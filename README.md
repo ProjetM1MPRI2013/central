@@ -19,4 +19,4 @@ Groupes
 
 * **Réseau** : Marc.H, Baptiste
 
-* **Musique** : Lucas
+* **Musique** : Lucas, Mélissa
