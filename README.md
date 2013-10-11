@@ -3,7 +3,7 @@ Projet logiciel MPRI 2013-2014
 
 Wiki
 -----------
-https://github.com/pangel/mpri_projet_2013/wiki
+https://github.com/ProjetM1MPRI2013/central/wiki
 
 
 Groupes
