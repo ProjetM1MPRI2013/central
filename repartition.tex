@@ -101,8 +101,8 @@
       \node[punkt] at (7.5,-4) (4) {UI \\ logique de l'interface};
       \node[punkt] at (8,0) (5) {Scénario / Gameplay \\ Rêgles de réaction};
       \node[punkt] at (3,4) (6) {Network};
-      \node[punkt] at (-5,0) (7) {Simulation};
-      \node[punkt] at (-5,-4) (8) {Scénario Global};
+      \node[punkt] at (-5,0) (7) {Simulation \\ {\scriptsize État global + \\ Règles d'évolution\\}};
+      \node[punkt] at (-5,-4) (8) {Scénario \\ {\scriptsize Règles de réaction globales\\}};
       \node[punkt] at (-5,4) (10) {Network};
       \node[punkt2] at (7.5,5) {Client};
       \node[punkt2] at (-7,5) {Serveur};
@@ -116,11 +116,12 @@
       \draw[->,black,thick] (5) to[out=200,in=-20] node [midway,above] {infos} (0);
       \draw[->,black,thick] (4) to[out=90,in=-90] node [midway,above] {actions} (5);
       \draw[->,black,thick] (4) to[out=180,in=0] node [midway,above] {update} (3);
-      \draw[->,black,thick] (0) to[out=45,in=-45] node [midway,above] {évènements} (6);
+      \draw[->,black,thick] (0) to[out=45,in=-45] node [midway,below] {évènements} (6);
       \draw[->,black,thick] (6) to[out=-135,in=135] node [midway,above] {seed et updates} (0);
-      \draw[<->,blue,thick] (6) to[out=180,in=0] node [midway,above] {TCP} (10);
-      \draw[<->,black,thick] (10) to[out=-90,in=90] node [midway,above] {Infos} (7);
-      \draw[->,black,thick] (8) to[out=90,in=-90] node [midway,above] {infos} (7);
+      \draw[<->,blue,thick] (6) to[out=180,in=0] node [midway,above] {UDP} (10);
+      \draw[->,black,thick] (10) to[out=-135,in=135] node [midway,above] {actions client} (7);
+      \draw[->,black,thick] (7) to[out=54,in=-45] node [midway,below] {updates locales \\ / client} (10);
+      \draw[<->,black,thick] (8) to[out=90,in=-90] node [midway,above] {infos} (7);
 
       
       
