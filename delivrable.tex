@@ -97,6 +97,13 @@
            text width=5em,
            minimum height=2em,
            text centered},
+           punktgrd/.style={
+           rectangle,dashed,
+           rounded corners,
+           draw=magenta, very thick,
+           minimum width = 2cm
+           minimum height= 2cm,
+           text centered},
              punktge/.style={
            rectangle,
            rounded corners,
@@ -154,17 +161,18 @@
       \node[punktre] at (-5,4) (10) {Network};
       \node[punkt2] at (7.5,5) {Client};
       \node[punkt2] at (-7,5) {Serveur};
+%       \node[punkt2] at (5.5,-4) {};
       \node[punktsc] at (-8,0) (11){Scénario \\ {\scriptsize Application des actions\\}};
       \draw[-,black,dashed] (-2,-6) -- (-2,6);
       \draw[->,black,thick] (1) to[out=45,in=135] node [midway,above] {ville} (0);
       \draw[->,black,thick] (0) to[out=225,in=-45] node [midway,above] {seed} (1);
       \draw[->,black,thick] (0) to[out=260,in=45] (2);
-      \draw[->,black,thick] (0) to[out=270,in=90] node [midway,left] {update} (3);
-      \draw[->,black,thick] (0) to[out=-45,in=135] node [midway,left] {update} (4);
+      \draw[->,black,thick] (0) to[out=270,in=90] node [midway,right] {update} (3);
+%       \draw[->,black,thick] (0) to[out=-45,in=135] node [midway,left] {update} (4);
       \draw[->,black,thick] (0) to[out=20,in=160] node [midway,above] {nouvel état local} (5);
       \draw[->,black,thick] (5) to[out=200,in=-20] node [midway,above] {infos} (0);
       \draw[<->,black,thick] (4) to[out=90,in=-90] node [midway,above] {actions} (5);
-      \draw[->,black,thick] (4) to[out=180,in=0] node [midway,above] {update} (3);
+%       \draw[->,black,thick] (4) to[out=180,in=0] node [midway,above] {update} (3);
       \draw[->,black,thick] (0) to[out=45,in=-45] node [midway,below] {évènements} (6);
       \draw[->,black,thick] (6) to[out=-135,in=135] node [midway,left] {updates} (0);
       \draw[<->,blue,thick] (6) to[out=180,in=0] node [midway,above] {UDP} (10);
@@ -173,6 +181,7 @@
       \draw[<->,black,thick] (8) to[out=90,in=-90] node [midway,above] {infos} (7);
       \draw[<->,black,thick] (11) to[out=0,in=180] node [midway,above] {infos} (7);
       \draw[<-,black,thick] (11) to[out=90,in=-150] node [midway,above] {demande d'actions} (10);
+      \draw[magenta,thick,dashed] (2,-5) rectangle (9,-3);
 \end{tikzpicture}
 % \caption{Structure \& interactions des composantes}
 % \end{figure}
@@ -189,9 +198,47 @@
 \end{tikzpicture}
  \caption{Code couleur des différents groupes de travail}
 \end{figure}
+\subsection{Choix technologiques}
+\begin{itemize}
+ \item Langage : \verb!C++!
+ \item Bibliothèque Graphique : SFML
+ \item Logiciel de versionnement : Git
+ \item Hébergement : GitHub (\href{https://github.com/ProjetM1MPRI2013/central}{https://github.com/ProjetM1MPRI2013/central})
+\end{itemize}
+\subsection{Responsabilités globales}
+\begin{itemize}
+ \item Coordination : Adrien Husson
+ \item Infrastructure : Matthieu Journault
+ \item Support Technique : Adrien Koutsos
+ \item Documentation utilisateur : Lucas Randazzo
+\end{itemize}
+
 \section{Description des sous projets}
 \subsection{Simulation}
 \subsection{Réseau}
+On adopte une architecture type client/serveur. Ce sous-projet est responsable de la synchonisation des evenements et des données entre le serveur et les différents clients.
+
+Sur le serveur, on effectue tous les calculs liés à la simulation (positions des personnages par ex). Les résultats de ces calculs sont ensuite envoyés de temps en temps à tous les clients, qui mettent à jour les données dont ils disponsent.
+
+Coté serveur, il s'agit de mettre à disposition des méthodes pour la mise en place du serveur, la réception de commande des clients, et l'envoie de données pertinentes aux clients (on n'envoie pas l'état complet du monde au client, mais juste les données qui lui sont utiles, pour un joueur terroriste, la position des personnages autours de lui par exemple). Coté client, il faut recevoir ces données, et etre capable d'en tenir compte pour interpoler/extrpoler les donnees importantes (le taux de rafraichissement de l'écran sera beaucoup plus important que le taux de transfert par le réseau).
+
+Il y a une interface importante avec la partie simulation, pour la façon dont sont représentées l'état du jeu, coté client et coté serveur, ainsi que sur le type d'evenements qui doivent etre transmis au seveur.
+
+Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra implémenter)
+\begin{enumerate}
+ \item Client : \begin{enumerate}
+        \item \verb!createClient(ClientInfo)! cree un client à partir d'informations (nom, addresse du serveur pour se connecter ....) et essaye de le connecter au seveur.
+        \item \verb!recieveUpdates()! regarde si il y a des données du serveur à recevoir, et si c'est le cas, les 'appliquer' pour qu'elles puissent etre prises en compte lors des affichages suivants.
+        \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non blocant
+       \end{enumerate}
+\item Serveur : \begin{enumerate}
+                 \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non blocant
+                 \item \verb!sendState(Etat, joueur)! Envoie au joueur donné les données qui lui sont pertinentes. Non, bloquant, les données peuvent éventuellement etre envoyées un peu après.
+                 \item \verb!recieveEvents()! Reçoie tous les evenements envoyés par les joueurs, retourne immédiatement si il n'y en a pas.
+                \end{enumerate}
+
+\end{enumerate}
+
 \subsection{Scénario \& Gameplay}
 \subsection{Graphismes \& Interface Utilisateur (IU)}
 \subsection{Génération ville}
