@@ -216,6 +216,8 @@
 \section{Description des sous projets}
 \subsection{Simulation}
 \subsection{Réseau}
+\paragraph{Membres du sous-projet} Denys Kanunikov \verb!kanunikov-denys!. Marc Heinrich \verb!mheinric!.
+\paragraph{}
 On adopte une architecture type client/serveur. Ce sous-projet est responsable de la synchonisation des evenements et des données entre le serveur et les différents clients.
 
 Sur le serveur, on effectue tous les calculs liés à la simulation (positions des personnages par ex). Les résultats de ces calculs sont ensuite envoyés de temps en temps à tous les clients, qui mettent à jour les données dont ils disponsent.
@@ -240,6 +242,13 @@ Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra im
 \end{enumerate}
 
 \subsection{Scénario \& Gameplay}
+\paragraph{Membre du sous-projet} Adrien Koutsos (Responsable du sous-projet) \verb!polimegalo!. Remy Poulain \verb!Nobody35!. Marc Beunardeau \verb!marc3!.
+\paragraph{}
+\input{./scenario.tex}
+\begin{figure}[h]
+ \includegraphics[width = \linewidth]{scenario-interface.jpg}
+\end{figure}
+
 \subsection{Graphismes \& Interface Utilisateur (IU)}
 \paragraph{Membre du sous-projet} Matthieu Journault (Responsable du sous-projet) travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!). Anthony Lick \verb!Seyaryuki!. Naina Razakarison \verb!nvorksjen!. Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. Maxime Morgado travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!.
 \paragraph{} Ce sous-projet est responsable des graphismes et de l'interface utilisateur. 
@@ -254,7 +263,24 @@ Voici ci-dessous une première idée de l'interface utilisateur pour les terrori
  \includegraphics[width = 0.5\linewidth]{TS2014.png}
 \end{figure}
 
-\subsection{Génération ville}
+\subsection{Génération ville} 
+\paragraph{Membre du sous-projet} Maxime Morgado (Responsable du sous-projet) travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!. Matthieu Journault travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!).
+\paragraph{} Ce sous-projet comprend uniquement la génération du monde. Celui-ci est créé chez chaque client à partir d'une seed générée aléatoirement au début du jeu. Il met donc en place la structure de base du jeu dont voici quelques premières fonctions :
+\begin{itemize}
+\item global : \begin{itemize}
+	\item \verb!taille()! (* donne la taille du plateau rectangulaire (ce qui n'empêche pas de donner d'autres formes au plateau à l'aide de case où on ne peut aller) *)
+	\item \verb!densité initiale! (* de la population pour que la simulation puisse calculer les chemins initiaux des civils *)
+	\end{itemize}
+\item \verb!case : coord -> Bat! (* donne le batiment qui en trouve sur une certaine case *)
+\item caractéristiques : \begin{itemize}
+	\item \verb!marcher : Bat -> float! (* donne un coefficient pour connaître la vitesse à laquelle on peut aller sur cette case. Coeff entre 0 (on ne peut marcher) et 1 *)
+	\item \verb!cible : Bat -> bool! (* Pour savoir si une case fait partie des cibles potentielles *)
+	\item \verb!direction (bat,Dir) : Bat * int -> bool! (pour savoir si, à partir d'un type de case on peut aller dans la direction Dir, ce qui permet d'avoir des murs par exemple *)
+	\item \verb!visible : Bat -> bool! (* pour savoir si une case est visible par les caméras du maire *)
+	\item ...
+	\end{itemize}
+\item graphisme (* pour que la simulation envoie les infos au graphisme *)
+\end{itemize}
 \subsection{Musique} 
 \paragraph{Membre du sous-projet} Melissa Riesner \verb!mriesner! (Responsable du sous-projet).Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. 
 \paragraph{Rôle}
