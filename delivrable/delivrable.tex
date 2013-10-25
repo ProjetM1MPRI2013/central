@@ -145,6 +145,71 @@
 \tableofcontents
 
 \section{Introduction}
+
+\subsection{Résumé}
+
+Le projet est un jeu de stratégie multijoueur en temps réel composé de deux camps. D'un côté, un joueur contrôle les ressources policères d'une ville ; de l'autre, une équipe de joueurs doit accomplir des objectifs subversifs tels que la destruction d'un bâtiment.
+
+\subsection{Détails}
+
+Le joueur dans le camp policier (appelons-le C) dispose d'une interface similaire à celle d'un SimCity (image : \texttt{http://i.imgur.com/2paoqYB.gif}) qui lui donne à la fois un aperçu de l'état physique de la ville et de la répartition des ressources dont il dispose (présence policière, etc., voir suite). Certaines de ses ressources, comme les caméras et les policiers, lui permettent de voir la ville au même niveau de zoom que les joueurs adverses (voir suite).
+
+Les joueurs dans le camp subversif (appelons-les T) voient quand à eux le monde de façon plus rapprochée (exemple 1 : \texttt{http://i.imgur.com/aMoXCaU.jpg}, exemple 2 : \texttt{http://i.imgur.com/bmkwiZP.jpg}). Ils peuvent interagir avec certains passants, avec certains bâtiments, et éxécuter des actions globales (aller sur internet, etc.).
+
+\subsection{Gameplay}
+
+
+Chaque round dure 10mn. L'équipe T doit choisir entre vitesse et sécurité, tandis qui l'équipe C doit a) bien allouer ses ressources, et b) remarquer les comportements étranges dans la rue.
+
+\begin{enumerate}
+\item La ville est petite et comporte 7 cibles potentielles (de grands bâtiments).
+\item Quand le jeu commence, un bâtiment est choisi au hasard par le jeu (disons la Mairie). L'équipe T doit le détruire. C ignore la cible.
+\item Il y a 2 joueurs dans l'équipe T.
+  \begin{itemize}
+  \item A doit passer du temps près de la Mairie pour découvrir les lieux (représenté par une barre de chargement). Il peut
+    \begin{itemize}
+    \item Passer 5mn près de la Mairie
+    \item Parler aux gardes alentours. Cela accélère le processus mais augmente les chances d'être repéré.
+    \end{itemize}
+    \end{itemize}
+  \item B doit acheter l'équipement pour la bombe. Il peut :
+  \begin{itemize}
+    \item Utiliser des produits ménagers. Pour cela, il doit aller sur internet. Dans ce cas, il peut soit :
+    \begin{itemize}
+      \item Utiliser un canal non-protégé et rapide
+      \item Utiliser un canal sûr et lent
+      \end{itemize}
+    \item Obtenir des explosifs auprès de gangs. Il risque alors 
+    \begin{itemize}
+      \item de se faire tuer si le gang décide de l'attaquer et qu'il n'arrive pas à fuir
+      \item de parler à un agent sous couverture (dans le cas où C a alloué ce type de ressources)
+      \end{itemize}
+      \end{itemize}
+\item C a, disons, 100 points de surveillance à allouer parmi :
+\begin{itemize}
+  \item le nombre de policiers sur le terrain (utiles après l'explosion de la bombe)
+  \item la quantité de caméras (pour surveiller manuellement la rue)
+  \item propagande pro-police (accélère le déplacement des policiers dans la foule)
+  \item agents sous couverture (protège d'un achat rapide d'explosifs dans la rue)
+  \item surveillance d'internet (protège d'un achat rapide d'explosifs en ligne)
+  \end{itemize}
+\item Pendant la partie, C peut :
+\begin{itemize}
+  \item Consulter les caméras de surveillance à la recherche de comportements suspects. Il arrêter des suspects, mais des erreurs lui coûtent des points de surveillance (mauvaise opinion publique)
+  \item Répondre aux alertes données par ses ressources. Une alerte (qui peut toujours être un faux positif) peut
+  \begin{itemize}
+    \item Lui donner l'identité d'un T (improbable)
+    \item Donner une information d'emplacement partielle. Dans ce cas, allouer plus de points permet de resserrer la recherche.
+    \item Lui donner une vidéo d'un évènement. Plus il la consulte vite, plus il aura une information précise sur le suspect (s'il considère que ce n'était pas un faux positif)
+    \end{itemize}
+    \end{itemize}
+\item Puis l'équipe T peut soit
+\begin{itemize}
+  \item Faire exploser la cible, puis rentrer dans sa planque le plus vite possible.
+  \item S'ils ont obtenu 2 bombes (plus risqué) et que la présence policière autour de la cible est trop grande, ils peuvent faire exploser un autre bâtiment, ce qui attirera la police sur les lieu, avant de faire exploser la cible et de partir sans encombres.
+\end{itemize}
+\end{enumerate}
+
 \section{Architecture générale}
 \subsection{Les différentes composantes et leurs interfaces}
 % \begin{figure}[h]
@@ -229,12 +294,12 @@ Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra im
  \item Client : \begin{enumerate}
         \item \verb!createClient(ClientInfo)! cree un client à partir d'informations (nom, addresse du serveur pour se connecter ....) et essaye de le connecter au seveur.
         \item \verb!recieveUpdates()! regarde si il y a des données du serveur à recevoir, et si c'est le cas, les 'appliquer' pour qu'elles puissent etre prises en compte lors des affichages suivants.
-        \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non blocant
+        \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non bloquant
        \end{enumerate}
 \item Serveur : \begin{enumerate}
-                 \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non blocant
+                 \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non bloquant.
                  \item \verb!sendState(Etat, joueur)! Envoie au joueur donné les données qui lui sont pertinentes. Non, bloquant, les données peuvent éventuellement etre envoyées un peu après.
-                 \item \verb!recieveEvents()! Reçoie tous les evenements envoyés par les joueurs, retourne immédiatement si il n'y en a pas.
+                 \item \verb!receiveEvents()! Reçoit tous les evenements envoyés par les joueurs, retourne immédiatement si il n'y en a pas.
                 \end{enumerate}
 
 \end{enumerate}
