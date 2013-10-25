@@ -353,12 +353,13 @@ Sur le serveur, on effectue tous les calculs liés à la simulation (positions d
 Coté serveur, il s'agit de mettre à disposition des méthodes pour la mise en place du serveur, la réception de commande des clients, et l'envoie de données pertinentes aux clients (on n'envoie pas l'état complet du monde au client, mais juste les données qui lui sont utiles, pour un joueur terroriste, la position des personnages autours de lui par exemple). Coté client, il faut recevoir ces données, et etre capable d'en tenir compte pour interpoler/extrpoler les donnees importantes (le taux de rafraichissement de l'écran sera beaucoup plus important que le taux de transfert par le réseau).
 
 Il y a une interface importante avec la partie simulation, pour la façon dont sont représentées l'état du jeu, coté client et coté serveur, ainsi que sur le type d'evenements qui doivent etre transmis au seveur.
-\paragraph{Interface} (provisoire, c'est juste pour donner une idée de ce qu'il faudra implémenter)
+\paragraph{Interface}
 \begin{enumerate}
  \item Client : \begin{enumerate}
         \item \verb!createClient(ClientInfo)! cree un client à partir d'informations (nom, addresse du serveur pour se connecter ....) et essaye de le connecter au seveur.
         \item \verb!recieveUpdates()! regarde si il y a des données du serveur à recevoir, et si c'est le cas, les 'appliquer' pour qu'elles puissent etre prises en compte lors des affichages suivants.
         \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non bloquant
+        \item \verb!applyChanges(GameState)! Applique les données reçues du serveur pour mettre à jour l'état local du jeu. Est utilisé pour interpoler les données reçues du serveur.
        \end{enumerate}
 \item Serveur : \begin{enumerate}
                  \item \verb!sendEvent(Evenement)! Envoie un evenement au serveur. Non bloquant.
@@ -367,6 +368,13 @@ Il y a une interface importante avec la partie simulation, pour la façon dont s
                 \end{enumerate}
 
 \end{enumerate}
+
+Une des difficultés principales sera la dissimulation de lag, c'est à dire, faire croire au joueur que son jeu tourne directement sur le serveur. Pour cela, on mettra en place principalement deux méthodes :
+\begin{itemize}
+\item Interpolation des données : Le client tourne avec un certain retard par rapport au serveur (globalement de l'ordre de 200-400 ms). Il dispose donc, dans le cas où il n'y a pas trop de lag, pour afficher un instant t, de données pour un temps futur que le serveur a déjà envoyé. Il peut donc interpoler les données futures et passées pour avoir une représentation à l'instant t. Cela permet de masquer le fait que le serveur n'envoie de nouvelles données que de temps en temps.
+\item Extrapolation de données : Il s'agit de prévoir l'état du jeu, en faisant l'hypothèse que les joueurs n'ont pas d'influence. Par exemple, si on a un personnage qui se déplace, le serveur va envoyer, en plus de sa position, sa vitesse, et le client supposera que le personnage continue de se déplacer à cette vitesse. Il continue ainsi jusqu'à recevoir de nouvelles informations du serveur, dans une limite de temps raisonnable. Lorsqu'il reçoit enfin les information, il remplace l'état courant par celui renvoyé par le serveur (en essayant au plus d'éviter des phénomènes de téléportation, en lissant les trajectoires par exemple). 
+\end{itemize}
+
 
 \subsection{Scénario \& Gameplay}
 \subsection{Graphismes \& Interface Utilisateur (IU)}
