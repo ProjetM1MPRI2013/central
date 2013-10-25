@@ -265,31 +265,95 @@ Chaque round dure 10mn. L'équipe T doit choisir entre vitesse et sécurité, ta
 \end{figure}
 \subsection{Choix technologiques}
 \begin{itemize}
- \item Langage : \verb!C++!
- \item Bibliothèque Graphique : SFML
+ \item Langage : \verb!C++!, car orienté objet, suffisamment performant, et avec de nombreuses librairies utiles pour les jeux.
+ \item Bibliothèque Graphique : SFML, choisie plutôt que SDL ou Allegro, c'était la plus recommandée pour ses performances et la clarté de son code.
  \item Logiciel de versionnement : Git
  \item Hébergement : GitHub (\href{https://github.com/ProjetM1MPRI2013/central}{https://github.com/ProjetM1MPRI2013/central})
 \end{itemize}
 \subsection{Responsabilités globales}
 \begin{itemize}
- \item Coordination : Adrien Husson
+ \item Coordination : Adrien Husson et Matthieu Journault
  \item Infrastructure : Matthieu Journault
  \item Support Technique : Adrien Koutsos
- \item Documentation utilisateur : Lucas Randazzo
+ \item Documentation utilisateur et Direction Artistique : Lucas Randazzo
 \end{itemize}
 
 \section{Description des sous projets}
 \subsection{Simulation}
+\paragraph{Membres du sous-projet} Adrien Husson \verb!pangel!, Gaspard Ohlmann \verb!Gac21!, Joseph Lallemand \verb!grosxor!, Danys Kanunikov \verb!kanunikov-denys!.
+
+\paragraph{Description} Ce sous-projet contient l'état du jeu et les règles qui le font évoluer en l'absence d'intervention des joueurs. Il est divisé en trois sous-modules : représentation de l'état, application des règles, et gestionnaires d'événements auxquels les autres modules peuvent s'abonner. Il existe de plus deux versions, une côté client et une côté serveur.
+
+L'état local est stocké dans un matrice où chaque case indique son type de terrain, les entités qui s'y trouvent, son indicateur de danger, si elle est un obstacle, etc.
+
+Les règles concernent l'évolution d'une case en fonction de ses voisines et les actions des entités. Par exemple, le niveau de peur sur une case dépend du niveau de peur des cases voisines et du niveau de peur des entités les plus récemment entrées sur la case ; l'action d'une entité de type \verb!gangster! dépend de sa proximité à d'autres entités de type \verb!gangster!.
+
+\paragraph{Interfaces}
+
+\subparagraph{Côté serveur}
+
+\begin{itemize}
+
+\item Avec le network
+
+  \begin{itemize}
+  \item \verb!receiveActions(actions)! : met à jour l'état avec les informations rendues disponibles par le réseau. Ces informations sont accumulées en une seule mise à jour qui est supprimé suite à l'appel à receiveState. 
+
+  \item \verb!sendState(stateDiff)! : indique une mise à jour au réseau, qui choisira en fonction des conditions de l'envoyer ou de placer la mise à jour dans un buffer.
+  \end{itemize}
+
+\item Avec le scénario
+
+  \begin{itemize}
+  \item \verb!event(eventName,eventTarget)! : signale un événement au scénario si le scénario y était inscrit. Plus précisément, le scénario s'inscrira à des événements en fournissant des méthodes à appeller, et \verb!event! les appellera. \verb!event! ne fait donc pas partie de l'interface à proprement parler.
+  \end{itemize}
+\end{itemize}
+
+\subparagraph{Côté client :}
+
+\begin{itemize}
+\item  Avec le network
+
+  \begin{itemize}
+  \item \verb!receiveState(stateDiff)! \emph{voir plus haut.}
+  \item \verb!sendAction(action)! transmet au réseau une action donnée par le scénario.
+  \end{itemize}
+
+\item Avec la génération de ville : voir \emph{génération de ville}.
+
+\item Avec la musique et l'UI
+
+  \begin{itemize}
+    \item \verb!event(eventName, eventTarget)! \emph{voir plus haut.}
+  \end{itemize}
+
+\item Avec les graphismes et le scénario local
+
+  \begin{itemize}
+  \item \verb!getTileInfo(tile)! donne des informations sur une case donnée
+  \item \verb!getTiles()! renvoie un énumérateur de toutes les cases
+  \end{itemize}
+
+\item Avec le scénario local
+
+  \begin{itemize}
+  \item \verb!receiveAction(action)! reçoit une action validée par le scénario
+  \end{itemize}
+
+\end{itemize}
+
+
 \subsection{Réseau}
-On adopte une architecture type client/serveur. Ce sous-projet est responsable de la synchonisation des evenements et des données entre le serveur et les différents clients.
+\paragraph{Membres du sous-projet} Marc Heinrich \verb!mheinrich!.
+
+\paragraph{Description}
 
 Sur le serveur, on effectue tous les calculs liés à la simulation (positions des personnages par ex). Les résultats de ces calculs sont ensuite envoyés de temps en temps à tous les clients, qui mettent à jour les données dont ils disponsent.
 
 Coté serveur, il s'agit de mettre à disposition des méthodes pour la mise en place du serveur, la réception de commande des clients, et l'envoie de données pertinentes aux clients (on n'envoie pas l'état complet du monde au client, mais juste les données qui lui sont utiles, pour un joueur terroriste, la position des personnages autours de lui par exemple). Coté client, il faut recevoir ces données, et etre capable d'en tenir compte pour interpoler/extrpoler les donnees importantes (le taux de rafraichissement de l'écran sera beaucoup plus important que le taux de transfert par le réseau).
 
 Il y a une interface importante avec la partie simulation, pour la façon dont sont représentées l'état du jeu, coté client et coté serveur, ainsi que sur le type d'evenements qui doivent etre transmis au seveur.
-
-Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra implémenter)
+\paragraph{Interface} (provisoire, c'est juste pour donner une idée de ce qu'il faudra implémenter)
 \begin{enumerate}
  \item Client : \begin{enumerate}
         \item \verb!createClient(ClientInfo)! cree un client à partir d'informations (nom, addresse du serveur pour se connecter ....) et essaye de le connecter au seveur.
@@ -306,7 +370,7 @@ Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra im
 
 \subsection{Scénario \& Gameplay}
 \subsection{Graphismes \& Interface Utilisateur (IU)}
-\paragraph{Membre du sous-projet} Matthieu Journault (Responsable du sous-projet) travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!). Anthony Lick \verb!Seyaryuki!. Naina Razakarison \verb!nvorksjen!. Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. Maxime Morgado travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!.
+\paragraph{Membres du sous-projet} Matthieu Journault \verb!matthieujournault/ (Responsable du sous-projet) travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!). Anthony Lick \verb!Seyaryuki!. Naina Razakarison \verb!nvorksjen!. Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. Maxime Morgado travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!.
 \paragraph{} Ce sous-projet est responsable des graphismes et de l'interface utilisateur. 
 La partie graphisme s'appuie sur l'état local qui lui donne initialement la carte, puis au fur et à mesure du jeu qui lui permettra de savoir quelles modifications (par exemple destruction) ont été apportés aux batiments pendant le jeu ainsi que les positions des joueurs et des éventuelles PNJ. Un descriptif plus détaille de cette interface est disponible en sous section Simulation.
 La partie interface utilisateur interagit avec le scénario, dans un sens pour savoir quelles actions peuvent être réalisés par le joueur et dans l'autre pour communiquer les actions ou les mouvements effectivement réalisés par le joueur. Un descriptif plus détaillé de cette interface est disponible dans la sous section Scénario.
