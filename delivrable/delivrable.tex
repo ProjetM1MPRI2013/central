@@ -241,7 +241,112 @@ Interface : (provisoire, c'est juste pour donner une idée de ce qu'il faudra im
 
 \subsection{Scénario \& Gameplay}
 \subsection{Graphismes \& Interface Utilisateur (IU)}
-\subsection{Génération ville}
-\subsection{Musique}
+\paragraph{Membre du sous-projet} Matthieu Journault (Responsable du sous-projet) travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!). Anthony Lick \verb!Seyaryuki!. Naina Razakarison \verb!nvorksjen!. Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. Maxime Morgado travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!.
+\paragraph{} Ce sous-projet est responsable des graphismes et de l'interface utilisateur. 
+La partie graphisme s'appuie sur l'état local qui lui donne initialement la carte, puis au fur et à mesure du jeu qui lui permettra de savoir quelles modifications (par exemple destruction) ont été apportés aux batiments pendant le jeu ainsi que les positions des joueurs et des éventuelles PNJ. Un descriptif plus détaille de cette interface est disponible en sous section Simulation.
+La partie interface utilisateur interagit avec le scénario, dans un sens pour savoir quelles actions peuvent être réalisés par le joueur et dans l'autre pour communiquer les actions ou les mouvements effectivement réalisés par le joueur. Un descriptif plus détaillé de cette interface est disponible dans la sous section Scénario.
 
+Pour les graphismes, nous avons choisis de la 2D isométrique, avec une vue du dessus pour le maire et une vue de 3/4 pour les terroristes. 
+Concernant l'interface utilisateur, il faudra créer une interface pour les deux modes de jeu (maire ou terroristes), mais aussi un menu général. 
+Voici ci-dessous une première idée de l'interface utilisateur pour les terroristes :
+\begin{figure}[h]
+\centering
+ \includegraphics[width = 0.5\linewidth]{TS2014.png}
+\end{figure}
+
+\subsection{Génération ville}
+\subsection{Musique} 
+\paragraph{Membre du sous-projet} Melissa Riesner \verb!mriesner! (Responsable du sous-projet).Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. 
+\paragraph{Rôle}
+Le rôle de ce sous projet est de sonoriser le jeu. D'une part, nous ajoutons des bruitages (bruits de pas, de coup de feux, explosions etc...). D'autre part, nous générons une "musique de fond" qui tient compte des événements qui surviennent lors de la partie.
+Nous avons décidé de découper la partie musique du projet en 2 étapes. La première consiste à  écrire un générateur de musiques aléatoire pour  jeu qui produit des fichiers son.  La deuxième étape consiste à insérer dans le jeu les fichiers  son créés.
+
+
+\paragraph{Liste des tâches à réaliser:}
+\begin{enumerate}
+ \item Définition des paramètres d’entrée du générateur et réalisation de l’interface utilisateur pour définir les paramètres des choix musicaux. (Voir fenêtre ci-dessous).
+ \item Implémenter le générateur:
+ \begin{enumerate}[(i)]
+  \item Génération de la grille harmonique aléatoirement à partir des paramètres d’entrées
+  \item Implémentation de chaînes de Markov pour générer la partie mélodique
+  \item Sortie des fichiers aux différents formats
+ \end{enumerate}
+ \item Intégration de la musique dans le jeu
+ \begin{enumerate}[(i)]
+ \item Implémentation des classes de lecture de son 
+ \end{enumerate}
+ 
+
+\end{enumerate}
+\paragraph{Planning de réalisation:}
+\begin{enumerate}[1-]
+ \item déjà réalisée
+ \item mois de novembre
+ \item mois de décembre
+\end{enumerate}
+\paragraph{Détails du sous projet}
+\subparagraph{Le générateur}
+Ce générateur prend en entrée un certain nombre de paramètres (tempo, instruments,…)  qui sont saisis par l’utilisateur dans une fenêtre. Ces paramètres sont proposés à une valeur par défaut en fonction du type de musique choisie par l’utilisateur. Par exemple, s’il choisit une musique de type rock, les paramètres par défaut seront: {(batterie – basse - guitare – guitare)  harmonie:blues - tempo:rapide - densité de notes: normale}. 
+L’utilisateur peut aussi choisir les paramètres qu’il souhaite ou bien modifier ceux qui sont proposés. 
+
+A partir de ces données on va créer la musique. 
+Dans un premier temps  on génère une grille harmonique. Pour ce faire on va choisir de façon totalement aléatoire 4 accords qui utilisent les notes de la gamme. Cette grille  nous donne le cadre sur  lequel vont être aligné la basse et l’accompagnement.
+Ensuite, on utilise une chaîne de Markov pour générer  la piste mélodique (piste 4)  en choisissant des notes dans la gamme. Le rythme de la partie rythmique (la batterie,  Piste 3)  sera générée indépendant du reste selon les paramètres saisis par l’utilisateur. 
+
+
+En plus du style de musique que l’on vient de définir (ici le rock), on veut pouvoir adapter la musique en fonction de ce qu’il se passe dans le jeu. Par exemple, si une bombe a été posée, le joueur doit être stressé, et donc la musique plus angoissante, ou plus intense. Par exemple par un rythme plus rapide, ou bien en ajoutant certains bruitages. De même si un joueur est blessé, on veut que cela se ressente également par une musique qui sera spontanément beaucoup plus lente.  
+Donc, une fois le type de base créé, nous allons générer des musiques du même type correspondant aux différentes situations possible. 
+
+Ainsi, pour chaque demande de fichier audio (par exemple «générer une musique type rock») le programme renverra un dossier contenant un ensemble de fichiers de musiques, qui se répartiront dans les trois types suivants «musique rock normale»; «musique rock stressante» et «musique rock pour personnage blessé»).
+\begin{figure}[h]
+\centering
+\includegraphics[width = \linewidth]{./musique.png}
+\end{figure}
+
+\subparagraph{Insertion du son dans le jeu}
+
+L'état local informe le module son des événements suivants : \\
+
+
+Événements pris en compte pour faire varier a musique :
+\begin{itemize}
+\item Est-ce qu'une bombe a été posée? (Si oui à quelle date)
+\item Est-ce qu'une bombe vient d'exploser?
+\item Est ce que mon personnage est blessé?
+\end{itemize}
+
+Événements pris en compte pour insérer des bruitages :
+\begin{itemize}
+\item Est-ce qu'une bombe a été posée ? (Si oui à quelle date)
+\item Est-ce qu'une bombe est en train d'exploser ?
+\item Est ce que je suis en train d'utiliser une arme ? (et quel type d'arme)
+\item Est-ce qu'un autre joueur près de moi est en train d'utiliser une arme ? (et quel type d'arme)
+\item Est-ce que mon joueur est en train de marcher ? De courir ?
+\item Est-ce que mon personnage vient d'être blessé ?
+
+\end{itemize}
+À partir de ceux-ci, le module Son choisit une musique appropriée à la situation, qui sera jouée pendant un laps de temps dépendant des événements à venir. 
+
+
+Interface :\\
+
+Nous allons mettre à disposition des programmeurs du jeu une classe Son qui disposera de toutes les méthodes nécessaires pour faire jouer la bonne musique au moment opportun du jeu. \\
+
+Nous allons distinguer deux classes :\\
+\begin{verbatim}
+classe MusiqueAmbiance
+	void typeMusique(  style) // rock ou orientale …
+	void setEtat( etatDuJoueur) // ‘normal’ ou ‘blessé’ ou ‘stresse’
+	void startJouer( )  // la musique démarre et ne s’arrêtera qu’a l’appel de stop()
+	void stopJouer()
+
+	void  Jouer( int temps) // jouer un laps de temps
+	void JouerJusquASignal( int signal) // jouer jusqu à ce qu’un événement se produise
+
+classe  Bruitage
+	setType( TypeDeBruitage)
+	setForce(int)
+	setRépétif( int fois)
+	setJouer()
+\end{verbatim}
 \end{document}
