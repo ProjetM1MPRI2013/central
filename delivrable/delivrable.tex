@@ -377,6 +377,21 @@ Une des difficultés principales sera la dissimulation de lag, c'est à dire, fa
 
 
 \subsection{Scénario \& Gameplay}
+
+La partie scénario du projet a pour rôle global de gérer la réaction du systéme aux actions des joueurs. Le scénario ne gardera pas d'information sur l'état du systéme et demandera l'état actuel du systéme à la simulation chaque fois que ce sera nécésaire. Plus précisement le scénario aura le rôle suivant :
+\begin{itemize}
+\item Client: Informer l'UI des actions que peuvent réaliser les terroristes et le chef de la police. Par exemple interdire le deplacement d'un joueur dans un mur, ou informer un joueur qu'il est dans une zone ou il peut planter une bombe. 
+\item Client: Recevoir les actions éxécutés par les joueurs, appliquer les changements locaux de ces actions puis les transmettre à la simulation.
+\item Client: Recevoir les changements de l'état impactant les actions disponibles pour le joueur. Pour communiquer avec l'état local du côtès du client en évitant de demander trop souvent des données on utilise un systéme d'event. Le scénario envoie un nouvel event à l'état local et lorsque l'un de ces event a lieu, l'état local en informe le scénario.
+\item Serveur: Recevoir du réseau les actions des joueurs et les appliquées chez la simulation. Par exemple: l'explosion d'une bombe augmente le niveaux de panique et de destruction d'une zone.
+\item Serveur: Appliquer les régles globales sur la ville. Par exemple la proximité d'un terroriste avec un batiment augmente automatiquement ça connaissance de celui-ci. On utilise ici aussi une communication par event comme chez le client.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width = \linewidth]{./scenario-interface.jpg}
+\end{figure}
+
 \subsection{Graphismes \& Interface Utilisateur (IU)}
 \paragraph{Membres du sous-projet} Matthieu Journault \verb!matthieujournault/ (Responsable du sous-projet) travaillant à $70\%$ dans graphisme et interface utilisateur et à $30\%$ dans la génération (\verb!matthieujournault!). Anthony Lick \verb!Seyaryuki!. Naina Razakarison \verb!nvorksjen!. Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. Maxime Morgado travaillant à  $30\%$ dans le graphisme et à  $70\%$ dans la génération \verb!ChatanW!.
 \paragraph{} Ce sous-projet est responsable des graphismes et de l'interface utilisateur. 
@@ -392,6 +407,25 @@ Voici ci-dessous une première idée de l'interface utilisateur pour les terrori
 \end{figure}
 
 \subsection{Génération ville}
+\paragraph{Membres du sous-projet} Maxime Morgado \verb!ChatanW!.
+
+\begin{itemize}
+\item global : \begin{itemize}
+  \item taille() (* donne la taille du plateau rectangulaire (ce qui n'empêche pas de donner d'autres formes au plateau à l'aide de case où on ne peut aller) *)
+  \item densité initiale (* de la population pour que la simulation puisse calculer les chemins initiaux des civils *)
+  \end{itemize}
+\item case : coord $ \rightarrow$ Bat (* donne le batiment qui en trouve sur une certaine case *)
+\item caractéristiques : \begin{itemize}
+  \item marcher : Bat $ \rightarrow$ float (* donne un coefficient pour connaître la vitesse à laquelle on peut aller sur cette case. Coeff entre 0 (on ne peut marcher) et 1 *)
+  \item cible : Bat $ \rightarrow$ bool (* Pour savoir si une case fait partie des cibles potentielles *)
+  \item direction (bat,Dir) : Bat $\times$ int $ \rightarrow$ bool (pour savoir si, à partir d'un type de case on peut aller dans la direction Dir, ce qui permet d'avoir des murs par exemple *)
+  \item visible : Bat $ \rightarrow$ bool (* pour savoir si une case est visible par les caméras du maire *)
+  \item ...
+  \end{itemize}
+\item graphisme (* pour que la simulation envoie les infos au graphisme *)
+\end{itemize}
+
+
 \subsection{Musique} 
 \paragraph{Membre du sous-projet} Melissa Riesner \verb!mriesner! (Responsable du sous-projet).Lucas Randazzo \verb!MrKulu! travaillant à $40\%$ dans la musique et à $60\%$ dans le graphisme. 
 \paragraph{Rôle}
