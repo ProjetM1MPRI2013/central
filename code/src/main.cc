@@ -19,7 +19,7 @@ int main()
         window.draw(shape);
         window.display();
     }
-
+	int a = test();
     return 0;
 }
 
