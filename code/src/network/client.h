@@ -5,12 +5,10 @@
 #include <vector>
 #include <string>
 #include "clientInfo.h"
-
-
-//temporary declaration of class used by clients
-class GameState ;
-class GameUpdate ;
-class Event ;
+#include "event.h"
+#include "gameState.h"
+#include "gameUpdate.h"
+#include "netEvent.h"
 
 /**
  * @brief The Client class
@@ -23,12 +21,12 @@ class Event ;
 
 
 class Client {
- public :
+public :
     /**
      * Sends an event to the server in a reliable way. The event will be recieved
      * by the server, the network package is in charge to ensure its delivery
      */
-  virtual void sendEvent(Event event) = 0 ;
+    virtual void sendEvent(Event& event) = 0 ;
 
     /**
      * Returns a vector containing all the Updates from the server. These updates
@@ -36,7 +34,15 @@ class Client {
      * If no update has been recieved yet, the function returns immediately,
      * and the vector will be empty
      */
-  virtual std::vector<GameUpdate>& recieveUpdates() = 0 ;
+    virtual std::vector<GameUpdate>& recieveUpdates() = 0 ;
+
+    /**
+     * @brief recieveNetEvents
+     * @return A vector containing events related to connexion messages. (A new
+     * player joined, server unreachable ...). Empty vector if none has been
+     * recieved yet.
+     */
+    virtual std::vector<NetEvent>& recieveNetEvents() = 0 ;
 
 } ;
 
