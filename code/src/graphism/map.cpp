@@ -3,6 +3,30 @@
 #include <simulation/geography.h>
 
 
+class Sprite :
+{
+public:
+  int getHeight()
+  { return height };
+  int getWidth()
+  { return width };
+  coord getTile()
+  { return c_tileset };
+  coord getMap()
+  { return c_map };  
+  void setHeight(int h)
+  { height = h };
+  void setWidth(int w)
+  {width = w};
+  void setTile(coord ct)
+  {c_tileset = ct};
+  void setMap(coord cm)
+  {c_map = cm};
+private:
+  int height, width;
+  coord c_tileset, c_map; 
+};
+
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
@@ -29,13 +53,13 @@ public:
 	      sprite = tile.getSprite();
 	      
 	      // on en extrait sa position dans la texture du tileset
-	      int tu = sprite.c_tileset.x;
-	      int tv = sprite.c_tileset.y;
-	      int th = sprite.height;
-	      int tw = sprite.width;
+	      int tu = (sprite.getTile()).x;
+	      int tv = (sprite.getTile()).y;
+	      int th = sprite.getHeight();
+	      int tw = sprite.getWidth();
 
-	      int tmu = sprite.c_map.x;
-	      int tmv = sprite.c_map.y;
+	      int tmu = (sprite.getMap()).x;
+	      int tmv = (sprite.getMap()).y;
 
 	      // on récupère un pointeur vers le quad à définir dans le tableau de vertex
 	      sf::Vertex* quad = &m_vertices[(i + j * width) * 4];

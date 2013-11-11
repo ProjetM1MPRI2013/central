@@ -7,17 +7,23 @@
 #define RIGHT_TILE = [20;-10] /* Distance à la tile de droite */
 #define DOWN_TILE = [20;11] /* Distance à la tile du bas */
 
-class coord :
+struct coord :
 {
-  int x, y;
+  int x, y;  
 };
 
 class Sprite :
 {
+ private:
   int height, width;
   coord c_tileset, c_map; 
   // c_tileset : coordonnées dans la tileset
   // c_map : coordonnées dans la sprite qui correspondent à l'origine sur la map.
+ public:
+  int getHeight();
+  int getWidth();
+  coord getTile();
+  coord getMap();
 }
   
 
