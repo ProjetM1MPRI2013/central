@@ -5,40 +5,37 @@
 #include <string>
 #include "serverInfo.h"
 #include "clientInfo.h"
+#include "netEvent.h"
+#include "gameState.h"
+#include "event.h"
 
 class Server {
 
 public : 
-  /*
-    Creates a server from informations provided by the user. The information
-    contain the port number the server will be using, and possibly other 
-    parameters. 
-    The server will be started and will immediately accept new clients until 
-    it is told to start the game.
-   */
-  Server(ServerInfo s_info){} ;
 
-  /*
-    Will send new opdates to all the clients connected to the server. 
-    What will effectively be sent to each client will be evaluated, and only
-    relevant data will be sent to the network.
-    There is no guarantee that the data will effectively be delivered (using 
-    UDP protocol).
+  /**
+   * Will send new opdates to all the clients connected to the server.
+   * What will effectively be sent to each client will be evaluated, and only
+   * relevant data will be sent to the network.
+   * There is no guarantee that the data will effectively be delivered (using
+   * UDP protocol).
    */
-  virtual void sendUpdate(GameState game_state) = 0 ;
+  virtual void sendUpdate(GameState &game_state) = 0 ;
 
-  /*
-    Same as previously except that the server will send an update only to 
-    the client specified.
+  /**
+   * Returns an array containing all the events recieved from the clients.
+   * If none has been recieved, the function returns immediately with an
+   * empty vector.
    */
-  virtual void sendUpdate(GameState game_state, ClientInfo c_info) = 0 ;
+  virtual std::vector<Event>& receiveEvents() = 0;
 
-  /*
-    Returns an array containing all the events recieved from the clients.
-    If none has been recieved, the function returns immediately with an 
-    empty vector.
+  /**
+   * @brief recieveNetEvents
+   * @return A vector containing events related to connexion messages. (A new
+   * player joined, server unreachable ...). Empty vector if none has been
+   * recieved yet.
    */
-  virtual std::vector<Event>& recieveEvents() = 0;
+  virtual std::vector<NetEvent>& receiveNetEvents() = 0 ;
 
 } ;
 
