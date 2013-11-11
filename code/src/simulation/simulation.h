@@ -24,6 +24,13 @@ public :
     */
     static void run(sf::time dt);
 
+		/**
+		*	@brief isInTile
+		* @param npc : the npc you want to know the case he is in
+		* gives the tile the npc is in			
+		*/
+		static void isInTile(NPC npc);
+
     /**
      * @brief setGeography
      * @param g : a reference to the data structure created by the city generator
