@@ -1,4 +1,3 @@
-#include"dummytypes.h"
 #include"serverImplem.h"
 
 ServerImplem::ServerImplem(ServerInfo s_info) {

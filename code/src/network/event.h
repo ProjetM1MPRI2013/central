@@ -2,6 +2,12 @@
 #define EVENT_H
 #include<string>
 
+/**
+ * @brief The Event class
+ * Temporary will be replaced by a class from scenario/
+ * simulation
+ */
+
 class Event
 {
 public:

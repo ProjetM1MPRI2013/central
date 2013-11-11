@@ -3,6 +3,12 @@
 
 #include<string>
 
+/**
+ * @brief The GameUpdate class
+ * Will contain informations to transmit to the clients
+ * Will be created for the GameState.
+ */
+
 class GameUpdate{
 public:
     GameUpdate();

@@ -2,13 +2,17 @@
 #define SERVER_IMPLEM_H
 
 #include <boost/asio.hpp>
-#include "dummytypes.h"
 #include "server.h"
 
 
 using namespace boost::asio ;
 using namespace std ;
 
+/**
+ * @brief The ServerImplem class
+ * Network implementation of the Server interface.
+ * (not implemented yet).
+ */
 class ServerImplem : public Server {
  protected :
   /*
