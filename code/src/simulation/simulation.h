@@ -1,0 +1,64 @@
+#ifndef SIMULATION_H
+#define SIMULATION_H
+
+class Geography {}
+class EventType {}
+class EventTarget {}
+class EventListener {}
+class Action {}
+
+/**
+ * @brief The Simulation class
+ * updates the local state using its own internal rules and the actions provided by the scenario
+ * provides events to subscribers
+ */
+
+class Simulation {
+
+public :
+    /**
+     * @brief setGeography
+     * @param g : a reference to the data structure created by the city generator
+     * Called by the city generator; locally sets the simulation geography
+     */
+    static void setGeography(Geography& g) {}
+
+    /**
+     * @brief subscribe
+     * @param e: event the listener subscribes to, for instance "isDestroyed"
+     * @param t: target generating the event, for instance a building, a zone or an NPC
+     * @param l: the object inheriting from EventListener that wishes to be notified
+     *
+     * Any implementer of EventListener can listen to an event from the simulation. 
+     * There can be at most one subscription for every  (EventType, EventTarget, EventListener).
+     *
+     * To subscribe to all events from an EventTarget, pass the empty EventType.
+     * To subscribe to all events of type EventType, pass the empty EventTarget.
+     */
+    static void subscribe(EventType e, EventTarget& t, EventListener& l) {}
+
+    /**
+     * @brief unsubscribe
+     * @param e: event the listener unsubscribes from, for instance "panicBegins"
+     * @param t: target generating the event, for instance a building, a zone or an NPC
+     * @param l: the listener that does not wish to be notified anymore
+     *
+     * The EventListener won't receive that specific Event from the simulation.
+     *
+     * To unsubscribe from all events from an EventTarget, pass the empty EventType.
+     * To unsubscribe from all events of a type, pass the empty EventTarget
+     */
+    static void unsubscribe(EventType e, EventTarget& t, EventListener& l) {}
+
+    /**
+     * @brief actionPerformed
+     * @param a : the action that was performed
+     * Called by the scenario, notifies the simulation that an action was performed: movement, firing, etc.
+     */
+    static void actionPerformed(Action a) {}
+
+
+};
+
+
+#endif // SIMULATION_H
