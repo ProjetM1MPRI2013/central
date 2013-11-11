@@ -41,6 +41,7 @@ class Terrain : public Positionable {
    * type of the batiment of the case
    */
   TerrainType type;
+  Sprite sprite;
   bool destructible;
   float anxiety;
   float populationDensity;
@@ -98,6 +99,7 @@ class Terrain : public Positionable {
     void setLenghtBat(int l);
     int getWeightBat();
     void setWeightBat(int w);
+    Sprite getSprite();
 };
 
 class NPC : public Positionable {
