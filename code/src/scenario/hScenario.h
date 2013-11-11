@@ -6,7 +6,6 @@
 #include "Action.h"
 #include "ScenarioAction.h"
 
-class Action {}
 
 /**
  * @brief The host Scenario class
