@@ -1,11 +1,11 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
+#include "Action.h"
 
 class Geography {}
 class EventType {}
 class EventTarget {}
 class EventListener {}
-class Action {}
 
 /**
  * @brief The Simulation class
@@ -55,7 +55,7 @@ public :
      * @param a : the action that was performed
      * Called by the scenario, notifies the simulation that an action was performed: movement, firing, etc.
      */
-    static void actionPerformed(Action a) {}
+    static void scenarioActionPerformed(ScenarioAction a) {}
 
 
 };

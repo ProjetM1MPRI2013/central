@@ -27,4 +27,49 @@ class LocalState {
 
 } ;
 
+class Positionable {
+  private: 
+    Position position;
+  public: 
+      Position getPosition();
+      void setPosition(Position p);
+};
+
+class Terrain : public Positionable {
+  private:
+    TerrainType type;
+    bool destructible;
+    float anxiety;
+    float populationDensity;
+    float destructionLevel;
+
+  public:
+    Type getType();
+    void setType(TerrainType t);
+    bool isDestructible();
+    float getAnxiety();
+    void setAnxiety(float a);
+    float getPopulationDensity();
+    void setPopulationDensity(float d);
+    float getDestructionLevel();
+    void setDestructionLevel(float dl);
+};
+
+class NPC : public Positionable {
+  private:
+    Trajectory trajectory;
+    float fear;
+    bool shocked;
+  public:
+    float getFear();
+    void setFear(float f);
+    bool isShocked();
+    void setShocked(bool s);
+    void updateTrajectory(Trajectory t);
+};
+
+
+
+
+
 #endif // SIMULATION_H
