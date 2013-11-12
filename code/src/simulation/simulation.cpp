@@ -1,4 +1,4 @@
-#include "Simulation.h"
+#include "simulation.h"
 
 
 Tile& Simulation::isInTile(NPC npc){

@@ -1,9 +1,12 @@
 #ifndef GEOGRAPHY
 #define GEOGRAPHY
 
-class Geography {
+class Tile ;
+
+class Geography {
 	private :
-	Tile[MAP_SIZE][MAP_SIZE] map;
+    static const int MAP_SIZE ;
+    Tile map[MAP_SIZE][MAP_SIZE];
 	
 	public :
 	void setAnxiety(int i, int j, float anxiety);
