@@ -22,8 +22,8 @@ class ScenarioAction {
   /**
    * @brief This method performed the action.
    */
-  static void run () {}
-}
+  static void run () ;
+} ;
 
 
 /**
@@ -36,7 +36,7 @@ class changeDirection: public ScenarioAction {
    * 0 stop, 1 up, 2 right, 3 down, 4 left 
    */
   int newMovement;
-}
+} ;
 
 
 /**
@@ -52,14 +52,14 @@ class explosion: public ScenarioAction {
    * The power of the explosion
    */
   int power;
-}
+} ;
 
 /**
  * @brief Kill a NPC.
  */
 class killNPC: public ScenarioAction {
   NPC* target;
-}
+} ;
 
 class addObject: public ScenarioAction {
   Object* object;
@@ -73,8 +73,8 @@ class addObject: public ScenarioAction {
   /**
    * Is the object visible to PC (0 no, 1 yes)
    */
-  int isVisiblePC
-}
+  int isVisiblePC ;
+} ;
 
 class removeObject: public ScenarioAction {
   Object* object;

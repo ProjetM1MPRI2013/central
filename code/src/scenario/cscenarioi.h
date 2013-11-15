@@ -1,6 +1,6 @@
 #ifndef CSCENARIOI_H
 #define CSCENARIOI_H
-include "action.h";	
+#include "action.h"
 /**
  * @brief The cscenario class
  * Used by UI 

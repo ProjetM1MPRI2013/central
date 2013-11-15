@@ -1,11 +1,16 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
-#include "Action.h"
+// no such file
+//scenario/action.h ?
+//#include "Action.h"
+#include "scenario/ScenarioAction.h"
+#include "npc.h"
+#include "SFML/System.hpp"
 
-class Geography {}
-class EventType {}
-class EventTarget {}
-class EventListener {}
+class Geography ;
+class EventType ;
+class EventTarget ;
+class EventListener ;
 
 /**
  * @brief The Simulation class
@@ -22,7 +27,14 @@ public :
      * @param dt: short lapse of time
      * Update all the parameters of Simulation
     */
-    static void run(sf::time dt);
+    static void run(sf::Time dt);
+
+		/**
+		*	@brief isInTile
+		* @param npc : the npc you want to know the case he is in
+		* gives the tile the npc is in			
+		*/
+		static void isInTile(NPC npc);
 
     /**
      * @brief setGeography

@@ -3,11 +3,11 @@
 
 class Position;
 enum Layers {
-  L_Players = 1
-  L_NPC = 2
-  L_Geography = 4
+  L_Players = 1,
+  L_NPC = 2,
+  L_Geography = 4,
   L_Cameras = 8
-}
+} ;
 
 /**
  * @brief The Local State Class
@@ -41,6 +41,7 @@ class Terrain : public Positionable {
    * type of the batiment of the case
    */
   TerrainType type;
+  Sprite sprite;
   bool destructible;
   float anxiety;
   float populationDensity;
@@ -98,6 +99,7 @@ class Terrain : public Positionable {
     void setLenghtBat(int l);
     int getWeightBat();
     void setWeightBat(int w);
+    Sprite getSprite();
 };
 
 class NPC : public Positionable {
