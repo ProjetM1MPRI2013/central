@@ -5,14 +5,14 @@
 #include <string>
 #include <iostream>
 
-#define THEME_CONFIG_FILE "../../widgets/BabyBlue.conf"
+#define THEME_CONFIG_FILE "../widgets/BabyBlue.conf"
 static const std::vector<sf::VideoMode> vect_fs_vm = sf::VideoMode::getFullscreenModes();
 bool synchro_vert = false;
 
 void cut_string_x (sf::String s, sf::String* m1 , sf::String* m2) {
   std::size_t n = s.getSize();
 }
-int main() 
+int interface_initiale() 
 {
   //for (std::size_t i = 0; i < vect_fs_vm.size(); ++i)
   //  {
@@ -26,7 +26,7 @@ int main()
   tgui::Gui gui(window);
   tgui::Gui opt(window);
 
-  if (gui.setGlobalFont("../../fonts/80db.ttf") == false)
+  if (gui.setGlobalFont("../fonts/80db.ttf") == false)
         return 1;
 
 
@@ -34,7 +34,7 @@ int main()
   unsigned int w = size.x;
   unsigned int h = size.y;
   tgui::Picture::Ptr picture(gui);
-  picture->load("../pic.jpg");
+  picture->load("pic.jpg");
   
   tgui::Button::Ptr bcreate(gui);
   bcreate->load(THEME_CONFIG_FILE);
@@ -70,9 +70,9 @@ int main()
   
 
   tgui::Picture::Ptr picture2(opt);
-  picture2->load("../pic.jpg");
+  picture2->load("pic.jpg");
   
-  if (opt.setGlobalFont("../../fonts/80db.ttf") == false)
+  if (opt.setGlobalFont("../fonts/80db.ttf") == false)
         return 1;
 
   tgui::Button::Ptr optb(opt);
