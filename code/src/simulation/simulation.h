@@ -1,11 +1,16 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
+// no such file
+//scenario/action.h ?
+//#include "Action.h"
+#include "scenario/ScenarioAction.h"
+#include "npc.h"
+#include "SFML/System.hpp"
 
-class Geography {}
-class EventType {}
-class EventTarget {}
-class EventListener {}
-class Action {}
+class Geography ;
+class EventType ;
+class EventTarget ;
+class EventListener ;
 
 /**
  * @brief The Simulation class
@@ -16,12 +21,27 @@ class Action {}
 class Simulation {
 
 public :
+
+ 	 /**
+     * @brief run
+     * @param dt: short lapse of time
+     * Update all the parameters of Simulation
+    */
+    static void run(sf::Time dt);
+
+		/**
+		*	@brief isInTile
+		* @param npc : the npc you want to know the case he is in
+		* gives the tile the npc is in			
+		*/
+		static void isInTile(NPC npc);
+
     /**
      * @brief setGeography
      * @param g : a reference to the data structure created by the city generator
      * Called by the city generator; locally sets the simulation geography
      */
-    static void setGeography(Geography& g) {}
+    static void setGeography(Geography& g);
 
     /**
      * @brief subscribe
@@ -35,7 +55,7 @@ public :
      * To subscribe to all events from an EventTarget, pass the empty EventType.
      * To subscribe to all events of type EventType, pass the empty EventTarget.
      */
-    static void subscribe(EventType e, EventTarget& t, EventListener& l) {}
+    static void subscribe(EventType e, EventTarget& t, EventListener& l);
 
     /**
      * @brief unsubscribe
@@ -48,15 +68,21 @@ public :
      * To unsubscribe from all events from an EventTarget, pass the empty EventType.
      * To unsubscribe from all events of a type, pass the empty EventTarget
      */
-    static void unsubscribe(EventType e, EventTarget& t, EventListener& l) {}
+    static void unsubscribe(EventType e, EventTarget& t, EventListener& l);
 
     /**
      * @brief actionPerformed
      * @param a : the action that was performed
      * Called by the scenario, notifies the simulation that an action was performed: movement, firing, etc.
      */
-    static void actionPerformed(Action a) {}
+    static void scenarioActionPerformed(ScenarioAction a);
 
+private :
+
+  static Geography map;
+	static Geography oldMap;
+  static List<NPC> NPCs;
+  
 
 };
 
