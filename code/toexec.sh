@@ -7,7 +7,7 @@ echo "
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = \${ACLOCAL_FLAGS}
 bin_PROGRAMS = game
-game_LDADD = -lsfml-graphics\$(SFML_LIB_SUFFIX) -lsfml-system\$(SFML_LIB_SUFFIX) -lsfml-window\$(SFML_LIB_SUFFIX) -lboost_system\$(BOOS_LIB_SUFFIX) -lpthread
+game_LDADD = -ltgui -lsfml-graphics\$(SFML_LIB_SUFFIX) -lsfml-system\$(SFML_LIB_SUFFIX) -lsfml-window\$(SFML_LIB_SUFFIX) -lboost_system\$(BOOS_LIB_SUFFIX) -lpthread
 game_SOURCES = $x $y
 dist_noinst_SCRIPTS = autogen.sh
 AM_CPPFLAGS = $z
