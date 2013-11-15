@@ -1,0 +1,55 @@
+\documentclass[a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\title{Attribution des rôles pour le prototype 1}
+\author{Projet Génie Logiciel MPRI 2013-2014}
+
+\begin{document}
+\maketitle
+\section{Aperçu}
+
+Nous comptons avoir une version du jeu qui fonctionne localement et permet de se déplacer dans une version simplifiée de la ville d'ici mi-décembre. Sauf indication contraire, la date butoir des tâches listées ci-dessous est le 6 décembre.
+
+\section{Scénario}
+\paragraph{Adrien K.} \emph{Interaction entre le scénario et le simulateur} : architecture des classes correspondant aux actions de scénario. Il peut s'agir d'une action du joueur, d'un événement scripté, d'une conséquence d'un choix aléatoire, etc.
+
+\paragraph{Rémy} \emph{Actions et objets des terroristes} : implémentation des actions de scénario ayant spécifiquement trait aux actions des terroristes et à l'utilisation de leurs objets.
+
+\paragraph{Marc B.} \emph{Actions du chef de la police} : implémentation des actions de scénario ayant spécifiquement trait aux actions du chef de la police.
+
+\section{Simulation}
+\paragraph{Adrien H.} \emph{Gestionnaire d'événement} : Le scénario peut s'inscrire à des événements déclenchés par des entités, des classes d'entités, des zones, et choisir le type d'événement auquel il s'inscrit.
+
+\paragraph{Joseph} \emph{Déplaçement des personnages non joueurs (PNJs)} : Les PNJ se déplaçent de façon réaliste et changent de comportement quand ils ont peur.
+
+\paragraph{Gaspard} \emph{Fonction de pas de la simulation} : évolution naturelle de la ville (propagation des taux d'anxiété, génération de nouveaux PNJs).
+
+\paragraph{Denys} \emph{Réaction aux événements du scénario} : détection d'événements fournis par le scénario, calcul des conséquences sur la prochaine étape de simulation.
+
+\section{Réseau}
+\paragraph{Marc H.} \emph{Architecture client/serveur} : terminé pour la communication locale ; travail en cours sur une vraie communication réseau, fin estimée à après le 6 décembre.
+
+\section{Musique}
+\paragraph{Mélissa} \emph{Génération musicale} : lecture des paramètres d'entrée dans le génération offline et génération de la grille harmonique. Date estimée : 24 décembre.
+
+\paragraph{Lucas} \emph{Déclenchement musical} : interface jeu-musique, déclenchement/interruption d'une musique simple à une piste en fonction des événements. Date estimée : 24 décembre.
+
+\section{Génération de la carte}
+\paragraph{Maxime} \emph{Génération version 1} : création aléatoire d'une carte de forme carrée munies de route et de deux types de bâtiments à partir d'une seed.
+
+\section{Graphismes/Interface utilisateur}
+\paragraph{Matthieu} \emph{Menus} : Menu d'accueil, menu de configuration (collaboration avec Anthony).
+
+
+\paragraph{Anthony} \emph{Interface du jeu} : Boutons pour les différentes actions possibles, inventaire et minimap (collaboration avec Matthieu).
+
+\paragraph{Lucas} \emph{Vue des terroristes} : Vue de 2/3.
+
+\paragraph{Naina} \emph{Vue du chef de la police} : Vue du dessus ; deux types de bâtiments.
+
+\end{document}
