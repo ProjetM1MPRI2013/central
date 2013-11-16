@@ -6,25 +6,7 @@
 #include <interfaceinit/interface_init.h>
 int main()
 {
-	int b = interface_initiale();
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-	boost::asio::ip::tcp::v4();
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-	int a = test();
+    int b = interface_initiale();
     return 0;
 }
 
