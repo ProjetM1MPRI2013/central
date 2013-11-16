@@ -133,9 +133,9 @@ void modifyConfig (int index , std::string s) {
           i++;
           fprintf(temp,"%s\n",(const char *)ligne.c_str());
         }
-      std::string delimiter = " ";
+      std::string delimiter = "_";
       std::string action = ligne.substr(0, ligne.find(delimiter));
-      fprintf(temp, "%s",(action + (std::string)" " + s + (std::string) + "\n").c_str());
+      fprintf(temp, "%s",(action + (std::string)"_" + s + (std::string) + "\n").c_str());
       while(getline(fichierConf, ligne))
         {
           fprintf(temp,"%s\n",ligne.c_str());
@@ -157,9 +157,9 @@ void reloadKeyMapping(tgui::ListBox::Ptr lc) {
       std::string ligne;
       while(getline(fichierConf, ligne))
         {
-          std::string delimiter = " ";
+          std::string delimiter = "_";
           std::string action = ligne.substr(0, ligne.find(delimiter));
-          std::string key = ligne.substr(ligne.find(delimiter),ligne.size());
+          std::string key = ligne.substr(ligne.find(delimiter)+1,ligne.size());
           std::string blanc(20-action.size(),' ');
           std::string newline = action + blanc + key;
           lc->addItem(newline);
@@ -180,7 +180,7 @@ int interface_initiale()
   		<< mode.bitsPerPixel << " bpp" << std::endl;
   }
   static sf::VideoMode video_mode = sf::VideoMode::getDesktopMode(); 	
-  sf::RenderWindow window(video_mode, "Game Interface");//,sf::Style::Fullscreen);
+  sf::RenderWindow window(video_mode, "Game Interface",sf::Style::Fullscreen);
   tgui::Gui gui(window);
 
   if (gui.setGlobalFont("../fonts/leadcoat.ttf") == false)
@@ -370,9 +370,9 @@ int interface_initiale()
       std::string ligne;
       while(getline(fichierConf, ligne))
         {
-          std::string delimiter = " ";
+          std::string delimiter = "_";
           std::string action = ligne.substr(0, ligne.find(delimiter));
-          std::string key = ligne.substr(ligne.find(delimiter),ligne.size());
+          std::string key = ligne.substr(ligne.find(delimiter)+1,ligne.size());
           std::string blanc(20-action.size(),' ');
           std::string newline = action + blanc + key;
           listCommande->addItem(newline);
@@ -416,7 +416,7 @@ int interface_initiale()
 	        {
 	          if (event.mouseButton.button == sf::Mouse::Right)
 	            {
-	              modifyConfig(waitingKey-1,"Right_Mouse_Button");
+	              modifyConfig(waitingKey-1,"Right Mouse Button");
 	              reloadKeyMapping(listCommande);
 	              listCommande->deselectItem();
 	              waitingKey =0;
@@ -424,7 +424,7 @@ int interface_initiale()
 	            }
 	          if (event.mouseButton.button == sf::Mouse::Left)
 	            {
-	              modifyConfig(waitingKey-1,"Left_Mouse_Button");
+	              modifyConfig(waitingKey-1,"Left Mouse Button");
 	              reloadKeyMapping(listCommande);
 	              listCommande->deselectItem();
 	              waitingKey =0;
