@@ -647,6 +647,7 @@ int interface_initiale()
                     picture2->setSize(w, h);
                     picture3->setSize(w, h);
                     picture4->setSize(w, h);
+                    picture5->setSize(w, h);
 		  }
 		}
 		if (sync_vertical->isChecked()) {
