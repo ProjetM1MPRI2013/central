@@ -5,6 +5,7 @@
 #include <string>
 #include <unistd.h>
 #include <fstream>
+#include <SFML/Audio.hpp>
 
 using namespace std;
 int usl = chdir("./src/interfaceinit");
@@ -120,6 +121,33 @@ std::string getKeyName(const sf::Keyboard::Key key) {
       }
 }
 
+int copierFichier(char const * const source, char const * const destination)
+{
+    FILE* fSrc;
+    FILE* fDest;
+    char buffer[512];
+    int NbLus;
+
+    if ((fSrc = fopen(source, "rb")) == NULL)
+    {
+        return 1;
+    }
+
+    if ((fDest = fopen(destination, "wb")) == NULL)
+    {
+        fclose(fSrc);
+        return 2;
+    }
+
+    while ((NbLus = fread(buffer, 1, 512, fSrc)) != 0)
+        fwrite(buffer, 1, NbLus, fDest);
+
+    fclose(fDest);
+    fclose(fSrc);
+
+    return 0;
+}
+
 void modifyConfig (int index , std::string s) {
   FILE* temp = fopen("temp.txt","wt");
   string fichierConfName = "../../keymap.conf";
@@ -147,6 +175,12 @@ void modifyConfig (int index , std::string s) {
   remove("../../keymap.conf");
   rename("../../keymap2.conf","../../keymap.conf");
 }
+void modifyConfigAudio (int music , int sound) {
+  FILE* audioconf = fopen("../../audio.conf","wt");
+  fprintf(audioconf,"Music_%d\n",music);
+  fprintf(audioconf,"Sound_%d",sound);
+  fclose(audioconf);
+}
 
 void reloadKeyMapping(tgui::ListBox::Ptr lc) {
   lc->removeAllItems();
@@ -172,13 +206,24 @@ void reloadKeyMapping(tgui::ListBox::Ptr lc) {
 }
 int interface_initiale() 
 {
-  for (std::size_t i = 0; i < vect_fs_vm.size(); ++i)
-    {
-      sf::VideoMode mode = vect_fs_vm[i];
-      std::cout << "Mode #" << i << ": "
-  		<< mode.width << "x" << mode.height << " - "
-  		<< mode.bitsPerPixel << " bpp" << std::endl;
-  }
+	//Définition des sons
+	sf::SoundBuffer changementMenuBuffer;
+    if (!changementMenuBuffer.loadFromFile("../son/SFB-arme-pompe.wav"))
+        return 1;
+    sf::Sound changementMenu;
+    changementMenu.setBuffer(changementMenuBuffer);
+
+	sf::SoundBuffer testBuffer;
+    if (!testBuffer.loadFromFile("../son/SF-bullet-time_04sf.wav"))
+        return 1;
+    sf::Sound test;
+    test.setBuffer(testBuffer);
+    //Fin Définition des sons
+    //Définition de la musique
+    sf::Music interfaceMusic;
+    if (!interfaceMusic.openFromFile("../son/Age_of_Empires_Main_Theme_Dubstep_Remix_Age_of_Dub.wav"))
+        return -1; // error
+    //Fin de la définition de la musique
   static sf::VideoMode video_mode = sf::VideoMode::getDesktopMode(); 	
   sf::RenderWindow window(video_mode, "Game Interface",sf::Style::Fullscreen);
   tgui::Gui gui(window);
@@ -288,9 +333,9 @@ int interface_initiale()
   tgui::Label::Ptr label(gopt);
   label->load(THEME_CONFIG_FILE);
   label->setText("Maximum framerate :");
-  label->setPosition(w/3, 3*h/5);
+  label->setPosition(w/3, 3*h/5-45);
   label->setTextColor(sf::Color(0, 0,0));
-  label->setTextSize(24);
+  label->setTextSize(40);
 
   tgui::ComboBox::Ptr resol(gopt);
   resol->load(THEME_CONFIG_FILE);
@@ -308,14 +353,15 @@ int interface_initiale()
   tgui::Checkbox::Ptr sync_vertical(gopt);
   sync_vertical->load(THEME_CONFIG_FILE);
   sync_vertical->setPosition(w/3, 2*h/5);
-  sync_vertical->setText("Enable Vertical Synchronization");
-  sync_vertical->setSize(32, 32);
+  sync_vertical->setText("Enable Vert. Sync.");
+  sync_vertical->setTextSize(40);
+  sync_vertical->setSize(40, 40);
   sync_vertical->setTextColor(sf::Color(0,0,0));  
 
   tgui::EditBox::Ptr framerate(gopt);
   framerate->load(THEME_CONFIG_FILE);
-  framerate->setPosition(w/2, 3*h/5);
-  framerate->setSize(w/6, 40);
+  framerate->setPosition(w/3, 3*h/5);
+  framerate->setSize(w/3, 40);
 
 
   tgui::Gui gaopt(window);
@@ -342,14 +388,6 @@ int interface_initiale()
   breturnGaOptOpt->setCallbackId(2);
   breturnGaOptOpt->bindCallback(tgui::Button::LeftMouseClicked);
   breturnGaOptOpt->setSize(w/5, 40);
-
-  tgui::Button::Ptr bmodify(gaopt);
-  bmodify->load(THEME_CONFIG_FILE);
-  bmodify->setPosition(2*w/5, 9*h/10);
-  bmodify->setText("Modify");
-  bmodify->setCallbackId(3);
-  bmodify->bindCallback(tgui::Button::LeftMouseClicked);
-  bmodify->setSize(w/5, 40);
 
   tgui::ListBox::Ptr listCommande(gaopt);
   listCommande->load(THEME_CONFIG_FILE);
@@ -382,9 +420,83 @@ int interface_initiale()
   else
     cerr << "Erreur à l'ouverture !" << endl;
 
+  tgui::Gui aopt(window);
+  tgui::Picture::Ptr picture5(aopt);
+  picture5->load("pic.jpg");
+  picture5->setSize(w, h);
+  picture5->setPosition(0, 0);
+
+  if (aopt.setGlobalFont("../fonts/leadcoat.ttf") == false)
+          return 1;
+
+  int audioVol = 0; int soundVol = 0 ;
+  string fichierConfAudioName = "../../audio.conf";
+  ifstream fichierConfAudio(fichierConfAudioName.c_str(), ios::in);
+  if(fichierConfAudio)
+  {
+      std::string ligne;
+      std::string delimiter = "_";
+      getline(fichierConfAudio, ligne);
+      std::string key = ligne.substr(ligne.find(delimiter)+1,ligne.size());
+      audioVol = atoi(key.c_str());
+      getline(fichierConfAudio, ligne);
+      key = ligne.substr(ligne.find(delimiter)+1,ligne.size());
+      soundVol = atoi(key.c_str());
+      fichierConf.close();
+  }
+  else
+    cerr << "Erreur à l'ouverture !" << endl;
+
+  tgui::Button::Ptr breturnAOptOpt(aopt);
+  breturnAOptOpt->load(THEME_CONFIG_FILE);
+  breturnAOptOpt->setText("Return to Menu");
+  breturnAOptOpt->setCallbackId(1);
+  breturnAOptOpt->bindCallback(tgui::Button::LeftMouseClicked);
+  breturnAOptOpt->setPosition(w/3, 3*h/4);
+  breturnAOptOpt->setSize(w/3, 40);
+
+  tgui::Label::Ptr labelvolume(aopt);
+  labelvolume->load(THEME_CONFIG_FILE);
+  labelvolume->setText("Sound Volume :");
+  labelvolume->setPosition(w/3, h/4 - 45);
+  labelvolume->setTextColor(sf::Color(0, 0,0));
+  labelvolume->setTextSize(40);
+
+  tgui::Scrollbar::Ptr scrollbarVolumeSound(aopt);
+  scrollbarVolumeSound->load(THEME_CONFIG_FILE);
+  scrollbarVolumeSound->setVerticalScroll(false);
+  scrollbarVolumeSound->setPosition(w/3, h/4);
+  scrollbarVolumeSound->setSize(w/3, 40);
+  scrollbarVolumeSound->setMaximum(100);
+  scrollbarVolumeSound->setLowValue(1);
+  scrollbarVolumeSound->setValue(soundVol);
+  scrollbarVolumeSound->setTransparency((unsigned char) 200);
+
+  tgui::Label::Ptr labelmusic(aopt);
+  labelmusic->load(THEME_CONFIG_FILE);
+  labelmusic->setText("Music Volume :");
+  labelmusic->setPosition(w/3, 2*h/4 - 45);
+  labelmusic->setTextColor(sf::Color(0, 0,0));
+  labelmusic->setTextSize(40);
+
+  tgui::Scrollbar::Ptr scrollbarVolumeMusic(aopt);
+  scrollbarVolumeMusic->load(THEME_CONFIG_FILE);
+  scrollbarVolumeMusic->setVerticalScroll(false);
+  scrollbarVolumeMusic->setPosition(w/3, 2*h/4);
+  scrollbarVolumeMusic->setSize(w/3, 40);
+  scrollbarVolumeMusic->setMaximum(100);
+  scrollbarVolumeMusic->setLowValue(1);
+  scrollbarVolumeMusic->setValue(audioVol);
+  scrollbarVolumeMusic->setTransparency((unsigned char) 200);
+
   int wim = 0 ; int wima = 0;
   int waitingKey = 0; int waitingKeyReady = 0;
   tgui::Gui* todo = &gui;
+  changementMenu.setVolume(soundVol);
+  test.setVolume(soundVol);
+  interfaceMusic.setVolume(audioVol);
+  interfaceMusic.play();
+  interfaceMusic.setLoop(true);
   while (window.isOpen())
     {
       wim = wima;
@@ -394,6 +506,7 @@ int interface_initiale()
       	case 1 : {todo = &opt; break ;}
       	case 2 : {todo = &gopt; break;}
         case 3 : {todo = &gaopt; break;}
+        case 4 : {todo = &aopt; break;}
       	}
   
       sf::Event event;
@@ -443,64 +556,74 @@ int interface_initiale()
 	    if (callback.id == 1)
 	      {
 		wima = 0;
+		changementMenu.play();
 	      }
 	    if (callback.id == 2) 
 	      {
 		wima = 0;
+		changementMenu.play();
 	      }
 	    if (callback.id == 3)
 	      {
-		wima = 1;
+	    	wima = 1;
+	    	changementMenu.play();
 	      }
 	    if (callback.id == 4)
 	      {
-		window.close();
+	    	changementMenu.play();
+	    	window.close();
 	      }
 	  }
 	  if (wim == 1) {
-              std::cout << "Yolo" <<  std::endl;
 	      if (callback.id == 4) {
 	          wima = 0;
+	          changementMenu.play();
 	      }
 	      if(callback.id == 3) {
 	          wima = 3;
+	          changementMenu.play();
 	      }
 	      if(callback.id == 1) {
 	          wima = 2;
+	          changementMenu.play();
+	      }
+	      if(callback.id == 2) {
+	          wima = 4;
+	          changementMenu.play();
 	      }
 	  }
 	  if (wim ==2) {
 	    if (callback.id == 1) {
 	        wima = 1;
-		int ind_selected_items = resol->getSelectedItemIndex(); 
-		if (ind_selected_items != (-1)) {
-		  int compt = 0;
-		  int index = 0;
-		  while (compt < ind_selected_items || (vect_fs_vm[index]).bitsPerPixel != 32) {
-		    if (((vect_fs_vm[index]).bitsPerPixel) == 32) {
-		      compt ++;
-		    }
-		    index ++;
-		  }
-		  sf::VideoMode mode = vect_fs_vm[index];
-		  sf::Vector2u size = window.getSize();
-		  unsigned int w = size.x;
-		  unsigned int h = size.y;
-		  if (w != mode.width || h != mode.height) {
-		    window.create(mode,"test",sf::Style::Fullscreen);
-		    //Resize of Widgets :
-		    sf::Vector2u size = window.getSize();
-		    w = size.x;
-		    h = size.y;
-		    bcreate->setPosition(w/3,h/5); bcreate->setSize(w/3,40);
-		    bjoin->setPosition(w/3,2*h/5); bjoin->setSize(w/3,40);
-		    boptions->setPosition(w/3,3*h/5);boptions->setSize(w/3,40);
+			changementMenu.play();
+			int ind_selected_items = resol->getSelectedItemIndex();
+			if (ind_selected_items != (-1)) {
+				int compt = 0;
+				int index = 0;
+				while (compt < ind_selected_items || (vect_fs_vm[index]).bitsPerPixel != 32) {
+					if (((vect_fs_vm[index]).bitsPerPixel) == 32) {
+						compt ++;
+					}
+					index ++;
+				}
+				sf::VideoMode mode = vect_fs_vm[index];
+				sf::Vector2u size = window.getSize();
+				unsigned int w = size.x;
+				unsigned int h = size.y;
+				if (w != mode.width || h != mode.height) {
+					window.create(mode,"test",sf::Style::Fullscreen);
+					//Resize of Widgets :
+					sf::Vector2u size = window.getSize();
+					w = size.x;
+					h = size.y;
+					bcreate->setPosition(w/3,h/5); bcreate->setSize(w/3,40);
+					bjoin->setPosition(w/3,2*h/5); bjoin->setSize(w/3,40);
+					boptions->setPosition(w/3,3*h/5);boptions->setSize(w/3,40);
 		    bquit->setPosition(w/3,4*h/5);bquit->setSize(w/3,40);
 		    resol->setPosition(w/3,h/5);resol->setSize(w/3,40);
 		    breturnOptM->setPosition(w/3,4*h/5);breturnOptM->setSize(w/3,40);
 		    sync_vertical->setPosition(w/3,2*h/5);
-		    framerate->setPosition(w/2,3*h/5);framerate->setSize(w/6,40);
-		    label->setPosition(w/3,3*h/5);
+		    label->setPosition(w/3, 3*h/5-45);
 		    bgraph->setPosition(w/3,h/5);bgraph->setSize(w/3,40);
 		    baudio->setPosition(w/3,2*h/5);baudio->setSize(w/3,40);
 		    bgame->setPosition(w/3,3*h/5);bgame->setSize(w/3,40);
@@ -509,11 +632,20 @@ int interface_initiale()
 		    breturnGaOptOpt->setPosition(3*w/5, 9*h/10);
 		    listCommande->setSize(3*w/5, 7*h/10);
 		    listCommande->setPosition(w/5, h/10);
-		    bmodify->setPosition(2*w/5, 9*h/10);  bmodify->setSize(w/5, 40);
+		    breturnAOptOpt->setPosition(w/3, 3*h/4);
+		    breturnAOptOpt->setSize(w/3, 40);
+		    scrollbarVolumeMusic->setPosition(w/3, 2*h/4);
+		    scrollbarVolumeMusic->setSize(w/3, 40);
+		    scrollbarVolumeSound->setPosition(w/3, h/4);
+		    scrollbarVolumeSound->setSize(w/3, 40);
+		    framerate->setPosition(w/3, 3*h/5);
+		    framerate->setSize(w/3, 40);
+		    labelvolume->setPosition(w/3, h/4 - 45);
+		    labelmusic->setPosition(w/3, 2*h/4 - 45);
 		    //Resize of Pictures :
                     picture->setSize(w, h);
                     picture2->setSize(w, h);
-		    picture3->setSize(w, h);
+                    picture3->setSize(w, h);
                     picture4->setSize(w, h);
 		  }
 		}
@@ -533,17 +665,41 @@ int interface_initiale()
 	  if (wim == 3) {
 	      if (callback.id == 2) {
 	          wima = 1;
+	          changementMenu.play();
 	      }
-	      if (callback.id == 3) {
-	          if (listCommande->getSelectedItemIndex() != -1) {
-	              std::cout << "#SWAG "<< listCommande->getSelectedItemIndex() << std::endl;
-	              waitingKey = listCommande->getSelectedItemIndex() +1 ;
-	              listCommande->setSelectedBackgroundColor(sf::Color(238,44,44,100));
-	          }
+	      if (callback.id == 1)
+	      {
+	    	  remove("../../keymap.conf");
+	    	  if (copierFichier("../../defaultkeymap.conf","../../keymap.conf") != 0) {
+	    		  return 1;
+	    	  };
+              reloadKeyMapping(listCommande);
 	      }
+	  }
+	  if (wim == 4) {
+		  if (callback.id ==1) {
+			  wima = 1;
+	          changementMenu.play();
+	          modifyConfigAudio(interfaceMusic.getVolume(),changementMenu.getVolume());
+		  }
 	  }
 
         }
+      if (listCommande->getSelectedItemIndex() != -1) {
+          std::cout << "#SWAG "<< listCommande->getSelectedItemIndex() << std::endl;
+          waitingKey = listCommande->getSelectedItemIndex() +1 ;
+          listCommande->setSelectedBackgroundColor(sf::Color(238,44,44,100));
+      }
+      if (wim == 4) {
+    	  if (interfaceMusic.getVolume() != scrollbarVolumeMusic->getValue()) {
+    		  interfaceMusic.setVolume(scrollbarVolumeMusic->getValue());
+    	  }
+    	  if (changementMenu.getVolume() != scrollbarVolumeSound->getValue()) {
+    		  changementMenu.setVolume(scrollbarVolumeSound->getValue());
+    		  test.setVolume(scrollbarVolumeSound->getValue());
+    		  test.play();
+    	  }
+      }
       window.clear();
       (*todo).draw();
       window.display();
