@@ -120,7 +120,20 @@ std::string getKeyName(const sf::Keyboard::Key key) {
     case sf::Keyboard::Pause: return "Pause";
       }
 }
+std::string loadNick() {
 
+	  string fichierNickName = "../../conf/nick.conf";
+	  ifstream fichierNick(fichierNickName.c_str(), ios::in);
+	  std::string nickFromFile;
+	  if(fichierNick)
+	  {
+	      getline(fichierNick, nickFromFile);
+	      fichierNick.close();
+	  }
+	  else
+	    cerr << "Erreur à l'ouverture nick.conf!" << endl;
+	  return nickFromFile;
+}
 int copierFichier(char const * const source, char const * const destination)
 {
     FILE* fSrc;
@@ -150,7 +163,7 @@ int copierFichier(char const * const source, char const * const destination)
 
 void modifyConfig (int index , std::string s) {
   FILE* temp = fopen("temp.txt","wt");
-  string fichierConfName = "../../keymap.conf";
+  string fichierConfName = "../../conf/keymap.conf";
   ifstream fichierConf(fichierConfName.c_str(), ios::in);
   if(fichierConf)
   {
@@ -172,11 +185,11 @@ void modifyConfig (int index , std::string s) {
   fclose(temp);
   fichierConf.close();
   rename("temp.txt","../../keymap2.conf");
-  remove("../../keymap.conf");
-  rename("../../keymap2.conf","../../keymap.conf");
+  remove("../../conf/keymap.conf");
+  rename("../../keymap2.conf","../../conf/keymap.conf");
 }
 void modifyConfigAudio (int music , int sound) {
-  FILE* audioconf = fopen("../../audio.conf","wt");
+  FILE* audioconf = fopen("../../conf/audio.conf","wt");
   fprintf(audioconf,"Music_%d\n",music);
   fprintf(audioconf,"Sound_%d",sound);
   fclose(audioconf);
@@ -184,7 +197,7 @@ void modifyConfigAudio (int music , int sound) {
 
 void reloadKeyMapping(tgui::ListBox::Ptr lc) {
   lc->removeAllItems();
-  string fichierConfName = "../../keymap.conf";
+  string fichierConfName = "../../conf/keymap.conf";
   ifstream fichierConf(fichierConfName.c_str(), ios::in);
   if(fichierConf)
   {
@@ -389,9 +402,30 @@ int interface_initiale()
   breturnGaOptOpt->bindCallback(tgui::Button::LeftMouseClicked);
   breturnGaOptOpt->setSize(w/5, 40);
 
+  tgui::Label::Ptr labelNick(gaopt);
+  labelNick->load(THEME_CONFIG_FILE);
+  std::string nickFromFile =loadNick();
+  labelNick->setText((std::string)"NickName (" + nickFromFile + (std::string)")");
+  labelNick->setPosition(w/5, 7*h/10 - 45);
+  labelNick->setTextColor(sf::Color(0, 0,0));
+  labelNick->setTextSize(40);
+
+  tgui::EditBox::Ptr nickbox(gaopt);
+  nickbox->load(THEME_CONFIG_FILE);
+  nickbox->setPosition(w/5, 7*h/10);
+  nickbox->setSize(2*w/5, 40);
+
+  tgui::Button::Ptr bapplynick(gaopt);
+  bapplynick->load(THEME_CONFIG_FILE);
+  bapplynick->setPosition(3.5*w/5, 7*h/10);
+  bapplynick->setText("Apply");
+  bapplynick->setCallbackId(3);
+  bapplynick->bindCallback(tgui::Button::LeftMouseClicked);
+  bapplynick->setSize(0.5*w/5, 40);
+
   tgui::ListBox::Ptr listCommande(gaopt);
   listCommande->load(THEME_CONFIG_FILE);
-  listCommande->setSize(3*w/5, 7*h/10);
+  listCommande->setSize(3*w/5, 5*h/10);
   listCommande->setBackgroundColor(sf::Color(50,50,50,100));
   listCommande->setItemHeight(40);
   listCommande->setPosition(w/5, h/10);
@@ -401,7 +435,7 @@ int interface_initiale()
   gameOptionFont.loadFromFile("../fonts/cour.ttf");
   listCommande->setTextFont(gameOptionFont);
   // Modularité oblige :
-  string fichierConfName = "../../keymap.conf";
+  string fichierConfName = "../../conf/keymap.conf";
   ifstream fichierConf(fichierConfName.c_str(), ios::in);
   if(fichierConf)
   {
@@ -430,7 +464,7 @@ int interface_initiale()
           return 1;
 
   int audioVol = 0; int soundVol = 0 ;
-  string fichierConfAudioName = "../../audio.conf";
+  string fichierConfAudioName = "../../conf/audio.conf";
   ifstream fichierConfAudio(fichierConfAudioName.c_str(), ios::in);
   if(fichierConfAudio)
   {
@@ -489,6 +523,43 @@ int interface_initiale()
   scrollbarVolumeMusic->setValue(audioVol);
   scrollbarVolumeMusic->setTransparency((unsigned char) 200);
 
+  tgui::Gui jgm(window);
+  tgui::Picture::Ptr picture6(jgm);
+  picture6->load("pic.jpg");
+  picture6->setSize(w, h);
+  picture6->setPosition(0, 0);
+  if (jgm.setGlobalFont("../fonts/leadcoat.ttf") == false)
+          return 1;
+
+  tgui::EditBox::Ptr chatinsert(jgm);
+  chatinsert->load(THEME_CONFIG_FILE);
+  chatinsert->setPosition(w/10, 19*h/20);
+  chatinsert->setSize(5*w/10, 30);
+
+  tgui::ChatBox::Ptr chatbox(jgm);
+  chatbox->load(THEME_CONFIG_FILE);
+  chatbox->setSize(5*w/10, 5*h/20);
+  chatbox->setTextSize(20);
+  chatbox->setPosition(w/10, 13*h/20);
+  chatbox->setTransparency(100);
+  chatbox->setBackgroundColor(sf::Color(200,200,200,100));
+
+  tgui::Button::Ptr breturnJgmM(jgm);
+  breturnJgmM->load(THEME_CONFIG_FILE);
+  breturnJgmM->setText("Return");
+  breturnJgmM->setCallbackId(1);
+  breturnJgmM->bindCallback(tgui::Button::LeftMouseClicked);
+  breturnJgmM->setPosition(7*w/10, 15*h/20);
+  breturnJgmM->setSize(2*w/10, 2*h/20);
+
+  tgui::Panel::Ptr panel(jgm);
+  panel->setSize(5*w/10, 11*h/20);
+  panel->setPosition(w/10, h/20);
+  panel->setBackgroundColor(sf::Color(200,200,200,100));
+  panel->setTransparency(100);
+
+
+
   int wim = 0 ; int wima = 0;
   int waitingKey = 0; int waitingKeyReady = 0;
   tgui::Gui* todo = &gui;
@@ -507,6 +578,7 @@ int interface_initiale()
       	case 2 : {todo = &gopt; break;}
         case 3 : {todo = &gaopt; break;}
         case 4 : {todo = &aopt; break;}
+        case 5 : {todo = &jgm; break;}
       	}
   
       sf::Event event;
@@ -544,7 +616,21 @@ int interface_initiale()
 	              listCommande->setSelectedBackgroundColor(sf::Color(200,200,200,100));
 	            }
 	        }
-	  }
+	    }
+	      if (wim == 5) {
+		      if (event.type == sf::Event::KeyPressed) {
+		    	  if (event.key.code ==sf::Keyboard::Return) {
+		    		  std::string nickName = loadNick();
+			    	  sf::String newchatString = chatinsert->getText();
+			    	  chatinsert->setText("");
+			    	  std::string newchatStdString  = newchatString.toAnsiString();
+			    	  if (newchatStdString.compare("") !=0) {
+			    		  //TODO Envoyer un message aux autres personnes dont le contenu est : newchatStdString
+			    		  chatbox->addLine(nickName + (std::string)" : " + newchatStdString,sf::Color(0,0,0));
+			    	  }
+		    	  }
+		      }
+	      }
 
           (*todo).handleEvent(event);
         }
@@ -560,7 +646,7 @@ int interface_initiale()
 	      }
 	    if (callback.id == 2) 
 	      {
-		wima = 0;
+		wima = 5;
 		changementMenu.play();
 	      }
 	    if (callback.id == 3)
@@ -670,11 +756,24 @@ int interface_initiale()
 	      }
 	      if (callback.id == 1)
 	      {
-	    	  remove("../../keymap.conf");
-	    	  if (copierFichier("../../defaultkeymap.conf","../../keymap.conf") != 0) {
+	    	  remove("../../conf/keymap.conf");
+	    	  if (copierFichier("../../defaultkeymap.conf","../../conf/keymap.conf") != 0) {
 	    		  return 1;
 	    	  };
               reloadKeyMapping(listCommande);
+	      }
+	      if (callback.id ==3) {
+	    	  sf::String newNickString = nickbox->getText();
+	    	  std::string newNickStdString  = newNickString.toAnsiString();
+	    	  if (newNickStdString.compare("") !=0) {
+	    		  FILE * fnick = fopen("../../conf/nick.conf","wb");
+	    		  fprintf(fnick,"%s\n",newNickStdString.c_str());
+	    		  std::cout << newNickStdString.c_str();
+	    		  fclose(fnick);
+	    		  labelNick->setText((std::string)"NickName (" + newNickStdString + (std::string)")");
+	    	  }
+
+
 	      }
 	  }
 	  if (wim == 4) {
@@ -682,6 +781,13 @@ int interface_initiale()
 			  wima = 1;
 	          changementMenu.play();
 	          modifyConfigAudio(interfaceMusic.getVolume(),changementMenu.getVolume());
+		  }
+	  }
+	  if (wim == 5) {
+		  if (callback.id ==1) {
+			  wima = 0;
+			  changementMenu.play();
+
 		  }
 	  }
 
