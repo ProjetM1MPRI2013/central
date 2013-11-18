@@ -2,9 +2,15 @@
 #DEFINE HSCENARIO_H
 
 
-#include "Event.h"
-#include "Action.h"
+//no such file
+//#include "Event.h"
+#include "action.h"
 #include "ScenarioAction.h"
+
+//Quickfix
+//Replace with includes
+class EventType ;
+class EventTarget ;
 
 
 /**
@@ -19,20 +25,20 @@ class Scenario {
   /**
    * @brief the run function called by Simulation at each iteration.
    */
-  static void run () {}
+  static void run () ;
 
   /**
    * @brief a event has been triggered
    * @param e: event the listener subscribes to, for instance "isDestroyed"
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
-  static void eventTriggered (EventType e, EventTarget& t) {}
+  static void eventTriggered (EventType e, EventTarget& t) ;
   
   /**
    * @brief new action from Network
    * @param a: action that have to be performed
    */
-  static void newAction (Action a)
+  static void newAction (Action a) ;
 
 }
 

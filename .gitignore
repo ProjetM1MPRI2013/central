@@ -1,0 +1,33 @@
+# Compilation Generated files
+.deps
+.dirstamp
+depcomp
+*.o
+code/Makefile*
+code/aclocal.m4
+code/autom4te.cache
+code/config.log
+code/config.status
+code/configure
+code/game
+code/install-sh
+code/missing
+
+# Temp files
+*~
+
+# Latex compilation outputs
+delivrable/*.aux
+delivrable/*.log
+delivrable/*.out
+delivrable/*.pdf
+delivrable/*.toc
+
+# OS Generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

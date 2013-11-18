@@ -3,11 +3,11 @@
 
 class Position;
 enum Layers {
-  L_Players = 1
-  L_NPC = 2
-  L_Geography = 4
+  L_Players = 1,
+  L_NPC = 2,
+  L_Geography = 4,
   L_Cameras = 8
-}
+} ;
 
 /**
  * @brief The Local State Class
