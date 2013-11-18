@@ -8,7 +8,7 @@ ClientImplem::ClientImplem(ClientInfo c_info) :ack_set() {
     service = new io_service() ;
     sock = new ip::udp::socket(*service) ;
     buff = new string(BUFF_SIZE, '\000') ;
-    recieved_updates = new vector<GameUpdate>() ;
+    //recieved_updates = new vector<GameUpdate>() ;
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
@@ -45,16 +45,18 @@ ClientImplem::~ClientImplem(){
     delete service ;
     delete sock ;
     delete buff ;
-    delete recieved_updates ;
+    //delete recieved_updates ;
 }
 
+/*
 void ClientImplem::sendEvent(Event &event) {
     string &msg = event.toString() ;
     const ip::udp::endpoint* endp = new ip::udp::endpoint(server_endpoint) ;
     //on_sent will have to free the space occupied by s
     sock->async_send_to(buffer(msg), *endp, boost::bind(&ClientImplem::on_sent,this,msg,_1,_2)) ;
 }
-
+*/
+/*
 vector<GameUpdate>& ClientImplem::recieveUpdates(){
 
     vector<GameUpdate> *vec = recieved_updates ;
@@ -64,7 +66,7 @@ vector<GameUpdate>& ClientImplem::recieveUpdates(){
 
 vector<NetEvent> & ClientImplem::recieveNetEvents(){
     return *(new vector<NetEvent>()) ;
-}
+}*/
 
 void ClientImplem::on_sent(string & msg, const boost::system::error_code& error, int size){
 
@@ -121,7 +123,7 @@ void ClientImplem::on_sent(string & msg, const boost::system::error_code& error,
     }
     } ;
 }
-
+/*
 void ClientImplem::on_recieve(const boost::system::error_code &error, int size){
     if(error != 0)
     {
@@ -167,6 +169,7 @@ void ClientImplem::on_recieve(const boost::system::error_code &error, int size){
 
     }
 }
+*/
 
 void ClientImplem::init_connexion(){
 

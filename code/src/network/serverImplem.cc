@@ -8,7 +8,7 @@ ServerImplem::ServerImplem(ServerInfo s_info) {
 void ServerImplem::sendUpdate(GameState &game_state){
   return ; 
 }
-
+/*
 vector<Event>& ServerImplem::receiveEvents(){
   return *(new std::vector<Event>()) ;
 }
@@ -16,3 +16,4 @@ vector<Event>& ServerImplem::receiveEvents(){
 vector<NetEvent>& ServerImplem::receiveNetEvents(){
     return *(new vector<NetEvent>()) ;
 }
+*/

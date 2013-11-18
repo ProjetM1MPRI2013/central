@@ -1,10 +1,9 @@
 #ifndef DUMMYCLIENT_H
 #define DUMMYCLIENT_H
 
+#include <map>
 #include "client.h"
 #include "dummyServer.h"
-
-using namespace std ;
 
 /**
  * @brief The DummyClient class
@@ -13,60 +12,57 @@ using namespace std ;
  * the network, nor carry out any serialization
  */
 
-
 class DummyClient : public Client{
 
-    friend DummyServer::~DummyServer() ;
+  friend DummyServer::~DummyServer() ;
 
 public:
-    /**
-     * @brief DummyClient
-     * Creates a new Client, connected to the server.
-     * All events sent will be copied to the server
-     * The server will copy any update to the client
-     * @param server : the server the Client will connect to
-     */
-    DummyClient(DummyServer& server);
+  /**
+   * @brief DummyClient
+   * Creates a new Client, connected to the server.
+   * All events sent will be copied to the server
+   * The server will copy any update to the client
+   * @param server : the server the Client will connect to
+   */
+  DummyClient(DummyServer& server);
 
-    /**
-     * @brief addUpdate
-     * @param gu : the game update to add to the recieved
-     * updates.
-     */
-    void addUpdate(GameUpdate& gu) ;
+  /**
+   * @brief addMessage : adds a pending message to this client
+   * @param msg : the message to add
+   * @param msgType : the type of message to add
+   */
+  void addMessage(AbstractMessage &msg, std::string msgType) ;
 
 protected :
-    /**
-     * protected destructor : the client will be
-     * destroyed either when the server is destroyed,
-     * or by call to shutdown (not implemented for now).
-     */
-    virtual ~DummyClient() ;
+  /**
+   * protected destructor : the client will be
+   * destroyed either when the server is destroyed,
+   * or by call to shutdown (not implemented for now).
+   */
+  virtual ~DummyClient() ;
 
-    /**
-     * @brief recieved_updates
-     * Stores the updates recieved from now.
-     * Will be replaced by an empty vector when
-     * recieved_updates is called.
-     */
-    vector<GameUpdate>* recieved_updates;
-    /**
-     * @brief server
-     * The server this client is connected to.
-     */
-    DummyServer* server ;
+  typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
+
+  /**
+   * @brief recieved_updates
+   * Stores the updates recieved from now.
+   * To each message type, associates a vector composed of
+   * the received messages of this type.
+   */
+  MapType received_messages;
+  /**
+   * @brief server
+   * The server this client is connected to.
+   */
+  DummyServer* server ;
 
     /*
-     * Methods inherited from the server interface
+     * Methods inherited from the Client interface
      */
+  virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) ;
 
-public :
+  virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *) ) ;
 
-    virtual void sendEvent(Event& event) ;
-
-    virtual vector<GameUpdate>& recieveUpdates() ;
-
-    virtual vector<NetEvent>& recieveNetEvents() ;
 };
 
 #endif // DUMMYCLIENT_H

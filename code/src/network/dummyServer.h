@@ -2,6 +2,7 @@
 #define DUMMYSERVER_H
 
 #include "server.h"
+#include <map>
 
 class DummyClient ;
 
@@ -37,11 +38,11 @@ public:
     void addClient(DummyClient& cli) ;
 
     /**
-     * @brief addEvent
-     * Adds an event to the recieved_events
-     * @param event : the event to add.
+     * @brief addMessage : adds a received message to the server with the given type
+     * @param msg : the message to add
+     * @param msgType : the type of the message
      */
-    void addEvent(Event& event) ;
+    void addMessage(AbstractMessage& msg, std::string msgType) ;
 
 private :
     /**
@@ -50,23 +51,25 @@ private :
      */
     std::vector<DummyClient*> clients ;
 
+    typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
     /**
-     * @brief events : all the events recieved from now.
-     * Will be reset when recieveEvents() is called.
+     * @brief received_messages : used to store all the messages received from now.
+     * Associates to each type of message a vector containing all the messages
+     * received.
      */
-    std::vector<Event> *events ;
+    MapType received_messages ;
 
+protected :
     /*
-     *Methods inherited from Client
+     *Methods inherited from Server
      */
+    virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType ) ;
+
+    virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *) ) ;
 
 public :
 
   virtual void sendUpdate(GameState &game_state) ;
-
-  virtual std::vector<Event>& receiveEvents() ;
-
-  virtual std::vector<NetEvent>& receiveNetEvents() ;
 
 };
 

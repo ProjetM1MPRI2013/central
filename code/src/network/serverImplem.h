@@ -4,7 +4,6 @@
 #include <boost/asio.hpp>
 #include "server.h"
 
-
 using namespace boost::asio ;
 using namespace std ;
 
@@ -29,10 +28,17 @@ class ServerImplem : public Server {
     Container of the pending events recieved.
     With a mutex to prevent concurrent access.
    */
-  vector<Event> recieved_events ;
+  //vector<Event> recieved_events ;
   //mutex stuff
   
   void on_recieve(/*some arg*/) ;
+
+  virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
+    //TODO missing implementation
+  }
+  virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *) ) {
+    //TODO missing implementation
+  }
 
  public :
 
@@ -42,8 +48,8 @@ class ServerImplem : public Server {
    * Methods from Server Interface
    */
   void sendUpdate(GameState& game_state) ;
-  vector<Event>& receiveEvents() ;
-  virtual vector<NetEvent>& receiveNetEvents() ;
+  //vector<Event>& receiveEvents() ;
+  //virtual vector<NetEvent>& receiveNetEvents() ;
 } ;
 
 #endif 

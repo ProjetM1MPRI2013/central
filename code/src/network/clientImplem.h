@@ -7,8 +7,8 @@
 #include <boost/asio.hpp>
 #include "client.h"
 
-using namespace boost::asio;
-using namespace std;
+
+
 
 /**
  * @brief The ClientImplem class
@@ -44,6 +44,8 @@ using namespace std;
 
 
 
+using namespace boost::asio ;
+using namespace std;
 
 class ClientImplem : public Client {
 
@@ -54,10 +56,19 @@ public :
    */
     ClientImplem(ClientInfo c_info) ;
     ~ClientImplem() ;
-    virtual void sendEvent(Event& event) ;
-    virtual std::vector<GameUpdate>& recieveUpdates() ;
-    virtual std::vector<NetEvent>& recieveNetEvents() ;
+    //virtual void sendEvent(Event& event) ;
+    //virtual std::vector<GameUpdate>& recieveUpdates() ;
+    //virtual std::vector<NetEvent>& recieveNetEvents() ;
 
+protected :
+    virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
+      //TODO missing implementation
+    }
+    virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *) ) {
+      //TODO missing implementation
+    }
+
+public :
     /**
      * @brief BUFF_SIZE
      * size of the buffer used for recieve operations.
@@ -115,7 +126,7 @@ protected :
      * vector used to store the recieved GameUpdates.
      * This is the vector returned when calling to recieveUpdates()
      */
-    vector<GameUpdate>* recieved_updates ;
+    //vector<GameUpdate>* recieved_updates ;
 
     /**
      * @brief buff
@@ -170,6 +181,8 @@ protected :
     int get_msg_type(string &msg) ;
 
     int get_msg_nb(string &msg) ;
+
+
 
 } ;
 
