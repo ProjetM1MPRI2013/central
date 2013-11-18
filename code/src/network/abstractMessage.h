@@ -34,7 +34,9 @@ public :
    * @return a string object representing the Class of a message
    *
    * Every class extending the AbstractMessageInterface must
-   * provide their own implementation of the getMsgType method.
+   * provide their own implementation of the getMsgType method.7
+   * The returned string must be exactly 8 characters long.
+   * (it will be sent over the network, so a fixed size is required).
    */
   static std::string getMsgType() { assert(false) ;}
 
