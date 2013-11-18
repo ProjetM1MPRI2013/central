@@ -45,7 +45,7 @@ void DummyServer::sendUpdate(GameState &game_state){
     }
 }
 
-vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *)){
+vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &)){
     MapType::iterator p =  received_messages.find(msgType) ;
     if(p != received_messages.end())
       {

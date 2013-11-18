@@ -12,7 +12,7 @@
  * expicitely by the client.
  */
 
-class NetEvent : AbstractMessage{
+class NetEvent : public AbstractMessage{
 public:
 
   /**

@@ -51,7 +51,8 @@ public :
    */
   template <typename MsgType>
   std::vector<MsgType *> & receiveMessages(){
-    return (std::vector<MsgType *> &) receive_messages(MsgType::getMsgType(), &MsgType::fromString) ;
+    //function pointer casting ----> not sure it works
+    return (std::vector<MsgType *> &) receive_messages(MsgType::getMsgType(), (AbstractMessage* (*) (std::string &)) &MsgType::fromString) ;
 
   }
 
@@ -72,7 +73,7 @@ protected :
    * @param f : function used for deserialisation
    * @return : a vector containing all the messages of this type received from now.
    */
-  virtual std::vector<AbstractMessage * >& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string *) ) =0;
+  virtual std::vector<AbstractMessage * >& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) =0;
 
 } ;
 
