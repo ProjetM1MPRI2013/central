@@ -8,26 +8,32 @@
 #define DOWN_TILE = [20;11] /* Distance à la tile du bas */
 
 struct coord :
-{
-  int x, y;  
+{ 
+  int x , y;
 };
 
 class Sprite :
 {
- private:
-  int height, width;
-  coord c_tileset, c_map; 
-  // c_tileset : coordonnées dans la tileset
-  // c_map : coordonnées dans la sprite qui correspondent à l'origine sur la map.
  public:
   int getHeight();
   int getWidth();
   coord getTile();
   coord getMap();
-}
+  void setHeight(int h);
+  void setWidth(int w);
+  void setTile(coord ct);
+  void setMap(coord cm);
+
+ private:
+  int height, width;
+  coord c_tileset, c_map; 
+  // c_tileset : coordonnées dans la tileset
+  // c_map : coordonnées dans la sprite qui correspondent à l'origine sur la map.
+
+};
   
 
-class TileMap : public sf::Drawable, public sf::Transformable
+class IsoMap : public sf::Drawable, public sf::Transformable
 {
  public:
   bool load(const std::string& tileset, const Terrain* tiles);

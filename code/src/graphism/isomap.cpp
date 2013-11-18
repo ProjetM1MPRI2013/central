@@ -1,33 +1,34 @@
 #include <SFML/Graphics.hpp>
 #include <simulation/localState.h>
 #include <simulation/geography.h>
+#include <graphism/map.h>
 
 
 class Sprite :
 {
 public:
   int getHeight()
-  { return height };
+  { return height }
   int getWidth()
-  { return width };
+  { return width }
   coord getTile()
-  { return c_tileset };
+  { return c_tileset }
   coord getMap()
-  { return c_map };  
+  { return c_map }
   void setHeight(int h)
-  { height = h };
+  { height = h }
   void setWidth(int w)
-  {width = w};
+  {width = w}
   void setTile(coord ct)
-  {c_tileset = ct};
+  {c_tileset = ct}
   void setMap(coord cm)
-  {c_map = cm};
+  {c_map = cm}
 private:
   int height, width;
   coord c_tileset, c_map; 
 };
 
-class TileMap : public sf::Drawable, public sf::Transformable
+class IsoMap : public sf::Drawable, public sf::Transformable
 {
 public:
 
@@ -47,7 +48,7 @@ public:
         for (unsigned int i = 0; i < width; ++i)
 	  for (unsigned int j = 0; j < height; ++j)
             {
-	      // on récupère le numéro de tuile courant
+	      // on récupère la tuile courante
 	      Terrain tile = map.getTile(i,j);
 
 	      sprite = tile.getSprite();
@@ -65,10 +66,10 @@ public:
 	      sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
 
                 // on définit ses quatre coins
-	      quad[0].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu, i * RIGHT_TILE[1] + j * SIZE_TILE[1] - tmv);
-	      quad[1].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu + tw , i * RIGHT_TILE[1] + j * SIZE_TILE[1] - tmv);
-	      quad[2].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu + tw, i * RIGHT_TILE[1] + j * SIZE_TILE[1] - tmv + th);
-	      quad[3].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu, i * RIGHT_TILE[1] + j * SIZE_TILE[1] - tmv + th);
+	      quad[0].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu, i * RIGHT_TILE[1] + j * DOWN_TILE[1] - tmv);
+	      quad[1].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu + tw , i * RIGHT_TILE[1] + j * DOWN_TILE[1] - tmv);
+	      quad[2].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu + tw, i * RIGHT_TILE[1] + j * DOWN_TILE[1] - tmv + th);
+	      quad[3].position = sf::Vector2f(i * RIGHT_TILE[0] + j * DOWN_TILE[0] - tmu, i * RIGHT_TILE[1] + j * DOWN_TILE[1] - tmv + th);
 
                 // on définit ses quatre coordonnées de texture
 	      quad[0].texCoords = sf::Vector2f(tu, tv);
@@ -90,8 +91,8 @@ private:
         // on applique la texture du tileset
         states.texture = &m_tileset;
 
-        // et on dessine enfin le tableau de vertex
-        target.draw(m_vertices, states);
+        // 	
+	target.draw(m_vertices, states);
     }
 
     sf::VertexArray m_vertices;
