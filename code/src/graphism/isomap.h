@@ -1,5 +1,5 @@
-#ifndef GRAPHISM
-#define GRAPHISM
+#ifndef ISOMAP
+#define ISOMAP
 
 #include <SFML/Graphics.hpp>
 #include <simulation/localState.h>

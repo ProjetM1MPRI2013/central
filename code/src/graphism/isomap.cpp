@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <simulation/localState.h>
 #include <simulation/geography.h>
-#include <graphism/map.h>
+#include <graphism/isomap.h>
 
 
 class Sprite :
@@ -91,7 +91,7 @@ private:
         // on applique la texture du tileset
         states.texture = &m_tileset;
 
-        // 	
+        // on affiche tout	
 	target.draw(m_vertices, states);
     }
 
