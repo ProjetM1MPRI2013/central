@@ -1095,20 +1095,20 @@ int interface_initiale() {
 				}
 				if (callback.id ==2) { // Direct Connect Button pressed
 
-					std::cout << "ok2" << std::endl;
-					std::string serverIp = (ipbox->getText()).toAnsiString();
-					ClientInfo c_info = ClientInfo(serverIp,(std::string)"1234");
-					(*gameClient) = network.createClient(c_info);
-					std::cout << serverIp << std::endl;
-					std::cout << "ok1" << std::endl;
-					std::vector<NetEvent*> msgVector= gameClient->receiveMessages<NetEvent>();
-					std::cout << "ok3" << std::endl;
-					int sizerm = msgVector.size();
-					for (int i = 0 ; i < sizerm ; i++ ) {
-						if ((*(msgVector[i])).getType() == 1) {
-							std::cout << "ok" << std::endl;
-						}
-					}
+					//std::cout << "ok2" << std::endl;
+					//std::string serverIp = (ipbox->getText()).toAnsiString();
+					//ClientInfo c_info = ClientInfo(serverIp,(std::string)"1234");
+					//(*gameClient) = network.createDummyClient(c_info);
+					//std::cout << serverIp << std::endl;
+					//std::cout << "ok1" << std::endl;
+					///std::vector<NetEvent*> msgVector= gameClient->receiveMessages<NetEvent>();
+					//std::cout << "ok3" << std::endl;
+					//int sizerm = msgVector.size();
+					//for (int i = 0 ; i < sizerm ; i++ ) {
+					//	if ((*(msgVector[i])).getType() == 1) {
+						//	std::cout << "ok" << std::endl;
+					//	}
+					//}
 
 				}
 			}
