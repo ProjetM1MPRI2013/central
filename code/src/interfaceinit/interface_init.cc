@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <SFML/Audio.hpp>
+#include <../network/network.h>
 
 using namespace std;
 int usl = chdir("./src/interfaceinit");
@@ -691,6 +692,86 @@ int interface_initiale() {
 	//End Definition of the scrollbar sound
 	//End Definition of the audio option menu widgets set (aopt)
 
+	//Definition of the select server menu widgets set (ssm)
+	tgui::Gui ssm(window);
+	tgui::Picture::Ptr picture7(ssm);
+	//Definition of the picture
+	picture7->load("pic.jpg");
+	picture7->setSize(w, h);
+	picture7->setPosition(0, 0);
+	if (ssm.setGlobalFont("../fonts/leadcoat.ttf") == false)
+		return 1;
+	//End Definition of the Background Picture
+
+	//Definition of the Direct Connect Box
+	tgui::EditBox::Ptr ipbox(ssm);
+	ipbox->load(THEME_CONFIG_FILE);
+	ipbox->setPosition(w / 5, h/5);
+	ipbox->setSize(2 * w / 5, 40);
+	//End Definition of the Direct Connect Box
+
+	//Definition of the Direct Connect Button
+	tgui::Button::Ptr bapplyip(ssm);
+	bapplyip->load(THEME_CONFIG_FILE);
+	bapplyip->setText("Direct Connect");
+	bapplyip->setCallbackId(2);
+	bapplyip->bindCallback(tgui::Button::LeftMouseClicked);
+	bapplyip->setPosition(3.5*w / 5,  h / 5);
+	bapplyip->setSize(0.5*w / 5, 40);
+	//End Definition of the Direct Connect Button
+
+	//Definition of the Return Button
+	tgui::Button::Ptr bReturnSsmMenu(ssm);
+	bReturnSsmMenu->load(THEME_CONFIG_FILE);
+	bReturnSsmMenu->setText("Return to Menu");
+	bReturnSsmMenu->setCallbackId(1);
+	bReturnSsmMenu->bindCallback(tgui::Button::LeftMouseClicked);
+	bReturnSsmMenu->setPosition(3*w / 5,  4* h / 5);
+	bReturnSsmMenu->setSize(w / 5, 40);
+	//End Definition of the Return Button
+
+	//Definition of the "Direct Connect" Label
+	tgui::Label::Ptr labelDirectConnect(ssm);
+	labelDirectConnect->load(THEME_CONFIG_FILE);
+	labelDirectConnect->setText("Direct Connect (ip) :");
+	labelDirectConnect->setPosition(w / 5,  h / 5 - 45);
+	labelDirectConnect->setTextColor(sf::Color(0, 0, 0));
+	labelDirectConnect->setTextSize(40);
+	//End Definition of the "Direct Connect" Label
+	//End Definition of the select server menu widgets set (ssm)
+
+	//Definition of the Create Server Menu
+	tgui::Gui csm(window);
+	tgui::Picture::Ptr picture8(csm);
+	//Definition of the picture
+	picture8->load("pic.jpg");
+	picture8->setSize(w, h);
+	picture8->setPosition(0, 0);
+	if (csm.setGlobalFont("../fonts/leadcoat.ttf") == false)
+		return 1;
+	//Definition of the return button
+	tgui::Button::Ptr bReturnCsmMenu(csm);
+	bReturnCsmMenu->load(THEME_CONFIG_FILE);
+	bReturnCsmMenu->setText("Return to Menu");
+	bReturnCsmMenu->setCallbackId(1);
+	bReturnCsmMenu->bindCallback(tgui::Button::LeftMouseClicked);
+	bReturnCsmMenu->setPosition(3*w / 5,  4* h / 5);
+	bReturnCsmMenu->setSize(w / 5, 40);
+	//End Definition of return button
+
+	//Definition of the ListBox that presents keymap
+	tgui::ListBox::Ptr listclient(csm);
+	listclient->load(THEME_CONFIG_FILE);
+	listclient->setSize(3 * w / 5, 5 * h / 10);
+	listclient->setBackgroundColor(sf::Color(50, 50, 50, 100));
+	listclient->setItemHeight(40);
+	listclient->setPosition(w / 5, h / 10);
+	listclient->setTransparency(100);
+	listclient->setSelectedBackgroundColor(sf::Color(200, 200, 200, 100));
+	listclient->setTextFont(gameOptionFont);
+	//End Definition of the ListBox that presents keymap
+
+	//End Definition of the Create Server Menu
 	tgui::Gui jgm(window);
 	tgui::Picture::Ptr picture6(jgm);
 	picture6->load("pic.jpg");
@@ -738,6 +819,9 @@ int interface_initiale() {
 	interfaceMusic.setVolume(audioVol);
 	interfaceMusic.play();
 	interfaceMusic.setLoop(true);
+	Network network;
+	Client* gameClient;
+	Server* gameServer;
 	//End Initialization of the volume
 	while (window.isOpen()) {
 		wim = wima;
@@ -765,6 +849,14 @@ int interface_initiale() {
 		}
 		case 5: {
 			todo = &jgm;
+			break;
+		}
+		case 6: {
+			todo = &ssm;
+			break;
+		}
+		case 7: {
+			todo = &csm;
 			break;
 		}
 		}
@@ -829,11 +921,14 @@ int interface_initiale() {
 		while ((*todo).pollCallback(callback)) {
 			if (wim == 0) { //Main menu
 				if (callback.id == 1) {
-					wima = 0; //go to create game menu
+					wima = 7; //go to create game menu
 					changementMenu.play();
+					ServerInfo servInfo = ServerInfo();
+					(*gameServer) = network.createServer(servInfo);
+
 				}
 				if (callback.id == 2) {
-					wima = 5;//go to join game menu
+					wima = 6;//go to join game menu
 					changementMenu.play();
 				}
 				if (callback.id == 3) {
@@ -988,6 +1083,24 @@ int interface_initiale() {
 
 				}
 			}
+			if (wim == 6) {
+				if (callback.id ==1) {
+					wima = 0;
+					changementMenu.play();
+				}
+				if (callback.id ==2) { // Direct Connect Button pressed
+					std::string serverIp = (ipbox->getText()).toAnsiString();
+					ClientInfo c_info = ClientInfo(serverIp,(std::string)"1234");
+					std::cout << serverIp << std::endl;
+
+				}
+			}
+			if (wim == 7) {
+				if (callback.id ==1) {
+					wima = 0;
+					changementMenu.play();
+				}
+			}
 
 		}
 		if (listCommande->getSelectedItemIndex() != -1) { //An element of the keymapping list is selected
@@ -1004,6 +1117,12 @@ int interface_initiale() {
 				test.setVolume(scrollbarVolumeSound->getValue());
 				test.play();
 			}
+		}
+		if (wim == 7) {
+			//AbstractMessage chat;
+			//std::string truc = chat.getMsgType();
+			//std::vector<truc *> msg = (*gameServer).receiveMessages();
+			//std::string m1 = msg[0];
 		}
 		window.clear();
 		(*todo).draw();
