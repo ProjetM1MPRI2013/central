@@ -7,6 +7,8 @@
 #include <fstream>
 #include <SFML/Audio.hpp>
 #include <../network/network.h>
+#include <../network/netEvent.h>
+#include <chat_event.h>
 
 using namespace std;
 int usl = chdir("./src/interfaceinit");
@@ -907,6 +909,9 @@ int interface_initiale() {
 								newchatString.toAnsiString();
 						if (newchatStdString.compare("") != 0) {
 							//TODO Envoyer un message aux autres personnes dont le contenu est : newchatStdString
+							ChatEvent toSend;
+							toSend.setData(nickName + (std::string) " : " + newchatStdString);
+
 							chatbox->addLine(nickName + (std::string) " : "
 									+ newchatStdString, sf::Color(0, 0, 0));
 						}
@@ -1089,9 +1094,21 @@ int interface_initiale() {
 					changementMenu.play();
 				}
 				if (callback.id ==2) { // Direct Connect Button pressed
+
+					std::cout << "ok2" << std::endl;
 					std::string serverIp = (ipbox->getText()).toAnsiString();
 					ClientInfo c_info = ClientInfo(serverIp,(std::string)"1234");
+					(*gameClient) = network.createClient(c_info);
 					std::cout << serverIp << std::endl;
+					std::cout << "ok1" << std::endl;
+					std::vector<NetEvent*> msgVector= gameClient->receiveMessages<NetEvent>();
+					std::cout << "ok3" << std::endl;
+					int sizerm = msgVector.size();
+					for (int i = 0 ; i < sizerm ; i++ ) {
+						if ((*(msgVector[i])).getType() == 1) {
+							std::cout << "ok" << std::endl;
+						}
+					}
 
 				}
 			}
@@ -1119,8 +1136,6 @@ int interface_initiale() {
 			}
 		}
 		if (wim == 7) {
-			//AbstractMessage chat;
-			//std::string truc = chat.getMsgType();
 			//std::vector<truc *> msg = (*gameServer).receiveMessages();
 			//std::string m1 = msg[0];
 		}
