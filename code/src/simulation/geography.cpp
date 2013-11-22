@@ -1,5 +1,7 @@
 #include "geography.h"
 
+
+
 float Geography::getAnxiety(int i, int j){
 	return (map[i][j].getAnxiety());
 }
