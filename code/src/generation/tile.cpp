@@ -3,7 +3,7 @@
 
 enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO) {
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin) {
   coord = new Coordinates(abs, ord);
   type = typeO;
   destructible = destructibleO;
@@ -19,6 +19,7 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   weightBat = getTWeight(typeO);
   sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas 
   destructionLevel = 0.;
+  coordBorough = boroughOrigin;
 }
 
 
