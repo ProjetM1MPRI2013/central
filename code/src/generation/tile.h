@@ -95,6 +95,10 @@ class tile {
    * coordinates of the tile
    */
   Coordinates coord;
+  /*
+   * coordinates of the caracteristic tile of the borough of our tile
+   */
+  Coordinates coordBorough;
 
   /**
    * @brief lenght of a bat thanks to its type
@@ -130,8 +134,9 @@ class tile {
    * @param gol : initial possibility to go to the left
    * @param speed : initial speed into the tile
    * @param batOrigin : caracteristic point of the bat
+   * @param boroughOrigin : initial borough of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin);
     TileType getType();
     void setType(TerrainType t);
     bool isDestructible();
@@ -160,6 +165,15 @@ class tile {
     Sprite getSprite();
     Coordinates getCoord();
     void setCoord(Coordinates coord);
+    /**
+     *@brief The tile belongs to a borough caracterized by a tile, given by this function
+     *@return the caracteristic tile of the borough
+     */
+    Coordinates getCoordBorough();
+    /**
+     *@brief Change the borough of the tile
+     */
+    void setCoordBorough(Coordinates CBorough);
     
 }
 ;
