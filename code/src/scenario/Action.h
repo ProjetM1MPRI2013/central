@@ -29,7 +29,7 @@ class Action {
   virtual void doAction ();
 
  private:
-  std::string PlayerID;
+  std::string playerID;
 };
 
 #endif

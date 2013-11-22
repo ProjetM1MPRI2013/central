@@ -1,10 +1,11 @@
-#IFNDEF HSCENARIO_H
-#DEFINE HSCENARIO_H
+#ifndef HSCENARIO_H
+#define HSCENARIO_H
 
 
-//no such file
-//#include "Event.h"
-#include "action.h"
+#include "../simulation/simulation.h"
+#include "Action.h"
+#include "ActionsTerro.h"
+#include "ActionsPC.h"
 #include "ScenarioAction.h"
 
 //Quickfix
@@ -18,28 +19,26 @@ class EventTarget ;
  * Asynchronous communications with the host Simulation class and the Network class.
  * Implement the eventListener interface.
  */
-class Scenario {
+class HScenario {
   
  public :
+  
+  HScenario (Simulation* s);
   
   /**
    * @brief the run function called by Simulation at each iteration.
    */
-  static void run () ;
-
+  void run () ;
+  
   /**
    * @brief a event has been triggered
    * @param e: event the listener subscribes to, for instance "isDestroyed"
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
-  static void eventTriggered (EventType e, EventTarget& t) ;
+  void eventTriggered (EventType e, EventTarget& t) ;
   
-  /**
-   * @brief new action from Network
-   * @param a: action that have to be performed
-   */
-  static void newAction (Action a) ;
-
+ private :
+  Simulation* simulation;
 }
 
-#ENDIF
+#endif

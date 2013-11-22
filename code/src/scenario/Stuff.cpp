@@ -2,7 +2,7 @@
 
 int Stuff::counter = 0;
 
-std::list<string> Stuff::getActionsPossible () {return actionsPossible;};
+std::list<std::string> Stuff::getActionsPossible () {return actionsPossible;};
 
 Stuff::Stuff (std::string n) {
   name = n;
@@ -13,6 +13,6 @@ Stuff::Stuff (std::string n) {
   stuffID = counter;
   counter = counter + 1;
 
-  actionPossible = new list<string>;
-  actionPossible.push_back("DropStuff");
+  this->actionsPossible = list<std::string>;
+  this->actionsPossible.push_back("DropStuff");
 };

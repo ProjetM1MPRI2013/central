@@ -3,7 +3,6 @@
 
 #include <list>
 #include <string>
-#include "ActionType.h"
 
 class Clickable {
  public:

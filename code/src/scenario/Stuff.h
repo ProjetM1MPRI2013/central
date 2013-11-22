@@ -23,7 +23,7 @@ class Stuff : public Clickable {
   /**
    * @brief Return the list of actions possible
    */
-  virtual std::list<string> getActionsPossible ();
+  virtual std::list<std::string> getActionsPossible ();
 
   Stuff (std::string n);
 
@@ -31,7 +31,7 @@ class Stuff : public Clickable {
   /**
    * @brief The list of all actions possible on the object.
    */
-  std::list<string> actionsPossible;
+  std::list<std::string> actionsPossible;
 
  private:
   /**

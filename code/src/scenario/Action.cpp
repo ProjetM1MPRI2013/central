@@ -4,15 +4,15 @@
 
 Action::Action(std::string n) {
   name = n;
-  playerID = "";
+  this->playerID = "";
 };
 
-Action::isActionPossible(){
-  std::cerr << "isActionPossible called but not implemented for the Action type :" << this.name << "\n";
+int Action::isActionPossible(){
+  std::cerr << "isActionPossible called but not implemented for the Action type :" << name << "\n";
   return 0;
 };
 
-Action::doAction(){
-  std::cerr << "doAction called but not implemented for the Action type :" << this.name << "\n";
-return;
+void Action::doAction(){
+  std::cerr << "doAction called but not implemented for the Action type :" << name << "\n";
+  return;
 };
