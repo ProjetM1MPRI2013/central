@@ -1,18 +1,18 @@
+#include <cerrno>
+#include <iostream>
 #include "Action.h"
-#include "Stuff.h"
 
-class Action{
-  Action(std::string n) {
-    name = n;
-  };
+Action::Action(std::string n) {
+  name = n;
+  playerID = "";
 };
 
+Action::isActionPossible(){
+  std::cerr << "isActionPossible called but not implemented for the Action type :" << this.name << "\n";
+  return 0;
+};
 
-
-class ADropStuff: public Action {
-public:
-  int stuffID;
-  ADropStuff (Stuff* s): Action ("ADropStuff") {
-    stuffID = s->stuffID;
-  };
+Action::doAction(){
+  std::cerr << "doAction called but not implemented for the Action type :" << this.name << "\n";
+return;
 };

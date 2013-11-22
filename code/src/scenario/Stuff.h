@@ -4,17 +4,39 @@
 #include <list>
 #include <string>
 #include "Clickable.h"
-#include "ActionType.h"
+#include "Action.h"
 
 class Stuff : public Clickable {
  public :
+  /**
+   * @brief The stuff name
+   * For exemple Knife or Bomb ...
+   */
   std::string name;
+
+  /**
+   * @brief The ID of the object
+   * An unique integer identifying the object on the client.
+   */
   int stuffID;
-  virtual std::list<ActionType> getActionPossible ();
+
+  /**
+   * @brief Return the list of actions possible
+   */
+  virtual std::list<string> getActionsPossible ();
+
   Stuff (std::string n);
+
  protected:
-  std::list<ActionType> actionPossible;
+  /**
+   * @brief The list of all actions possible on the object.
+   */
+  std::list<string> actionsPossible;
+
  private:
+  /**
+   * @brief A counter used to generate unique stuffID
+   */
   static int counter;
 };
 
