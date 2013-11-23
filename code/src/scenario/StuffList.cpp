@@ -1,28 +1,25 @@
 #include "StuffList.h"
 
 
-
-class Bomb : public Stuff {
-
+Weapon::Weapon (std::string n): Stuff(n) {
+   this->actionsPossible.push_back("Attack");
 };
 
-class Weapon : public Stuff {
-
+Bomb::Bomb () : Stuff("Bomb") {
+  this->actionsPossible.push_back("Plant");
+  
 };
 
-class Knife : public Weapon {
 
+Knife::Knife () : Weapon ("Knife") {
+  
 };
 
-class Gun : public Weapon {
-
+Gun::Gun(int max, int dam) : Weapon ("Gun") {
+  nAmmunition = max;
+  nMax = max;
+  ndamage = dam;
+  this->actionsPossible.push_back("Reload");
 };
 
-class Silencer : public Stuff {
-
-};
-
-class Ammunition : public Stuff {
-
-};
 
