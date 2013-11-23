@@ -39,6 +39,6 @@ class HScenario {
   
  private :
   Simulation* simulation;
-}
+};
 
 #endif
