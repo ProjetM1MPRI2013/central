@@ -1,6 +1,8 @@
 #ifndef TILE
 #define TILE
 
+#include "antibug.h"
+
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
@@ -47,7 +49,7 @@ class Coordinates {
 /**
  * @brief A tile of the map
  */
-class tile {
+class Tile {
 
  private:
   /*
@@ -138,7 +140,7 @@ class tile {
    */
   Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin);
     TileType getType();
-    void setType(TerrainType t);
+    void setType(Tiletype t);
     bool isDestructible();
     float getAnxiety();
     void setAnxiety(float a);
