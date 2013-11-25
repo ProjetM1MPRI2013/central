@@ -6,6 +6,8 @@
 #include "scenario/ScenarioAction.h"
 #include "npc.h"
 #include "SFML/System.hpp"
+#include <iostream>
+#include <list>
 
 class Geography ;
 class EventType ;
@@ -27,7 +29,7 @@ public :
      * @param dt: short lapse of time
      * Update all the parameters of Simulation
     */
-    static void run(sf::Time dt);
+    static void run(sf::Time dt, int MAP_SIZE);
 
 		/**
 		*	@brief isInTile
@@ -81,7 +83,7 @@ private :
 
   static Geography map;
 	static Geography oldMap;
-  static List<NPC> NPCs;
+  static std::list<NPC> NPCs;
   
 
 };

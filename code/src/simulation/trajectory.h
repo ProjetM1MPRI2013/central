@@ -1,16 +1,17 @@
 #ifndef TRAJECTORY_H
 #define TRAJECTORY_H
 
+#include <list>
 #include "position.h"
 #include <SFML/System.hpp>
 #include "geography.h"
 
 class Trajectory {
  private:
-  vector<Position> posList;
+  std::vector<Position> posList;
  
  public:
-  vector<Position> getPosList();
+  std::vector<Position> getPosList();
   void setPosList(Position p);
   Position getCurrentPos();
   void updateTrajectory(sf::Time dt,float speed,Geography const& map);

@@ -1,8 +1,8 @@
 #include "position.h"
 
-Position(float x,float y) {
-  this.x = x;
-  this.y = y;
+Position::Position(float x,float y) {
+  this->x = x;
+  this->y = y;
 }
 
 float Position::getX() {
@@ -14,12 +14,12 @@ float Position::getY() {
 }
 
 void Position::setX(float x) {
-  this.x = x;
+  this->x = x;
   return;
 }
 
 void Position::setY(float y) {
-  this.y = y;
+  this->y = y;
   return;
 }
 

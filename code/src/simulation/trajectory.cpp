@@ -1,7 +1,7 @@
 #include "trajectory.h"
 
 //il manque le constructeur qui genere la trajectoire en tenant compte du plan de la ville
-vector<Position> Trajectory::getPosList() {
+std::vector<Position> Trajectory::getPosList() {
   return posList;
 }
 
@@ -22,7 +22,7 @@ void Trajectory::updateTrajectory(sf::Time dt,float speed,Geography const& map) 
   Position objectif = posList[1];
   float dX = objectif.getX()-position.getX();
   float dY = objectif.getY()-position.getY();
-  float norme = sqrt(pow(dirX,2)+pow(dirY,2));
+  float norme = (float)sqrt(pow(dirX,2)+pow(dirY,2));
   dX = dX/norme;
   dY = dY/norme;
   dX = dX*dist;
