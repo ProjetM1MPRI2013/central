@@ -167,6 +167,7 @@ class Tile {
     Sprite getSprite();
     Coordinates getCoord();
     void setCoord(Coordinates coord);
+    std::list<NPC&> getNPCs();
     /**
      *@brief The tile belongs to a borough caracterized by a tile, given by this function
      *@return the caracteristic tile of the borough

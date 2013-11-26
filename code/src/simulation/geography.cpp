@@ -1,8 +1,10 @@
 #include "geography.h"
 
 float Geography::getAnxiety(int i, int j){
-	return (map[i][j].getAnxiety());
+
+	return ((this->map[i][j]).getAnxiety());
 }
+
 
 void Geography::setAnxiety(int i, int j, float anxiety){
 	map[i][j].setAnxiety(anxiety);

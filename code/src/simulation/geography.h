@@ -3,11 +3,10 @@
 
 #include "../generation/tile.h"
 
-
 class Geography {
  private :
   static const int MAP_SIZE ;
-  Tile map[MAP_SIZE][MAP_SIZE];
+  Tile& map[MAP_SIZE][MAP_SIZE];
 	
  public :
   /**
