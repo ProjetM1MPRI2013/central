@@ -8,6 +8,7 @@
 #include "SFML/System.hpp"
 #include <iostream>
 #include <list>
+#include "miscellaneous.h"
 
 class Geography ;
 class EventType ;
@@ -84,6 +85,9 @@ public :
     static void scenarioActionPerformed(ScenarioAction a);
 
 private :
+  std::list<Camera&> cameras;
+  std::list<Agent&> agents;
+  int sous;
   const int MAP_SIZE;
   const int TILE_SIZE_X;
   const int TILE_SIZE_Y;
@@ -93,7 +97,6 @@ private :
   Geography map;
   Geography oldMap;
   std::list<NPC> NPCs;
-
 
 };
 

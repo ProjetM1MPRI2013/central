@@ -26,6 +26,10 @@ Agent::Agent(float x, float y, float entretien, int type){
 	this->type=type;
 }
 
+float Agent::getEntretien(){
+	return (this->entretien);
+}
+
 Camera::Camera(float x,float y,float entretien, std::list<Tile&> lineOfSight) {
 	this->entretien=entretien;
 	this->position=Position(x,y);
@@ -41,5 +45,9 @@ bool Camera::isInSight(NPC& npc){
 			boolean=boolean||(isInList(npc,NPCinTile));
 		}
 	return boolean;
+}
+
+float Camera::getEntretien(){
+	return (this->entretien);
 }
 

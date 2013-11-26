@@ -107,12 +107,12 @@ void Simulation::lisserMatrice(){
 		for(int j=1; j< MAP_SIZE-2; j++){
 			//calcul
 			anxiety=sqrt2((1/6)*(
-					2*pow2(oldMap.getAnxiety(MAP_SIZE-1,j),2)+
-					pow2(oldMap.getAnxiety(MAP_SIZE-2,j),2)+
-					pow2(oldMap.getAnxiety(MAP_SIZE-1,j-1),2)+
-					pow2(oldMap.getAnxiety(MAP_SIZE-1,j+1),2)+
-					(1/2)*(pow2(oldMap.getAnxiety(MAP_SIZE-2,j+1),2)+
-						pow2(oldMap.getAnxiety(MAP_SIZE-2,j-1),2))));
+				2*pow2(oldMap.getAnxiety(MAP_SIZE-1,j),2)+
+				pow2(oldMap.getAnxiety(MAP_SIZE-2,j),2)+
+				pow2(oldMap.getAnxiety(MAP_SIZE-1,j-1),2)+
+				pow2(oldMap.getAnxiety(MAP_SIZE-1,j+1),2)+
+				(1/2)*(pow2(oldMap.getAnxiety(MAP_SIZE-2,j+1),2)+
+					pow2(oldMap.getAnxiety(MAP_SIZE-2,j-1),2))));
 			//set
 			map.setAnxiety(MAP_SIZE-1,j,anxiety);
 	  }
@@ -165,9 +165,17 @@ void Simulation::run(sf::Time dt) {
 		this->lisserMatrice();
 	}
 
-	for(){
+	/*on fait payer l'entretien des différents trucs*/
+	for(int i=1;i<secondes;i++){
+		for (std::list<Agent>::iterator it = agents.begin(); it != agents.end(); ++it)
+			{
+				this->sous=this->sous-(*it).getEntretien();
+			}
 
-
+		for (std::list<Camera>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+			{
+			this->sous=this->sous-(*it).getEntretien();
+			}
 	}
 
 	//Deplacement de tous les NPC.

@@ -19,6 +19,8 @@ int type;
 
 	public :
 Agent(float x, float y, float entretien,int type);
+float getEntretien();
+
 };
 
 class Camera {
@@ -31,8 +33,7 @@ std::list<Tile&> champDeVision;
 	public :
 bool isInSight(NPC& npc);
 Camera(float x, float y, float entretien, std::list<Tile&> champDeVision);
+float getEntretien();
 };
-
-
 
 #endif /* MISCELLANEOUS_H_ */
