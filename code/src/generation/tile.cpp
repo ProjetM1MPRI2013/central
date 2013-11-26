@@ -22,13 +22,15 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->coordBorough = boroughOrigin;
 }
 
-float Tile::getAnxiety(float f){
-
-
+float Tile::getAnxiety(){
+  return this->anxiety;
 
 }
 
-
+void Tile::setAnxiety(float f){
+  this->anxiety=f;
+  return;
+}
 
 float Tile::getTLenght(TileType type) {
   switch (type) {
