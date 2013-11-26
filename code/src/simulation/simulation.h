@@ -29,14 +29,18 @@ public :
      * @param dt: short lapse of time
      * Update all the parameters of Simulation
     */
-    static void run(sf::Time dt, int MAP_SIZE);
+    static void run(sf::Time dt);
+
+    /*methode qui agit sur la matrice pour lisser la peur*/
+
+    void lisserMatrice();
 
 		/**
 		*	@brief isInTile
 		* @param npc : the npc you want to know the case he is in
 		* gives the tile the npc is in			
 		*/
-		static void isInTile(NPC npc);
+	static Tile& isInTile(NPC npc);
 
     /**
      * @brief setGeography
@@ -80,11 +84,16 @@ public :
     static void scenarioActionPerformed(ScenarioAction a);
 
 private :
+  const int MAP_SIZE;
+  const int TILE_SIZE_X;
+  const int TILE_SIZE_Y;
+  float absoluteTime;
+  float relativeTime;
+  float smallTime;
+  Geography map;
+  Geography oldMap;
+  std::list<NPC> NPCs;
 
-  static Geography map;
-	static Geography oldMap;
-  static std::list<NPC> NPCs;
-  
 
 };
 
