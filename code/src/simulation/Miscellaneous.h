@@ -13,21 +13,21 @@
 class Agent {
 	private :
 Position position;
-float entretien;
+float entretien;//en unité/seconde
 int type;
 
 	public :
-
+Agent(float x, float y, float entretien,int type);
 };
 
 class Camera {
 	private :
 Position position;
-float entretien;
-std::list<Tile> champDeVision;
+float entretien;//en unité/seconde
+std::list<Tile&> champDeVision;
 	public :
-bool isInSight(NPC npc);
-
+bool isInSight(NPC& npc);
+Camera(float x, float y, float entretien, std::list<Tile&> champDeVision);
 };
 
 
