@@ -2,6 +2,7 @@
 #define ACTION_H
 
 #include <string>
+#include <time.h>
 
 class Action {
  public:
@@ -10,6 +11,16 @@ class Action {
    * For exemple KillNPC or PlantBomb
    */
   std::string name;
+
+  /**
+   * @brief The time when the action was performed.
+   */
+  long date;
+
+  /**
+   * @brief Delay to do the action before executing.
+   */
+  long delay;
 
   Action (std::string n);
   /**

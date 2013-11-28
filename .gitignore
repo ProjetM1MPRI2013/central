@@ -31,3 +31,9 @@ delivrable/*.toc
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# QT project files
+*.config
+*.creator
+*.files
+*.includes

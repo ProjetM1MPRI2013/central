@@ -2,8 +2,8 @@
 #define SIMULATION_H
 // no such file
 //scenario/action.h ?
-//#include "Action.h"
-#include "scenario/ScenarioAction.h"
+#include "Action.h"
+#include "ScenarioAction.h"
 #include "npc.h"
 #include "SFML/System.hpp"
 #include <iostream>
@@ -83,6 +83,12 @@ public :
      * Called by the scenario, notifies the simulation that an action was performed: movement, firing, etc.
      */
     static void scenarioActionPerformed(ScenarioAction a);
+
+    /**
+      * @brief
+
+      */
+    static int actionTerroPerformed(Action a);
 
 private :
   std::list<Camera&> cameras;
