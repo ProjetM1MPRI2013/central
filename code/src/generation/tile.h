@@ -1,7 +1,12 @@
 #ifndef TILE
 #define TILE
 
-#include "antibug.h"
+#include <list>
+#include <SFML/Graphics.hpp>
+#include "../simulation/npc.h"
+
+
+enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
 
 /**
  * @brief Coordinates
@@ -24,6 +29,7 @@ class Coordinates {
    * @param ord : the ordinate
    */
   Coordinates(int abs, int ord);
+
   /**
    * @brief get the abscissa
    */ 
@@ -56,7 +62,7 @@ class Tile {
    * type of the batiment of the case
    */
   TileType type;
-  Sprite sprite;
+  sf::Sprite sprite;
   bool destructible;
   float anxiety;
   float populationDensity;
@@ -84,7 +90,7 @@ class Tile {
   /*
    * the origin of the batiment, which is rectangular (we can decompose a batiment)
    */
-  Coordinates batOrigin;
+  Coordinates& batOrigin;
   /*
    * total lenght of the bat
    */
@@ -100,7 +106,19 @@ class Tile {
   /*
    * coordinates of the caracteristic tile of the borough of our tile
    */
-  Coordinates coordBorough;
+  Coordinates& coordBorough;
+
+  /**
+   * @brief List of the NPC currently in the tile
+   */
+  std::list<NPC*> listNPC;
+
+  /**
+   * @brief Use to sort the list of NPCs
+   * Return true iff ax - ay < bx - by
+   */
+  bool compareNPC (NPC* a, NPC* b);
+
 
   /**
    * @brief lenght of a bat thanks to its type
@@ -119,7 +137,7 @@ class Tile {
    * @param type : type of the batiment
    * @return the sprite of the bat
    */
-  Sprite getTSprite(TileType type);
+  sf::Sprite getTSprite(TileType type);
   
   public:
   /**
@@ -138,9 +156,9 @@ class Tile {
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates& batOrigin, Coordinates& boroughOrigin);
     TileType getType();
-    void setType(Tiletype t);
+    void setType(TileType t);
     bool isDestructible();
     float getAnxiety();
     void setAnxiety(float a);
@@ -158,25 +176,33 @@ class Tile {
     void setGol(bool gol);
     float getSpeed();
     void setSpeed(float speed);
-    Coordinates getBatOrigin();
-    void setBatOrigin(Coordinates p);
+    Coordinates& getBatOrigin();
+    void setBatOrigin(Coordinates& p);
     int getLenghtBat();
     void setLenghtBat(int l);
     int getWeightBat();
     void setWeightBat(int w);
-    Sprite getSprite();
-    Coordinates getCoord();
-    void setCoord(Coordinates coord);
-    std::list<NPC&> getNPCs();
+    sf::Sprite getSprite();
+    Coordinates& getCoord();
+    void setCoord(Coordinates& coord);
+
+    /**
+     * @brief Return the list of the NPC in the tile, sorted by x-y
+     */
+    std::list<NPC*> getNPCs();
+
+    void addNPC (NPC*);
+    void removeNPC (NPC*);
+    
     /**
      *@brief The tile belongs to a borough caracterized by a tile, given by this function
      *@return the caracteristic tile of the borough
      */
-    Coordinates getCoordBorough();
+    Coordinates& getCoordBorough();
     /**
      *@brief Change the borough of the tile
      */
-    void setCoordBorough(Coordinates CBorough);
+    void setCoordBorough(Coordinates& CBorough);
     
 }
 ;
