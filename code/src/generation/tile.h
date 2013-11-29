@@ -2,10 +2,8 @@
 #define TILE
 
 #include <list>
-//#include "antibug.h"
 #include <SFML/Graphics.hpp>
 #include "../simulation/npc.h"
-//class NPC;
 
 enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
 
