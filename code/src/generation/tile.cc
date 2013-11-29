@@ -63,27 +63,21 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   }
 }
 
-//bool compareNPC (NPC* a, NPC* b){
-  //Position ap = a->getPosition();
-  //Position bp = b->getPosition();
-  //return (if (ap.getX() - ap.getY() < bp.getX() - bp.getY()) { true } else { false });
-  //bool ret;
-  //if (ap.getX() - ap.getY() < bp.getX() - bp.getY()) { return true; } else { return false; }
-//}
+std::list<NPC*> Tile::getNPCs() {
+  listNPC.sort([](NPC* a, NPC* b) { 
+    Position ap = a->getPosition();
+    Position bp = b->getPosition();
+    return ap.getX() - ap.getY() < bp.getX() - bp.getY();
+    });
+};
 
 
-std::list<NPC*> Tile::getNPCs() {}
-  //listNPC.sort(compareNPC);
-  //return listNPC;
-//};
+void Tile::addNPC (NPC* a){
+  listNPC.push_back(a);
+  return;
+};
 
-
-//void addNPC (NPC* a){
-  //listNPC.push_end(a);
-  //return;
-//};
-
-//void removeNPC (NPC* a){
-  //listNPC.remove(a);
-  //return;
-//};
+void Tile::removeNPC (NPC* a){
+  listNPC.remove(a);
+  return;
+};

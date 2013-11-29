@@ -113,13 +113,6 @@ class Tile {
   std::list<NPC*> listNPC;
 
   /**
-   * @brief Use to sort the list of NPCs
-   * Return true iff ax - ay < bx - by
-   */
-  bool compareNPC (NPC* a, NPC* b);
-
-
-  /**
    * @brief lenght of a bat thanks to its type
    * @param type : type of the batiment
    * @return the lenght of the bat
