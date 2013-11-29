@@ -1,7 +1,6 @@
 #ifndef GEOGRAPHY
 #define GEOGRAPHY
 
-//#include "../generation/tile.h"
 class Tile;
 
 class Geography {

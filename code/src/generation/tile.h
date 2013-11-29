@@ -195,7 +195,6 @@ class Tile {
      *@brief Change the borough of the tile
      */
     void setCoordBorough(Coordinates& CBorough);
-    //void setCoordBorough(Coordinates CBorough);
     
 }
 ;
@@ -205,6 +204,3 @@ class Tile {
 
 
 #endif // TILE_H
-
-  //Sprite& getTSprite(TileType type); ?
-

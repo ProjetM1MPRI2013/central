@@ -23,11 +23,7 @@ bool isInList(NPC& a,std::list<NPC*> b){
 Agent::Agent(float x, float y, float entretien, int type) : 
   entretien(entretien), 
   type(type), 
-  position(x,y) {
-	//this->entretien=entretien;
-	//this->type=type;
-	//this->position= Position(x,y);
-}
+  position(x,y) {}
 
 float Agent::getEntretien(){
 	return (this->entretien);
@@ -36,11 +32,7 @@ float Agent::getEntretien(){
 Camera::Camera(float x,float y,float entretien, std::list<Tile*> lineOfSight) :
   entretien(entretien),
   position(x,y),
-  champDeVision(lineOfSight) {
-	//this->entretien=entretien;
-	//this->position=Position(x,y);
-	//this->champDeVision=lineOfSight;
-}
+  champDeVision(lineOfSight) {}
 
 bool Camera::isInSight(NPC& npc){
 	bool boolean=false;

@@ -1,8 +1,6 @@
 #include <math.h>
 #include "simulation.h"
 #include "geography.h"
-//class Tile;
-//class NPC;
 
 Tile& Simulation::isInTile(NPC npc){
 	Position position=npc.getPosition();
@@ -14,17 +12,6 @@ Tile& Simulation::isInTile(NPC npc){
 	j=y/TILE_SIZE_Y;
 	return (map.getTile(i,j));
 }
-
-//bool isInList(NPC& a,std::list<NPC*> b){
-	//NPC* currentNPC;
-	//bool boolean(false);
-	//for (std::list<NPC*>::iterator it = b.begin(); it != b.end(); ++it)
-			//{
-				//currentNPC=(*it);
-				//boolean=boolean||(currentNPC==&a);
-			//}
-	//return boolean;
-//}
 
 float pow2(float x,float y){
 	return ((float)(pow((double(x)),double(y))));

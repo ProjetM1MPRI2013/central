@@ -9,9 +9,6 @@ class IdCarrier {
 };
 
 class EventTarget : public IdCarrier {
-  //bool operator< (const EventTarget& x) {
-    //id < x.id;
-  //}
 };
 
 struct IdCarrierCmp{

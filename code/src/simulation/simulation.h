@@ -9,8 +9,6 @@
 #include <iostream>
 #include <list>
 #include <map>
-#include "boost/ref.hpp"
-#include "boost/unordered_map.hpp"
 #include "miscellaneous.h"
 
 typedef std::string EventName;
