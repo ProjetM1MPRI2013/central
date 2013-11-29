@@ -1,12 +1,13 @@
 #ifndef GEOGRAPHY
 #define GEOGRAPHY
 
-#include "../generation/tile.h"
+//#include "../generation/tile.h"
+class Tile;
 
 class Geography {
  private :
-  static const int MAP_SIZE ;
-  Tile& map[MAP_SIZE][MAP_SIZE];
+  static const int MAP_SIZE  = 100;
+  Tile* map[MAP_SIZE][MAP_SIZE];
 	
  public :
   /**

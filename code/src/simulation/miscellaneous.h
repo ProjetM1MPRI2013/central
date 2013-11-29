@@ -9,6 +9,9 @@
 #define MISCELLANEOUS_H_
 
 #include "position.h"
+#include <list>
+class Tile;
+class NPC;
 
 class Agent {
 
@@ -28,11 +31,11 @@ class Camera {
 	private :
 Position position;
 float entretien;//en unité/seconde
-std::list<Tile&> champDeVision;
+std::list<Tile*> champDeVision;
 
 	public :
 bool isInSight(NPC& npc);
-Camera(float x, float y, float entretien, std::list<Tile&> champDeVision);
+Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
 float getEntretien();
 };
 

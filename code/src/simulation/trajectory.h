@@ -13,8 +13,8 @@ class Trajectory {
  public:
   std::vector<Position> getPosList();
   void setPosList(Position p);
-  Position getCurrentPos();
-  void updateTrajectory(sf::Time dt,float speed,Geography const& map);
+  Position getPosition();
+  void update(sf::Time dt,float speed,Geography const& map);
 } ;
 
 #endif //TRAJECTORY_H

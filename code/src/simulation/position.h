@@ -1,3 +1,5 @@
+#ifndef POSITION_H
+#define POSITION_H
 class Position {
  private:
   float x;
@@ -10,3 +12,4 @@ class Position {
   void setY(float y);
   void add(float a,float b);
 };
+#endif

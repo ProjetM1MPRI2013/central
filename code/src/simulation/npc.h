@@ -1,4 +1,8 @@
+#ifndef NPC_H
+#define NPC_H
 #include "trajectory.h"
+#include "localState.h"
+#include <SFML/System.hpp>
 
 class NPC : public Positionable {
  private:
@@ -19,3 +23,4 @@ class NPC : public Positionable {
   Position getPosition();
   void updatePosition(sf::Time dt,Geography const& map);
 };
+#endif

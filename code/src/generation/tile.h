@@ -2,9 +2,10 @@
 #define TILE
 
 #include <list>
+//#include "antibug.h"
 #include <SFML/Graphics.hpp>
 #include "../simulation/npc.h"
-
+//class NPC;
 
 enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
 
@@ -125,19 +126,19 @@ class Tile {
    * @param type : type of the batiment
    * @return the lenght of the bat
    */
-  int getTLenght(TileType type);
+  float getTLenght(TileType type);
   /**
    * @brief weight of a bat thanks to its type
    * @param type : type of the batiment
    * @return the weight of the bat
    */
-  int getTWeight(TileType type);
+  float getTWeight(TileType type);
   /**
    * @brief sprite of the bat thanks to its type
    * @param type : type of the batiment
    * @return the sprite of the bat
    */
-  sf::Sprite getTSprite(TileType type);
+  sf::Sprite& getTSprite(TileType type);
   
   public:
   /**
@@ -203,6 +204,7 @@ class Tile {
      *@brief Change the borough of the tile
      */
     void setCoordBorough(Coordinates& CBorough);
+    //void setCoordBorough(Coordinates CBorough);
     
 }
 ;
@@ -212,3 +214,6 @@ class Tile {
 
 
 #endif // TILE_H
+
+  //Sprite& getTSprite(TileType type); ?
+

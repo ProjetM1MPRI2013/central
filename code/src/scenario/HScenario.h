@@ -10,7 +10,6 @@
 
 //Quickfix
 //Replace with includes
-class EventType ;
 class EventTarget ;
 
 
@@ -35,7 +34,7 @@ class HScenario {
    * @param e: event the listener subscribes to, for instance "isDestroyed"
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
-  void eventTriggered (EventType e, EventTarget& t) ;
+  void eventTriggered (EventName e, EventTarget& t) ;
   
  private :
   Simulation* simulation;
