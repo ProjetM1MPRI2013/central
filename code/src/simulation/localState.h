@@ -1,7 +1,8 @@
 #ifndef LOCAL_STATE_H
 #define LOCAL_STATE_H
+#include "position.h"
+class Tile; // forward declaration
 
-class Position;
 enum Layers {
   L_Players = 1,
   L_NPC = 2,
@@ -22,7 +23,7 @@ class LocalState {
    * @param l : layers to return (see enum Layers)
    * @return a copy of the tile at position p, limited to the layers specified by L
    */
-   Tile getTile(Position p, Layers l) {
+   Tile& getTile(Position p, Layers l) {
    }
 
 } ;
@@ -33,25 +34,7 @@ class Positionable {
   public: 
       Position getPosition();
       void setPosition(Position p);
+      Positionable(float x, float y);
+      Positionable(Position p);
 };
-
-
-
-class NPC : public Positionable {
-  private:
-    Trajectory trajectory;
-    float fear;
-    bool shocked;
-  public:
-    float getFear();
-    void setFear(float f);
-    bool isShocked();
-    void setShocked(bool s);
-    void updateTrajectory(Trajectory t);
-};
-
-
-
-
-
 #endif // SIMULATION_H

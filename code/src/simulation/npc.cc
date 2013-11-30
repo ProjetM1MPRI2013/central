@@ -1,7 +1,9 @@
+#include "npc.h"
 #include "localState.h"
 #include "simulation.h"
+//#include "trajectory.h"
 
-NPC::NPC(float s,float f) {
+NPC::NPC(float s,float f) : Positionable(0,0) {
   shocked = false;
   speed = s;
   fear = f;
@@ -39,10 +41,10 @@ void NPC::setSpeed(float s) {
   return;
 }
 
-Position getPosition() {
+Position NPC::getPosition() {
   return (this->trajectory).getPosition();
 }
 
-void updatePosition(sf::Time dt,Geography const& map) {
-  trajectory.updatePosition(dt,speed,map);
+void NPC::updatePosition(sf::Time dt,Geography const& map) {
+  trajectory.update(dt,speed,map);
 }

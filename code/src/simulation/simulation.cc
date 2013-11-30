@@ -1,5 +1,6 @@
-#include "simulation.h"
 #include <math.h>
+#include "simulation.h"
+#include "geography.h"
 
 Tile& Simulation::isInTile(NPC npc){
 	Position position=npc.getPosition();
@@ -10,17 +11,6 @@ Tile& Simulation::isInTile(NPC npc){
 	i=x/TILE_SIZE_X;
 	j=y/TILE_SIZE_Y;
 	return (map.getTile(i,j));
-}
-
-bool isInList(NPC& a,std::list<NPC&> b){
-	NPC& currentNPC;
-	bool boolean(false);
-	for (std::list<NPC&>::iterator it = b.begin(); it != b.end(); ++it)
-			{
-				currentNPC=(*it);
-				boolean=boolean||(currentNPC==a);
-			}
-	return boolean;
 }
 
 float pow2(float x,float y){
@@ -154,7 +144,7 @@ void Simulation::lisserMatrice(){
 void Simulation::run(sf::Time dt) {
   
 	/*on empile les dt jusqu'à obtenir plus d'une seconde*/
-	this->smallTime=smallTime+dt;
+	this->smallTime=smallTime+dt.asSeconds();
 
 	/*on compte le nombre de secondes dans dt*/
 	int secondes=floor2(smallTime);
@@ -167,14 +157,14 @@ void Simulation::run(sf::Time dt) {
 
 	/*on fait payer l'entretien des différents trucs*/
 	for(int i=1;i<secondes;i++){
-		for (std::list<Agent>::iterator it = agents.begin(); it != agents.end(); ++it)
+		for (std::list<Agent*>::iterator it = agents.begin(); it != agents.end(); ++it)
 			{
-				this->sous=this->sous-(*it).getEntretien();
+				this->sous=this->sous-(*it)->getEntretien();
 			}
 
-		for (std::list<Camera>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+		for (std::list<Camera*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
 			{
-			this->sous=this->sous-(*it).getEntretien();
+			this->sous=this->sous-(*it)->getEntretien();
 			}
 	}
 
@@ -189,4 +179,11 @@ void Simulation::run(sf::Time dt) {
 	
 	
 }
-
+void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
+  try {
+    auto listeners = this->targets.at(std::ref(target)).at(eventT);
+    for (auto& pair : listeners) { pair.second(); };
+  } catch (const std::out_of_range& e) {
+    return;
+  }
+}

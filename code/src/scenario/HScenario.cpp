@@ -9,6 +9,6 @@ void HScenario::run(){
   return;
 };
 
-void HScenario::eventTriggered (EventType e, EventTarget& t){
+void HScenario::eventTriggered (EventName e, EventTarget& t){
   return;
 };
