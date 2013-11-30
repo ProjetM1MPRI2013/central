@@ -5,6 +5,8 @@
 #include "Action.h"
 #include "Stuff.h"
 #include "StuffList.h"
+#include "../simulation/npc.h"
+#include "../generation/tile.h"
 
 class Drop : public Action{
  public : 
@@ -17,7 +19,7 @@ class Drop : public Action{
    * @brief the stuff to drop
    */
   Stuff* stu;
-  }
+};
 
 class Attack : public Action {
  public : 
@@ -36,7 +38,7 @@ class Attack : public Action {
    */
   NPC* vict;
   int damage ();
-}
+};
 
 
 
@@ -46,7 +48,6 @@ class Plant : public Action {
    * @brief Create an action to plant a bomb
    * @param bomb the bomb used
    * @param zone the zone where the bomb will be planted 
-   * todo : trouver le type de zone
    */
   Plant (Bomb bomb ,Tile zone);
    /**
