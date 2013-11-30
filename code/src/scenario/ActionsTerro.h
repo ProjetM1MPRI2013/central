@@ -48,7 +48,7 @@ class Plant : public Action {
    * @param zone the zone where the bomb will be planted 
    * todo : trouver le type de zone
    */
-  Plant (Bomb bomb ,Clickable zone);
+  Plant (Bomb bomb ,Tile zone);
    /**
    * @brief the bomb
    */
@@ -56,7 +56,7 @@ class Plant : public Action {
    /**
    * @brief the zone
    */
-  Clickable z;
+  Tile z;
 };
 
 

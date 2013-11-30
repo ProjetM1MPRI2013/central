@@ -11,6 +11,10 @@ class Weapon : public Stuff {
    * @brief Compute the number of damage .  
    */
   virtual int damage () ;
+  /**
+   * @brief Compute the range of the weapon .  
+   */
+  virtual int range () ;
 };
 
 class Bomb : public Stuff {

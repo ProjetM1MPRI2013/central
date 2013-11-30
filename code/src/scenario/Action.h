@@ -25,11 +25,10 @@ class Action {
   Action (std::string n);
   /**
    * @brief Check if the action is possible
-   * 0 for no and 1 for yes.
    * This method has to be defined by each different actions.
    * The default behavior is to answer no to all request.
    */
-  virtual int isActionPossible ();
+  virtual bool isActionPossible ();
 
   /**
    * @brief Do the action

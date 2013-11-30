@@ -7,7 +7,7 @@ Action::Action(std::string n) {
   this->playerID = ""; /* to do find the player id*/
 };
 
-int Action::isActionPossible(){
+bool Action::isActionPossible(){
   std::cerr << "isActionPossible called but not implemented for the Action type :" << name << "\n";
   return 0;
 };
