@@ -6,7 +6,7 @@
 #include "position.h"
 #include <SFML/System.hpp>
 
-class NPC {
+class NPC : Positionable {
  private:
   Trajectory trajectory;
   float fear;

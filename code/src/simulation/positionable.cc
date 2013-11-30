@@ -1,6 +1,11 @@
 #include "positionable.h"
 #include "position.h"
 
+Positionable::Positionable() {
+  position = Position();
+  return;
+}
+
 Positionable::Positionable(float x,float y) {
   position = Position(x,y);
   return;

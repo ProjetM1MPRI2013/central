@@ -6,6 +6,7 @@ class Positionable {
  private:
   Position position;
  public:
+  Positionable();
   Positionable(float x,float y);
   Positionable(Position& p);
   virtual Position& getPosition()=0;
