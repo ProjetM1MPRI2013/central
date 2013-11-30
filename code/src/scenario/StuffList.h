@@ -29,14 +29,16 @@ class Knife : public Weapon {
 };
 
 
+
 class Gun : public Weapon {
  public :
  /**
    * @brief Create a Gun
    * @param max Number of ammunition maximum
-   * @param dam Damagemade by a shot 
+   * @param dam Damagemade by a shot
+   * @param range Range of the gun
    */
-  Gun (int max, int dam) ;
+  Gun (int max, int dam, int range) ;
   /**
    * @brief Number of ammunition in the gun   
    */
@@ -45,6 +47,10 @@ class Gun : public Weapon {
    * @brief Number of ammunition maximum   
    */
   int nMax;
+  /**
+   * @brief range of the gyn   
+   */
+  int range;
  private: 
   /**
    * @brief damage   
@@ -53,41 +59,14 @@ class Gun : public Weapon {
   
 };
 
-
-class Ammunition (int number)  : public Stuff {
- public :
-class Gun : public Weapon {
- public :
- /**
-   * @brief Create a Gun
-   * @param max Number of ammunition maximum
-   * @param dam Damagemade by a shot 
-   */
-  Gun (int max, int dam) ;
-  /**
-   * @brief Number of ammunition in the gun   
-   */
-  int nAmmunition;
-  /**
-   * @brief Number of ammunition maximum   
-   */
-  int nMax;
- private: 
-  /**
-   * @brief damage   
-   */
-  int ndamage ;
-  
-};
-
-  class Ammunition (int number) : public Stuff {
+  class Ammunition : public Stuff {
  public :
  /**
    * @brief Create a pack of ammunition
-   * @param number Number of ammunitions in the pack 
+   * @param n Number of ammunitions in the pack 
   Ammunition (int n) ;
   /**
-   * @brief Number of ammunition in the pack   
+   * @brief number Number of ammunition in the pack   
    */
   int number;
 };

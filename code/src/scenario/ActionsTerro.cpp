@@ -16,7 +16,7 @@ Plant :: Plant (Bomb* bomb,Clicable zone )  : Action ("Plant") {
   z = zone;
 };
 
-Reload (Gun gun,Ammunition ammunition) :: Action ("Reload") {
+Reload (Gun gun,Ammunition ammunition) : Action ("Reload") {
   g = gun;
   ammu = ammunition;
     };

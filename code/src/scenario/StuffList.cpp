@@ -15,9 +15,10 @@ Knife::Knife () : Weapon ("Knife") {
   
 };
 
-Gun::Gun(int max, int dam) : Weapon ("Gun") {
+Gun::Gun(int max, int dam,int ran) : Weapon ("Gun") {
   nAmmunition = max;
   nMax = max;
+  range = ran;
   ndamage = dam;
   this->actionsPossible.push_back("Reload");
 };
