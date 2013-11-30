@@ -23,3 +23,6 @@ Gun::Gun(int max, int dam) : Weapon ("Gun") {
 };
 
 
+Ammuniton::Ammunition (int n) Stuff("Ammunition") {
+  number=n
+    };

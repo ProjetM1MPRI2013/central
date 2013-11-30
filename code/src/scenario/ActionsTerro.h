@@ -65,12 +65,18 @@ class Reload : public Action {
    /**
    * @brief Create an action to reload a gun
    * @param gun the gun to reload
+   * @param Ammunition the pack of ammunition used
    */
-  Reload (Gun gun );
+  Reload (Gun gun,Ammunition ammunition);
    /**
    * @brief the gun
    */
-  Gun g; 
+  Gun g;
+   /**
+   * @brief the pack of ammunition
+   */
+  Ammunition ammu;
+ 
 };
 
 

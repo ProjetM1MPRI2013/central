@@ -16,11 +16,12 @@ Plant :: Plant (Bomb* bomb,Clicable zone )  : Action ("Plant") {
   z = zone;
 };
 
-Reload (Gun gun) : Action ("Reload") {
+Reload (Gun gun,Ammunition ammunition) :: Action ("Reload") {
   g = gun;
+  ammu = ammunition;
     };
 
-void Reload::doAction(){
-  date = time(0); //TODO: change this to the boost way to calculate with milliseconds
-  //send to the server the request to save this action (add to the waiting list)
-}
+ 
+
+ 
+

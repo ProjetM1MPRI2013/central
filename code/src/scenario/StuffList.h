@@ -54,7 +54,42 @@ class Gun : public Weapon {
 };
 
 
+class Ammunition (int number)  : public Stuff {
+ public :
+class Gun : public Weapon {
+ public :
+ /**
+   * @brief Create a Gun
+   * @param max Number of ammunition maximum
+   * @param dam Damagemade by a shot 
+   */
+  Gun (int max, int dam) ;
+  /**
+   * @brief Number of ammunition in the gun   
+   */
+  int nAmmunition;
+  /**
+   * @brief Number of ammunition maximum   
+   */
+  int nMax;
+ private: 
+  /**
+   * @brief damage   
+   */
+  int ndamage ;
+  
+};
 
-
+  class Ammunition (int number) : public Stuff {
+ public :
+ /**
+   * @brief Create a pack of ammunition
+   * @param number Number of ammunitions in the pack 
+  Ammunition (int n) ;
+  /**
+   * @brief Number of ammunition in the pack   
+   */
+  int number;
+};
 
 #endif
