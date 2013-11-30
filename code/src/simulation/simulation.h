@@ -1,7 +1,5 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
-// no such file
-//scenario/action.h ?
 #include "Action.h"
 #include "ScenarioAction.h"
 #include "npc.h"
@@ -10,21 +8,22 @@
 #include <list>
 #include <map>
 #include "miscellaneous.h"
+#include "withUuid.h"
+#include "eventTarget.h"
 
 typedef std::string EventName;
 
 class EventListener;
-#include <eventTarget.h>
+class EventTarget;
 
 
 /** We need a function from (target,type,listener) to callback,
  *  We create three maps : target -> (type -> (listener -> callback))
  */
 template <typename RefE> using ref = std::reference_wrapper<RefE>;
-typedef std::map<ref<EventListener>, std::function<void ()>, IdCarrierCmp> listenerMap;
+typedef std::map<ref<EventListener>, std::function<void ()>, WithUuidCmp> listenerMap;
 typedef std::map<EventName, listenerMap> eventMap;
-typedef std::map<ref<EventTarget>,eventMap, IdCarrierCmp> targetMap;
-//typedef mtargetMap(mb) targetMap;
+typedef std::map<ref<EventTarget>,eventMap, WithUuidCmp> targetMap;
 
 /**
  * @brief The Simulation class
