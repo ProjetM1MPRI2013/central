@@ -10,11 +10,8 @@
 #include "miscellaneous.h"
 #include "withUuid.h"
 #include "eventTarget.h"
+#include "eventListener.h"
 
-typedef std::string EventName;
-
-class EventListener;
-class EventTarget;
 
 
 /** We need a function from (target,type,listener) to callback,
