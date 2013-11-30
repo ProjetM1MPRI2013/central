@@ -3,7 +3,7 @@
 /*to ask to denys to implemente */
 bool isInThePack(Stuff stuff) { return true };
 int distance(Npc npc) {return 0};
-bool isPlantable (Title t) {return true}
+bool isPlantable (Tile t) {return true};
 
 Drop :: Drop (Stuff* s) : Action ("Drop") {
   stu = s;
