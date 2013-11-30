@@ -5,16 +5,25 @@
 #include "position.h"
 #include <SFML/System.hpp>
 #include "geography.h"
+#include <vector>
+#include <cmath>
+
+class Tile;
+class Coordinates;
 
 class Trajectory {
  private:
-  std::vector<Position> posList;
- 
+  bool arrived;
+  std::vector<std::reference_wrapper<Position>> posList;
  public:
-  std::vector<Position> getPosList();
-  void setPosList(Position p);
-  Position getPosition();
-  void update(sf::Time dt,float speed,Geography const& map);
+  Trajectory();
+  Trajectory(Position& start,Position& target);
+  Trajectory(Trajectory& t);
+  std::vector<std::reference_wrapper<Position>>& getPosList();
+  Position& getPosition();
+  bool getArrived();
+  Tile& findNextTile(Tile& start,Tile& target);
+  void update(sf::Time dt,float speed,Geography& map);
 } ;
 
 #endif //TRAJECTORY_H

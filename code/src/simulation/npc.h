@@ -2,17 +2,20 @@
 #define NPC_H
 #include "trajectory.h"
 #include "localState.h"
+#include "positionable.h"
+#include "position.h"
 #include <SFML/System.hpp>
 
-class NPC : public Positionable {
+class NPC {
  private:
   Trajectory trajectory;
   float fear;
   bool shocked;
   float speed;
-  
+  float hitboxSize;
+
  public:
-  NPC(float s,float f);
+  NPC(float s,float f,float h,Position& start,Position& target);
   float getFear();
   void setFear(float f);
   bool isShocked();
@@ -20,7 +23,8 @@ class NPC : public Positionable {
   void updateTrajectory(Trajectory t);
   float getSpeed();
   void setSpeed(float s);
-  Position getPosition();
-  void updatePosition(sf::Time dt,Geography const& map);
+  Position& getPosition();
+  void updatePosition(sf::Time dt,Geography& map);
+  bool isInHitbox(Position& p);
 };
 #endif

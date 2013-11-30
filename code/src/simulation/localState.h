@@ -1,6 +1,7 @@
 #ifndef LOCAL_STATE_H
 #define LOCAL_STATE_H
 #include "position.h"
+#include "positionable.h"
 class Tile; // forward declaration
 
 enum Layers {
@@ -27,14 +28,4 @@ class LocalState {
    }
 
 } ;
-
-class Positionable {
-  private: 
-    Position position;
-  public: 
-      Position getPosition();
-      void setPosition(Position p);
-      Positionable(float x, float y);
-      Positionable(Position p);
-};
-#endif // SIMULATION_H
+#endif

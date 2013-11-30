@@ -2,6 +2,14 @@
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
+int Coordinates::getAbs() {
+  return abs;
+}
+
+int Coordinates::getOrd() {
+  return ord;
+}
+
 
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin) :
   coord(abs,ord),
@@ -81,3 +89,7 @@ void Tile::removeNPC (NPC* a){
   listNPC.remove(a);
   return;
 };
+
+Coordinates& Tile::getCoord() {
+  return coord;
+}

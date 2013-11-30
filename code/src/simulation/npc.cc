@@ -1,12 +1,14 @@
 #include "npc.h"
 #include "localState.h"
 #include "simulation.h"
-//#include "trajectory.h"
+#include "trajectory.h"
 
-NPC::NPC(float s,float f) : Positionable(0,0) {
+NPC::NPC(float s,float f,float h,Position& start,Position& target) {
+  trajectory = Trajectory(start,target);
   shocked = false;
   speed = s;
   fear = f;
+  hitboxSize = h;
   return;
 }
 
@@ -41,10 +43,16 @@ void NPC::setSpeed(float s) {
   return;
 }
 
-Position NPC::getPosition() {
+Position& NPC::getPosition() {
   return (this->trajectory).getPosition();
 }
 
-void NPC::updatePosition(sf::Time dt,Geography const& map) {
+void NPC::updatePosition(sf::Time dt,Geography& map) {
   trajectory.update(dt,speed,map);
+  return;
+}
+
+bool NPC::isInHitbox(Position& p) {
+  float d = p.distance(trajectory.getPosition());
+  return (d<hitboxSize);
 }
