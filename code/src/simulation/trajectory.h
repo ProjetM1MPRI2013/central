@@ -4,7 +4,7 @@
 #include <list>
 #include "position.h"
 #include <SFML/System.hpp>
-#include "geography.h"
+#include "../generation/geography.h"
 #include <vector>
 #include <cmath>
 

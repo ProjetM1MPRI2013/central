@@ -1,6 +1,6 @@
 #include <math.h>
 #include "simulation.h"
-#include "geography.h"
+#include "../generation/geography.h"
 
 Tile& Simulation::isInTile(NPC npc){
 	Position position=npc.getPosition();
