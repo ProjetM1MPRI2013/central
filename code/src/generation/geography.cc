@@ -1,6 +1,10 @@
 #include "geography.h"
 #include "tile.h"
 
+Geography::Geography(int seed){
+
+}
+
 float Geography::getAnxiety(int i, int j){
 
 	return ((this->map[i][j])->getAnxiety());
