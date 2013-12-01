@@ -2,6 +2,7 @@
 #include "simulation.h"
 #include "../generation/geography.h"
 #include "../generation/tile.h"
+#include "npc.h"
 
 Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map){
 		this->MAP_SIZE=MAP_SIZE;
@@ -194,12 +195,12 @@ void Simulation::run(sf::Time dt) {
 	for(int i=1;i<secondes;i++){
 		for (std::list<Agent*>::iterator it = agents.begin(); it != agents.end(); ++it)
 			{
-				this->mesSous=this->mesSous-(*it)->getEntretien();
+				this->sous[0]=this[0]-(*it)->getEntretien();
 			}
 
 		for (std::list<Camera*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
 			{
-			this->mesSous=this->mesSous-(*it)->getEntretien();
+			this->sous[0]=this->sous[0]-(*it)->getEntretien();
 			}
 	}
 
@@ -209,13 +210,12 @@ void Simulation::run(sf::Time dt) {
 		int i,j;
 		i=isInTileX(*it);
 		j=isInTileY(*it);
-		//(*it).updateTrajectory(dt);
+		(*it)->updatePosition(dt,*map);
 		int i2,j2;
 		(map->getTile(i2,j2))->removeNPC(*it);
 		(map->getTile(i2,j2))->addNPC(*it);
 		
 	}
-
 }
 
 void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
