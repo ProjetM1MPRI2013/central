@@ -13,8 +13,6 @@
 #include "eventListener.h"
 #include "time.h"
 
-
-
 /** We need a function from (target,type,listener) to callback,
  *  We create three maps : target -> (type -> (listener -> callback))
  */
@@ -33,7 +31,7 @@ class Simulation {
 
 public :
 
-	Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography map);
+	Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map);
 
  	 /**
      * @brief run
@@ -60,7 +58,7 @@ public :
      * @param g : a reference to the data structure created by the city generator
      * Called by the city generator; locally sets the simulation geography
      */
-    void setGeography(Geography& g);
+    void setGeography(Geography* g);
 
     /**
      * @brief subscribe
@@ -110,18 +108,18 @@ public :
 private :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
-  const int MAP_SIZE;
-  const int TILE_SIZE_X;
-  const int TILE_SIZE_Y;
-  const int NB_JOUEURS;
+  int MAP_SIZE;
+  int TILE_SIZE_X;
+  int TILE_SIZE_Y;
+  int NB_JOUEURS;
   int Id; //0 pour le maire = le serveur, i pour le joueur i
-  int sous[]; //tableau des sous de tout le monde
+  int* sous; //tableau des sous de tout le monde
   int mesSous;
   float absoluteTime;
   float relativeTime;
   float smallTime;
-  Geography map;
-  Geography oldMap;
+  Geography* map;
+  Geography* oldMap;
   std::list<NPC *> NPCs;
   void triggerEvent(EventName eventT, EventTarget& target);
   targetMap targets;
@@ -148,7 +146,6 @@ void Simulation::unsubscribe(EventName eventT, TargetT& target, EventListener& l
     return;
   }
 }
-
 
 //#include "eventListener.h"
 

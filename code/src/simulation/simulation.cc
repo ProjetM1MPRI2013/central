@@ -3,24 +3,28 @@
 #include "../generation/geography.h"
 #include "../generation/tile.h"
 
-Simulation::Simulation(){
+Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map){
 		this->MAP_SIZE=MAP_SIZE;
 		this->TILE_SIZE_X=TILE_SIZE_X;
 		this->TILE_SIZE_Y=TILE_SIZE_Y;
 		this->NB_JOUEURS=NB_JOUEURS;
-		this->Id=id;
 		this->map=map;
+		this->oldMap=map;
+		this->Id=id;
 
-		int t[NB_JOUEURS]={0};
+		int t[NB_JOUEURS];
+		for(int i=0;i<NB_JOUEURS;i++){
+			t[i]=0;
+		}
 		this->mesSous=0;
 		this->sous=t;
 		this->relativeTime=0;
 		this->absoluteTime=0;
+		this->smallTime=0;
 
-		NPC* NPCs[];
+		std::list<NPC*> NPCs;
 		this->NPCs=NPCs;
 }
-
 
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
@@ -68,17 +72,17 @@ void Simulation::lisserMatrice(){
 	    for(int j = 1; i< MAP_SIZE-2; j++){
 			//calcul
 	      anxiety=sqrt2((1/8)*(
-				2*pow2(oldMap.getAnxiety(i,j),2)+
-				pow2(oldMap.getAnxiety(i-1,j),2)+
-				pow2(oldMap.getAnxiety(i,j-1),2)+
-				pow2(oldMap.getAnxiety(i+1,j),2)+
-				pow2(oldMap.getAnxiety(i,j+1),2)+
-				(1/2)*(pow2(oldMap.getAnxiety(i-1,j+1),2)+
-					pow2(oldMap.getAnxiety(i+1,j+1),2)+
-					pow2(oldMap.getAnxiety(i-1,j-1),2)+
-					pow2(oldMap.getAnxiety(i+1,j-1),2))));
+				2*pow2(oldMap->getAnxiety(i,j),2)+
+				pow2(oldMap->getAnxiety(i-1,j),2)+
+				pow2(oldMap->getAnxiety(i,j-1),2)+
+				pow2(oldMap->getAnxiety(i+1,j),2)+
+				pow2(oldMap->getAnxiety(i,j+1),2)+
+				(1/2)*(pow2(oldMap->getAnxiety(i-1,j+1),2)+
+					pow2(oldMap->getAnxiety(i+1,j+1),2)+
+					pow2(oldMap->getAnxiety(i-1,j-1),2)+
+					pow2(oldMap->getAnxiety(i+1,j-1),2))));
 	      //set
-				map.setAnxiety(i,j,anxiety);
+				map->setAnxiety(i,j,anxiety);
 	    }
 	  }
 
@@ -86,89 +90,89 @@ void Simulation::lisserMatrice(){
 		for(int j=1; j< MAP_SIZE-2; j++){
 			//calcul
 			anxiety=sqrt2((1/6)*(
-				2*pow2(oldMap.getAnxiety(0,j),2)+
-				pow2(oldMap.getAnxiety(0,j-1),2)+
-				pow2(oldMap.getAnxiety(1,j),2)+
-				pow2(oldMap.getAnxiety(0,j+1),2)+
-				(1/2)*(pow2(oldMap.getAnxiety(1,j+1),2)+
-					pow2(oldMap.getAnxiety(1,j-1),2))));
+				2*pow2(oldMap->getAnxiety(0,j),2)+
+				pow2(oldMap->getAnxiety(0,j-1),2)+
+				pow2(oldMap->getAnxiety(1,j),2)+
+				pow2(oldMap->getAnxiety(0,j+1),2)+
+				(1/2)*(pow2(oldMap->getAnxiety(1,j+1),2)+
+					pow2(oldMap->getAnxiety(1,j-1),2))));
 			//set
-			map.setAnxiety(0,j,anxiety);
+			map->setAnxiety(0,j,anxiety);
 	  }
 
 		//bande à gauche (j=0)
 		for(int i=1; i< MAP_SIZE-2; i++){
 			//calcul
 			anxiety=sqrt2((1/6)*(
-				2*pow2(oldMap.getAnxiety(i,0),2)+
-				pow2(oldMap.getAnxiety(i-1,0),2)+
-				pow2(oldMap.getAnxiety(i+1,0),2)+
-				pow2(oldMap.getAnxiety(i,0+1),2)+
-				(1/2)*(pow2(oldMap.getAnxiety(i-1,0+1),2)+
-					pow2(oldMap.getAnxiety(i+1,0+1),2))));
+				2*pow2(oldMap->getAnxiety(i,0),2)+
+				pow2(oldMap->getAnxiety(i-1,0),2)+
+				pow2(oldMap->getAnxiety(i+1,0),2)+
+				pow2(oldMap->getAnxiety(i,0+1),2)+
+				(1/2)*(pow2(oldMap->getAnxiety(i-1,0+1),2)+
+					pow2(oldMap->getAnxiety(i+1,0+1),2))));
 			//set
-			map.setAnxiety(i,0,anxiety);
+			map->setAnxiety(i,0,anxiety);
 	  }
 
 		//bande à droite (j=MAP_SIZE -1)
 		for(int i=1; i< MAP_SIZE-2; i++){
 			//calcul
 			anxiety=sqrt2((1/6)*(
-				2*pow2(oldMap.getAnxiety(i,MAP_SIZE-1),2)+
-				pow2(oldMap.getAnxiety(i-1,MAP_SIZE-1),2)+
-				pow2(oldMap.getAnxiety(i+1,MAP_SIZE-1),2)+
-				pow2(oldMap.getAnxiety(i,MAP_SIZE-1-1),2)+
-				(1/2)*(pow2(oldMap.getAnxiety(i-1,MAP_SIZE-1-1),2)+
-					pow2(oldMap.getAnxiety(i+1,MAP_SIZE-1-1),2))));
+				2*pow2(oldMap->getAnxiety(i,MAP_SIZE-1),2)+
+				pow2(oldMap->getAnxiety(i-1,MAP_SIZE-1),2)+
+				pow2(oldMap->getAnxiety(i+1,MAP_SIZE-1),2)+
+				pow2(oldMap->getAnxiety(i,MAP_SIZE-1-1),2)+
+				(1/2)*(pow2(oldMap->getAnxiety(i-1,MAP_SIZE-1-1),2)+
+					pow2(oldMap->getAnxiety(i+1,MAP_SIZE-1-1),2))));
 			//set
-			map.setAnxiety(i,MAP_SIZE-1,anxiety);
+			map->setAnxiety(i,MAP_SIZE-1,anxiety);
 	  }
 
 		//bande en haut (i=MAP_SIZE -1)
 		for(int j=1; j< MAP_SIZE-2; j++){
 			//calcul
 			anxiety=sqrt2((1/6)*(
-				2*pow2(oldMap.getAnxiety(MAP_SIZE-1,j),2)+
-				pow2(oldMap.getAnxiety(MAP_SIZE-2,j),2)+
-				pow2(oldMap.getAnxiety(MAP_SIZE-1,j-1),2)+
-				pow2(oldMap.getAnxiety(MAP_SIZE-1,j+1),2)+
-				(1/2)*(pow2(oldMap.getAnxiety(MAP_SIZE-2,j+1),2)+
-					pow2(oldMap.getAnxiety(MAP_SIZE-2,j-1),2))));
+				2*pow2(oldMap->getAnxiety(MAP_SIZE-1,j),2)+
+				pow2(oldMap->getAnxiety(MAP_SIZE-2,j),2)+
+				pow2(oldMap->getAnxiety(MAP_SIZE-1,j-1),2)+
+				pow2(oldMap->getAnxiety(MAP_SIZE-1,j+1),2)+
+				(1/2)*(pow2(oldMap->getAnxiety(MAP_SIZE-2,j+1),2)+
+					pow2(oldMap->getAnxiety(MAP_SIZE-2,j-1),2))));
 			//set
-			map.setAnxiety(MAP_SIZE-1,j,anxiety);
+			map->setAnxiety(MAP_SIZE-1,j,anxiety);
 	  }
 
 		//coin en haut à gauche
 		anxiety=sqrt2((1/4.5)*(
-			2*pow2(oldMap.getAnxiety(0,MAP_SIZE-1),2)+
-			pow2(oldMap.getAnxiety(0,MAP_SIZE-2),2)+
-			pow2(oldMap.getAnxiety(1,MAP_SIZE-1),2)+
-			(1/2)*(pow2(oldMap.getAnxiety(1,MAP_SIZE-2),2))));
-		map.setAnxiety(0,MAP_SIZE-1,anxiety);
+			2*pow2(oldMap->getAnxiety(0,MAP_SIZE-1),2)+
+			pow2(oldMap->getAnxiety(0,MAP_SIZE-2),2)+
+			pow2(oldMap->getAnxiety(1,MAP_SIZE-1),2)+
+			(1/2)*(pow2(oldMap->getAnxiety(1,MAP_SIZE-2),2))));
+		map->setAnxiety(0,MAP_SIZE-1,anxiety);
 
 		//coin en haut à droite
 		anxiety=sqrt2((1/4.5)*(
-			2*pow2(oldMap.getAnxiety(MAP_SIZE-1,MAP_SIZE-1),2)+
-			pow2(oldMap.getAnxiety(MAP_SIZE-1,MAP_SIZE-2),2)+
-			pow2(oldMap.getAnxiety(MAP_SIZE-2,MAP_SIZE-1),2)+
-			(1/2)*(pow2(oldMap.getAnxiety(MAP_SIZE-2,MAP_SIZE-2),2))));
-		map.setAnxiety(MAP_SIZE-1,MAP_SIZE-1,anxiety);
+			2*pow2(oldMap->getAnxiety(MAP_SIZE-1,MAP_SIZE-1),2)+
+			pow2(oldMap->getAnxiety(MAP_SIZE-1,MAP_SIZE-2),2)+
+			pow2(oldMap->getAnxiety(MAP_SIZE-2,MAP_SIZE-1),2)+
+			(1/2)*(pow2(oldMap->getAnxiety(MAP_SIZE-2,MAP_SIZE-2),2))));
+		map->setAnxiety(MAP_SIZE-1,MAP_SIZE-1,anxiety);
 
 	  //coin en bas à gauche
 		anxiety=sqrt2((1/4.5)*(
-			2*pow2(oldMap.getAnxiety(0,0),2)+
-			pow2(oldMap.getAnxiety(0,1),2)+
-			pow2(oldMap.getAnxiety(1,0),2)+
-			(1/2)*(pow2(oldMap.getAnxiety(1,1),2))));
-		map.setAnxiety(0,0,anxiety);
+			2*pow2(oldMap->getAnxiety(0,0),2)+
+			pow2(oldMap->getAnxiety(0,1),2)+
+			pow2(oldMap->getAnxiety(1,0),2)+
+			(1/2)*(pow2(oldMap->getAnxiety(1,1),2))));
+		map->setAnxiety(0,0,anxiety);
 
 		//coin en bas à droite
 		anxiety=sqrt2((1/4.5)*(
-			2*pow2(oldMap.getAnxiety(MAP_SIZE-1,0),2)+
-			pow2(oldMap.getAnxiety(MAP_SIZE-1,1),2)+
-			pow2(oldMap.getAnxiety(MAP_SIZE-2,0),2)+
-			(1/2)*(pow2(oldMap.getAnxiety(MAP_SIZE-2,1),2))));
-		map.setAnxiety(MAP_SIZE-1,0,anxiety);
+			2*pow2(oldMap->getAnxiety(MAP_SIZE-1,0),2)+
+			pow2(oldMap->getAnxiety(MAP_SIZE-1,1),2)+
+			pow2(oldMap->getAnxiety(MAP_SIZE-2,0),2)+
+			(1/2)*(pow2(oldMap->getAnxiety(MAP_SIZE-2,1),2))));
+		map->setAnxiety(MAP_SIZE-1,0,anxiety);
 
 }
 
@@ -207,13 +211,13 @@ void Simulation::run(sf::Time dt) {
 		j=isInTileY(*it);
 		//(*it).updateTrajectory(dt);
 		int i2,j2;
-		(map.getTile(i2,j2))->removeNPC(*it);
-		(map.getTile(i2,j2))->addNPC(*it);
+		(map->getTile(i2,j2))->removeNPC(*it);
+		(map->getTile(i2,j2))->addNPC(*it);
 		
 	}
 
 }
-/* en commentaire pour le moment car ne compile pas
+
 void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
   try {
     auto listeners = this->targets.at(std::ref(target)).at(eventT);
@@ -222,4 +226,3 @@ void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
     return;
   }
 }
-/*
