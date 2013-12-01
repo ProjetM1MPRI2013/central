@@ -54,7 +54,7 @@ Tile& Position::isInTile(Geography& map) {
   int i,j;
   i=x/TILE_SIZE_X;
   j=y/TILE_SIZE_Y;
-  return (map.getTile(i,j));
+  return (map.getTileRef(i,j));
 }
 
 float Position::distance(Position& p) {
