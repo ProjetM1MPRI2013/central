@@ -16,7 +16,7 @@ class Geography {
   Geography(int seed);
   void setAnxiety(int i, int j, float anxiety);
   float getAnxiety(int i, int j);
-  Tile& getTile(int i,int j);
+  Tile* getTile(int i,int j);
   
 }
 ;

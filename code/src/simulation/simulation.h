@@ -11,6 +11,7 @@
 #include "withUuid.h"
 #include "eventTarget.h"
 #include "eventListener.h"
+#include "time.h"
 
 
 
@@ -32,6 +33,8 @@ class Simulation {
 
 public :
 
+	Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography map);
+
  	 /**
      * @brief run
      * @param dt: short lapse of time
@@ -48,7 +51,9 @@ public :
 		* @param npc : the npc you want to know the case he is in
 		* gives the tile the npc is in			
 		*/
-    Tile& isInTile(NPC npc);
+    int isInTileX(NPC* npc);
+
+    int isInTileY(NPC* npc);
 
     /**
      * @brief setGeography
@@ -105,16 +110,19 @@ public :
 private :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
-  int sous;
   const int MAP_SIZE;
   const int TILE_SIZE_X;
   const int TILE_SIZE_Y;
+  const int NB_JOUEURS;
+  int Id; //0 pour le maire = le serveur, i pour le joueur i
+  int sous[]; //tableau des sous de tout le monde
+  int mesSous;
   float absoluteTime;
   float relativeTime;
   float smallTime;
   Geography map;
   Geography oldMap;
-  std::list<NPC> NPCs;
+  std::list<NPC *> NPCs;
   void triggerEvent(EventName eventT, EventTarget& target);
   targetMap targets;
 
@@ -140,6 +148,7 @@ void Simulation::unsubscribe(EventName eventT, TargetT& target, EventListener& l
     return;
   }
 }
+
 
 //#include "eventListener.h"
 

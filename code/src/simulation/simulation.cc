@@ -1,16 +1,47 @@
 #include <math.h>
 #include "simulation.h"
 #include "../generation/geography.h"
+#include "../generation/tile.h"
 
-Tile& Simulation::isInTile(NPC npc){
-	Position position=npc.getPosition();
+Simulation::Simulation(){
+		this->MAP_SIZE=MAP_SIZE;
+		this->TILE_SIZE_X=TILE_SIZE_X;
+		this->TILE_SIZE_Y=TILE_SIZE_Y;
+		this->NB_JOUEURS=NB_JOUEURS;
+		this->Id=id;
+		this->map=map;
+
+		int t[NB_JOUEURS]={0};
+		this->mesSous=0;
+		this->sous=t;
+		this->relativeTime=0;
+		this->absoluteTime=0;
+
+		NPC* NPCs[];
+		this->NPCs=NPCs;
+}
+
+
+int Simulation::isInTileX(NPC* npc){
+	Position position=npc->getPosition();
+	float x=position.getX();
+	float y=position.getY();
+
+	int i,j;
+	i=x/TILE_SIZE_X;
+	j=y/TILE_SIZE_Y;
+	return (i);
+}
+
+int Simulation::isInTileY(NPC* npc){
+	Position position=npc->getPosition();
 	float x=position.getX();
 	float y=position.getY();	
 	
 	int i,j;
 	i=x/TILE_SIZE_X;
 	j=y/TILE_SIZE_Y;
-	return (map.getTile(i,j));
+	return (j);
 }
 
 float pow2(float x,float y){
@@ -159,26 +190,30 @@ void Simulation::run(sf::Time dt) {
 	for(int i=1;i<secondes;i++){
 		for (std::list<Agent*>::iterator it = agents.begin(); it != agents.end(); ++it)
 			{
-				this->sous=this->sous-(*it)->getEntretien();
+				this->mesSous=this->mesSous-(*it)->getEntretien();
 			}
 
 		for (std::list<Camera*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
 			{
-			this->sous=this->sous-(*it)->getEntretien();
+			this->mesSous=this->mesSous-(*it)->getEntretien();
 			}
 	}
 
 	//Deplacement de tous les NPC.
-	/*for (std::list<NPC>::iterator it = NPCs.begin(); it != NPCs.end(); ++it)
+	for (std::list<NPC *>::iterator it = NPCs.begin(); it != NPCs.end(); ++it)
 	{
-		(*it).updateTrajectory(dt);
-		map.addNPC(i,j,NPC);
+		int i,j;
+		i=isInTileX(*it);
+		j=isInTileY(*it);
+		//(*it).updateTrajectory(dt);
+		int i2,j2;
+		(map.getTile(i2,j2))->removeNPC(*it);
+		(map.getTile(i2,j2))->addNPC(*it);
 		
 	}
-	*/
-	
-	
+
 }
+/* en commentaire pour le moment car ne compile pas
 void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
   try {
     auto listeners = this->targets.at(std::ref(target)).at(eventT);
@@ -187,3 +222,4 @@ void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
     return;
   }
 }
+/*
