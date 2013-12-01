@@ -5,11 +5,12 @@
 // Event Manager templated functions use this,
 // so they must be declared in headers
 class WithUuid {
+  private:
+    boost::uuids::uuid uuid;
   public:
     WithUuid(): uuid(boost::uuids::random_generator()()) {}
     friend class WithUuidCmp;
-  private:
-    boost::uuids::uuid uuid;
+    boost::uuids::uuid getUuid();
 };
 
 struct WithUuidCmp{

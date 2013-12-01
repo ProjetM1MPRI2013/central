@@ -4,9 +4,10 @@
 #include "localState.h"
 #include "positionable.h"
 #include "position.h"
+#include "withUuid.h"
 #include <SFML/System.hpp>
 
-class NPC : Positionable {
+class NPC : WithUuid,Positionable {
  private:
   Trajectory trajectory;
   float fear;
