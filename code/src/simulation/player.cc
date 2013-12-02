@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player (int pid, float xx, float yy) : position(xx,yy) {
+Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
   this->playerID;
   this->speed = 1.;
@@ -11,7 +11,7 @@ int Player::getID(){
 };
 
 Position* Player::getPosition() {
-  return &(this->position);
+  return &(this->p);
 };
 
 Direction Player::getDirection () {
@@ -24,7 +24,7 @@ void Player::setDirection(Direction newd) {
 };
 
 void Player::updatePosition(sf::Time dt) {
-  float dep = (this->speed) * (dt::asSeconds());
+  float dep = (this->speed) * (dt.asSeconds());
   switch (this->d){
   case UP : 
     this->p.add(0,dep);
@@ -54,7 +54,7 @@ void Player::updatePosition(sf::Time dt) {
     break;
   default:
     //ne doit pas arriver
-    exit(1);
+    std::cerr << "Player::updatePosition : Direction not correct " << (int) (this->d) << "\n";
     break;
   };
   

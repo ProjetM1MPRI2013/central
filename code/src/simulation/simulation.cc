@@ -34,10 +34,10 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 Player* Simulation::getPlayerByID(int pid){
   Player* result = 0;
   for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it){
-    if ((*it)->getID() == pid){result = *it};
+    if ((*it)->getID() == pid){result = *it;};
   };
   if (result == 0) {
-      std::cerr << "getPlayerByID error : Unknown playerID : %d \n" pid;
+    std::cerr << "getPlayerByID error : Unknown playerID : " << pid << "\n" ;
     };
   return result;
 }

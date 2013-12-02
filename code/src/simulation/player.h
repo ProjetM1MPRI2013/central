@@ -1,5 +1,10 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "position.h"
-#include "SFML/system.hpp"
+#include "SFML/System.hpp"
+#include <iostream>
+#include <cerrno>
 
 enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP};
 
@@ -28,3 +33,5 @@ private:
   Position p;
   Direction d;
 };
+
+#endif
