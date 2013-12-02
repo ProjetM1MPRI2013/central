@@ -1,0 +1,38 @@
+\documentclass[a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\begin{document}
+
+\section*{Fonctionnement de la partie Simulation.*}
+
+La variable map contient un objet de type géography, qui est en gros une matrice de Tile.
+
+\subsection*{Anxiété :}
+\paragraph{} Les cases contiennent un float de 0 à 100 qui correspond à l'anxiété localisée dans la case. 0 est le plus bas 100 est le plus haut et 10 est le niveau de base.
+Chaque seconde, modulo les évenements supplémentaires qui modifient directement les cases, on a la formule de lissage suivante :\\
+$Anx'[i,j]=$\\
+$\sqrt{(\frac{(Anx[i-1,j])^2+(Anx[i,j-1])^2+(Anx[i+1,j])^2+(Anx[i,j+1])^2+\frac{(Anx[i-1,j-1])^2}{2}+\frac{(Anx[i+1,j+1])^2}{2}+\frac{(Anx[i-1,j+1])^2}{2}+\frac{(Anx[i+1,j-1])^2}{2}+2*(Anx[i,j])^2}{8}}$
+(La formule dépasse volontairement)\\
+Où Anx' est l'anxiété à l'instant (t+1) et Anx est l'anxiété à l'instant t.\\
+Les cases adjacentes sont comptées avec le coefficient 1, la propre case avec le coefficient 2 et les cases en diagonale sont comptées avec le coefficient $\frac{1}{2}$. Le tout est pris dans une sorte de norme deux pour faire remonter un peu plus les extremes.
+
+\subsection*{Population :}
+Chaque Tile contient un niveau de population entre 0 et 100 exprimé en float: 0 le minimum, 100 le maximum et on veut une moyenne de 50 environ sur la carte.
+Chaque seconde, on crée/supprime des npcs de la façon suivante :
+\begin{itemize}
+\item Un npc a $\frac{Pop[i,j]}{10}\%$ de chance d'être créé dans la case [i][j].
+\item Un npc a $max(0,\frac{50-Pop[i,j]}{10})\%$ de chance de disparaitre dans la case [i][j].
+\end{itemize}
+
+\subsection*{Déplacement des npcs :}
+A chaque tour de boucle, on appelle la méthode updatePosition des npcs.
+
+\subsection*{Croisement des npcs :}
+(A venir) Les npcs partagent leur peur quand ils se croisent.
+
+\end{document}
