@@ -47,6 +47,11 @@ Position& NPC::getPosition() {
   return (this->trajectory).getPosition();
 }
 
+void NPC::setPosition(Position& p) {
+  trajectory.setPosition(p);
+  return;
+}
+
 void NPC::updatePosition(sf::Time dt,Geography& map) {
   trajectory.update(dt,speed,map);
   return;
@@ -55,4 +60,8 @@ void NPC::updatePosition(sf::Time dt,Geography& map) {
 bool NPC::isInHitbox(Position& p) {
   float d = p.distance(trajectory.getPosition());
   return (d<hitboxSize);
+}
+
+bool NPC::hasArrived() {
+  return trajectory.getHasArrived();
 }
