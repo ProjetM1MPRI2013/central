@@ -104,5 +104,11 @@ class NPC : WithUuid,Positionable {
    * @return true iff the position is in the hitbox
    */
   bool isInHitbox(Position& p);
+
+  /**
+   * @brief hasArrived
+   * @return true iff the NPC has arrived at his target position
+   */
+  bool hasArrived();
 };
 #endif

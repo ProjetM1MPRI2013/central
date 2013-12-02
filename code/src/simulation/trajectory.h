@@ -17,7 +17,7 @@ class Coordinates;
  */
 class Trajectory {
  private:
-  bool isArrived;
+  bool hasArrived;
   std::vector<std::reference_wrapper<Position>> posList;
   Tile& findNextTile(Tile& start,Tile& target);
   void updateNextPosition(Geography& map);
@@ -68,10 +68,10 @@ class Trajectory {
   void setPosition(Position& p);
 
   /**
-   * @brief getIsArrived
-   * @return a boolean true iff the NPC whose Trajectory it is is arrived at his target
+   * @brief getHasArrived
+   * @return a boolean true iff the NPC whose Trajectory it is has arrived at his target
    */
-  bool getIsArrived();
+  bool getHasArrived();
 
   /**
    * @brief update

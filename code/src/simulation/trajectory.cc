@@ -8,7 +8,7 @@ Trajectory::Trajectory() {
   p1 = Position();
   p2 = Position();
   Trajectory(p1,p2);
-  isArrived = false;
+  hasArrived = false;
   return;
 }
 
@@ -18,13 +18,13 @@ Trajectory::Trajectory(Position& start,Position& target) {
   posList = std::vector<std::reference_wrapper<Position>> (3,start);
   posList[1] = std::ref(next);
   posList[2] = std::ref(target);
-  isArrived = false;
+  hasArrived = false;
   return;
 }
 
 Trajectory::Trajectory(Trajectory& t) {
   posList = std::vector<std::reference_wrapper<Position>>(t.getPosList());
-  isArrived = false;
+  hasArrived = false;
   return;
 }
 
@@ -42,8 +42,8 @@ void Trajectory::setPosition(Position& p) {
   return;
 }
 
-bool Trajectory::getIsArrived() {
-  return isArrived;
+bool Trajectory::getHasArrived() {
+  return hasArrived;
 }
 
 Tile& Trajectory::findNextTile(Tile& start,Tile& target) {
@@ -62,7 +62,7 @@ void Trajectory::updateNextPosition(Geography& map) {
 
 void Trajectory::update(sf::Time dt,float speed,Geography& map) {
   /*on calcule la nouvelle position en avancant en ligne droite*/
-  if (!isArrived) {//du moins s'il n'est pas arrivé, sinon on ne fait rien
+  if (!hasArrived) {//du moins s'il n'est pas arrivé, sinon on ne fait rien
     if ((((Position)posList[0]).getX()==((Position)posList[1]).getX())&&((((Position)posList[0]).getY()==((Position)posList[1]).getY()))) {//pour des raisons obscures son objectif à court terme est sa position courante
       updateNextPosition(map);
     }
@@ -83,7 +83,7 @@ void Trajectory::update(sf::Time dt,float speed,Geography& map) {
     
     if (dist1 <= dist/2) {//on est assez proche de l'objectif à court terme
       if (dist2<=dist/2) {//et aussi de celui à long terme -> on est arrivé
-        isArrived = true;
+        hasArrived = true;
       } else {//on a atteint l'objectif proche mais pas l'autre
         updateNextPosition(map);
       }

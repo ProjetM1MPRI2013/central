@@ -61,3 +61,7 @@ bool NPC::isInHitbox(Position& p) {
   float d = p.distance(trajectory.getPosition());
   return (d<hitboxSize);
 }
+
+bool NPC::hasArrived() {
+  return trajectory.getHasArrived();
+}
