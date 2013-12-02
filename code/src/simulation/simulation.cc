@@ -3,6 +3,8 @@
 #include "../generation/geography.h"
 #include "../generation/tile.h"
 #include "npc.h"
+#include <cstdlib>
+#include <iostream>
 
 Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map){
 		this->MAP_SIZE=MAP_SIZE;
@@ -49,6 +51,8 @@ int Simulation::isInTileY(NPC* npc){
 	return (j);
 }
 
+
+//Simplement des casts en float de pow, sqrt et floor
 float pow2(float x,float y){
 	return ((float)(pow((double(x)),double(y))));
 }
@@ -61,9 +65,34 @@ float floor2(float x){
 	return ((float)(floor((double(x)))));
 }
 
-/*float pow2(int i,int j){
-	return ((float)(pow((int)i,(int)j)));
-}*/
+void Simulation::ajouterNPC(int i,int j){
+
+
+}
+
+void Simulation::supprimerNPC(int i,int j){
+
+
+}
+
+//Crée et tue les gens dans les cases
+void Simulation::peopleGeneration(){
+	float chance;
+	for(int i=0;i<MAP_SIZE;i++){
+		for(int j=0;j<MAP_SIZE;j++){
+			chance = (rand()%100);
+			if(chance>(map->getTile(i,j)->getPopulationDensity()/10)){
+				ajouterNPC(i,j);
+			}
+			if(chance<(map->getTile(i,j)->getPopulationDensity()/10)){
+				supprimerNPC(i,j);
+			}
+		}
+	}
+
+}
+
+//Nivelle la peur via une sorte de norme 2
 void Simulation::lisserMatrice(){
 	float anxiety;
 	  float population;
@@ -178,7 +207,7 @@ void Simulation::lisserMatrice(){
 }
 
 void Simulation::run(sf::Time dt) {
-  
+
 	/*on empile les dt jusqu'à obtenir plus d'une seconde*/
 	this->smallTime=smallTime+dt.asSeconds();
 
@@ -195,7 +224,7 @@ void Simulation::run(sf::Time dt) {
 	for(int i=1;i<secondes;i++){
 		for (std::list<Agent*>::iterator it = agents.begin(); it != agents.end(); ++it)
 			{
-				this->sous[0]=this[0]-(*it)->getEntretien();
+				this->sous[0]=this->sous[0]-(*it)->getEntretien();
 			}
 
 		for (std::list<Camera*>::iterator it = cameras.begin(); it != cameras.end(); ++it)

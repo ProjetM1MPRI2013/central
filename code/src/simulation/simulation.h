@@ -31,6 +31,15 @@ class Simulation {
 
 public :
 
+	//crée un nouveau npc et l'ajoute dans une case
+	void ajouterNPC(int i,int j);
+
+	//supprime un npc dans la case i,j
+	void supprimerNPC(int i,int j);
+
+	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
+	void peopleGeneration();
+
 	Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map);
 
  	 /**
