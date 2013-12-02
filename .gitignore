@@ -1,4 +1,4 @@
-# Compilation Generated files
+﻿# Compilation Generated files
 .deps
 .dirstamp
 depcomp
@@ -37,3 +37,7 @@ Thumbs.db
 *.creator
 *.files
 *.includes
+
+# Aseprite source files
+*.ase
+sprite/palette/*
