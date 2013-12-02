@@ -37,7 +37,6 @@ class Attack : public Action {
    * @brief the victim
    */
   NPC* vict;
-  int damage ();
 };
 
 

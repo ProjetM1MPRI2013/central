@@ -12,7 +12,6 @@ Drop :: Drop (Stuff* s) : Action ("Drop") {
 Attack :: Attack (Weapon* weapon,NPC* victim)  : Action ("Attack") {
   vict = victim;
   weap = weapon;
-  int damage () = {return 3;} ;/*todo*/
 };
 
 

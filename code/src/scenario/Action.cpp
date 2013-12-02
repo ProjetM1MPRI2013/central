@@ -16,3 +16,10 @@ void Action::doAction(){
   std::cerr << "doAction called but not implemented for the Action type :" << name << "\n";
   return;
 };
+
+/*  to check */
+
+void Action::doAction(){
+
+}
+
