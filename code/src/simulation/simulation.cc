@@ -67,7 +67,7 @@ float floor2(float x){
 void Simulation::lisserMatrice(){
 	float anxiety;
 	  float population;
-
+	  *oldMap=*map;
 		//interieur de la map
 	  for(int i = 1; i< MAP_SIZE-2; i++){
 	    for(int j = 1; i< MAP_SIZE-2; j++){
