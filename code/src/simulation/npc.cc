@@ -47,6 +47,11 @@ Position& NPC::getPosition() {
   return (this->trajectory).getPosition();
 }
 
+void NPC::setPosition(Position& p) {
+  trajectory.setPosition(p);
+  return;
+}
+
 void NPC::updatePosition(sf::Time dt,Geography& map) {
   trajectory.update(dt,speed,map);
   return;

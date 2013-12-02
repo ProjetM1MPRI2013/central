@@ -8,20 +8,23 @@ Trajectory::Trajectory() {
   p1 = Position();
   p2 = Position();
   Trajectory(p1,p2);
+  isArrived = false;
   return;
 }
 
 Trajectory::Trajectory(Position& start,Position& target) {
+  Position next ;
+  next = Position(start);
   posList = std::vector<std::reference_wrapper<Position>> (3,start);
-  posList[1] = std::ref(start);
+  posList[1] = std::ref(next);
   posList[2] = std::ref(target);
-  arrived = false;
+  isArrived = false;
   return;
 }
 
 Trajectory::Trajectory(Trajectory& t) {
   posList = std::vector<std::reference_wrapper<Position>>(t.getPosList());
-  arrived = false;
+  isArrived = false;
   return;
 }
 
@@ -34,8 +37,13 @@ Position& Trajectory::getPosition() {
   return posList[0];
 }
 
-bool Trajectory::getArrived() {
-  return arrived;
+void Trajectory::setPosition(Position& p) {
+  posList[0] = std::ref(p);
+  return;
+}
+
+bool Trajectory::getIsArrived() {
+  return isArrived;
 }
 
 Tile& Trajectory::findNextTile(Tile& start,Tile& target) {
@@ -43,9 +51,21 @@ Tile& Trajectory::findNextTile(Tile& start,Tile& target) {
 }
 
 
+void Trajectory::updateNextPosition(Geography& map) {
+  Tile& nextTile = findNextTile(((Position)posList[0]).isInTile(map),((Position)posList[2]).isInTile(map));
+  Position p;
+  p = Position(nextTile);
+  posList[2] = std::ref(p);
+  return;
+}
+  
+
 void Trajectory::update(sf::Time dt,float speed,Geography& map) {
   /*on calcule la nouvelle position en avancant en ligne droite*/
-  if (!arrived) {//du moins s'il n'est pas arrivé, sinon on ne fait rien
+  if (!isArrived) {//du moins s'il n'est pas arrivé, sinon on ne fait rien
+    if ((((Position)posList[0]).getX()==((Position)posList[1]).getX())&&((((Position)posList[0]).getY()==((Position)posList[1]).getY()))) {//pour des raisons obscures son objectif à court terme est sa position courante
+      updateNextPosition(map);
+    }
     float dist = dt.asSeconds()*speed;
     Position& position = posList[0];
     Position& target = posList[1];
@@ -63,12 +83,9 @@ void Trajectory::update(sf::Time dt,float speed,Geography& map) {
     
     if (dist1 <= dist/2) {//on est assez proche de l'objectif à court terme
       if (dist2<=dist/2) {//et aussi de celui à long terme -> on est arrivé
-        arrived = true;
+        isArrived = true;
       } else {//on a atteint l'objectif proche mais pas l'autre
-        Tile& nextTile = findNextTile(((Position)posList[0]).isInTile(map),((Position)posList[2]).isInTile(map));
-        Position p1;
-        p1 = Position(nextTile);
-        posList[1] = std::ref(p1);
+        updateNextPosition(map);
       }
     }
   }
