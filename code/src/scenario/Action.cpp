@@ -17,9 +17,3 @@ void Action::doAction(){
   return;
 };
 
-/*  to check */
-
-void Action::doAction(){
-
-}
-

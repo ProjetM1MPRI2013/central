@@ -19,6 +19,9 @@ class Drop : public Action{
    * @brief the stuff to drop
    */
   Stuff* stu;
+
+  bool isActionPossible ();
+  void doAction ();
 };
 
 class Attack : public Action {
@@ -37,6 +40,9 @@ class Attack : public Action {
    * @brief the victim
    */
   NPC* vict;
+
+  bool isActionPossible ();
+  void doAction ();
 };
 
 
@@ -48,15 +54,18 @@ class Plant : public Action {
    * @param bomb the bomb used
    * @param zone the zone where the bomb will be planted 
    */
-  Plant (Bomb bomb ,Tile zone);
+  Plant (Bomb* bomb ,Tile* zone);
    /**
    * @brief the bomb
    */
-  Bomb bo;
+  Bomb* bo;
    /**
    * @brief the zone
    */
-  Tile z;
+  Tile* z;
+
+  bool isActionPossible ();
+  void doAction ();
 };
 
 
@@ -67,16 +76,18 @@ class Reload : public Action {
    * @param gun the gun to reload
    * @param Ammunition the pack of ammunition used
    */
-  Reload (Gun gun,Ammunition ammunition);
+  Reload (Gun* gun,Ammunition* ammunition);
    /**
    * @brief the gun
    */
-  Gun g;
+  Gun* g;
    /**
    * @brief the pack of ammunition
    */
-  Ammunition ammu;
+  Ammunition* ammu;
  
+  bool isActionPossible ();
+  void doAction ();
 };
 
 
