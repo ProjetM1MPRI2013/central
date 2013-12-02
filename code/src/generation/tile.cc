@@ -79,6 +79,21 @@ std::list<NPC*> Tile::getNPCs() {
     });
 };
 
+float Tile::getPopulationDensity(){
+	return this->populationDensity;
+}
+
+void Tile::setPopulationDensity(float density){
+	this->populationDensity=density;
+}
+
+float Tile::getSpeed(){
+	return this->speed;
+}
+
+void Tile::setSpeed(float speed){
+	this->speed=speed;
+}
 
 void Tile::addNPC (NPC* a){
   listNPC.push_back(a);
