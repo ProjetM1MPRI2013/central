@@ -26,6 +26,8 @@ Reload :: Reload (Gun* gun,Ammunition* ammunition) : Action ("Reload") {
 };
 
 bool Drop::isActionPossible(){return isInThePack(this->stu);};
+void Drop::doAction () {return;};
+
 
 bool Plant::isActionPossible(){
   return (
@@ -33,12 +35,16 @@ bool Plant::isActionPossible(){
 	  && (isPlantable (this->z))
 	  );
 };
+void Plant::doAction () {return;};
+
 
 bool Reload::isActionPossible(){
   return ((isInThePack(this->g))
 	  && (isInThePack( this->ammu))
 	  );
 };
+void Reload::doAction () {return;};
+
 
 
 bool Attack::isActionPossible(){
@@ -46,3 +52,4 @@ bool Attack::isActionPossible(){
 	  && ( (this->weap)->getRange() <= distance (this->vict) )
 	  );
 };
+void Attack::doAction () {return;};

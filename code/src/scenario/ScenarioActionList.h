@@ -1,8 +1,8 @@
 #ifndef SCENARIOACTIONLIST_H
 #define SCENARIOACTIONLIST_H
 
-#include "../simulation/npc.h"
-#include "../generation/tile.h"
+#include "simulation/npc.h"
+#include "generation/tile.h"
 #include "ScenarioAction.h"
 
 /**

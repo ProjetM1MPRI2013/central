@@ -3,6 +3,8 @@
 
 #include <string>
 #include <time.h>
+#include <cerrno>
+#include <iostream>
 
 class Action {
  public:

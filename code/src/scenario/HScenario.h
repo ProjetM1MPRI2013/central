@@ -2,7 +2,7 @@
 #define HSCENARIO_H
 
 
-#include "../simulation/simulation.h"
+#include "simulation/simulation.h"
 #include "Action.h"
 #include "ActionsTerro.h"
 #include "ActionsPC.h"

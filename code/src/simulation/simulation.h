@@ -1,7 +1,8 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 #include "Action.h"
-#include "ScenarioAction.h"
+#include "scenario/ScenarioAction.h"
+class ScenarioAction;
 #include "npc.h"
 #include "SFML/System.hpp"
 #include <iostream>
@@ -107,11 +108,13 @@ public :
      */
     void scenarioActionPerformed(ScenarioAction a);
 
-    /**
-      * @brief
 
-      */
-    int actionTerroPerformed(Action a);
+    //Cette fonction ne devrait pas exister [Adrien K.]
+    ///**
+    //  * @brief
+    //
+    // */
+    //int actionTerroPerformed(Action a);
 
 
 private :
