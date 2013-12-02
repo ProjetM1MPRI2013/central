@@ -5,6 +5,7 @@
 #include "npc.h"
 #include <cstdlib>
 #include <iostream>
+#include "position.h"
 
 Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map){
 		this->MAP_SIZE=MAP_SIZE;
@@ -28,6 +29,7 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 		std::list<NPC*> NPCs;
 		this->NPCs=NPCs;
 }
+
 
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
@@ -66,8 +68,16 @@ float floor2(float x){
 }
 
 void Simulation::ajouterNPC(int i,int j){
-
-
+	Position start,target;
+	int i1,i2,j1,j2;
+	i1=rand()%(this->MAP_SIZE);
+	i2=rand()%(this->MAP_SIZE);
+	j1=rand()%(this->MAP_SIZE);
+	j2=rand()%(this->MAP_SIZE);
+	start=Position(i1*TILE_SIZE_X,j1*TILE_SIZE_Y);
+	target=Position(i2*TILE_SIZE_X,j2*TILE_SIZE_Y);
+	NPC *pnj=new NPC(20,10,10,start,start);
+	NPCs.push_back(pnj);
 }
 
 void Simulation::supprimerNPC(int i,int j){
