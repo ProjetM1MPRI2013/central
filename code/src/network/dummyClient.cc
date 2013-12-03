@@ -1,8 +1,10 @@
 #include "dummyClient.h"
+#include "netEvent.h"
 
 DummyClient::DummyClient(DummyServer& server) : received_messages(){
   this->server = &server ;
   this->server->addClient(*this);
+  this->addMessage(*(new NetEvent(NetEvent::SERV_RESP)),NetEvent::getMsgType());
 }
 
 DummyClient::~DummyClient(){
@@ -15,26 +17,43 @@ DummyClient::~DummyClient(){
 }
 
 void DummyClient::addMessage(AbstractMessage &msg, std::string msgType){
+
+  if(msgType.compare(NetEvent::getMsgType()) == 0){
+      NetEvent& event = (NetEvent &) msg ;
+      if(handle_netEvent(event))
+        return ;
+    }
+  lock.lock() ;
   if(received_messages[msgType] == NULL)
       received_messages[msgType] = new std::vector<AbstractMessage *>() ;
 
   received_messages[msgType]->push_back(&msg) ;
+  lock.unlock() ;
 }
 
 void DummyClient::send_message(AbstractMessage& msg, bool , std::string msgType ) {
-  server->addMessage(msg, msgType) ;
+  server->addMessage(msg, msgType, this) ;
 }
 
 std::vector<AbstractMessage *>& DummyClient::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
+  lock.lock() ;
   MapType::iterator p = received_messages.find(msgType) ;
   if(p != received_messages.end())
     {
       std::vector<AbstractMessage *> *temp = p->second ;
       received_messages.erase(p);
+      lock.unlock() ;
       return *temp ;
     }
   else
-    return *(new std::vector<AbstractMessage *>()) ;
+    {
+      lock.unlock() ;
+      return *(new std::vector<AbstractMessage *>()) ;
+    }
 }
 
+bool DummyClient::handle_netEvent(NetEvent &event){
+  //TODO : some stuff
+  return false ;
+}
 

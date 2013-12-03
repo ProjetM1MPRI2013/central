@@ -8,7 +8,7 @@ DummyServer::DummyServer() : clients(), received_messages(){
 }
 
 DummyServer::~DummyServer(){
-    vector<DummyClient *>::iterator it ;
+    list<DummyClient *>::iterator it ;
     for(it = clients.begin(); it != clients.end() ; it++)
     {
         delete *it ;
@@ -25,17 +25,27 @@ void DummyServer::addClient(DummyClient &cli){
     clients.push_back(&cli) ;
 }
 
-void DummyServer::addMessage(AbstractMessage &msg, std::string msgType){
+void DummyServer::addMessage(AbstractMessage &msg, std::string msgType, DummyClient *cli){
+  if(msgType.compare(NetEvent::getMsgType()) == 0)
+    {
+      //Handle netEvents
+      NetEvent & event = (NetEvent &) msg ;
+      if(handle_netEvent(event, *cli))
+        return ;
+    }
+
   MapType::iterator p = received_messages.find(msgType) ;
   if(p == received_messages.end())
     {
       p = received_messages.insert(MapType::value_type(msgType, new vector<AbstractMessage *>()) ).first ;
     }
+  lock.lock() ;
   p->second->push_back(&msg) ;
+  lock.unlock() ;
 }
 
 void DummyServer::sendUpdate(GameState &game_state){
-    vector<DummyClient*>::iterator cli ;
+    list<DummyClient*>::iterator cli ;
     for(cli = clients.begin(); cli != clients.end() ; cli++)
     {
         //Create gameUpdate from gameState
@@ -49,8 +59,10 @@ vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, Ab
     MapType::iterator p =  received_messages.find(msgType) ;
     if(p != received_messages.end())
       {
+        lock.lock() ;
         vector<AbstractMessage *>* temp = p->second ;
         received_messages.erase(p);
+        lock.unlock() ;
         return *temp ;
       }
     else
@@ -62,6 +74,11 @@ void DummyServer::broadcast_message(AbstractMessage& msg, bool, std::string msgT
     {
       client->addMessage(*msg.copy(),msgType);
     }
+}
+
+bool DummyServer::handle_netEvent(NetEvent& event, DummyClient &client){
+  //TODO : some stuff
+  return false ;
 }
 
 
