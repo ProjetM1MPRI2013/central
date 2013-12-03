@@ -14,18 +14,6 @@
  * interface can be used to call receiveMessages<MsgType>() and
  * sendMessage<MsgType>(message).
  *
- * For now only classes directly diriving from the AbstractMessage
- * class can be sent over the network. For example, you should not
- * try to do something like :
- *     AbstractMessage
- *           |
- *       MessageBase
- *           |
- *      MessageChild
- *
- * Here, you should not use the MessageChild class to send data
- * on the network. If you still want to use inheritance, tell me,
- * some modifications will be required.
  */
 class AbstractMessage {
 public :
@@ -34,7 +22,7 @@ public :
    * @return a string object representing the Class of a message
    *
    * Every class extending the AbstractMessageInterface must
-   * provide their own implementation of the getMsgType method.7
+   * provide their own implementation of the getMsgType method.
    * The returned string must be exactly 8 characters long.
    * (it will be sent over the network, so a fixed size is required).
    */

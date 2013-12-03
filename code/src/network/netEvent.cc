@@ -5,6 +5,8 @@ const std::string NetEvent::MSG_TYPE = "netEvent" ;
 
 NetEvent::NetEvent() : data(0), type(0){}
 
+NetEvent::NetEvent(int type) : data(0), type(type){}
+
 std::string NetEvent::getMsgType(){
   return MSG_TYPE ;
 }

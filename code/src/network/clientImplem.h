@@ -6,6 +6,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/asio.hpp>
 #include "client.h"
+#include "netEvent.h"
 
 
 
@@ -14,9 +15,9 @@
  * @brief The ClientImplem class
  *  Class implementing the Client interface. It is used for communication
  *  between the server and the Client.
- *  This class relies on UDP protocol for communication. A custo protocol is
+ *  This class relies on UDP protocol for communication. A custom protocol is
  *  added on top of UDP to ensure packet delivery when it is necessary (basically,
- *  when the client sends an event to the server.
+ *  when the client sends an event to the server).
  *
  *  This class uses asynchronous send/recieve, and stores eventually the results.
  *  This is necessary to ACK messages, and to resend thoses who have not been recieved.
@@ -24,30 +25,26 @@
  *  (send, recieve, resend, ack...).
  *
  *  The messages that will be sent must have this form :
- *  -> 1 bit  : message type
- *  -> 4 bits : message ident
- *  -> rest data
+ *  - a header containing the type of the message (8 bits), the message number (used to identify messages, 4 bits)
+ *  and wether it should be acked or not (1 bit).
+ *  - data : provided by the toString method of the message
  *
  *  In pariticular, the size of the message sent is not sent. This is possible because
  *  we use a datagram oriented protocol. For this protocol to work, it is important that
  *  messages can be sent in only one datagram (and it should be checked that it is
  *  effectively the case).
- *
- *  The type of the message is distributed as follow :
- *  -> 0 : connection messages, reserved for Network implementation
- *  -> 1 : Aknoledgment messages (in this case, the ident represents the message that is
- *         beeing acked.
- *  -> 2 : Event messages (Safe delivery through ACK)
- *  -> 3 : GameUpdate messages (Server->Client), usafe delivery
- *  -> ... : other types of messages can be added later.
  */
 
-
-
-using namespace boost::asio ;
-using namespace std;
-
 class ClientImplem : public Client {
+
+  /*
+   * Type shortcuts
+   */
+  typedef boost::asio::ip::udp::endpoint endpoint ;
+  typedef boost::asio::ip::udp::socket socket ;
+  typedef boost::asio::io_service io_service ;
+  typedef boost::system::error_code error_code ;
+  typedef boost::asio::deadline_timer deadline_timer ;
 
 public :
     /*
@@ -56,9 +53,6 @@ public :
    */
     ClientImplem(ClientInfo c_info) ;
     ~ClientImplem() ;
-    //virtual void sendEvent(Event& event) ;
-    //virtual std::vector<GameUpdate>& recieveUpdates() ;
-    //virtual std::vector<NetEvent>& recieveNetEvents() ;
 
 protected :
     virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
@@ -69,6 +63,14 @@ protected :
     }
 
 public :
+    /**
+     * @brief HEADER_SIZE : the size of the header used to transfer messages.
+     * 8 bits for message type.
+     * 4 bits for message number
+     * 1 bit for ack
+     */
+    const static int HEADER_SIZE = 13 ;
+
     /**
      * @brief BUFF_SIZE
      * size of the buffer used for recieve operations.
@@ -86,8 +88,7 @@ public :
      * @brief NB_TRY
      * number of times the client should try to send the message.
      * if no ack has been recieved after that, the server is believed
-     * to be unreacheable, and the client goes into an error state
-     * (error gestion to be precised)
+     * to be unreacheable a NetEvent with type SERV_LOST is generated
      */
     const static int NB_TRY = 10 ;
 
@@ -97,12 +98,12 @@ protected :
      * @brief server_endpoint
      * Address of the server
      */
-    ip::udp::endpoint server_endpoint ;
+    endpoint server_endpoint ;
 
     /**
      * Socket used to recieve and send informations to the server
      */
-    ip::udp::socket *sock ;
+    socket *sock ;
 
     /**
      * Element used to dispach events on the Client.
@@ -119,21 +120,28 @@ protected :
      * when an ack is recieved, the corresponding number is
      * removed from this set, to prevent resending the data.
      */
-    set<int> ack_set ;
+    std::set<int> ack_set ;
 
+    typedef std::map<std::string,std::vector<std::string> > mapType ;
     /**
      * @brief recieved_updates
      * vector used to store the recieved GameUpdates.
      * This is the vector returned when calling to recieveUpdates()
      */
-    //vector<GameUpdate>* recieved_updates ;
+    mapType received_messages ;
+
+    /**
+     * @brief header_buff
+     * Used as a buffer to temporarily store the header of received messages
+     */
+    std::string *header_buff ;
 
     /**
      * @brief buff
      * Used as a buffer to temporarily store the results of
      * recieve operations.
      */
-    string *buff ;
+    std::string *buff ;
 
     /**
     * @brief on_sent
@@ -141,7 +149,7 @@ protected :
     * This function is responsible to call further operations to ensure
     * we recieved a ACK
     */
-    void on_sent(string &msg, const boost::system::error_code &error, int size) ;
+    void on_sent(std::vector<std::string*> &buffer, const error_code &error, int) ;
 
     /**
      * @brief on_recieve
@@ -149,13 +157,6 @@ protected :
      * the content, and eventually store it
      */
     void on_recieve(const boost::system::error_code &error, int size) ;
-
-    /**
-     * @brief init_connexion
-     * exchange basic informations with the server (game version, players names ...)
-     * start the io thread.
-     */
-    void init_connexion() ;
 
     /**
      * @brief shutdown
@@ -176,13 +177,37 @@ protected :
      * The function takes ownership of the message and the timer (is responsible for
      * destroying them when they ar no longer needed).
      */
-    void check_ack(string &msg, int nb_times, deadline_timer *t, const boost::system::error_code &err) ;
+    void check_ack(std::vector<std::string*>& msg, int nb_times, deadline_timer *t, const boost::system::error_code &err) ;
 
-    int get_msg_type(string &msg) ;
+    /**
+     * @brief get_msg_type : gives the type of the message header passed as argument
+     * @return : the type of the message
+     */
+    std::string get_msg_type(std::string &header) ;
 
-    int get_msg_nb(string &msg) ;
+    /**
+     * @brief get_msg_nb : gives the id of the message corresponding to the
+     * header passed in argument
+     * @return the id of the message
+     */
+    int get_msg_id(std::string & header) ;
 
+    /**
+     * @brief generate_message : generates a NetEvent message on this
+     * side. (used to inform of possible failures).
+     * The caller keep ownership of the message which can be destroyed immediatetly
+     * after it ha been sent.
+     * @param event : the NetEvent to add to the pending events on this side of the
+     * communication.
+     */
+    void generate_message(NetEvent& event) ;
 
+    /**
+     * @brief ack_message : whether or not this message awaits an ack.
+     * @param header : the header of the message
+     * @return : true if this message must be acked (reliable message)
+     */
+    bool ack_message(std::string& header) ;
 
 } ;
 
