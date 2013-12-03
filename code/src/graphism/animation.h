@@ -1,9 +1,9 @@
 #ifndef ANIMATION
 #define ANIMATION
 
-#include <SFML/Graphics>
+#include <SFML/Graphics.hpp>
 
-enum AnimType {IDLE, WALK, DEAD}
+enum AnimType {IDLE = 0, WALK = 1, DEAD = 2}
 
 
 class Animation
@@ -13,13 +13,14 @@ class Animation
   /**
    * @brief Loads an animation
    * @param textureName: The file name of the sprite set
-   * @param nbFrames_: The number of fraes of the animation
-   * @param widthSprite_: The fixed width of a sprite
+   * @param nbFrames_: The number of frames of the animation
+   * @param widthSprite_: The fixed width of a sprite for one animation
+   * @param heightSprite_ : The fixed height of the animations
    * @param offsetX_: The abscissa of the origin of the animation
    * @param offsetY_: The ordinate of the origin of the animtaion
    * @param isloop_: Is true if the animation loops
    **/
-  virtual bool load(std::string textureName, unsigned int nbFrames_, unsigned int widthSprite_, int offsetX_, int offsetY_, bool isLoop_);
+  virtual bool load(std::string textureName, unsigned int *nbFrames_, unsigned int *widthSprite_, unsigned int heightAnim_, int *offsetX_, int *offsetY_, bool *isLoop_);
   
   /**
    * @brief Goes to the next frame of the animation
@@ -35,7 +36,7 @@ class Animation
   /**
    * @brief Is true if the animation loops
    **/
-  bool isLoop;
+  bool *isLoop;
   
   /**
    * @brief The sprite of the animation
@@ -45,27 +46,37 @@ class Animation
   /**
    * @brief The number of frames of the animation
    **/
-  unsigned int nbFrames;
+  unsigned int *nbFrames;
 
   /**
    * @brief The fixed width of a sprite
    **/
-  unsigned int widthSprite;
+  unsigned int *widthSprite;
+
+  /**
+   *@brief The fixed height for the animations
+   **/
+  unsigned int heigthAnim
   
   /**
    * @brief The abscissa of the origin of the animation
    **/
-  int offsetX;
+  int *offsetX;
   
   /**
    * @brief The ordinate of the origin of the animation
    **/
-  int offsetY;
+  int *offsetY;
   
   /**
    * @brief The number of the current frame
    **/
-  unsigned int currentFrame;  
+  unsigned int currentFrame; 
+  
+  /**
+   * @brief Current animation
+   **/
+  AnimType animT;
 
 };
 

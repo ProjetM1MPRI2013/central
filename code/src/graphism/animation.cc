@@ -1,6 +1,6 @@
 #include "animation.h"
 
-bool Animation::load(std::string textureName, unsigned int nbFrames_, unsigned int widthSprite_, int offsetX_, int offsetY_, bool isLoop_)
+bool Animation::load(std::string textureName, unsigned int *nbFrames_, unsigned int *widthSprite_, unsigned int heightAnim_, int *offsetX_, int *offsetY_, bool *isLoop_)
 {
   /* TODO (cf doc SFML pour sf::Texture) */
   
@@ -10,6 +10,8 @@ bool Animation::load(std::string textureName, unsigned int nbFrames_, unsigned i
   this->offsetY = offsetY_;
   this->isLoop = isLoop_;
   this->currentFrame = 0;
+  this->animT = IDLE;
+  this->heightAnim = heightAnim_;
 
   return true;
 }
