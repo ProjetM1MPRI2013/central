@@ -77,7 +77,7 @@ protected :
      * @param event
      * @return true if the event should be passed to the user. False otherwise.
      */
-    virtual bool handle_netEvent(NetEvent& event, DummyClient& client) ;
+    virtual bool handle_netEvent(NetEvent& event, DummyClient *client) ;
 
     /*
      *Methods inherited from Server

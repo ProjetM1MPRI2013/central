@@ -30,8 +30,11 @@ void DummyServer::addMessage(AbstractMessage &msg, std::string msgType, DummyCli
     {
       //Handle netEvents
       NetEvent & event = (NetEvent &) msg ;
-      if(handle_netEvent(event, *cli))
-        return ;
+      if(handle_netEvent(event, cli))
+        {
+          delete &msg ;
+          return ;
+        }
     }
 
   MapType::iterator p = received_messages.find(msgType) ;
@@ -76,8 +79,52 @@ void DummyServer::broadcast_message(AbstractMessage& msg, bool, std::string msgT
     }
 }
 
-bool DummyServer::handle_netEvent(NetEvent& event, DummyClient &client){
-  //TODO : some stuff
+bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
+  switch(event.getType())
+    {
+    case NetEvent::CLI_LOST : {
+        break ;
+      }
+    case NetEvent::CLI_RESP : {
+        break ;
+      }
+    case NetEvent::CLI_TRY : {
+        //Cannot be received by the server
+        assert(false) ;
+        break ;
+      }
+    case NetEvent::MSG_LOST : {
+        break ;
+      }
+    case NetEvent::NOT_SET : {
+        //Do not send NetEvent with type not set.
+        assert(false) ;
+        break ;
+      }
+    case NetEvent::PLAYER_JOIN : {
+        //TODO : add something here to identify Players/Clients
+        break ;
+      }
+    case NetEvent::PLAYER_QUIT : {
+        break ;
+      }
+    case NetEvent::RECEIVE_ERR : {
+        break ;
+      }
+    case NetEvent::SEND_ERR : {
+        break ;
+      }
+    case NetEvent::SERV_LOST : {
+        break ;
+      }
+    case NetEvent::SERV_RESP : {
+        break ;
+      }
+    case NetEvent::SERV_TRY : {
+        client->addMessage(*(new NetEvent(NetEvent::SERV_RESP)), NetEvent::getMsgType());
+        break ;
+      }
+    }
   return false ;
 }
 
