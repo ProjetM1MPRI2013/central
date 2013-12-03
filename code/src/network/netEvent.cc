@@ -3,9 +3,9 @@
 
 const std::string NetEvent::MSG_TYPE = "netEvent" ;
 
-NetEvent::NetEvent() : data(0), type(0){}
+NetEvent::NetEvent() : data(0), type(NetEvent::NOT_SET){}
 
-NetEvent::NetEvent(int type) : data(0), type(type){}
+NetEvent::NetEvent(Type type) : data(0), type(type){}
 
 std::string NetEvent::getMsgType(){
   return MSG_TYPE ;
@@ -24,5 +24,6 @@ NetEvent* NetEvent::fromString(std::string &msg){
 NetEvent * NetEvent::copy(){
   NetEvent * event = new NetEvent() ;
   event->setType(this->getType());
+  event->data = this->data ;
   return event ;
 }

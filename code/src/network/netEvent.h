@@ -21,74 +21,88 @@
 class NetEvent : public AbstractMessage{
 public:
 
-  /**
-   * @brief EventType : type used to descrive events.
-   */
-  typedef char EventType ;
+  typedef enum Type {
 
-  /**
-   * @brief SERV_LOST : message generated when the server does not answer for a long time
-   * data is NULL
-   */
-  static const EventType SERV_LOST = 1 ;
-  /**
-   * @brief SERV_TRY : send a message to the server to see if it responds
-   * The server answers by a SERV_RESP message
-   * data is NULL
-   */
-  static const EventType SERV_TRY = 2 ;
-  /**
-   * @brief SERV_RESP : server answer to SERV_TRY. Must not be sent manually
-   * data is NULL
-   */
-  static const EventType SERV_RESP = 3 ;
-  /**
-   * @brief CLI_LOST : generated when the client does not respond for a long time
-   * data is NULL
-   */
-  static const EventType CLI_LOST = 4 ;
-  /**
-   * @brief CLI_TRY : tries to contact the client. If it receives the message,
-   * the client answers with CLI_RESP
-   * data is NULL
-   */
-  static const EventType CLI_TRY = 5 ;
-  /**
-   * @brief CLI_RESP : client's answer to CLI_TRY. Must not be sent manually
-   * data is NULL
-   */
-  static const EventType CLI_RESP = 6 ;
-  /**
-   * @brief MSG_LOST : message generated when a message could not be delivered.
-   * data is of type (int *), the integer will be number associated with the message lost
-   */
-  static const EventType MSG_LOST = 7 ;
-  /**
-   * @brief PLAYER_JOIN : send this message to notify the server or other players
-   * that a player joined the game.
-   * data is of type (int *), the integer is the id of the player that joined the game.
-   */
-  static const EventType PLAYER_JOIN = 8 ;
-  /**
-   * @brief PLAYER_QUIT : send this message to notify the server or other players
-   * that a player left the game
-   * data is of type (int *), the integer is the id of the player that left the game.
-   */
-  static const EventType PLAYER_QUIT = 9 ;
+    /**
+     * @brief NOT_SET : default value used on creation.
+     * No meaning associated
+     */
+    NOT_SET,
 
-  /**
-   * @brief SEND_ERROR : generated when an error occured while
-   * sending a message
-   * data is of type (int *), the integer is the number associated with the message
-   */
-  static const EventType SEND_ERR = 10 ;
+    /**
+     * @brief SERV_LOST : message generated when the server does not answer for a long time
+     * data is NULL
+     */
+    SERV_LOST = 1,
 
-  /**
-   * @brief RECEIVE_ERR : generated when an error occured when
-   * receiving a message.
-   * data is null.
-   */
-  static const EventType RECEIVE_ERR = 11 ;
+    /**
+     * @brief SERV_TRY : send a message to the server to see if it responds
+     * The server answers by a SERV_RESP message
+     * data is NULL
+     */
+    SERV_TRY ,
+
+    /**
+     * @brief SERV_RESP : server answer to SERV_TRY. Must not be sent manually
+     * data is NULL
+     */
+    SERV_RESP ,
+
+    /**
+     * @brief CLI_LOST : generated when the client does not respond for a long time
+     * data is NULL
+     */
+    CLI_LOST ,
+
+    /**
+     * @brief CLI_TRY : tries to contact the client. If it receives the message,
+     * the client answers with CLI_RESP
+     * data is NULL
+     */
+    CLI_TRY ,
+
+    /**
+     * @brief CLI_RESP : client's answer to CLI_TRY. Must not be sent manually
+     * data is NULL
+     */
+    CLI_RESP ,
+
+    /**
+     * @brief MSG_LOST : message generated when a message could not be delivered.
+     * data is of type (int *), the integer will be number associated with the message lost
+     */
+    MSG_LOST ,
+
+    /**
+     * @brief PLAYER_JOIN : send this message to notify the server or other players
+     * that a player joined the game.
+     * data is of type (int *), the integer is the id of the player that joined the game.
+     */
+    PLAYER_JOIN = 8 ,
+
+    /**
+     * @brief PLAYER_QUIT : send this message to notify the server or other players
+     * that a player left the game
+     * data is of type (int *), the integer is the id of the player that left the game.
+     */
+    PLAYER_QUIT = 9 ,
+
+    /**
+     * @brief SEND_ERROR : generated when an error occured while
+     * sending a message
+     * data is of type (int *), the integer is the number associated with the message
+     */
+    SEND_ERR ,
+
+    /**
+     * @brief RECEIVE_ERR : generated when an error occured when
+     * receiving a message.
+     * data is null.
+     */
+    RECEIVE_ERR
+
+  } Type ;
+
 
   static const std::string MSG_TYPE ;
 
@@ -103,19 +117,19 @@ public:
   /**
    * @brief NetEvent : creates a new NetEvent with the given type
    */
-  NetEvent(int type) ;
+  NetEvent(Type type) ;
 
   /**
    * @brief getType
    * @return the type of this message
    */
-  EventType inline getType(){ return type ;}
+  NetEvent::Type inline getType(){ return type ;}
 
   /**
    * @brief setType
    * @param type : the type to set to this message
    */
-  void inline setType(EventType type){this->type = type ;}
+  void inline setType(NetEvent::Type type){this->type = type ;}
 
 
 
@@ -140,7 +154,7 @@ protected :
    * @brief type : the type of this message.
    * The possible types are described in static fields.
    */
-  EventType type ;
+  Type type ;
 
   /**
    * @brief data : the data that is attached to this message.
