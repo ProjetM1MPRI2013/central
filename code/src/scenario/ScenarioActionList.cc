@@ -4,12 +4,13 @@
 /*****************
  *ChangeDirection*
  *****************/
-ChangeDirection::ChangeDirection(int id, int mov) : ScenarioAction ("ChangeDirection"){
+ChangeDirection::ChangeDirection(int id, Direction mov) : ScenarioAction ("ChangeDirection"){
   playerID = id;
   newMovement = mov;
 };
 
 void ChangeDirection::run(){
+  simulation->getPlayerByID(playerID)->setDirection(newMovement);
   return;
 };
 
@@ -33,5 +34,8 @@ KillNPC::KillNPC(NPC* t) : ScenarioAction("KillNPC"){
 };
 
 void KillNPC::run(){
+  //Supprime un NPC de la case du NPC target, vue qu'il n'existe pas de methode pour supprimer un NPC précis -_-' [Adrien K]
+  //TODO : gérer le cas ou le NPC n'existe pas
+    simulation->supprimerNPC(simulation->isInTileX(target),simulation->isInTileY(target));
   return;
 };

@@ -31,6 +31,17 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 }
 
 
+Player* Simulation::getPlayerByID(int pid){
+  Player* result = 0;
+  for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it){
+    if ((*it)->getID() == pid){result = *it;};
+  };
+  if (result == 0) {
+    std::cerr << "getPlayerByID error : Unknown playerID : " << pid << "\n" ;
+    };
+  return result;
+}
+
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
 	float x=position.getX();
@@ -228,6 +239,11 @@ void Simulation::run(sf::Time dt) {
 	/*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
 	for(int i=1;i<secondes;i++){
 		this->lisserMatrice();
+	}
+
+	/* We update the position of all the player */
+	for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it){
+	  (*it)->updatePosition(dt);
 	}
 
 	/*on fait payer l'entretien des différents trucs*/
