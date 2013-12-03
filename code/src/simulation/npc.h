@@ -12,7 +12,7 @@
  * @brief The NPC class
  * It represents a NPC, and is a subclass of Positionable and Withuuid
  */
-class NPC : WithUuid,Positionable {
+class NPC : public WithUuid, public Positionable {
  private:
   Trajectory trajectory;
   float fear;
