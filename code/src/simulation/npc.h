@@ -34,8 +34,9 @@ class NPC : WithUuid,Positionable {
    * @param h : the NPC's hitbox size
    * @param start : the NPC's start position
    * @param target : the NPC's target position
+   * @param tex: the texture pack of the sprite cheet of the animation
    */
-  NPC(float s,float f,float h,Position& start,Position& target);
+  NPC(float s,float f,float h,Position& start,Position& target,TexturePack* tex);
 
   /**
    * @brief getFeat
@@ -124,7 +125,13 @@ class NPC : WithUuid,Positionable {
    * @brief setAnim
    * Sets the animation of the NPC
    * @param t: New animation
-   */  
-  void setAnim(AnimType t);
+   **/  
+  void setAnim(const int t);
+
+  /**
+   * @brief TextureAnim
+   * Changes the texture of the animation of the NPC
+   **/
+  void TextureAnim(TexturePack* tex);
 };
 #endif

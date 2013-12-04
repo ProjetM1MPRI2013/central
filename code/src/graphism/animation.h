@@ -3,28 +3,36 @@
 
 #include <SFML/Graphics.hpp>
 
-enum AnimType {IDLE , WALK , DEAD }
+/**
+ * @brief TexturePack
+ * A package of all the informations needed for an animation
+ **/
+struct TexturePack {
+  sf::Texture texture;
+  unsigned int nbAnim;
+  unsigned int* nbFrames;
+  unsigned int* widthSprite;
+  unsigned int heightSprite;
+  int* offsetX;
+  int* offsetY;
+  bool* isLoop;
+};
 
 /**
  * @brief The Animation class
  * Represents the animation of an object on the map
- */
- 
+ */ 
 class Animation
 {
  public:
 
+  Animation();
+
   /**
    * @brief Constructor for the Animation class
-   * @param tex: Texture of the sprite sheet
-   * @param nbFrames: The number of frames of the animation
-   * @param widthSprite: The fixed width of a sprite for one animation
-   * @param heightSprite: The fixed height of the animations
-   * @param offsetX: The abscissa of the origin of the animation
-   * @param offsetY: The ordinate of the origin of the animtaion
-   * @param isloop: Is true if the animation loops
+   * @param tex: Texture pack of the animation
    **/
-  Animation(sf::Texture& tex, unsigned int *nbFrames, unsigned int *widthSprite, unsigned int heightSprite, int *offsetX, int *offsetY, bool *isLoop);
+  Animation(TexturePack* tex);
  
   /**
    * @brief Goes to the next frame of the animation
@@ -35,7 +43,7 @@ class Animation
    * @brief Changes the animation
    * @param t: New animation
    **/
-  virtual void setAnim(AnimType t)
+  virtual void setAnim(const int t);
   
   /**
    * @brief Give the sprite of the animation
@@ -53,51 +61,32 @@ class Animation
    **/
   virtual int getOffsetY();
 
+  /**
+   * @brief isNull
+   * @return is true iff tex != Null, ie if there is an actual texture pack applied to the animation.
+   **/
+  virtual bool isInit();
+
  private:
   /**
-   * @brief Is true if the animation loops
+   * @brief The Texture Pack
    **/
-  bool *isLoop;
-  
+  TexturePack* tex;
+ 
   /**
    * @brief The sprite of the animation
    **/
   sf::Sprite spr;
-  
-  /**
-   * @brief The number of frames of the animation
-   **/
-  unsigned int *nbFrames;
 
   /**
-   * @brief The fixed width of a sprite
+   * @brief The current frame of the animation
    **/
-  unsigned int *widthSprite;
+  unsigned int currentFrame;
 
   /**
-   *@brief The fixed height for the animations
+   * @brief The current animation
    **/
-  unsigned int heigthSprite
-  
-  /**
-   * @brief The abscissa of the origin of the animation
-   **/
-  int *offsetX;
-  
-  /**
-   * @brief The ordinate of the origin of the animation
-   **/
-  int *offsetY;
-  
-  /**
-   * @brief The number of the current frame
-   **/
-  unsigned int currentFrame; 
-  
-  /**
-   * @brief Current animation
-   **/
-  AnimType animT;
+  unsigned int animT;
 
 };
 

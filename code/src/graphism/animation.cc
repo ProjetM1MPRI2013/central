@@ -1,40 +1,42 @@
 #include "animation.h"
-#include <assert.h>
 
-Animation::Animation(sf::Texture& tex, unsigned int *nbFrames, unsigned int *widthSprite, unsigned int heightSprite, int *offsetX, int *offsetY, bool *isLoop)
+Animation::Animation() { }
+
+Animation::Animation(TexturePack* tex)
 {
+  if(tex == NULL)
+    {
+      this->tex = NULL;
+    }
+  else
+    {
 
-  this->nbFrames = nbFrames;
-  this->widthSprite = widthSprite;
-  this->offsetX = offsetX;
-  this->offsetY = offsetY;
-  this->isLoop = isLoop;
-  this->currentFrame = 0;
-  this->animT = IDLE;
-  this->heightSprite = heightSprite;
-  
-  (this->spr).setTexture(tex);
-  (this->spr).setTextureRect(sf::IntRect(0,0,widthSprite[0] - 1,heightSprite - 1));
-  
+      this->currentFrame = 0;
+      this->animT = 0;
+      this->tex = tex;
+      
+      (this->spr).setTexture(tex->texture);
+      (this->spr).setTextureRect(sf::IntRect(0,0,tex->widthSprite[0] - 1,tex->heightSprite - 1));
+    }
 }
 
 void Animation::nextFrame()
 {
-  if (currentFrame < nbFrames[animT] - 1)
+  if (currentFrame < tex->nbFrames[animT] - 1)
     currentFrame++;
-  else if (currentFrame == nbFrames[animT] - 1 && isLoop)
+  else if (currentFrame == tex->nbFrames[animT] - 1 && tex->isLoop[animT])
     currentFrame = 0;
   
-  spr.setTextureRect(sf::IntRect(currentFrame * widthSprite[animT], animT * heightSprite, (currentFrame + 1) * widthSprite[animT] - 1,  (animT + 1) * heightSprite - 1));
+  spr.setTextureRect(sf::IntRect(currentFrame * tex->widthSprite[animT], animT * tex->heightSprite, (currentFrame + 1) * tex->widthSprite[animT] - 1,  (animT + 1) * tex->heightSprite - 1));
   
   return;
 }
 
-void Animation::setAnim(AnimType t)
+void Animation::setAnim(const int t)
 {
   animT = t;
   currentFrame = 0;
-  spr.setTextureRect(sf::IntRect(0,animT * heightSprite ,widthSprite[0] - 1, (animT + 1) * heightSprite - 1 ));
+  spr.setTextureRect(sf::IntRect(0,animT * tex->heightSprite ,tex->widthSprite[0] - 1, (animT + 1) * tex->heightSprite - 1 ));
   return;
 }
 
@@ -44,12 +46,17 @@ sf::Sprite Animation::getSprite()
 }
 
 
-int Animation::getOffsetX();
+int Animation::getOffsetX()
 {
-  return offsetX;
+  return tex->offsetX[animT];
 }
   
-int Animation::getOffsetY();
+int Animation::getOffsetY()
 {
-  return offsetY;
+  return tex->offsetY[animT];
+}
+
+bool Animation::isInit()
+{
+  return tex != NULL;
 }
