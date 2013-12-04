@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "../simulation/npc.h"
 
-enum TileType {ROADH, ROADV, INTER, BANK, HOUSE}; // énumération des types de batiments
+enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
 /**
  * @brief Coordinates
