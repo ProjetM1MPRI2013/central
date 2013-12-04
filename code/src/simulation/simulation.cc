@@ -277,15 +277,6 @@ void Simulation::run(sf::Time dt) {
 	}
 }
 
-void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
-  try {
-    auto listeners = this->targets.at(std::ref(target)).at(eventT);
-    for (auto& pair : listeners) { pair.second(); };
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-
-}
 int Simulation::getSous() {
 	return (this->sous[0]);
 }

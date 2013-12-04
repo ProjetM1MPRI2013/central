@@ -6,10 +6,10 @@
 
 template <typename TargetT>
 void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&)> callback) {
-  simulation.subscribe(eventT, target, this, callback);
+  EventManager::subscribe(eventT, target, this, callback);
 };
 
 template <typename TargetT>
 void EventListener::unsubscribe(EventName eventT, TargetT& target) {
-  simulation.unsubscribe(eventT, target, this);
+  EventManager::unsubscribe(eventT, target, this);
 };
