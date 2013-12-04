@@ -7,7 +7,7 @@
 #include "withUuid.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "../graphism/animation.h"
+#include "graphism/animation.h"
 
 
 /**
