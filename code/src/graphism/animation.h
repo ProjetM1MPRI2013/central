@@ -3,34 +3,55 @@
 
 #include <SFML/Graphics.hpp>
 
-enum AnimType {IDLE = 0, WALK = 1, DEAD = 2}
+enum AnimType {IDLE , WALK , DEAD }
 
-
+/**
+ * @brief The Animation class
+ * Represents the animation of an object on the map
+ */
+ 
 class Animation
 {
- publc:
+ public:
 
   /**
-   * @brief Loads an animation
-   * @param textureName: The file name of the sprite set
-   * @param nbFrames_: The number of frames of the animation
-   * @param widthSprite_: The fixed width of a sprite for one animation
-   * @param heightSprite_ : The fixed height of the animations
-   * @param offsetX_: The abscissa of the origin of the animation
-   * @param offsetY_: The ordinate of the origin of the animtaion
-   * @param isloop_: Is true if the animation loops
+   * @brief Constructor for the Animation class
+   * @param tex: Texture of the sprite sheet
+   * @param nbFrames: The number of frames of the animation
+   * @param widthSprite: The fixed width of a sprite for one animation
+   * @param heightSprite: The fixed height of the animations
+   * @param offsetX: The abscissa of the origin of the animation
+   * @param offsetY: The ordinate of the origin of the animtaion
+   * @param isloop: Is true if the animation loops
    **/
-  virtual bool load(std::string textureName, unsigned int *nbFrames_, unsigned int *widthSprite_, unsigned int heightAnim_, int *offsetX_, int *offsetY_, bool *isLoop_);
-  
+  Animation(sf::Texture& tex, unsigned int *nbFrames, unsigned int *widthSprite, unsigned int heightSprite, int *offsetX, int *offsetY, bool *isLoop);
+ 
   /**
    * @brief Goes to the next frame of the animation
    **/
   virtual void nextFrame();
   
   /**
+   * @brief Changes the animation
+   * @param t: New animation
+   **/
+  virtual void setAnim(AnimType t)
+  
+  /**
    * @brief Give the sprite of the animation
    **/
   virtual sf::Sprite getSprite();
+  
+  /**
+   * @brief Gives the horizontal offset of the location of where the sprite should be drawn
+   **/
+  
+  virtual int getOffsetX();
+  
+  /**
+   * @brief Gives the vertical offset of the location of where the sprite should be drawn
+   **/
+  virtual int getOffsetY();
 
  private:
   /**
@@ -56,7 +77,7 @@ class Animation
   /**
    *@brief The fixed height for the animations
    **/
-  unsigned int heigthAnim
+  unsigned int heigthSprite
   
   /**
    * @brief The abscissa of the origin of the animation

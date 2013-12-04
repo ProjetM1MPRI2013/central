@@ -3,12 +3,13 @@
 #include "simulation.h"
 #include "trajectory.h"
 
-NPC::NPC(float s,float f,float h,Position& start,Position& target) {
+NPC::NPC(float s,float f,float h,Position& start,Position& target, sf::Texture& tex) {
   trajectory = Trajectory(start,target);
   shocked = false;
   speed = s;
   fear = f;
   hitboxSize = h;
+  this->anim = Animation(tex,{1,12,16},{16,16,32},32,{0,0,0},{0,0,0},{false,true,false}); // Pour tester
   return;
 }
 
@@ -65,3 +66,14 @@ bool NPC::isInHitbox(Position& p) {
 bool NPC::hasArrived() {
   return trajectory.getHasArrived();
 }
+
+sf::Sprite NPC::getSprite(){
+  this->anim.nextFrame()                  // Pas certain 
+  return this->anim.getSprite();
+}
+
+void NPC::setAnim(AnimType t){
+  this->anim.setAnim(t);
+  return;
+}
+

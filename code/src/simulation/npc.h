@@ -6,6 +6,8 @@
 #include "position.h"
 #include "withUuid.h"
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include "../graphism/animation.h"
 
 
 /**
@@ -19,6 +21,7 @@ class NPC : WithUuid,Positionable {
   bool shocked;
   float speed;
   float hitboxSize;
+  Animation anim;
 
 
  public:
@@ -110,5 +113,18 @@ class NPC : WithUuid,Positionable {
    * @return true iff the NPC has arrived at his target position
    */
   bool hasArrived();
+  
+  /**
+   * @brief getSprite
+   * @return returns the sprite of the NPC
+   */  
+  sf::Sprite getSprite();
+  
+  /**
+   * @brief setAnim
+   * Sets the animation of the NPC
+   * @param t: New animation
+   */  
+  void setAnim(AnimType t);
 };
 #endif

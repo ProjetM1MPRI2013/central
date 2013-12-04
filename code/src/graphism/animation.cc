@@ -1,28 +1,55 @@
 #include "animation.h"
+#include <assert.h>
 
-bool Animation::load(std::string textureName, unsigned int *nbFrames_, unsigned int *widthSprite_, unsigned int heightAnim_, int *offsetX_, int *offsetY_, bool *isLoop_)
+Animation::Animation(sf::Texture& tex, unsigned int *nbFrames, unsigned int *widthSprite, unsigned int heightSprite, int *offsetX, int *offsetY, bool *isLoop)
 {
-  /* TODO (cf doc SFML pour sf::Texture) */
-  
+
   this->nbFrames = nbFrames;
-  this->widthSprite = widthSprite_;
-  this->offsetX = offsetX_;
-  this->offsetY = offsetY_;
-  this->isLoop = isLoop_;
+  this->widthSprite = widthSprite;
+  this->offsetX = offsetX;
+  this->offsetY = offsetY;
+  this->isLoop = isLoop;
   this->currentFrame = 0;
   this->animT = IDLE;
-  this->heightAnim = heightAnim_;
-
-  return true;
+  this->heightSprite = heightSprite;
+  
+  (this->spr).setTexture(tex);
+  (this->spr).setTextureRect(sf::IntRect(0,0,widthSprite[0] - 1,heightSprite - 1));
+  
 }
 
 void Animation::nextFrame()
 {
-  /* TODO */
+  if (currentFrame < nbFrames[animT] - 1)
+    currentFrame++;
+  else if (currentFrame == nbFrames[animT] - 1 && isLoop)
+    currentFrame = 0;
+  
+  spr.setTextureRect(sf::IntRect(currentFrame * widthSprite[animT], animT * heightSprite, (currentFrame + 1) * widthSprite[animT] - 1,  (animT + 1) * heightSprite - 1));
+  
   return;
 }
 
-void Animation::getSprite()
+void Animation::setAnim(AnimType t)
 {
-  return thisi->spr;
+  animT = t;
+  currentFrame = 0;
+  spr.setTextureRect(sf::IntRect(0,animT * heightSprite ,widthSprite[0] - 1, (animT + 1) * heightSprite - 1 ));
+  return;
+}
+
+sf::Sprite Animation::getSprite()
+{
+  return this->spr;
+}
+
+
+int Animation::getOffsetX();
+{
+  return offsetX;
+}
+  
+int Animation::getOffsetY();
+{
+  return offsetY;
 }
