@@ -2,8 +2,10 @@
 #define DUMMYCLIENT_H
 
 #include <map>
+#include <mutex>
 #include "client.h"
 #include "dummyServer.h"
+#include "netEvent.h"
 
 /**
  * @brief The DummyClient class
@@ -50,11 +52,23 @@ protected :
    * the received messages of this type.
    */
   MapType received_messages;
+
+  /**
+   * @brief lock : used to prevent concurrent acces to the container containing all the messages.
+   */
+  std::mutex lock ;
   /**
    * @brief server
    * The server this client is connected to.
    */
   DummyServer* server ;
+
+  /**
+   * @brief handle_netEvent : handles NetEvent when they are received.
+   * @param event
+   * @return true if the event must not be passed to the user. false otherwise
+   */
+  virtual bool handle_netEvent(NetEvent& event) ;
 
     /*
      * Methods inherited from the Client interface

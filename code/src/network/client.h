@@ -69,6 +69,8 @@ public :
 
   // The only reason for private members in this interface is that
   // templates cannot be declared virtual.
+
+  virtual ~Client(){}
 protected :
   /**
    * @brief send_message : (Internal do not use) Sends a message with the type given as a parameter.

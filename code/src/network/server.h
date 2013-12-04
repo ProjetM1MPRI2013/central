@@ -9,6 +9,7 @@
 /**
  * @brief The GameState class (Temporary, will be replaced by an include when the
  * corresponding class in the simulation module will be defined.
+ *
  */
 class GameState {} ;
 
@@ -17,6 +18,11 @@ class GameState {} ;
  * Provides the basic functionnalities for the server.
  * Allows to broadcast/receive events through the network (in a reliable way or not)
  * Also allows to broacast game updates to all the clients.
+ * On its creation, the server will wait for external messages. The server will register any client sending a SERV_TRY message
+ * as a connected Client, which will be notified when messages are sent usong broadcastMessage.
+ * If a client fails to ack a message sent with the reliable option set to true, this client is removed
+ * from the list of connected clients, and a CLI_LOST NetEvent is generated on the Server side
+ * and broadcasted to all the other clients.
  */
 class Server {
 
@@ -35,7 +41,6 @@ public :
    * @brief broadcastMessage : broadcasts a message of the given type to all the clients
    * @param msg : the message to send
    * @param reliable : whether the server should wait for an ack or not.
-   * @see Client::sendMessage for details
    */
   template <typename MsgType>
   void broadcastMessage(MsgType msg, bool reliable = true){
@@ -47,7 +52,17 @@ public :
    * @return all the messages received from nom with type MsgType.
    * MsgType should extend the AbstractMessage interface.
    * @see AbstractMessage
-   * @see Client::receiveMessages
+   * Will only return messages of the given class. If there are pending messages
+   * of a subclass, they won't be transferred by a call to receive on the superclass.
+   * For example :
+   *       AbstractMessage
+   *            |
+   *       MessageBase
+   *            |
+   *       MessageChild
+   *
+   * A call to receiveMessages<MessageBase>() won't return instances of MessageChild if
+   * some have been received.
    */
   template <typename MsgType>
   std::vector<MsgType *> & receiveMessages(){
@@ -56,6 +71,7 @@ public :
 
   }
 
+  virtual ~Server() {}
   //only reason for private members in this interface is that templates cannot be
   // declared virtual.
 protected :
