@@ -7,6 +7,21 @@
 
 enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
 
+struct SpriteTilePack
+{
+  sf::Texture tex;
+  // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
+  int originX;
+  int originY;
+  // Ces variables correspondent à la boite qui encadre l'image dans la texture
+  int X1;
+  int Y1;
+  int X2;
+  int Y2;
+};
+
+
+
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
@@ -62,6 +77,7 @@ class Tile {
    */
   TileType type;
   sf::Sprite sprite;
+  SpriteTilePack* stp;
   bool destructible;
   float anxiety;
   float populationDensity;
@@ -129,7 +145,7 @@ class Tile {
    * @param type : type of the batiment
    * @return the sprite of the bat
    */
-  sf::Sprite& getTSprite(TileType type);
+  // sf::Sprite& getTSprite(TileType type);
   
   public:
   /**
@@ -147,8 +163,9 @@ class Tile {
    * @param speed : initial speed into the tile
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
+   * @param stp : the informations about the texture of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates& batOrigin, Coordinates& boroughOrigin);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates& batOrigin, Coordinates& boroughOrigin, SpriteTilePack* stp);
     TileType getType();
     void setType(TileType t);
     bool isDestructible();
@@ -195,6 +212,12 @@ class Tile {
      *@brief Change the borough of the tile
      */
     void setCoordBorough(Coordinates& CBorough);
+    
+    void setTexture(SpriteTilePack* stp);
+    
+    int getOriginSpriteX();
+    
+    int getOriginSpriteY();
     
 }
 ;

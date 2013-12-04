@@ -1,6 +1,9 @@
 #ifndef GEOGRAPHY
 #define GEOGRAPHY
 
+#include <SFML/Graphics.hpp>
+
+
 class Tile;
 
 class Geography {
@@ -18,6 +21,8 @@ class Geography {
   float getAnxiety(int i, int j);
   Tile* getTile(int i,int j);
   Tile& getTileRef(int i,int j);
+  int getMapHeight();
+  int getMapWidth();
   
 }
 ;

@@ -68,8 +68,16 @@ bool NPC::hasArrived() {
 }
 
 sf::Sprite NPC::getSprite(){
-  this->anim.nextFrame();                  // Pas certain 
-  return this->anim.getSprite();
+  if this->anim.isInit
+  {
+    this->anim.nextFrame();                  // Pas certain 
+    return this->anim.getSprite();
+  }
+  else
+  {
+    sf::Sprite tmp;
+    return tmp;
+  }
 }
 
 void NPC::setAnim(const int t){
@@ -80,4 +88,12 @@ void NPC::setAnim(const int t){
 void NPC::TextureAnim(TexturePack* tex){
   anim = Animation(tex);
   return;
+}
+
+int NCP::TextureOffsetX(){
+  return anim.getOffsetX();
+}
+
+int NCP::TextureOffsetY(){
+  return anim.getOffsetY();
 }

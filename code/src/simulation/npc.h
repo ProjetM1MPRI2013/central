@@ -133,5 +133,9 @@ class NPC : public WithUuid, public Positionable {
    * Changes the texture of the animation of the NPC
    **/
   void TextureAnim(TexturePack* tex);
+  
+  int TextureOffsetX();
+  
+  int TextureOffsetY();
 };
 #endif

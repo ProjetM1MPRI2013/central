@@ -11,7 +11,7 @@ int Coordinates::getOrd() {
 }
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin) :
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin, SpriteTilePack* stp) :
   coord(abs,ord),
   batOrigin(batOriginO),
   coordBorough(boroughOrigin) {
@@ -27,7 +27,10 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   //this->batOrigin = batOriginO;
   this->lenghtBat = getTLenght(typeO);
   this->weightBat = getTWeight(typeO);
-  this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas
+  // this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas // MrKulu : Inutile si je rajoute le SpriteTilePack : 
+  this->stp = stp;
+  this->sprite.setTexture(stp->texture);
+  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
   this->destructionLevel = 0.;
 }
 
@@ -60,7 +63,7 @@ float Tile::getTWeight(TileType type) {
   case immeuble: return 0;
   }
 }
-
+/*
 sf::Sprite& Tile::getTSprite(TileType type) {
   switch (type) {
   case roadH: break;
@@ -68,8 +71,7 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   case intersection: break;
   case banque: break;
   case immeuble: break;
-  }
-}
+  }*/
 
 std::list<NPC*> Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
@@ -107,4 +109,23 @@ void Tile::removeNPC (NPC* a){
 
 Coordinates& Tile::getCoord() {
   return coord;
+}
+
+sf::Sprite Tile::getSprite(){
+  return sprite;
+}
+
+void setTexture(SpriteTilePack* stp){
+  this->stp = stp;
+  this->sprite.setTexture(stp->texture);
+  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  return;
+}
+    
+int getOriginSpriteX(){
+  return stp->originX:
+}
+    
+int getOriginSpriteY(){
+  return stp->originY;
 }

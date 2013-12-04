@@ -23,3 +23,11 @@ Tile * Geography::getTile(int i,int j){
 Tile& Geography::getTileRef(int i,int j){
 	return *(map[i][j]);
 }
+
+int Geography::getMapHeight(){
+  return MAP_SIZE;
+}
+
+int Geography::getMapWidth(){
+  return MAP_SIZE;
+}
