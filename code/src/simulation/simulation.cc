@@ -280,4 +280,8 @@ void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
   } catch (const std::out_of_range& e) {
     return;
   }
+
+}
+int Simulation::getSous() {
+	return (this->sous[0]);
 }
