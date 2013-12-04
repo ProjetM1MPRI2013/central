@@ -42,6 +42,10 @@ Player* Simulation::getPlayerByID(int pid){
   return result;
 }
 
+Player* Simulation::getPlayer(){
+  return this->getPlayerByID(this->Id);
+};
+
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
 	float x=position.getX();

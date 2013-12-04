@@ -18,8 +18,22 @@ Direction Player::getDirection () {
   return this->d;
 };
 
+std::list<Stuff*> Player::getInventory () {
+  return this->inventory;
+};
+
 void Player::setDirection(Direction newd) {
   this->d = newd;
+  return;
+};
+
+void Player::addItem(Stuff* s) {
+  this->inventory.push_back(s);
+  return;
+};
+
+void Player::removeItem(Stuff* s) {
+  this->inventory.remove(s);
   return;
 };
 

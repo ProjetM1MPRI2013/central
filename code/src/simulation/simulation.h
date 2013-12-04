@@ -39,6 +39,10 @@ public :
    */
   Player* getPlayerByID (int playerID);
 
+  /**
+   * @brief Get the player of this simulation
+   */
+  Player* getPlayer ();
 
 	//crée un nouveau npc et l'ajoute dans une case
 	void ajouterNPC(int i,int j);

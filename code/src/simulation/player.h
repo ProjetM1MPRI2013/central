@@ -2,9 +2,11 @@
 #define PLAYER_H
 
 #include "position.h"
+#include "scenario/Stuff.h"
 #include "SFML/System.hpp"
 #include <iostream>
 #include <cerrno>
+#include <list>
 
 enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP};
 
@@ -12,9 +14,13 @@ class Player{
 public:
   int getID();
   Position* getPosition();
+
   Direction getDirection();
   void setDirection(Direction d);
 
+  std::list<Stuff*> getInventory();
+  void addItem(Stuff* s);
+  void removeItem(Stuff* s);
   /**
    * @brief Update the position of the player
    * Calculate the new position after a  movement in the direction (Direction d) during a time (sf::Time dt)
@@ -32,6 +38,7 @@ private:
   float speed;
   Position p;
   Direction d;
+  std::list<Stuff*> inventory;
 };
 
 #endif

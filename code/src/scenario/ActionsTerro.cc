@@ -5,6 +5,7 @@ bool isInThePack(Stuff* stuff) { return true ;};
 int distance(NPC* npc) {return 0;};
 bool isPlantable (Tile* t) {return true;};
 
+
 Drop :: Drop (Stuff* s) : Action ("Drop") {
   stu = s;
 };
@@ -53,3 +54,9 @@ bool Attack::isActionPossible(){
 	  );
 };
 void Attack::doAction () {return;};
+
+
+void newMovement (NewMov n){
+  //TODO
+  return;
+};

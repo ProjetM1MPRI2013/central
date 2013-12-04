@@ -5,6 +5,9 @@
 #include "generation/tile.h"
 #include "ScenarioAction.h"
 #include "simulation/player.h"
+#include "scenario/ActionsTerro.h"
+#include <iostream>
+#include <cerrno>
 
 /**
  * @brief The player changes of direction.
@@ -15,11 +18,10 @@ class ChangeDirection: public ScenarioAction {
   
   /**
    * @brief The new direction of the player
-   * UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP
    */
-  Direction newMovement;
+  NewMov newMovement;
 
-  ChangeDirection(int id, Direction mov);
+  ChangeDirection(int id, NewMov mov);
 
   virtual void run();
 };

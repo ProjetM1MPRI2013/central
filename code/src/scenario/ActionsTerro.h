@@ -8,6 +8,10 @@
 #include "simulation/npc.h"
 #include "generation/tile.h"
 
+enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
+
+void newMovement (NewMov n);
+
 class Drop : public Action{
  public : 
    /**
@@ -89,13 +93,6 @@ class Reload : public Action {
   bool isActionPossible ();
   void doAction ();
 };
-
-
-
-
-
-
-
 
 
 #endif
