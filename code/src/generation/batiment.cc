@@ -1,108 +1,124 @@
 #include "batiment.h"
-#include <fstream>
-#include <assert.h> 
+//j'ai bougé les includes dans le .h
 
-Batiment::Batiment(string file, int line){
-  ifstream fichier(file, ios::in);
+
+//Voila une des erreurs de gcc, il faut que tu changes ca, je sais pas comment
+//src/generation/batiment.h:33:8: error: expected unqualified-id before ‘[’ token
+//   float[][] getSpeed();
+
+
+
+Batiment::Batiment(std::string file, int line){
+  std::ifstream fichier(file, ios::in);
   assert(fichier);
-  string ligne, mot;
-  for(i=1; i<=line; i++) {
+  std::string ligne, mot;
+  int i = 1, j = 1;
+  for(i; i<=line; i++) {
     assert(getline(fichier, ligne));
   }
   fichier.close();
   size_t espace0 = 0; 
   size_t espace = ligne.find(" ");
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace);
+
+  //tu ne peux pas switch sur autre chose qu'un integer je crois, il faut faire des if(){} partout je pense ...
   switch (mot) {
   case "BANK": {
-    this->type = BANK;
+    this->type = TileType::BANK;
       }
   case "ROADH": {
-    this->type = ROADH;
+    this->type = TileType::ROADH;
   }
   case "ROADV": {
-    this->type = ROADV;
+    this->type = TileType::ROADV;
   }
   case "INTER": {
-    this->type = INTER;
+    this->type = TileType::INTER;
   }
   case "HOUSE": {
-    this->type = HOUSE;
+    this->type = TileType::HOUSE;
   }
   case "BLANK": {
-    this->type = BLANK;
+    this->type = TileType::BLANK;
   }
   }
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
   this->weight = atoi(mot.c_str());
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
   this->lenght = atoi(mot.c_str());
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
-  string nombre;
+  std::string nombre;
   size_t espace1, espace2;
   espace2 = 2;
-  for(i=0; i<this.lenght; i++){
-    for(j=0; j<this.weight; j++) {
+  i = 0;
+  j = 0;
+  for(i; i<this->lenght; i++){
+    for(j; j<this->weight; j++) {
       espace1 = espace2 + 1;
       espace2 = mot.find_first_of("|]",espace1);
-      assert(espace2!=string::npos);
+      assert(espace2!=std::string::npos);
       nombre = mot.substr (espace1, espace2 - espace1 + 1);
       this->speed[i][j] = atof(nombre.c_str());
     }
-    space2 = mot.find_first_of("|]",espace1);
-    assert(espace2!=string::npos);
+    espace2 = mot.find_first_of("|]",espace1);
+    assert(espace2!=std::string::npos);
   }
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
-  this->filePicture = mot;
+  this->filePictures = mot;
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
-  assert(espace!=string::npos);
+  assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
   espace1 = mot.find(",",1);
-  assert(espace1!=string::npos);
+  assert(espace1!=std::string::npos);
   nombre = mot.substr (1, espace1-1);
-  string nombre2;
+  std::string nombre2;
   espace2 = mot.find(")",espace1+1);
-  assert(espace2!=string::npos);
+  assert(espace2!=std::string::npos);
   nombre2 = mot.substr (espace1+1, espace2-espace1-1);
-  this->picture = new Coordinates(atoi(nombre1.c_str()), atoi(nombre2.c_str()));
+
+
+  //TODO
+  //A priori cela ne va pas du tout, parce que picture ne sera jamais supprimé [Adrien K.]
+  // j 'ai transformé nombre1 en nombre, j'espere que c'etait ce qui etait voulue
+  this->picture = new Coordinates(atoi(nombre.c_str()), atoi(nombre2.c_str()));
 }
 
 
 TileType Batiment::getType() {
-  return(this.type);
+  return(this->type);
 }
 
 int Batiment::getWeight() {
-  return(this.weight);
+  return(this->weight);
 }
 
 int Batiment::getLenght() {
-  return(this.lenght);
+  return(this->lenght);
 }
 
 float[][] Batiment::getSpeed() {
-  return(this.speed);
+  return(this->speed);
 }
 
-string Batiment::getFilePictures() {
-  return(this.filePictures);
+std::string Batiment::getFilePictures() {
+  return(this->filePictures);
 }
 
-Coordinates Batiment::getPicture() {
-  return(this.picture);
+Coordinates* Batiment::getPicture() {
+  return(this->picture);
 }
 
