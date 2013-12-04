@@ -43,31 +43,31 @@ void Tile::setAnxiety(float f){
 
 float Tile::getTLenght(TileType type) {
   switch (type) {
-  case roadH: return 0;
-  case roadV: return 0;
-  case intersection: return 0;
-  case banque: return 0;
-  case immeuble: return 0;
+  case ROADH: return 0;
+  case ROADV: return 0;
+  case INTER: return 0;
+  case BANK: return 0;
+  case HOUSE: return 0;
   }
 }
 
 float Tile::getTWeight(TileType type) {
   switch (type) {
-  case roadH: return 0;
-  case roadV: return 0;
-  case intersection: return 0;
-  case banque: return 0;
-  case immeuble: return 0;
+  case ROADH: return 0;
+  case ROADV: return 0;
+  case INTER: return 0;
+  case BANK: return 0;
+  case HOUSE: return 0;
   }
 }
 
 sf::Sprite& Tile::getTSprite(TileType type) {
   switch (type) {
-  case roadH: break;
-  case roadV: break;
-  case intersection: break;
-  case banque: break;
-  case immeuble: break;
+  case ROADH: break;
+  case ROADV: break;
+  case INTER: break;
+  case BANK: break;
+  case HOUSE: break;
   }
 }
 

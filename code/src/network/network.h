@@ -3,6 +3,10 @@
 
 #include "server.h"
 #include "client.h"
+#include "updateGenerator.h"
+#include "localStateUpdater.h"
+#include "simulation/simulation.h"
+#include "simulation/localState.h"
 
 
 /**
@@ -31,6 +35,9 @@ public :
      * If not set by the client, the local internet address used by the client
      * will be filled in the corresponding fields of c_info.
      * The client will be immediately operationnal to communicate with the server.
+     * At its creation, the client sends a SERV_TRY event to the server.
+     * If the Server responds, it will generate a SERV_RESP event on the client side.
+     * otherwise, it will genereate a SERV_LOST event.
      * @param c_info : informations provided to start the client
      * @return a newly created client
      */
@@ -50,10 +57,33 @@ public :
      * the server is not an instance of DummyServer, it will result in undefined
      * behavior.
      * Data passed are simply copied, no serialization carried out.
+     * At its creation, the client sends a SERV_TRY event to the server.
+     * If the Server responds, it will generate a SERV_RESP event on the client side.
+     * otherwise, it will genereate a SERV_LOST event.
      * @param server The server to communicate with
      * @return The newly created client.
      */
     static Client& createDummyClient(Server & server) ;
+
+
+    /**
+     * @brief createUpdater : creates a new updater in charge of sending game updates over the network
+     * The instance returned will generate updates for all the players connected to the server through the
+     * server
+     * @param globalState : the global state to synchronize with all the players
+     * @param server : will be used to send the messages
+     * @return A new updater in charge of synchronizing the global state.
+     */
+    static UpdateGenerator& createUpdater(Simulation& globalState, Server& server) ;
+
+    /**
+     * @brief createUpdater : creates a new updater in charge of receiving and applying updates received from the
+     * server. The instance returned will handle received updates through its update method
+     * @param localState : the local state that must be synchronized
+     * @param client : the object used for communication
+     * @return A new updater in charge of synchronizing the local state through the network.
+     */
+    static LocalStateUpdater& createUpdater(LocalState& localState, Client& client) ;
 
 };
 

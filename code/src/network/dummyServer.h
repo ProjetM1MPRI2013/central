@@ -1,8 +1,12 @@
 #ifndef DUMMYSERVER_H
 #define DUMMYSERVER_H
 
-#include "server.h"
 #include <map>
+#include <list>
+#include <mutex>
+
+#include "server.h"
+#include "netEvent.h"
 
 class DummyClient ;
 
@@ -42,14 +46,14 @@ public:
      * @param msg : the message to add
      * @param msgType : the type of the message
      */
-    void addMessage(AbstractMessage& msg, std::string msgType) ;
+    void addMessage(AbstractMessage& msg, std::string msgType, DummyClient *cli) ;
 
 private :
     /**
      * @brief clients : all the clients connected to
      * this server
      */
-    std::vector<DummyClient*> clients ;
+    std::list<DummyClient*> clients ;
 
     typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
     /**
@@ -59,7 +63,22 @@ private :
      */
     MapType received_messages ;
 
+    /**
+     * @brief lock : to prevent concurrent access to the structure
+     */
+    std::mutex lock ;
+
 protected :
+
+    /**
+     * @brief handle_netEvent : handles the given NetEvent when it is received. Special operations can be carried on NetEvents
+     * when they are received
+     * @see NetEvent for details
+     * @param event
+     * @return true if the event should be passed to the user. False otherwise.
+     */
+    virtual bool handle_netEvent(NetEvent& event, DummyClient *client) ;
+
     /*
      *Methods inherited from Server
      */

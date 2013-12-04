@@ -87,7 +87,7 @@ void Simulation::ajouterNPC(int i,int j){
 	j2=rand()%(this->MAP_SIZE);
 	start=Position(i1*TILE_SIZE_X,j1*TILE_SIZE_Y);
 	target=Position(i2*TILE_SIZE_X,j2*TILE_SIZE_Y);
-	NPC *pnj=new NPC(20,10,10,start,start);
+	NPC *pnj=new NPC(20,10,10,start,start,NULL);
 	NPCs.push_back(pnj);
 }
 

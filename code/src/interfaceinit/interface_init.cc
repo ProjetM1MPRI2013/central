@@ -926,15 +926,17 @@ int interface_initiale() {
 		while ((*todo).pollCallback(callback)) {
 			if (wim == 0) { //Main menu
 				if (callback.id == 1) {
-					wima = 7; //go to create game menu
-					changementMenu.play();
-					ServerInfo servInfo = ServerInfo();
-					(*gameServer) = network.createServer(servInfo);
+					//wima = 7; //go to create game menu
+					//changementMenu.play();
+					//ServerInfo servInfo = ServerInfo();
+					//(*gameServer) = network.createServer(servInfo);
+					return 1;
 
 				}
 				if (callback.id == 2) {
-					wima = 6;//go to join game menu
-					changementMenu.play();
+					//wima = 6;//go to join game menu
+					//changementMenu.play();
+					return 0;
 				}
 				if (callback.id == 3) {
 					wima = 1; //go to option menu

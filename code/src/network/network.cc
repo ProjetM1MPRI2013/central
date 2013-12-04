@@ -20,3 +20,11 @@ Client& Network::createDummyClient(Server& server){
         return *(new DummyClient((DummyServer&) server)) ;
 }
 
+
+UpdateGenerator& Network::createUpdater(Simulation &globalState, Server &server){
+  return *(new UpdateGenerator(globalState, server)) ;
+}
+
+LocalStateUpdater& createUpdater(LocalState& localState, Client& client) {
+  return *(new LocalStateUpdater(localState, client)) ;
+}

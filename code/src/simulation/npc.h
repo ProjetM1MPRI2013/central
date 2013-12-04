@@ -6,19 +6,22 @@
 #include "position.h"
 #include "withUuid.h"
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include "../graphism/animation.h"
 
 
 /**
  * @brief The NPC class
  * It represents a NPC, and is a subclass of Positionable and Withuuid
  */
-class NPC : WithUuid,Positionable {
+class NPC : public WithUuid, public Positionable {
  private:
   Trajectory trajectory;
   float fear;
   bool shocked;
   float speed;
   float hitboxSize;
+  Animation anim;
 
 
  public:
@@ -31,8 +34,9 @@ class NPC : WithUuid,Positionable {
    * @param h : the NPC's hitbox size
    * @param start : the NPC's start position
    * @param target : the NPC's target position
+   * @param tex: the texture pack of the sprite cheet of the animation
    */
-  NPC(float s,float f,float h,Position& start,Position& target);
+  NPC(float s,float f,float h,Position& start,Position& target,TexturePack* tex);
 
   /**
    * @brief getFeat
@@ -110,5 +114,24 @@ class NPC : WithUuid,Positionable {
    * @return true iff the NPC has arrived at his target position
    */
   bool hasArrived();
+  
+  /**
+   * @brief getSprite
+   * @return returns the sprite of the NPC
+   */  
+  sf::Sprite getSprite();
+  
+  /**
+   * @brief setAnim
+   * Sets the animation of the NPC
+   * @param t: New animation
+   **/  
+  void setAnim(const int t);
+
+  /**
+   * @brief TextureAnim
+   * Changes the texture of the animation of the NPC
+   **/
+  void TextureAnim(TexturePack* tex);
 };
 #endif
