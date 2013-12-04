@@ -5,8 +5,8 @@
 #include "Action.h"
 #include "Stuff.h"
 #include "StuffList.h"
-#include "../simulation/npc.h"
-#include "../generation/tile.h"
+#include "simulation/npc.h"
+#include "generation/tile.h"
 
 class Drop : public Action{
  public : 

@@ -1,9 +1,10 @@
 #ifndef SCENARIOACTIONLIST_H
 #define SCENARIOACTIONLIST_H
 
-#include "../simulation/npc.h"
-#include "../generation/tile.h"
+#include "simulation/npc.h"
+#include "generation/tile.h"
 #include "ScenarioAction.h"
+#include "simulation/player.h"
 
 /**
  * @brief The player changes of direction.
@@ -14,11 +15,11 @@ class ChangeDirection: public ScenarioAction {
   
   /**
    * @brief The new direction of the player
-   * 0 stop, 1 up, 2 right, 3 down, 4 left 
+   * UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP
    */
-  int newMovement;
+  Direction newMovement;
 
-  ChangeDirection(int id, int mov);
+  ChangeDirection(int id, Direction mov);
 
   virtual void run();
 };

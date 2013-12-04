@@ -1,7 +1,7 @@
 #ifndef SCENARIOACTION_H
 #define SCENARIOACTION_H
 
-#include "../simulation/simulation.h"
+#include "simulation/simulation.h"
 class Simulation; // Forward declaration
 #include <string>
 
@@ -12,8 +12,6 @@ class Simulation; // Forward declaration
  */
 class ScenarioAction {
  public :
-
-  static void setSimulation(Simulation* s);
 
   ScenarioAction (std::string n);
 
@@ -33,7 +31,6 @@ class ScenarioAction {
    */
   virtual void run ();
 
- private:
   static Simulation* simulation;
 } ;
 

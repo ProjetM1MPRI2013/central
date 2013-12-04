@@ -1,4 +1,4 @@
-# Compilation Generated files
+﻿# Compilation Generated files
 .deps
 .dirstamp
 depcomp
@@ -15,6 +15,7 @@ code/missing
 
 # Temp files
 *~
+*#
 
 # Latex compilation outputs
 delivrable/*.aux
@@ -37,3 +38,7 @@ Thumbs.db
 *.creator
 *.files
 *.includes
+
+# Aseprite source files
+*.ase
+sprite/palette/*

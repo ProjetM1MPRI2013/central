@@ -6,7 +6,7 @@
 
 class Clickable {
  public:
-  virtual std::list<std::string> getActionPossible ();
+  virtual std::list<std::string> getActionPossible () = 0;
 };
 
 #endif

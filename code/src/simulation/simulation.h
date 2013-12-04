@@ -1,17 +1,20 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 #include "Action.h"
-#include "ScenarioAction.h"
+#include "scenario/ScenarioAction.h"
+class ScenarioAction;
 #include "npc.h"
 #include "SFML/System.hpp"
 #include <iostream>
 #include <list>
+#include <cerrno>
 #include <map>
 #include "miscellaneous.h"
 #include "withUuid.h"
 #include "eventTarget.h"
 #include "eventListener.h"
 #include "time.h"
+#include "player.h"
 
 /** We need a function from (target,type,listener) to callback,
  *  We create three maps : target -> (type -> (listener -> callback))
@@ -30,6 +33,12 @@ typedef std::map<ref<EventTarget>,eventMap, WithUuidCmp> targetMap;
 class Simulation {
 
 public :
+
+  /**
+   * @brief Get a player by is playerID;
+   */
+  Player* getPlayerByID (int playerID);
+
 
 	//crée un nouveau npc et l'ajoute dans une case
 	void ajouterNPC(int i,int j);
@@ -107,11 +116,13 @@ public :
      */
     void scenarioActionPerformed(ScenarioAction a);
 
-    /**
-      * @brief
 
-      */
-    int actionTerroPerformed(Action a);
+    //Cette fonction ne devrait pas exister [Adrien K.]
+    ///**
+    //  * @brief
+    //
+    // */
+    //int actionTerroPerformed(Action a);
 
 
 private :
@@ -129,6 +140,7 @@ private :
   float smallTime;
   Geography* map;
   Geography* oldMap;
+  std::list<Player*> players;
   std::list<NPC *> NPCs;
   void triggerEvent(EventName eventT, EventTarget& target);
   targetMap targets;
