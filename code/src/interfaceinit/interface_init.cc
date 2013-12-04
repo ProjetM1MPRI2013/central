@@ -239,6 +239,7 @@ std::string loadNick() {
 		cerr << "Erreur à l'ouverture nick.conf!" << endl;
 	return nickFromFile;
 }
+
 /*copierFichier : copy the file in source and paste it into destination*/
 int copierFichier(char const * const source, char const * const destination) {
 	FILE* fSrc;
@@ -317,7 +318,7 @@ void reloadKeyMapping(tgui::ListBox::Ptr lc) {
 		cerr << "Erreur à l'ouverture !" << endl;
 
 }
-int interface_initiale() {
+int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 	//Definition of sounds
 	//Definition of menu changement sound
 	sf::SoundBuffer changementMenuBuffer;
@@ -341,9 +342,14 @@ int interface_initiale() {
 		return -1; // error
 	//End Definition of the interface Music
 	//Defintion of the window
-	static sf::VideoMode video_mode = sf::VideoMode::getDesktopMode();
+	sf::VideoMode video_mode = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow
 			window(video_mode, "Game Interface", sf::Style::Fullscreen);
+	bool isFullScreen = true;
+	(*isFullScreenParam) = true;
+	sizeFenetre[0] = video_mode.width;
+	sizeFenetre[1] = video_mode.height;
+	sizeFenetre[2] = video_mode.bitsPerPixel;
 	sf::Vector2u size = window.getSize();
 	unsigned int w = size.x;
 	unsigned int h = size.y;
@@ -867,6 +873,20 @@ int interface_initiale() {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code = sf::Keyboard::F11) {
+					if (isFullScreen) {
+						window.create(video_mode, "Game Interface");
+						isFullScreen = false;
+						(*isFullScreenParam) = false;
+					}
+					else {
+						window.create(video_mode, "Game Interface", sf::Style::Fullscreen);
+						isFullScreen = true;
+						(*isFullScreenParam) = true;
+					}
+				}
+			}
 			if (waitingKey != 0) /*The Game Option interface is waiting for a key */
 			{
 				if (event.type == sf::Event::KeyPressed) {
@@ -930,13 +950,13 @@ int interface_initiale() {
 					//changementMenu.play();
 					//ServerInfo servInfo = ServerInfo();
 					//(*gameServer) = network.createServer(servInfo);
-					return 1;
+					return ;
 
 				}
 				if (callback.id == 2) {
 					//wima = 6;//go to join game menu
 					//changementMenu.play();
-					return 0;
+					return 1;
 				}
 				if (callback.id == 3) {
 					wima = 1; //go to option menu
@@ -985,7 +1005,16 @@ int interface_initiale() {
 						unsigned int w = size.x;
 						unsigned int h = size.y;
 						if (w != mode.width || h != mode.height) {
-							window.create(mode, "test", sf::Style::Fullscreen);
+							if (isFullScreen) {
+								window.create(mode, "test", sf::Style::Fullscreen);
+							}
+							else {
+								window.create(mode, "test");
+							}
+							video_mode = mode;
+							sizeFenetre[0] = video_mode.width;
+							sizeFenetre[1] = video_mode.height;
+							sizeFenetre[2] = video_mode.bitsPerPixel;
 							//Resize of Widgets :
 							sf::Vector2u size = window.getSize();
 							w = size.x;

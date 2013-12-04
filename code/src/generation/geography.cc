@@ -1,8 +1,10 @@
 #include "geography.h"
 #include "tile.h"
 
-Geography::Geography(int seed){
 
+
+Geography::Geography(string seed){
+  new Generation1(seed);
 }
 
 float Geography::getAnxiety(int i, int j){
@@ -22,4 +24,12 @@ Tile * Geography::getTile(int i,int j){
 
 Tile& Geography::getTileRef(int i,int j){
 	return *(map[i][j]);
+}
+
+int Geography::getMapLenght(){
+  return(MAP_LENGHT);
+}
+
+int Geography::getMapWeight(){
+  return(MAP_WEIGHT);
 }

@@ -127,7 +127,7 @@ public :
     //
     // */
     //int actionTerroPerformed(Action a);
-
+    int getSous();
 
 private :
   std::list<Camera*> cameras;

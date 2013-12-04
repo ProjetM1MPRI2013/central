@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "../simulation/npc.h"
 
-enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération des types de batiments
+enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
 /**
  * @brief Coordinates
@@ -183,8 +183,8 @@ class Tile {
      */
     std::list<NPC*> getNPCs();
 
-    void addNPC (NPC*);
-    void removeNPC (NPC*);
+    void addNPC (NPC* a);
+    void removeNPC (NPC* a);
     
     /**
      *@brief The tile belongs to a borough caracterized by a tile, given by this function
