@@ -1,2 +1,2 @@
 Type largeur longueur matriceVitesse fichierImage posImage
-BANK  //à changer dans l'enum
+BANK  4 2 [[1|1|1|1||1|1|1|1]] sprite.jpg (10,12)
