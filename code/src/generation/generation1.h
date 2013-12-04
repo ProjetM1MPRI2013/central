@@ -1,10 +1,13 @@
 #ifndef GENERATION1
 #define GENERATION1
 
-class Generation1 : Public Geography
+#include "geography.h"
+#include <string>
+
+class Generation1 : public Geography
 {
  public:
-  Generation1(string seed);
+  Generation1(std::string seed);
   
 
 }

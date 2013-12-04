@@ -1,7 +1,8 @@
 #include "generation1.h"
 #include <boost/functional/hash.hpp>
 #include "tile.h"
-#include "cstdlib.h"
+#include <cstdlib>
+#include <string>
 
 Generation1::Generation1(string seed){
   size_t seed1 = hachage(seed);

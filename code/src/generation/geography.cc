@@ -1,6 +1,8 @@
 #include "geography.h"
 #include "tile.h"
 
+
+
 Geography::Geography(string seed){
   new Generation1(seed);
 }
