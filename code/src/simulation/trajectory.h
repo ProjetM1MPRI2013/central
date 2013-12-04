@@ -18,9 +18,8 @@ class Coordinates;
 class Trajectory {
  private:
   bool hasArrived;
-  std::vector<std::reference_wrapper<Position>> posList;
-  Tile& findNextTile(Tile& start,Tile& target);
-  void updateNextPosition(Geography& map);
+  std::vector<Position> posList;
+  void pathfinding(Geography& map);
 
 
  public:
@@ -36,7 +35,7 @@ class Trajectory {
    * @param start : the start position as a reference
    * @param target : the target position as a reference
    */
-  Trajectory(Position& start,Position& target);
+  Trajectory(Position start,Position target);
 
   /**
    * @brief Trajectory
@@ -50,7 +49,7 @@ class Trajectory {
    * @brief getPosList
    * @return the Trajectory's Position list as a reference
    */
-  std::vector<std::reference_wrapper<Position>>& getPosList();
+  std::vector<Position>& getPosList();
 
   /**
    * @brief getPosition

@@ -3,8 +3,8 @@
 #include "simulation.h"
 #include "trajectory.h"
 
-NPC::NPC(float s,float f,float h,Position& start,Position& target, TexturePack* tex) {
-  trajectory = Trajectory(start,target);
+NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& map,TexturePack* tex) {
+  trajectory = Trajectory(start,target,map);
   shocked = false;
   speed = s;
   fear = f;
@@ -12,6 +12,17 @@ NPC::NPC(float s,float f,float h,Position& start,Position& target, TexturePack* 
   anim = Animation(tex);
   return;
 }
+
+NPC::NPC(NPC& n) {
+  trajectory = Trajectory(n.getTrajectory());
+  shocked = n.isShocked();
+  speed = n.getSpeed();
+  fear = n.getFear();
+  hitboxSize = n.getHitboxSize();
+  anim = n.getAnim();
+  return;
+}
+  
 
 float NPC::getFear() {
   return fear;
@@ -58,6 +69,10 @@ void NPC::updatePosition(sf::Time dt,Geography& map) {
   return;
 }
 
+float NPC::getHitboxSize() {
+  return hitboxSize;
+}
+
 bool NPC::isInHitbox(Position& p) {
   float d = p.distance(trajectory.getPosition());
   return (d<hitboxSize);
@@ -70,6 +85,10 @@ bool NPC::hasArrived() {
 sf::Sprite NPC::getSprite(){
   this->anim.nextFrame();                  // Pas certain 
   return this->anim.getSprite();
+}
+
+Animation NPC::getAnim(){
+  return anim;
 }
 
 void NPC::setAnim(const int t){
