@@ -9,7 +9,9 @@
 #include "generation/tile.h"
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
-enum Actions {DROP,ATTACK,PLANT,RELOAD};
+enum Actions {DROP,ATTACK,PLANT,RELOAD,NONE};
+
+std::string stringOfActions (Actions a);
 
 void newMovement (NewMov n);
 

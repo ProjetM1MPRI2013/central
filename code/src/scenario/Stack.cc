@@ -11,30 +11,41 @@ Stuff* Stack::getBasic() {
 	return this->BasicStuff;
 };
 
-Stuff* Stack::getSimulation() {
-	return this->getSim();
+Stuff* Stack::getSim() {
+	return this->sim;
 };
 
 Stuff* Stack::getStuff() {
-	return (this->StuffList).front();
+	Stuff* s((this->StuffList).front());
+	(this->StuffList).pop_front();
+	return s;
 };
 
 
 Npc* Stack::getNpc()) {
-	return (this->NpcList).front();
+	Npc* n((this->NpcList).front());
+	(this->NpcList).pop_front();
+	return n;
 };
 
+Actions Stack::getActionsName() {
+	return (this->ActionsName);
+};
+
+Actions Stack::setActionsName(Actions a) {
+	(this->ActionsName)= a;
+};
 
 void Stack::cancel () {
 	this->SoNList.clear ();
 	this->NpcList.clear ();
 	this->StuffList.clear ();
 	this->BasicStuff = 0;
-	this->ActioName = "";
+	this->ActionName = NONE;
 };
 
-std::list<SoN> SoNOfActions (Actions* a) {
-	switch (*a)
+std::list<SoN> SoNOfActions (Actions a) {
+	switch (a)
 	{
 		case DROP :
 			return std::list<SoN>;
@@ -51,10 +62,10 @@ std::list<SoN> SoNOfActions (Actions* a) {
 	};
 };
 
-Action ActionOfState(Stack* s, Actions* a) {
+Action ActionOfState(Stack* s, Actions a) {
 	Stuff* b(s->BasicStuff());
 	Simulation* sim(s->getSim());
-	switch (*a)
+	switch (a)
 		{
 			case DROP :
 				return Drop::Drop(b,sim);
@@ -71,14 +82,15 @@ Action ActionOfState(Stack* s, Actions* a) {
 				return Plant::Plant (b,/*todo trouver la zone*/);
 			break;
 		};
-}
+};
+
 void Stack::sendAction () {
 	if ((this->SoNList).empty())
 	{
 		Action a(ActionOfStack(this,this->ActionName));
 		if (a.isActionPossible ())
 		{
-			a.doAction()
+			a.doAction();
 		}
 		else
 		{
@@ -99,7 +111,7 @@ void Stack::sendAction () {
 	};
 };
 
-void Stack::newAction(Actions* a, Stuff* sf) {
+void Stack::newAction(Actions a, Stuff* sf) {
 	this->SoNList = (SoNOfActions a);
 	this->BasicStuff-> sf;
 	this->sendAction();

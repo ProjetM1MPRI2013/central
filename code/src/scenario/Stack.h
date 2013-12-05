@@ -1,15 +1,10 @@
 #ifndef STACK_H
 #define STACK_H
-
+#include "ActionTerro.h"
 enum SoN {STUFF,NPC};
-class Action {};
-class Stuff {};
-class Npc {};
 class HudTerro {};
-class Simulation {};
-
-#include "Action.h"
 #include "../hud/hudTerro.h
+
 /**
    * @brief The object Stack will stack informations needed to create an action and send it when he can
   */
@@ -20,15 +15,20 @@ class Stack {
 	*/
 	Stack ();
 	/**
-	   * @brief Cancel an action which was waiting to be send
+	 	*@brief Cancel an action which was waiting to be send
 	*/
 	void cancel ();
+	/**
+	 	*@brief Give the name of the Action
+	 */
+	Actions getActionsName ();
+	void setActionsName (Actions a);
 	/**
 	   * @brief Create a begining of an action
 	   * @param a A name of an action
 	   * @param sf The basic stuff (the player clicked on it to do the action)
 	*/
-	void newAction (Actions* a, Stuff* sf);
+	void newAction (Actions a, Stuff* sf);
 	/**
 	   * @brief Used when the player click on a Npc
 	   * @param n The Npc
@@ -68,17 +68,21 @@ class Stack {
  private :
 	Simulation* sim;
 	HudTerro* hud ;
+	/**
+	 * @brief if the Action is completed, look if it possible and do the action,
+	 * else ask to the hub an NPC or a Stuff.
+	*/
 	void sendAction ();
-	std::string ActionName;
+	std::Actions ActionsName;
 	Stuff* BasicStuff;
 	std::list<SoN> SoNList;
 	std::list<Npc*> NpcList;
 	std::list<Stuff*> StuffList;
 };
 
-std::list<SoN> SoNOfActions (Actions* a);
+std::list<SoN> SoNOfActions (Actions a);
 
-Action ActionOfState(Stack* s, Actions* a);
+Action ActionOfState(Stack* s, Actions a);
 
 
 #endif

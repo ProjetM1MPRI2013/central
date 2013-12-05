@@ -50,4 +50,4 @@ class Action {
   int playerID;
 };
 
-#endif
+#endifs
