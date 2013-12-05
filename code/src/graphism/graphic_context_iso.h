@@ -35,7 +35,7 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
     * @param target: the target where the map have to be drawn at
     * @param states: transformations applied to the map
     **/
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
   
   void addTexturePack(TexturePack t);
 

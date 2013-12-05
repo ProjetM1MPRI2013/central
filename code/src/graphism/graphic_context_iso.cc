@@ -23,7 +23,7 @@
   }
   
   
-  void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) const
+  void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states)
   {
     int w = map->getMapWidth(), h = map->getMapHeight();
     states.transform *= getTransform();
