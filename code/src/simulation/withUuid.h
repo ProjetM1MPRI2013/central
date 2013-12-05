@@ -37,6 +37,7 @@ class WithUuid {
  * @brief A comparator for the WithUuid class
  */
 class WithUuidCmp{
+ public:
     bool operator()(const WithUuid& lhs, const WithUuid& rhs) const 
     {
         return lhs.uuid<rhs.uuid;
