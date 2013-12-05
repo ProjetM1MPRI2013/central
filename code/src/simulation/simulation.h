@@ -17,10 +17,8 @@ class Player;
 #include "time.h"
 #include "player.h"
 #include "../network/network.h"
-<<<<<<< HEAD
-=======
 
->>>>>>> e82cc6f248b3b6358184f735225aecf64ebda4c0
+
 /**
  * @brief The Simulation class
  * updates the local state using its own internal rules and the actions provided by the scenario
