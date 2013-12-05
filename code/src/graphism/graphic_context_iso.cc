@@ -7,8 +7,17 @@
   GraphicContextIso::GraphicContextIso(Geography* map)
   {
     this->map = map;
-    texArray = NULL; // A remplir
-    tilepackArray = NULL; // A remplir 
+    sf::Texture a1, b1, b2;
+    TexturePack tp1;
+    SpriteTilePack stp1, stp2;
+    assert(a1.loadFromFile("Anim.png"));
+    assert(b1.loadFromFile("Road_NS.png"));
+    assert(b2.loadFromFile("maison1.png"));
+    tp1 = {.texture = a1 , .nbAnim = {1,12,16} , .widthSprite = {16,16,32} , .heightSprite = 32 , .offsetX = {0,0,0} , .offsetY = {8,8,8} , .isLoop = {true, true, false}};
+    stp1 = {.texture = b1 , .originX = 0 , .originY = 39 , .X1 = 0 , .Y1 = 0, .X2 = 157 , .Y2 = 79 };
+    stp2 = {.texture = b2 , .originX = 0 , .originY = 109 , .X1 = 0, .Y1 = 0, .X2 = 157 , .Y2 = 149 };
+    texArray = {tp1}; // A vérifier
+    tilepackArray = {stp1,stp2}; // A vérifier 
   
   }
   
@@ -38,7 +47,7 @@
 	    }
           sf::Sprite sfn = (**ci).getSprite();
           Position& p = (**ci).getPosition();
-          sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - (**ci).TextureOffsetY())));
+          sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - (**ci).TextureOffsetY() - 32 /* !!!! */)));
           target.draw(sfn,states);
         }
       }
