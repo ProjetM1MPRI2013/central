@@ -37,7 +37,6 @@ class HScenario {
    */
   void eventTriggered (EventName e, EventTarget& t) ;
   
- private :
   Simulation* simulation;
 };
 

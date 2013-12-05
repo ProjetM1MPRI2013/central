@@ -14,29 +14,29 @@ class Tile;
 class NPC;
 
 class Agent {
-
-	private :
-Position position;
-float entretien;//en unité/seconde
-int type;
-
-	public :
-Agent(float x, float y, float entretien,int type);
-float getEntretien();
-
+  
+ private :
+  Position position;
+  float entretien;//en unité/seconde
+  int type;
+  
+ public :
+  Agent(float x, float y, float entretien,int type);
+  float getEntretien();
+  
 };
 
 class Camera {
 
-	private :
-Position position;
-float entretien;//en unité/seconde
-std::list<Tile*> champDeVision;
+ private :
+  Position position;
+  float entretien;//en unité/seconde
+  std::list<Tile*> champDeVision;
 
-	public :
-bool isInSight(NPC& npc);
-Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
-float getEntretien();
+ public :
+  bool isInSight(NPC& npc);
+  Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
+  float getEntretien();
 };
 
 #endif /* MISCELLANEOUS_H_ */

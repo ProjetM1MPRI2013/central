@@ -49,21 +49,17 @@ Player* Simulation::getPlayer(){
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
 	float x=position.getX();
-	float y=position.getY();
 
-	int i,j;
+	int i;
 	i=x/TILE_SIZE_X;
-	j=y/TILE_SIZE_Y;
 	return (i);
 }
 
 int Simulation::isInTileY(NPC* npc){
 	Position position=npc->getPosition();
-	float x=position.getX();
 	float y=position.getY();	
 	
-	int i,j;
-	i=x/TILE_SIZE_X;
+	int j;
 	j=y/TILE_SIZE_Y;
 	return (j);
 }

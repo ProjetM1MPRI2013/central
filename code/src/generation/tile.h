@@ -2,6 +2,8 @@
 #define TILE
 
 #include <list>
+#include <iostream>
+#include <cerrno>
 #include <SFML/Graphics.hpp>
 
 enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments

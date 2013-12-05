@@ -8,7 +8,7 @@ Batiment::Batiment(std::string file, int line){
   assert(fichier);
   std::string ligne, mot;
   int i = 1, j = 1;
-  for(i; i<=line; i++) {
+  for(i = 0; i<=line; i++) {
     assert(getline(fichier, ligne));
   }
   fichier.close();
@@ -41,10 +41,8 @@ Batiment::Batiment(std::string file, int line){
   std::string nombre;
   size_t espace1, espace2;
   espace2 = 2;
-  i = 0;
-  j = 0;
-  for(i; i<this->lenght; i++){
-    for(j; j<this->weight; j++) {
+  for(i = 0; i<this->lenght; i++){
+    for(j = 0; j<this->weight; j++) {
       espace1 = espace2 + 1;
       espace2 = mot.find_first_of("|]",espace1);
       assert(espace2!=std::string::npos);

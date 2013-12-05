@@ -73,10 +73,6 @@ class Gun : public Weapon {
 
 class Ammunition : public Stuff {
  public :
-  /**
-   * @brief Create a pack of ammunition
-   * @param n Number of ammunitions in the pack 
-   Ammunition (int n) ;
    /**
    * @brief number Number of ammunition in the pack   
    */

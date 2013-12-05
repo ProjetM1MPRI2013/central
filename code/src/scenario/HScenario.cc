@@ -7,6 +7,7 @@ HScenario::HScenario (Simulation* s) {
 };
 
 void HScenario::run(){
+  
   return;
 };
 
