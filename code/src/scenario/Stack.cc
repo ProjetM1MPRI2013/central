@@ -96,7 +96,7 @@ void Stack::sendAction () {
 		{
 			/*todo envoyer un message d'erreur*/
 		};
-		this.clear();
+		this.cancel();
 		(this->hud)->setwf(CLICK) = NONE;
 	};
 	else
@@ -115,7 +115,6 @@ void Stack::newAction(Actions a, Stuff* sf) {
 	this->SoNList = (SoNOfActions a);
 	this->BasicStuff-> sf;
 	this->sendAction();
-	this->cancel();
 };
 
 void SendNpc(Npc* n) {
