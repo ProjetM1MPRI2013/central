@@ -84,12 +84,17 @@ public :
     // */
     //int actionTerroPerformed(Action a);
     int getSous();
+    void enleveSous(int n);
 
     void supprimerNPC(NPC *);
 
     void supprimerNPCDansCase(int i,int j);
 
     void addAction(ScenarioAction * action);
+
+    void addAgent(Agent* agent);
+    void addCam(Camera* camera);
+
 
 private :
   std::list<Camera*> cameras;

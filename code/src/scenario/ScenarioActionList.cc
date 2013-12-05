@@ -1,6 +1,6 @@
 #include "ScenarioActionList.h"
 #include "simulation.h"
-
+#include "ActionsPC.h"
 
 /*****************
  *ChangeDirection*
@@ -123,4 +123,19 @@ void KillNPC::run(){
   //TODO : gérer le cas ou le NPC n'existe pas
     simulation->supprimerNPC(simulation->isInTileX(target),simulation->isInTileY(target));
   return;
+};
+
+void AddCops::AddCops(int number,float x,float y,Simulation* s) : ScenarioAction("AddCops"){     //TODO : répartir là où on peut
+	for (int i=0;i<number;i++) {
+		s->addAgent(new Agent(x+i,y+i,COST_COP1,0));
+	};
+	s->enleveSous((int)COST_COP2*number);
+};
+
+
+void AddCams::AddCams(int number,float x,float y,Simulation* s) : ScenarioAction("AddCams"){     //TODO : répartir là où on peut
+	for (int i=0;i<number;i++) {
+		s->addCam(new Camera(x+i,y+i,COST_CAM1,0));
+	};
+	s->enleveSous((int)COST_CAM2*number);
 };
