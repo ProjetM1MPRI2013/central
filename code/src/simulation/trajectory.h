@@ -34,8 +34,9 @@ class Trajectory {
    * creates a new Trajectory with given start and target Positions as references, so that the Trajectory's positions will be the same objects
    * @param start : the start position as a reference
    * @param target : the target position as a reference
+   * @param map : the map where the pathfinding will be done
    */
-  Trajectory(Position start,Position target);
+  Trajectory(Position start,Position target,Geography& map);
 
   /**
    * @brief Trajectory

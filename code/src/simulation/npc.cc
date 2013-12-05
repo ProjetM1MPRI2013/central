@@ -100,3 +100,7 @@ void NPC::TextureAnim(TexturePack* tex){
   anim = Animation(tex);
   return;
 }
+
+Trajectory& NPC::getTrajectory() {
+  return trajectory;
+}

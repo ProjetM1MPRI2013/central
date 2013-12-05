@@ -14,12 +14,6 @@ Position::Position(float x,float y) {
   return;
 }
 
-Position::Position(Position& p) {
-  x = p.getX();
-  y = p.getY();
-  return;
-}
-
 Position::Position(Tile& t) {
   x = TILE_SIZE_X*(0.5+(float)t.getCoord().getAbs());
   x = TILE_SIZE_Y*(0.5+(float)t.getCoord().getOrd());

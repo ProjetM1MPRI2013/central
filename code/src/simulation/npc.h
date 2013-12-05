@@ -37,7 +37,7 @@ class NPC : public WithUuid, public Positionable {
    * @param map : the map (to do the initial pathfinding)
    * @param tex: the texture pack of the sprite cheet of the animation
    */
-  NPC(float s,float f,float h,Position& start,Position& target,Geography* map,TexturePack* tex);
+  NPC(float s,float f,float h,Position& start,Position& target,Geography& map,TexturePack* tex);
 
   /**
    * @brief NPC

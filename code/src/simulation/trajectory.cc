@@ -2,12 +2,15 @@
 #include "../generation/tile.h"
 
 #include <vector>
+#include <cassert>
 
 Trajectory::Trajectory() {
   Position p1,p2;
   p1 = Position();
   p2 = Position();
-  Trajectory(p1,p2);
+  posList = std::vector<Position> ();
+  posList.push_back(p1);
+  posList.push_back(p2);
   hasArrived = false;
   return;
 }
@@ -28,7 +31,7 @@ Trajectory::Trajectory(Trajectory& t) {
 }
 
 
-void Trajectory::pahfinding(Geography& map) {//stupide pour l'instant, A* apres
+void Trajectory::pathfinding(Geography& map) {//stupide pour l'instant, A* apres
   assert(posList.size()>1);//le vecteur doit contenir au moins le départ et l'arrivée
   Position start,target;
   start = posList[0];

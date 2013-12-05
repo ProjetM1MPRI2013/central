@@ -37,13 +37,6 @@ class Position {
 
   /**
    * @brief Position
-   * creates a new Position by copying an existing one
-   * @param p : the existing position
-   */
-  Position(Position& p);
-
-  /**
-   * @brief Position
    * creates a new position at the center of a given Tile
    * @param t : the given tile
    */
