@@ -9,7 +9,8 @@
 
 
 Batiment::Batiment(std::string file, int line){
-  std::ifstream fichier(file, ios::in);
+  std::fstream fichier;
+  fichier.open(file, std::fstream::in);
   assert(fichier);
   std::string ligne, mot;
   int i = 1, j = 1;

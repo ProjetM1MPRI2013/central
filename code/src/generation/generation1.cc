@@ -9,7 +9,8 @@ Generation1::Generation1(string seed){
   int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
   string file = "../graphim/buildings";
   string ligne;
-  ifstream fichier(file, ios::in);
+  fstream fichier;
+  fichier.open(file, std::fstream::in);
   assert(fichier);
   nbLine = 0;
   while(getline(fichier, ligne)){
