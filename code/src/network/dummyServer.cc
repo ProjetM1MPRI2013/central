@@ -4,7 +4,7 @@
 
 using namespace std ;
 
-DummyServer::DummyServer() : clients(), received_messages(){
+DummyServer::DummyServer() : clients(), players(), received_messages(){
 }
 
 DummyServer::~DummyServer(){
@@ -72,10 +72,26 @@ vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, Ab
       return *(new vector<AbstractMessage* >()) ;
 }
 
-void DummyServer::broadcast_message(AbstractMessage& msg, bool, std::string msgType ) {
-  for(DummyClient * client : clients)
+void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, int player ) {
+  if(player == -1)
     {
-      client->addMessage(*msg.copy(),msgType);
+      //Broadcast message
+      for(DummyClient * client : clients)
+        {
+          client->addMessage(*msg.copy(),msgType);
+        }
+    }
+  else
+    {
+      //Send to specified client
+      std::map<int, DummyClient*>::iterator it = players.find(player) ;
+      if(it == players.end())
+        {
+          //TODO : display error message
+          return ;
+        }
+      it->second->addMessage(msg, msgType);
+
     }
 }
 
@@ -102,10 +118,13 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
         break ;
       }
     case NetEvent::PLAYER_JOIN : {
-        //TODO : add something here to identify Players/Clients
+        int player = *((int *) event.getData()) ;
+        players[player] = client;
         break ;
       }
     case NetEvent::PLAYER_QUIT : {
+        int player = *((int *) event.getData()) ;
+        players.erase(player);
         break ;
       }
     case NetEvent::RECEIVE_ERR : {
@@ -126,6 +145,19 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
       }
     }
   return false ;
+}
+
+vector<int> DummyServer::getConnectedPlayers(){
+  vector<int> v ;
+  for(std::pair<int, DummyClient *> p : players)
+    {
+      v.push_back(p.first);
+    }
+  return v ;
+}
+
+bool DummyServer::isConnected(int player){
+  return players.find(player) != players.end() ;
 }
 
 

@@ -77,6 +77,7 @@ protected :
 
   virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
 
+
 };
 
 #endif // DUMMYCLIENT_H
