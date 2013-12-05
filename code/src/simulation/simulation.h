@@ -37,9 +37,6 @@ public :
 	//crée un nouveau npc et l'ajoute dans une case
 	void ajouterNPC(int i,int j);
 
-	//supprime un npc dans la case i,j
-	void supprimerNPC(int i,int j);
-
 	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
 	void peopleGeneration();
 
@@ -80,7 +77,6 @@ public :
      */
     void scenarioActionPerformed(ScenarioAction a);
 
-
     //Cette fonction ne devrait pas exister [Adrien K.]
     ///**
     //  * @brief
@@ -88,6 +84,12 @@ public :
     // */
     //int actionTerroPerformed(Action a);
     int getSous();
+
+    void supprimerNPC(NPC *);
+
+    void supprimerNPCDansCase(int i,int j);
+
+    void addAction(ScenarioAction * action);
 
 private :
   std::list<Camera*> cameras;
@@ -106,9 +108,9 @@ private :
   Geography* oldMap;
   std::list<Player*> players;
   std::list<NPC *> NPCs;
+  std::list<ScenarioAction *> pendingActions;
 
 };
-
 //#include "eventListener.h"
 
 #endif // SIMULATION_H
