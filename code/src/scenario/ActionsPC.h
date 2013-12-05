@@ -6,10 +6,10 @@
 #include "Action.h"
 #include "../simulation/simulation.h"
 
-#define COST_COP 1
-#define COST_CAM 1
-#define COST_COP2 1
-#define COST_CAM2 1
+#define COST_COP1 1 //cout d'entretien d'un cop
+#define COST_CAM1 1 //cout d'entretien d'une caméra
+#define COST_COP2 1 //cout de placement d'un cop
+#define COST_CAM2 1 //cout de placement d'une caméra
 
 class AddCop : public Action {
 public:
@@ -20,6 +20,7 @@ private:
 	int number;
 	float x;
 	float y;
+
 
 };
 

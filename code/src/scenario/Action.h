@@ -5,7 +5,6 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
-class Player;
 class Simulation;
 #include "../simulation/simulation.h"
 

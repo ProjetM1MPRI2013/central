@@ -3,7 +3,7 @@
 Action::Action(std::string n, Simulation* s) {
   name = n;
   simulation = s;
-  this->playerID = this->simulation->getPlayer()->getID () ;
+  this->playerID = this->simulation->getPlayer()->getID ();
 };
 
 bool Action::isActionPossible(){
