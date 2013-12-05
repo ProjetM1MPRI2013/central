@@ -31,6 +31,11 @@
         std::list<NPC *> lnpc = tilec->getNPCs();
         for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
         {
+	  if(!(**ci).TextureIsInit())
+	    {
+	      assert(texArray != NULL);
+	      (**ci).TextureAnim(&(texArray[0])); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur.
+	    }
           sf::Sprite sfn = (**ci).getSprite();
           Position& p = (**ci).getPosition();
           sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - (**ci).TextureOffsetY())));
