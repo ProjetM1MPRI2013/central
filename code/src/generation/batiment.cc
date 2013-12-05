@@ -2,14 +2,9 @@
 //j'ai bougé les includes dans le .h
 
 
-//Voila une des erreurs de gcc, il faut que tu changes ca, je sais pas comment
-//src/generation/batiment.h:33:8: error: expected unqualified-id before ‘[’ token
-//   float[][] getSpeed();
-
-
 
 Batiment::Batiment(std::string file, int line){
-  std::ifstream fichier(file, ios::in);
+  std::ifstream fichier(file, std::ios::in);
   assert(fichier);
   std::string ligne, mot;
   int i = 1, j = 1;
@@ -22,27 +17,13 @@ Batiment::Batiment(std::string file, int line){
   assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace);
 
-  //tu ne peux pas switch sur autre chose qu'un integer je crois, il faut faire des if(){} partout je pense ...
-  switch (mot) {
-  case "BANK": {
-    this->type = TileType::BANK;
-      }
-  case "ROADH": {
-    this->type = TileType::ROADH;
-  }
-  case "ROADV": {
-    this->type = TileType::ROADV;
-  }
-  case "INTER": {
-    this->type = TileType::INTER;
-  }
-  case "HOUSE": {
-    this->type = TileType::HOUSE;
-  }
-  case "BLANK": {
-    this->type = TileType::BLANK;
-  }
-  }
+  this->type = TileType::BLANK; // default
+  if (mot == "BANK")  { this->type = TileType::BANK;  }
+  if (mot == "ROADH") { this->type = TileType::ROADH; }
+  if (mot == "ROADV") { this->type = TileType::ROADV; }
+  if (mot == "INTER") { this->type = TileType::INTER; }
+  if (mot == "HOUSE") { this->type = TileType::HOUSE; }
+
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
   assert(espace!=std::string::npos);
@@ -110,7 +91,7 @@ int Batiment::getLenght() {
   return(this->lenght);
 }
 
-float[][] Batiment::getSpeed() {
+floatMatrix Batiment::getSpeed() {
   return(this->speed);
 }
 

@@ -3,8 +3,8 @@
 
 
 
-Geography::Geography(string seed){
-  new Generation1(seed);
+Geography::Geography(std::string seed){
+  //new Generation1(seed); ?? Generation1 inherits from Geography
 }
 
 float Geography::getAnxiety(int i, int j){
@@ -32,4 +32,11 @@ int Geography::getMapLenght(){
 
 int Geography::getMapWeight(){
   return(MAP_WEIGHT);
+}
+
+size_t Geography::hachage(std::string seed) { 
+  return 0;
+}
+void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1) { 
+  return;
 }

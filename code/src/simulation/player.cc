@@ -2,7 +2,7 @@
 
 Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
-  this->playerID;
+  this->playerID = pid;
   this->speed = 1.;
 };
 

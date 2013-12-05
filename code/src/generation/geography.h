@@ -4,14 +4,15 @@
 #include <string>
 #include "tile.h"
 
-
 class Geography {
  private :
   static const int MAP_LENGHT  = 100;
   static const int MAP_WEIGHT = 100;
   Tile* map[MAP_LENGHT][MAP_WEIGHT];
-  virtual size_t hachage(std::string seed) = 0;
-  virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1) = 0;
+
+ protected:
+  virtual size_t hachage(std::string seed);
+  virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1);
 	
  public :
   /**

@@ -12,6 +12,7 @@
 #include <../network/network.h>
 #include <../network/netEvent.h>
 #include <chat_event.h>
+#include "geography.h"
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:

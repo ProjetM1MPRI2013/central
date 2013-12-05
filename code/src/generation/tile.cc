@@ -1,4 +1,6 @@
 #include "tile.h"
+#include "position.h"
+#include "npc.h"
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 

@@ -1,6 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include "geography.h"
+
 
 class Tile;
 class Coordinates;

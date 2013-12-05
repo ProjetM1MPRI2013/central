@@ -1,8 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 #include "Action.h"
-#include "scenario/ScenarioAction.h"
-class ScenarioAction;
+#include "ScenarioAction.h"
 #include "npc.h"
 #include "SFML/System.hpp"
 #include <iostream>
