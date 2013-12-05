@@ -36,14 +36,10 @@ class Camera {
  public :
   bool isInSight(NPC& npc);
   Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
-<<<<<<< HEAD
-  Camera(float x, float y, float entretien);
-=======
 
   //Quick fix, have to calculate the lineOfSight [Adrien K.]
   Camera(float x, float y, float entretien);
 
->>>>>>> e82cc6f248b3b6358184f735225aecf64ebda4c0
   float getEntretien();
 };
 
