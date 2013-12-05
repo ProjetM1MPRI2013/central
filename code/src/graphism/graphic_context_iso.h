@@ -2,6 +2,7 @@
 #define GRAPHICCONTEXT
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "animation.h"          // TexturePack
 #include "../generation/tile.h" // SpriteTilePack
 #include "../generation/geography.h"
@@ -36,9 +37,13 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
     **/
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   
+  void addTexturePack(TexturePack t);
+
+  void addSpriteTilePack(SpriteTilePack stp);
+
  private:
-  TexturePack* texArray;
-  SpriteTilePack* tilepackArray;
+  vector<TexturePack> texVector;
+  vector<SpriteTilePack> tilepackVector;
   Geography* map;
    
 };
