@@ -241,7 +241,7 @@ void Simulation::run(sf::Time dt) {
 
 	ScenarioAction* action;
 
-	for (std::list<Player*>::iterator it = pendingActions.begin(); it != pendingActions.end(); ++it){
+	for (std::list<ScenarioAction*>::iterator it = pendingActions.begin(); it != pendingActions.end(); ++it){
 		action=(*it);
 		//envoyer action à tlm et effectuer action
 	}

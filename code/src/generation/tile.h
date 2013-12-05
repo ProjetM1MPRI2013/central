@@ -10,6 +10,8 @@ enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des ty
 
 
 class NPC;
+class TileWrapper;
+
 
 struct SpriteTilePack
 {
@@ -24,17 +26,19 @@ struct SpriteTilePack
   int Y2;
 };
 
+
+
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
  */
 class Coordinates {
  private:
-  /*
+  /**
    * abscissa 
    */ 
   int abs;
-  /*
+  /**
    * ordinate 
    */
   int ord;
@@ -50,22 +54,31 @@ class Coordinates {
    * @brief get the abscissa
    */ 
   int getAbs();
+
   /**
    * @brief set the abscissa
    * @param abs : the new abscissa
    */
   void setAbs(int abs);
+
   /**
    * @brief get the abscissa ordinate
    */ 
   int getOrd();
+
   /**
    * @brief set the ordinate
    * @param abs : the new ordinate
    */
   void setOrd(int ord);
-};
 
+  /**
+   * @brief equals
+   * returns true iff the abs and ord of the Coordinates are equal to those of the other Coordinates
+   * @param c: the Coordinates to compare
+   */
+  bool equals(Coordinates& c);
+};
 
 /**
  * @brief A tile of the map
@@ -147,6 +160,8 @@ class Tile {
    * @return the sprite of the bat
    */
   // sf::Sprite& getTSprite(TileType type);
+
+  TileWrapper* wrapper;
   
   public:
   /**
@@ -213,6 +228,17 @@ class Tile {
      *@brief Change the borough of the tile
      */
     void setCoordBorough(Coordinates& CBorough);
+
+    /**
+     * @brief equals
+     * returns true iff the Tile is has the same coordinatees as the other tile
+     * @param t: the Tile to compare
+     */
+    bool equals(Tile& t);
+
+    TileWrapper* getWrapper();
+    void setWrapper(TileWrapper*);
+    void resetWrapper();
     
     /**
      *@brief Sets the texture of the tile

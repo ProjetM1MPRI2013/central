@@ -5,6 +5,7 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
+class Simulation;
 #include "../simulation/simulation.h"
 
 class Action {
@@ -42,8 +43,10 @@ class Action {
    */
   virtual void doAction ();
   
- private:
+ protected:
   Simulation* simulation;
+  
+ private:
   int playerID;
 };
 
