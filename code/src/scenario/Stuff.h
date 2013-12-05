@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 #include "Clickable.h"
-#include "Action.h"
+class Action;
 
 class Stuff : public Clickable {
  public :
