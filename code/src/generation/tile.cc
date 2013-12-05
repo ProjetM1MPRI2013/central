@@ -151,6 +151,7 @@ int Tile::getOriginSpriteX(){
     
 int Tile::getOriginSpriteY(){
   return stp->originY;
+}
 
 bool Tile::equals(Tile& t) {
   return (coord.equals(t.getCoord()));
