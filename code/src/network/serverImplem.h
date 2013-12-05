@@ -33,11 +33,22 @@ class ServerImplem : public Server {
   
   void on_recieve(/*some arg*/) ;
 
-  virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
+  virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType, int player = -1 ) {
     //TODO missing implementation
+    return ;
   }
   virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
     //TODO missing implementation
+    return *(new std::vector<AbstractMessage *>()) ;
+  }
+
+  virtual std::vector<int> getConnectedPlayers() {
+    std::vector<int> v ;
+    return v ;
+  }
+
+  virtual bool isConnected(int player){
+    return false;
   }
 
  public :

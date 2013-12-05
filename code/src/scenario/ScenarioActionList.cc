@@ -1,6 +1,6 @@
 #include "ScenarioActionList.h"
 #include "simulation.h"
-
+#include "ActionsPC.h"
 
 /*****************
  *ChangeDirection*
@@ -82,7 +82,7 @@ Direction intToDirection(Couple* a){
   return Direction::STOP;
 };
 
-ChangeDirection::ChangeDirection(int id, NewMov mov) : ScenarioAction ("ChangeDirection"){
+ChangeDirection::ChangeDirection(int id, NewMov mov,Simulation* s) : ScenarioAction ("ChangeDirection",s){
   playerID = id;
   newMovement = mov;
 };
@@ -102,7 +102,7 @@ void ChangeDirection::run(){
 /***********
  *Explosion*
  ***********/
-Explosion::Explosion(Tile* t,int p) : ScenarioAction("Explosion"){
+Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
   location = t;
   power = p;
 };
@@ -114,13 +114,42 @@ void Explosion::run(){
 /*********
  *KillNPC*
  *********/
-KillNPC::KillNPC(NPC* t) : ScenarioAction("KillNPC"){
+KillNPC::KillNPC(NPC* t,Simulation* s) : ScenarioAction("KillNPC",s){
   target = t;
 };
 
 void KillNPC::run(){
   //Supprime un NPC de la case du NPC target, vue qu'il n'existe pas de methode pour supprimer un NPC précis -_-' [Adrien K]
   //TODO : gérer le cas ou le NPC n'existe pas
-    simulation->supprimerNPC(simulation->isInTileX(target),simulation->isInTileY(target));
+    simulation->supprimerNPC(target);
   return;
+};
+
+AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){     //TODO : répartir là où on peut
+  x = xx;
+  y = yy;
+  number = n;
+  this->simulation = s;
+};
+
+void AddCops::run(){
+  for (int i=0;i<number;i++) {
+    simulation->addAgent(new Agent(x+i,y+i,COST_COP1,0));
+  };
+  simulation->enleveSous((int)COST_COP2*number);
+  return;
+};
+
+AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){     //TODO : répartir là où on peut
+  x = xx;
+  y = yy;
+  number = n;
+  this->simulation = s;
+};
+
+void AddCams::run(){
+  for (int i=0;i<number;i++) {
+    simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1));
+  };
+  simulation->enleveSous((int)COST_CAM2*number);
 };

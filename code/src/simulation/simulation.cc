@@ -30,6 +30,21 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 		this->NPCs=NPCs;
 }
 
+
+void Simulation::setServer(Server* s){
+  this->isServer = true;
+  this->server = s;
+  return;
+};
+
+
+void Simulation::setClient(Client* c){
+  this->isServer = false;
+  this->client = c;
+  return;
+};
+
+
 void Simulation::addAction(ScenarioAction * action){
 	this->pendingActions.push_back(action);
 }
@@ -241,7 +256,7 @@ void Simulation::run(sf::Time dt) {
 
 	ScenarioAction* action;
 
-	for (std::list<Player*>::iterator it = pendingActions.begin(); it != pendingActions.end(); ++it){
+	for (std::list<ScenarioAction*>::iterator it = pendingActions.begin(); it != pendingActions.end(); ++it){
 		action=(*it);
 		//envoyer action à tlm et effectuer action
 	}
@@ -294,4 +309,16 @@ void Simulation::run(sf::Time dt) {
 
 int Simulation::getSous() {
 	return (this->sous[0]);
+}
+void Simulation::enleveSous(int n){
+	this->sous[0] = this->sous[0] - n;
+	return;
+}
+
+void Simulation::addAgent (Agent* agent){
+	agents.push_back(agent);
+}
+
+void Simulation::addCam (Camera* cam){
+	cameras.push_back(cam);
 }

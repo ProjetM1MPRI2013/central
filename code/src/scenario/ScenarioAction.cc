@@ -1,8 +1,7 @@
 #include "ScenarioAction.h"
 
-Simulation* ScenarioAction::simulation = 0;
-
-ScenarioAction::ScenarioAction (std::string n){
+ScenarioAction::ScenarioAction (std::string n, Simulation* s){
+  simulation = s;
   name = n;
   date = 0; //TODO
 };

@@ -5,6 +5,11 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
+class Player;
+class Simulation;
+#include "../simulation/simulation.h"
+
+enum Actions {DROP,ATTACK,PLANT,RELOAD,NONE};
 
 class Action {
  public:
@@ -24,7 +29,8 @@ class Action {
    */
   long delay;
 
-  Action (std::string n);
+  Action (std::string n, Simulation* s);
+
   /**
    * @brief Check if the action is possible
    * This method has to be defined by each different actions.
@@ -39,7 +45,10 @@ class Action {
    * The default behavior does nothing.
    */
   virtual void doAction ();
-
+  
+ protected:
+  Simulation* simulation;
+  
  private:
   int playerID;
 };

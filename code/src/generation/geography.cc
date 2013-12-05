@@ -26,17 +26,17 @@ Tile& Geography::getTileRef(int i,int j){
 	return *(map[i][j]);
 }
 
-int Geography::getMapLenght(){
-  return(MAP_LENGHT);
-}
-
-int Geography::getMapWeight(){
-  return(MAP_WEIGHT);
-}
-
 size_t Geography::hachage(std::string seed) { 
   return 0;
 }
 void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1) { 
   return;
+}
+
+int Geography::getMapHeight(){
+  return MAP_HEIGHT;
+}
+
+int Geography::getMapWidth(){
+  return MAP_WIDTH;
 }

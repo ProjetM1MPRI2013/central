@@ -145,12 +145,19 @@ void ClientImplem::shutdown(){
 
  void ClientImplem::check_ack(std::vector<std::string*>& msg, int nb_times, deadline_timer *t, const boost::system::error_code &err) {}
 
- std::string ClientImplem::get_msg_type(std::string &header) {}
+ std::string ClientImplem::get_msg_type(std::string &header) {
+   return "" ;}
 
- int ClientImplem::get_msg_id(std::string & header) {}
+ int ClientImplem::get_msg_id(std::string & header) {
+   return 0 ;
+ }
 
 
- void ClientImplem::generate_message(NetEvent& event) {}
+ void ClientImplem::generate_message(NetEvent& event) {
+   return ;
+ }
 
- bool ClientImplem::ack_message(std::string& header) {}
+ bool ClientImplem::ack_message(std::string& header) {
+   return false ;
+ }
 

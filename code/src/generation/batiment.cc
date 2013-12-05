@@ -3,7 +3,7 @@
 
 
 
-Batiment::Batiment(std::string file, int line){
+Batiment::Batiment(const char* file, int line){
   std::fstream fichier;
   fichier.open(file, std::fstream::in);
   assert(fichier);

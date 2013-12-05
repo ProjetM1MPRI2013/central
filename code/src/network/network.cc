@@ -12,19 +12,19 @@ Client& Network::createClient(ClientInfo c_info){
     return *(new ClientImplem(c_info)) ;
 }
 
-Server& Network::createDummyServer(){
-    return *(new DummyServer()) ;
+Server* Network::createDummyServer(){
+    return (new DummyServer()) ;
 }
 
-Client& Network::createDummyClient(Server& server){
-        return *(new DummyClient((DummyServer&) server)) ;
+Client* Network::createDummyClient(Server* server){
+        return (new DummyClient((DummyServer*) server)) ;
 }
 
 
-UpdateGenerator& Network::createUpdater(Simulation &globalState, Server &server){
-  return *(new UpdateGenerator(globalState, server)) ;
+UpdateGenerator *Network::createUpdater(Simulation *globalState, Server *server){
+  return new UpdateGenerator(globalState, server) ;
 }
 
-LocalStateUpdater& createUpdater(LocalState& localState, Client& client) {
-  return *(new LocalStateUpdater(localState, client)) ;
+LocalStateUpdater* createUpdater(LocalState* localState, Client* client) {
+  return new LocalStateUpdater(localState, client) ;
 }

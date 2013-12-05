@@ -10,6 +10,8 @@
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
 
+std::string stringOfActions (Actions a);
+
 void newMovement (NewMov n);
 
 class Drop : public Action{
@@ -18,7 +20,7 @@ class Drop : public Action{
    * @brief Create a way to drop one stuff
    * @param stuff the stuff to drop
    */
-  Drop  (Stuff* stuff);
+  Drop  (Stuff* stuff, Simulation* s);
    /**
    * @brief the stuff to drop
    */
@@ -35,7 +37,7 @@ class Attack : public Action {
    * @param weapon the weapon used
    * @param victim the victim
    */
-  Attack (Weapon* weapon,NPC* victim);
+  Attack (Weapon* weapon, NPC* victim, Simulation* s);
    /**
    * @brief the weapon
    */
@@ -58,7 +60,7 @@ class Plant : public Action {
    * @param bomb the bomb used
    * @param zone the zone where the bomb will be planted 
    */
-  Plant (Bomb* bomb ,Tile* zone);
+  Plant (Bomb* bomb ,Tile* zone, Simulation* s);
    /**
    * @brief the bomb
    */
@@ -80,7 +82,7 @@ class Reload : public Action {
    * @param gun the gun to reload
    * @param Ammunition the pack of ammunition used
    */
-  Reload (Gun* gun,Ammunition* ammunition);
+  Reload (Gun* gun,Ammunition* ammunition, Simulation* s);
    /**
    * @brief the gun
    */

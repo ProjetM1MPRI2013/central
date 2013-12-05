@@ -7,6 +7,8 @@
 #include "../generation/geography.h"
 #include <vector>
 #include <cmath>
+#include <queue>
+#include "tilewrapper.h"
 
 class Tile;
 class Coordinates;
@@ -18,9 +20,9 @@ class Coordinates;
 class Trajectory {
  private:
   bool hasArrived;
-  std::vector<Position> posList;
+  std::list<Position> posList;
+  void explore(TileWrapper* y,TileWrapper* z,std::priority_queue<TileWrapper*,std::vector<TileWrapper*>,TileWrapperComparator>& open);
   void pathfinding(Geography& map);
-
 
  public:
   /**
@@ -50,7 +52,7 @@ class Trajectory {
    * @brief getPosList
    * @return the Trajectory's Position list as a reference
    */
-  std::vector<Position>& getPosList();
+  std::list<Position>& getPosList();
 
   /**
    * @brief getPosition

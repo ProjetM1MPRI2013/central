@@ -35,6 +35,10 @@ Camera::Camera(float x,float y,float entretien, std::list<Tile*> lineOfSight) :
   entretien(entretien),
   champDeVision(lineOfSight) {}
 
+Camera::Camera(float x,float y,float entretien) :
+  position(x,y),
+  entretien(entretien) {}
+
 bool Camera::isInSight(NPC& npc){
   bool boolean=false;
   std::list<NPC*>NPCinTile;
