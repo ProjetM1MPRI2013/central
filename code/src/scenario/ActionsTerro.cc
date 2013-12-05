@@ -6,22 +6,22 @@ int distance(NPC* npc) {return 0;};
 bool isPlantable (Tile* t) {return true;};
 
 
-Drop :: Drop (Stuff* s) : Action ("Drop") {
+Drop :: Drop (Stuff* s, Simulation* s) : Action ("Drop",s) {
   stu = s;
 };
 
-Attack :: Attack (Weapon* weapon,NPC* victim)  : Action ("Attack") {
+Attack :: Attack (Weapon* weapon,NPC* victim, Simulation* s)  : Action ("Attack",s) {
   vict = victim;
   weap = weapon;
 };
 
 
-Plant :: Plant (Bomb* bomb,Tile* zone )  : Action ("Plant") {
+Plant :: Plant (Bomb* bomb,Tile* zone, Simulation* s)  : Action ("Plant",s) {
   bo = bomb;
   z = zone;
 };
 
-Reload :: Reload (Gun* gun,Ammunition* ammunition) : Action ("Reload") {
+Reload :: Reload (Gun* gun, Ammunition* ammunition, Simulation* s) : Action ("Reload",s) {
   g = gun;
   ammu = ammunition;
 };

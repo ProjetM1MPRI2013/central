@@ -1,8 +1,8 @@
-
 #include "Action.h"
 
-Action::Action(std::string n) {
+Action::Action(std::string n, Simulation* s) {
   name = n;
+  simulation = s;
   this->playerID = this->simulation->getPlayer()->getID () ;
 };
 
