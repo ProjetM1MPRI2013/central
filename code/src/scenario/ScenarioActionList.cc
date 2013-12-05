@@ -1,4 +1,5 @@
 #include "ScenarioActionList.h"
+#include "simulation.h"
 
 
 /*****************

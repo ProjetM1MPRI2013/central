@@ -34,9 +34,17 @@ class NPC : public WithUuid, public Positionable {
    * @param h : the NPC's hitbox size
    * @param start : the NPC's start position
    * @param target : the NPC's target position
+   * @param map : the map (to do the initial pathfinding)
    * @param tex: the texture pack of the sprite cheet of the animation
    */
-  NPC(float s,float f,float h,Position& start,Position& target,TexturePack* tex);
+  NPC(float s,float f,float h,Position& start,Position& target,Geography& map,TexturePack* tex);
+
+  /**
+   * @brief NPC
+   * creates a new NPC by copying an existing one
+   * @param n: the NPC to copy
+   */
+  NPC(NPC& n);
 
   /**
    * @brief getFeat
@@ -69,6 +77,12 @@ class NPC : public WithUuid, public Positionable {
    * @return the NPC's speed
    */
   float getSpeed();
+
+  /**
+   * @brief getTrajectory
+   * @return the NPC's Trajectory as a reference
+   */
+  Trajectory& getTrajectory();
 
   /**
    * @brief setSpeed
@@ -110,6 +124,12 @@ class NPC : public WithUuid, public Positionable {
   bool isInHitbox(Position& p);
 
   /**
+   * @brief getHitboxSize
+   * @return the NPC's hitbox size
+   */
+  float getHitboxSize();
+
+  /**
    * @brief hasArrived
    * @return true iff the NPC has arrived at his target position
    */
@@ -121,6 +141,12 @@ class NPC : public WithUuid, public Positionable {
    */  
   sf::Sprite getSprite();
   
+  /**
+   * @brief getAnim
+   * @return the NPC's Animation
+   **/
+  Animation getAnim();
+
   /**
    * @brief setAnim
    * Sets the animation of the NPC

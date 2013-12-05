@@ -49,21 +49,17 @@ Player* Simulation::getPlayer(){
 int Simulation::isInTileX(NPC* npc){
 	Position position=npc->getPosition();
 	float x=position.getX();
-	float y=position.getY();
 
-	int i,j;
+	int i;
 	i=x/TILE_SIZE_X;
-	j=y/TILE_SIZE_Y;
 	return (i);
 }
 
 int Simulation::isInTileY(NPC* npc){
 	Position position=npc->getPosition();
-	float x=position.getX();
 	float y=position.getY();	
 	
-	int i,j;
-	i=x/TILE_SIZE_X;
+	int j;
 	j=y/TILE_SIZE_Y;
 	return (j);
 }
@@ -91,7 +87,7 @@ void Simulation::ajouterNPC(int i,int j){
 	j2=rand()%(this->MAP_SIZE);
 	start=Position(i1*TILE_SIZE_X,j1*TILE_SIZE_Y);
 	target=Position(i2*TILE_SIZE_X,j2*TILE_SIZE_Y);
-	NPC *pnj=new NPC(20,10,10,start,start,NULL);
+	NPC *pnj=new NPC(20,10,10,start,target,*map,NULL);
 	NPCs.push_back(pnj);
 }
 
@@ -277,15 +273,6 @@ void Simulation::run(sf::Time dt) {
 	}
 }
 
-void Simulation::triggerEvent(EventName eventT, EventTarget& target) {
-  try {
-    auto listeners = this->targets.at(std::ref(target)).at(eventT);
-    for (auto& pair : listeners) { pair.second(); };
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-
-}
 int Simulation::getSous() {
 	return (this->sous[0]);
 }

@@ -1,4 +1,5 @@
 #include "HScenario.h"
+#include "simulation.h"
 
 HScenario::HScenario (Simulation* s) {
   simulation = s;
@@ -6,6 +7,7 @@ HScenario::HScenario (Simulation* s) {
 };
 
 void HScenario::run(){
+  
   return;
 };
 

@@ -2,11 +2,13 @@
 #define TILE
 
 #include <list>
+#include <iostream>
+#include <cerrno>
 #include <SFML/Graphics.hpp>
-#include "../simulation/npc.h"
 
 enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
+class NPC;
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
@@ -196,8 +198,7 @@ class Tile {
      */
     void setCoordBorough(Coordinates& CBorough);
     
-}
-;
+};
 
 
 

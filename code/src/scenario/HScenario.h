@@ -2,11 +2,12 @@
 #define HSCENARIO_H
 
 
-#include "simulation/simulation.h"
 #include "Action.h"
 #include "ActionsTerro.h"
 #include "ActionsPC.h"
 #include "ScenarioAction.h"
+
+class Simulation;
 
 //Quickfix
 //Replace with includes
@@ -36,7 +37,6 @@ class HScenario {
    */
   void eventTriggered (EventName e, EventTarget& t) ;
   
- private :
   Simulation* simulation;
 };
 

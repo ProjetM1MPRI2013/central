@@ -1,6 +1,5 @@
 #include "ActionsPC.h"
 #include "../simulation/simulation.h"
-#include "../simulation/simulation.cc"
 
 //AddCop :: AddCop (int number, Positon* positon) : Action"AddCop"
 

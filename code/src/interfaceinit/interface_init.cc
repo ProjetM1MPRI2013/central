@@ -950,7 +950,7 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 					//changementMenu.play();
 					//ServerInfo servInfo = ServerInfo();
 					//(*gameServer) = network.createServer(servInfo);
-					return ;
+					return 0;
 
 				}
 				if (callback.id == 2) {

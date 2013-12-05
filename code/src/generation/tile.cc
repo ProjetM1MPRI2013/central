@@ -1,4 +1,6 @@
 #include "tile.h"
+#include "position.h"
+#include "npc.h"
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
@@ -12,8 +14,8 @@ int Coordinates::getOrd() {
 
 
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin) :
-  coord(abs,ord),
   batOrigin(batOriginO),
+  coord(abs,ord),
   coordBorough(boroughOrigin) {
   this->type = typeO;
   this->destructible = destructibleO;
@@ -48,7 +50,10 @@ float Tile::getTLenght(TileType type) {
   case INTER: return 0;
   case BANK: return 0;
   case HOUSE: return 0;
-  }
+  case BLANK: return 0;
+  default: std::cerr << "Error : Tile : default case should not happen in getTLength";
+  };
+  return 10; //should not happens
 }
 
 float Tile::getTWeight(TileType type) {
@@ -58,7 +63,10 @@ float Tile::getTWeight(TileType type) {
   case INTER: return 0;
   case BANK: return 0;
   case HOUSE: return 0;
-  }
+  case BLANK: return 0;
+  default: std::cerr << "Error : Tile : default case should not happen in getTWeight";
+  };
+  return 10; //should not happens
 }
 
 sf::Sprite& Tile::getTSprite(TileType type) {
@@ -68,7 +76,10 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   case INTER: break;
   case BANK: break;
   case HOUSE: break;
-  }
+  case BLANK: break;
+  default: std::cerr << "Error : Tile : default case should not happen in getTSprite";
+  };
+  //TODO
 }
 
 std::list<NPC*> Tile::getNPCs() {
@@ -77,6 +88,7 @@ std::list<NPC*> Tile::getNPCs() {
     Position bp = b->getPosition();
     return ap.getX() - ap.getY() < bp.getX() - bp.getY();
     });
+  return listNPC;
 };
 
 float Tile::getPopulationDensity(){

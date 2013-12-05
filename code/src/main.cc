@@ -20,7 +20,7 @@ int main()
     else {
     	window.create(video_mode, "Game");
     }
-    Geography geo = Geography(424242);
+    Geography geo = Geography("424242");
 
 	sf::Vector2u size = window.getSize();
     unsigned int w = size.x;

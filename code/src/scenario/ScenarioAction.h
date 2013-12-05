@@ -1,7 +1,6 @@
 #ifndef SCENARIOACTION_H
 #define SCENARIOACTION_H
 
-#include "simulation/simulation.h"
 class Simulation; // Forward declaration
 #include <string>
 

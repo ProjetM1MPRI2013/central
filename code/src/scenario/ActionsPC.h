@@ -4,7 +4,6 @@
 #include "../simulation/position.h"
 #include "Clickable.h"
 #include "Action.h"
-#include "../simulation/simulation.cc"
 #include "../simulation/simulation.h"
 
 #define COST_COP 1

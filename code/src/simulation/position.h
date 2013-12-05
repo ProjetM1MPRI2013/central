@@ -1,6 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include "geography.h"
+
 
 class Tile;
 class Coordinates;
@@ -32,13 +34,6 @@ class Position {
    * @param y : the y coordinate
    */
   Position(float x,float y);
-
-  /**
-   * @brief Position
-   * creates a new Position by copying an existing one
-   * @param p : the existing position
-   */
-  Position(Position& p);
 
   /**
    * @brief Position

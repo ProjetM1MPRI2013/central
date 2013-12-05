@@ -2,33 +2,47 @@
 #include "../generation/tile.h"
 
 #include <vector>
+#include <cassert>
 
 Trajectory::Trajectory() {
   Position p1,p2;
   p1 = Position();
   p2 = Position();
-  Trajectory(p1,p2);
+  posList = std::vector<Position> ();
+  posList.push_back(p1);
+  posList.push_back(p2);
   hasArrived = false;
   return;
 }
 
-Trajectory::Trajectory(Position& start,Position& target) {
-  Position next ;
-  next = Position(start);
-  posList = std::vector<std::reference_wrapper<Position>> (3,start);
-  posList[1] = std::ref(next);
-  posList[2] = std::ref(target);
+Trajectory::Trajectory(Position start,Position target,Geography& map) {
+  posList = std::vector<Position> ();
+  posList.push_back(start);
+  posList.push_back(target);
+  pathfinding(map);
   hasArrived = false;
   return;
 }
 
 Trajectory::Trajectory(Trajectory& t) {
-  posList = std::vector<std::reference_wrapper<Position>>(t.getPosList());
-  hasArrived = false;
+  posList = std::vector<Position>(t.getPosList());
+  hasArrived = t.getHasArrived();
   return;
 }
 
-std::vector<std::reference_wrapper<Position>>& Trajectory::getPosList() {
+
+void Trajectory::pathfinding(Geography& map) {//stupide pour l'instant, A* apres
+  assert(posList.size()>1);//le vecteur doit contenir au moins le départ et l'arrivée
+  Position start,target;
+  start = posList[0];
+  target = posList[posList.size()-1];
+  posList.clear();
+  posList.push_back(start);
+  posList.push_back(target);
+  return;
+}
+
+std::vector<Position>& Trajectory::getPosList() {
   return posList;
 }
 
@@ -38,7 +52,7 @@ Position& Trajectory::getPosition() {
 }
 
 void Trajectory::setPosition(Position& p) {
-  posList[0] = std::ref(p);
+  posList[0] = p;
   return;
 }
 
@@ -46,26 +60,10 @@ bool Trajectory::getHasArrived() {
   return hasArrived;
 }
 
-Tile& Trajectory::findNextTile(Tile& start,Tile& target) {
-  return target;//temporaire, après il y aura le pathfinder à la place
-}
-
-
-void Trajectory::updateNextPosition(Geography& map) {
-  Tile& nextTile = findNextTile(((Position)posList[0]).isInTile(map),((Position)posList[2]).isInTile(map));
-  Position p;
-  p = Position(nextTile);
-  posList[2] = std::ref(p);
-  return;
-}
-  
-
 void Trajectory::update(sf::Time dt,float speed,Geography& map) {
-  /*on calcule la nouvelle position en avancant en ligne droite*/
-  if (!hasArrived) {//du moins s'il n'est pas arrivé, sinon on ne fait rien
-    if ((((Position)posList[0]).getX()==((Position)posList[1]).getX())&&((((Position)posList[0]).getY()==((Position)posList[1]).getY()))) {//pour des raisons obscures son objectif à court terme est sa position courante
-      updateNextPosition(map);
-    }
+  assert(!posList.empty());//il doit y avoir au moins la position courante  
+  if (!hasArrived) {//si on n'est pas arrivé : on avance en ligne droite
+    assert(posList.size()>1);//il doit y avoir la position courante et au moins un objectif
     float dist = dt.asSeconds()*speed;
     Position& position = posList[0];
     Position& target = posList[1];
@@ -76,21 +74,16 @@ void Trajectory::update(sf::Time dt,float speed,Geography& map) {
     dY = dY/norm;
     dX = dX*dist;
     dY = dY*dist;
-    ((Position)posList[0]).add(dX,dY);
+    posList[0].add(dX,dY);
     
-    float dist1 = ((Position)posList[0]).distance(posList[1]);
-    float dist2 = ((Position)posList[0]).distance(posList[2]);
+    float dist1 = posList[0].distance(posList[1]);
     
-    if (dist1 <= dist/2) {//on est assez proche de l'objectif à court terme
-      if (dist2<=dist/2) {//et aussi de celui à long terme -> on est arrivé
+    if (dist1 <= dist/2) {//on est assez proche de l'objectif
+      posList.erase(posList.begin()+1);
+      if (posList.size()<2) {//il ne reste plus que la position courante
         hasArrived = true;
-      } else {//on a atteint l'objectif proche mais pas l'autre
-        updateNextPosition(map);
       }
     }
   }
   return;
 }
-
-
-

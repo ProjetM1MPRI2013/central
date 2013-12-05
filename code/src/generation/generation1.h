@@ -4,13 +4,11 @@
 #include "geography.h"
 #include <string>
 
-class Generation1 : public Geography
+class Generation1 : protected Geography
 {
  public:
   Generation1(std::string seed);
-  
-
-}
+};
 
 
 

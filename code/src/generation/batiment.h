@@ -6,6 +6,9 @@
 #include <string>
 #include "tile.h"
 
+// Une matrice de floats (float[][] oblige à déclarer une dimension max. sur les colonnes)
+typedef std::vector<std::vector<float>> floatMatrix;
+
 /**
  * @brief gives the caracteristic of a building and its sprite
  */
@@ -15,7 +18,7 @@ class Batiment {
   TileType type;
   int weight;
   int lenght;
-  float speed[][];
+  floatMatrix speed;
   std::string filePictures;
   Coordinates* picture;
 
@@ -30,7 +33,7 @@ class Batiment {
   TileType getType();
   int getWeight();
   int getLenght();
-  float[][] getSpeed();
+  floatMatrix getSpeed();
   std::string getFilePictures();
   Coordinates* getPicture();
   
