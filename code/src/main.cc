@@ -1,11 +1,38 @@
 #include <SFML/Graphics.hpp>
-#include <test/test.h> 
+#include <SFML/System.hpp>
+#include <test/test.h>
 #include <boost/asio.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <interfaceinit/interface_init.h>
 #include <generation/geography.h>
-int main() {
+
+struct inputState {
+  bool hasFocus;
+  sf::RenderWindow& window;
+};
+
+void updateInputState(inputState& s) {
+      sf::Event event;
+      while (s.window.pollEvent(event)) {
+        switch (event.type)
+        {
+          case sf::Event::LostFocus: s.hasFocus = false; break;
+          case sf::Event::GainedFocus: s.hasFocus = true; break;
+        }
+      }
+}
+
+void handleKeys(inputState& s) {
+  // Close window on Alt+F4
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && 
+      sf::Keyboard::isKeyPressed(sf::Keyboard::F4)) {
+    s.window.close();
+  }
+}
+
+int main()
+{
 	int sizeFenetre[3];
 	bool isFullScreen;
 	int b = interface_initiale(sizeFenetre, &isFullScreen);
@@ -24,21 +51,20 @@ int main() {
 		}
 		Geography geo = Geography("424242");
 
-		sf::Vector2u size = window.getSize();
-		unsigned int w = size.x;
-		unsigned int h = size.y;
-		//End Defintion of the window
-		while (window.isOpen()) {
-			sf::Event event;
-			while (window.pollEvent(event)) {
+	sf::Vector2u size = window.getSize();
+    unsigned int w = size.x;
+    unsigned int h = size.y;
+    //End Defintion of the window
+    
+    inputState s = {true, window};
 
-			}
-
-			window.clear();
-
-			window.display();
-		}
-		window.close();
-		return 0;
-	}
+    while (window.isOpen()) {
+      updateInputState(s);
+      if (s.hasFocus) { handleKeys(s); }
+      window.clear();
+      window.display();
+    }
+    window.close();
+    return 0;
+  }
 }
