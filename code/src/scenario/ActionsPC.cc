@@ -3,8 +3,8 @@
 
 
 
-bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (*simulation).getSous());};
-bool :: AddCam::IsActionPossible() {return (COST_CAM2 <= (*simulation).getSous());};
+bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());};
+bool :: AddCam::IsActionPossible() {return (COST_CAM2 <= (this->simulation)->getSous());};
 
 AddCop :: AddCop(int n,float xx, float yy, Simulation* s) : Action("AddCop",s) {
 this->number = n;

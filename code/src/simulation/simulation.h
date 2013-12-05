@@ -1,5 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
+class Stuff;
+class Action;
 #include "Action.h"
 #include "ScenarioAction.h"
 #include "npc.h"
