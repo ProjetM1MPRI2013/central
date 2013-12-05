@@ -4,12 +4,12 @@
 #include <cstdlib>
 #include <string>
 
-Generation1::Generation1(string seed){
+Generation1::Generation1 (std::string seed) : Geography(seed) {
   size_t seed1 = hachage(seed);
   int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
-  string file = "../graphim/buildings";
-  string ligne;
-  ifstream fichier(file, ios::in);
+  std::string file = "../graphim/buildings";
+  std::string ligne;
+  std::ifstream fichier(file, ios::in);
   assert(fichier);
   nbLine = 0;
   while(getline(fichier, ligne)){
