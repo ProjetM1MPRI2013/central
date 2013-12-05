@@ -20,7 +20,7 @@
     
     for(int k = w-1; k > -h; k--)
     {
-      for(int j = min(w - 1, h+k-1); j >= max(k,0); j--)          // Vérifié par le calcul
+      for(int j = std::min(w - 1, h+k-1); j >= std::max(k,0); j--)          // Vérifié par le calcul
       {
         int i = j - k;
         Tile* tilec = map->getTile(i,j);
