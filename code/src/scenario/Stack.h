@@ -8,8 +8,8 @@ class Npc {};
 class HudTerro {};
 class Simulation {};
 
-#include "Action.cc"
-#include "../hud/hudTerro.cc"
+#include "Action.h"
+#include "../hud/hudTerro.h
 /**
    * @brief The object Stack will stack informations needed to create an action and send it when he can
   */

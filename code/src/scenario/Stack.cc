@@ -1,7 +1,5 @@
 #include "Stack.h"
 
-
-
 Stack::Stack (){
 };
 
@@ -74,7 +72,7 @@ Action ActionOfState(Stack* s, Actions* a) {
 			break;
 		};
 }
-void Stack::SendAction () {
+void Stack::sendAction () {
 	if ((this->SoNList).empty())
 	{
 		Action a(ActionOfStack(this,this->ActionName));
@@ -102,9 +100,10 @@ void Stack::SendAction () {
 };
 
 void Stack::newAction(Actions* a, Stuff* sf) {
-	this->SoNList = SoNOfActions a;
+	this->SoNList = (SoNOfActions a);
 	this->BasicStuff-> sf;
 	this->sendAction();
+	this->cancel();
 };
 
 void SendNpc(Npc* n) {
