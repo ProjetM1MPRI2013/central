@@ -82,7 +82,7 @@ class Stack {
 
 std::list<SoN> SoNOfActions (Actions a);
 
-Action ActionOfState(Stack* s, Actions a);
+Action* ActionOfState(Stack* s, Actions a);
 
 
 #endif
