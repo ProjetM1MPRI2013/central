@@ -43,8 +43,7 @@
         {
 	  if(!(**ci).TextureIsInit())
 	    {
-	      assert(texArray != NULL);
-	      (**ci).TextureAnim(&(texArray[0])); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur.
+	      (**ci).TextureAnim(texVector.at(0))); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur.
 	    }
           sf::Sprite sfn = (**ci).getSprite();
           Position& p = (**ci).getPosition();
