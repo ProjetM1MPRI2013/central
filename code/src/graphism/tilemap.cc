@@ -1,5 +1,6 @@
 #include "tilemap.h"
 #include "geography.h"
+#include "tile.h"
 #include <SFML/Graphics/Transformable.hpp>
 
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
@@ -59,3 +60,47 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 
+void createTiles(int* Tilesbite, Geography geo)
+  {
+	unsigned int mapwidth = 100;
+	unsigned int mapheight = 100;
+//	Tilesbite = malloc((mapwidth*mapheight) * sizeof(int)); (à remettre quand j'appelerai la fonction)
+        for (unsigned int i = 0; i < mapwidth; ++i)
+            for (unsigned int j = 0; j < mapheight; ++j)
+            {
+		switch((geo.getTile(i,j))->getType()) {
+		 
+		case BLANK: {
+		Tilesbite[i + j * mapwidth]=0;
+			   }
+		case ROADV: {
+		Tilesbite[i + j * mapwidth]=1;
+			   }
+		case ROADH: {
+		Tilesbite[i + j * mapwidth]=2;
+			   }
+		case INTER: {
+		Tilesbite[i + j * mapwidth]=3;
+			   }
+		case HOUSE: {
+		if ((geo.getTile(i,j))->getAnxiety()<50)
+		{Tilesbite[i + j * mapwidth]=4;}
+		  else {
+			 if ((geo.getTile(i,j))->getAnxiety()<75)
+			 	{Tilesbite[i + j * mapwidth]=5;}
+			 else {Tilesbite[i + j * mapwidth]=6;}
+			}
+			   }
+		case BANK: {
+		if ((geo.getTile(i,j))->getAnxiety()<50)
+		{Tilesbite[i + j * mapwidth]=7;}
+		  else {
+			 if ((geo.getTile(i,j))->getAnxiety()<75)
+			 	{Tilesbite[i + j * mapwidth]=8;}
+			 else {Tilesbite[i + j * mapwidth]=9;}
+			} 
+		     }
+	    }
+	    }
+	    return;
+}
