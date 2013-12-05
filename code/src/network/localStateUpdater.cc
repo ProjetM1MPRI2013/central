@@ -1,7 +1,7 @@
 #include "localStateUpdater.h"
 
-LocalStateUpdater::LocalStateUpdater(LocalState& state, Client& client) :
-  localState(&state), client(&client)
+LocalStateUpdater::LocalStateUpdater(LocalState* state, Client* client) :
+  localState(state), client(client)
 {
 }
 

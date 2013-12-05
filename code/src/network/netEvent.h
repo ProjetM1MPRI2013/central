@@ -77,6 +77,7 @@ public:
      * @brief PLAYER_JOIN : send this message to notify the server or other players
      * that a player joined the game.
      * data is of type (int *), the integer is the id of the player that joined the game.
+     * This message is used by the server to determine wich are the players connected to it.
      */
     PLAYER_JOIN = 8 ,
 
@@ -84,6 +85,7 @@ public:
      * @brief PLAYER_QUIT : send this message to notify the server or other players
      * that a player left the game
      * data is of type (int *), the integer is the id of the player that left the game.
+     * This message is used by the server to determine wich are the players connected to it.
      */
     PLAYER_QUIT = 9 ,
 
@@ -129,7 +131,15 @@ public:
    * @brief setType
    * @param type : the type to set to this message
    */
-  void inline setType(NetEvent::Type type){this->type = type ;}
+  virtual inline void setType(NetEvent::Type type){this->type = type ;}
+
+  virtual inline void setData(void *data){
+    this->data = data ;
+  }
+
+  virtual inline void * getData(){
+    return data ;
+  }
 
 
 

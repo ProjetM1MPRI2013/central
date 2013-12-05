@@ -15,7 +15,7 @@ public:
    * @param state : the local state this updater is attached to
    * @param client : the client used to receive the updates
    */
-  LocalStateUpdater(LocalState& state, Client& client);
+  LocalStateUpdater(LocalState* state, Client* client);
 
   /**
    * @brief update : updates the local state according to the updates received from the server.

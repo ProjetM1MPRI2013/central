@@ -3,7 +3,6 @@
 
 HScenario::HScenario (Simulation* s) {
   simulation = s;
-  ScenarioAction::simulation = s;
 };
 
 void HScenario::run(){

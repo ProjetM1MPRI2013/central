@@ -30,6 +30,21 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 		this->NPCs=NPCs;
 }
 
+
+void Simulation::setServer(Server* s){
+  this->isServer = true;
+  this->server = s;
+  return;
+};
+
+
+void Simulation::setClient(Client* c){
+  this->isServer = false;
+  this->client = c;
+  return;
+};
+
+
 void Simulation::addAction(ScenarioAction * action){
 	this->pendingActions.push_back(action);
 }

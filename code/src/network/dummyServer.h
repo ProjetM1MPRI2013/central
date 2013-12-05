@@ -55,6 +55,11 @@ private :
      */
     std::list<DummyClient*> clients ;
 
+    /**
+     * @brief players : associates to each player ID the client it is associated to.
+     */
+    std::map<int, DummyClient *> players ;
+
     typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
     /**
      * @brief received_messages : used to store all the messages received from now.
@@ -82,9 +87,13 @@ protected :
     /*
      *Methods inherited from Server
      */
-    virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType ) ;
+    virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType, int player =-1) ;
 
     virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
+
+    virtual std::vector<int> getConnectedPlayers() ;
+
+    virtual bool isConnected(int player) ;
 
 public :
 

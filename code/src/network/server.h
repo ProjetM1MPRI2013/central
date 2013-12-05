@@ -44,7 +44,7 @@ public :
    */
   template <typename MsgType>
   void broadcastMessage(MsgType msg, bool reliable = true){
-    broadcast_message(msg,reliable,MsgType::getMsgType());
+    send_message(msg,reliable,MsgType::getMsgType());
   }
 
   /**
@@ -71,7 +71,39 @@ public :
 
   }
 
+  /**
+   * @brief Sends a message only to the given player.
+   * @param msg : The message to send
+   * @param player : the ID of the player to send the message to
+   * @param reliable : wether or not the server should wait for an ACK.
+   */
+  template <typename MsgType>
+  void sendMessage(MsgType msg, int player, bool reliable = true){
+    send_message(msg,reliable,MsgType::getMsgType(), player);
+  }
+
+  /**
+   * @brief getConnectedPlayers :
+   * returns a vector with all the players connected to this server. Each element of the
+   * vector correspond to a Player Id (getID() form simulation/Player
+   * A player is registered as connected when the server receives a NetEvent message with type
+   * PLAYER_JOIN, with the data containing the ID of the player that has joined.
+   * A player is removed from this server when the server receives or transmit a NetEvent message
+   * with type PLAYER_QUIT, with the corresponding ID in the field data.
+   * @return a vector containing the ID of all the players that are connected to this server.
+   */
+  virtual std::vector<int> getConnectedPlayers() = 0 ;
+
+  /**
+   * @brief isConnected : checks wether there is a player with the given ID connected to the server.
+   * @param player : the ID of the player
+   * @return true if the player is connected, false otherwise.
+   */
+  virtual bool isConnected(int player) = 0 ;
+
   virtual ~Server() {}
+
+
   //only reason for private members in this interface is that templates cannot be
   // declared virtual.
 protected :
@@ -80,8 +112,9 @@ protected :
    * @param msg : the message to send
    * @param reliable : whether the server should wait for an Ack or not
    * @param msgType : A string describing the type of the message (result of getMsgType())
+   * @param player : the player to send the message to. -1 to send the message to all the players
    */
-  virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType) =0 ;
+  virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType, int player = -1) =0 ;
 
   /**
    * @brief receive_messages : (Internal do not use) receives messages of the given type
