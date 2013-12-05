@@ -19,3 +19,5 @@ AddCam :: AddCam(int n, float xx,float yy, Simulation* s) : Action("AddCam",s) {
 };
 
 
+void AddCam::doAction() {return;};
+void AddCop::doAction() {return;};
