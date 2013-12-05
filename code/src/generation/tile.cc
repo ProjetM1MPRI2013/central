@@ -1,6 +1,7 @@
 #include "tile.h"
 #include "position.h"
 #include "npc.h"
+#include "../simulation/tilewrapper.h"
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
@@ -10,6 +11,10 @@ int Coordinates::getAbs() {
 
 int Coordinates::getOrd() {
   return ord;
+}
+
+bool Coordinates::equals(Coordinates& c) {
+  return (abs==c.getAbs() && ord==c.getOrd());
 }
 
 
@@ -34,6 +39,7 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->sprite.setTexture(stp->texture);
   this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
   this->destructionLevel = 0.;
+  wrapper = NULL;
 }
 
 float Tile::getAnxiety(){
@@ -127,6 +133,7 @@ Coordinates& Tile::getCoord() {
   return coord;
 }
 
+
 sf::Sprite Tile::getSprite(){
   return sprite;
 }
@@ -144,4 +151,41 @@ int Tile::getOriginSpriteX(){
     
 int Tile::getOriginSpriteY(){
   return stp->originY;
+
+bool Tile::equals(Tile& t) {
+  return (coord.equals(t.getCoord()));
+}
+
+
+TileWrapper* Tile::getWrapper() {
+  return wrapper;
+}
+
+void Tile::setWrapper(TileWrapper* t) {
+  wrapper = t;
+  return;
+}
+
+void Tile::resetWrapper() {
+  if (wrapper) {
+    delete wrapper;
+    wrapper = NULL;
+  }
+  return;
+}
+
+
+bool Tile::getGou() {
+  return gou;
+}
+
+bool Tile::getGoh() {
+  return goh;
+}
+bool Tile::getGor() {
+  return gor;
+}
+bool Tile::getGol() {
+  return gol;
+
 }
