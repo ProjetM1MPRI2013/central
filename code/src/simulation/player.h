@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "position.h"
+class Simulation;
 #include "scenario/Stuff.h"
 #include "SFML/System.hpp"
 #include <iostream>

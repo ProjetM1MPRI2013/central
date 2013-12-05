@@ -26,6 +26,23 @@ class ChangeDirection: public ScenarioAction {
   virtual void run();
 };
 
+class AddCops: public ScenarioAction {
+
+	public:
+		int number;
+		float x;
+		float y;
+		AddCops (int n, float xx, float yy);
+};
+
+
+
+class AddCams: public ScenarioAction {
+	public:
+		int number;
+		float x;
+		float y;
+};
 
 /**
  * @brief Create a new explosion.

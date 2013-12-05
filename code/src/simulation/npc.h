@@ -159,5 +159,24 @@ class NPC : public WithUuid, public Positionable {
    * Changes the texture of the animation of the NPC
    **/
   void TextureAnim(TexturePack* tex);
+  
+  
+  /**
+   * @brief TextureOffsetX
+   * Get the abscissa of the origin of the animation in the texture
+   **/
+  int TextureOffsetX();
+  
+  /**
+   * @brief TextureOffsetY
+   * Get the ordinate of the origin of the animation in the texture
+   **/
+  int TextureOffsetY();
+
+  /**
+   * @brief TextureIsInit
+   * Returns true iff the animation texture has been initialized
+   **/
+  bool TextureIsInit();
 };
 #endif

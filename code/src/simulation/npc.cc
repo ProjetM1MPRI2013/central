@@ -83,6 +83,7 @@ bool NPC::hasArrived() {
 }
 
 sf::Sprite NPC::getSprite(){
+  assert(this->anim.isInit());
   this->anim.nextFrame();                  // Pas certain 
   return this->anim.getSprite();
 }
@@ -103,4 +104,16 @@ void NPC::TextureAnim(TexturePack* tex){
 
 Trajectory& NPC::getTrajectory() {
   return trajectory;
+}
+
+int NPC::TextureOffsetX(){
+  return anim.getOffsetX();
+}
+
+int NPC::TextureOffsetY(){
+  return anim.getOffsetY();
+}
+
+bool NPC::TextureIsInit(){
+  return anim.isInit();
 }
