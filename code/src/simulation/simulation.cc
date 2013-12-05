@@ -30,6 +30,9 @@ Simulation::Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEU
 		this->NPCs=NPCs;
 }
 
+void Simulation::addAction(ScenarioAction * action){
+	this->pendingActions.push_back(action);
+}
 
 Player* Simulation::getPlayerByID(int pid){
   Player* result = 0;
@@ -91,9 +94,12 @@ void Simulation::ajouterNPC(int i,int j){
 	NPCs.push_back(pnj);
 }
 
-void Simulation::supprimerNPC(int i,int j){
+void Simulation::supprimerNPC(NPC * npc){
+	NPCs.remove(npc);
+}
 
-
+void Simulation::supprimerNPCDansCase(int i,int j){
+	map->getTile(i,j)->getNPCs().pop_back();
 }
 
 //Crée et tue les gens dans les cases
@@ -106,11 +112,10 @@ void Simulation::peopleGeneration(){
 				ajouterNPC(i,j);
 			}
 			if(chance<(map->getTile(i,j)->getPopulationDensity()/10)){
-				supprimerNPC(i,j);
+				supprimerNPCDansCase(i,j);
 			}
 		}
 	}
-
 }
 
 //Nivelle la peur via une sorte de norme 2
@@ -228,6 +233,19 @@ void Simulation::lisserMatrice(){
 }
 
 void Simulation::run(sf::Time dt) {
+	int chance;
+	if(sous[0]<0){
+		this->NPCs.pop_back();
+		this->cameras.pop_back();
+	}
+
+	ScenarioAction* action;
+
+	for (std::list<Player*>::iterator it = pendingActions.begin(); it != pendingActions.end(); ++it){
+		action=(*it);
+		//envoyer action à tlm et effectuer action
+	}
+	this->pendingActions.clear();
 
 	/*on empile les dt jusqu'à obtenir plus d'une seconde*/
 	this->smallTime=smallTime+dt.asSeconds();
@@ -241,7 +259,7 @@ void Simulation::run(sf::Time dt) {
 		this->lisserMatrice();
 	}
 
-	/* We update the position of all the player */
+	/* We update the position of all the players */
 	for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it){
 	  (*it)->updatePosition(dt);
 	}
@@ -259,7 +277,7 @@ void Simulation::run(sf::Time dt) {
 			}
 	}
 
-	//Deplacement de tous les NPC.
+	//Deplacement de tous les NPCs.
 	for (std::list<NPC *>::iterator it = NPCs.begin(); it != NPCs.end(); ++it)
 	{
 		int i,j;
@@ -269,8 +287,9 @@ void Simulation::run(sf::Time dt) {
 		int i2,j2;
 		(map->getTile(i2,j2))->removeNPC(*it);
 		(map->getTile(i2,j2))->addNPC(*it);
-		
 	}
+
+
 }
 
 int Simulation::getSous() {
