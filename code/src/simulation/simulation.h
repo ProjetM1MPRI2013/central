@@ -1,9 +1,8 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
-class Stuff;
 class Action;
-#include "Action.h"
-#include "Stuff.h"
+#include "../scenario/Action.h"
+#include "../scenario/Stuff.h"
 #include "ScenarioAction.h"
 #include "npc.h"
 #include "SFML/System.hpp"
@@ -16,6 +15,7 @@ class Action;
 #include "eventListener.h"
 #include "time.h"
 #include "player.h"
+#include "../ne"
 
 /**
  * @brief The Simulation class
@@ -26,6 +26,16 @@ class Action;
 class Simulation {
 
 public :
+
+  /**
+   * @brief Set the Server object
+   */
+  void setServer(Server*);
+
+  /**
+   * @brief Set the Client object
+   */
+  void setClient(Client*);
 
   /**
    * @brief Get a player by is playerID;
@@ -97,6 +107,9 @@ public :
 private :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
+  Client client;
+  Server server;
+  bool isServer;
   int MAP_SIZE;
   int TILE_SIZE_X;
   int TILE_SIZE_Y;
