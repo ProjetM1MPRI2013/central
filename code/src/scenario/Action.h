@@ -41,7 +41,7 @@ class Action {
   virtual void doAction ();
 
  private:
-  std::string playerID;
+  int playerID;
 };
 
 #endif

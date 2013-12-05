@@ -82,6 +82,9 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   //TODO
 }
 
+TileType Tile::getType(){
+return (this -> type);}
+
 std::list<NPC*> Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
     Position ap = a->getPosition();
