@@ -15,22 +15,24 @@ class AddCop : public Action {
 public:
 	bool IsActionPossible ();
 	void doAction();
-	AddCop (int number, Position* position, Simulation* s);
+	AddCop (int number, float x, float y, Simulation* s);
 private:
 	int number;
-	Position* position;
-	Simulation* simulation;
+	float x;
+	float y;
+
 };
 
 class AddCam : public Action {
 public:
 	bool IsActionPossible ();
 	void doAction();
-	AddCam (int number, Position* position, Simulation* s);
+	AddCam (int number,float x, float y, Simulation* s);
 private:
 	int number;
-	Position* position;
-	Simulation* simulation;
+	float x;
+	float y;
+
 };
 
 
