@@ -27,7 +27,11 @@ class ChangeDirection: public ScenarioAction {
 };
 
 class AddCops: public ScenarioAction {
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> e82cc6f248b3b6358184f735225aecf64ebda4c0
  public:
   int number;
   float x;
