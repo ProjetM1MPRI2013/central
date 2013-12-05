@@ -5,32 +5,45 @@
 #include <string> 
 #include <iostream> 
 #include <sstream> 
-#include "scenario/ActionsTerro.h" 
+#include "../scenario/ActionsTerro.h" 
 
 enum ButtonState {INVENT, ACTIONS} 
 
-class Hud 
+enum WaitFor {NONE, CLICK} 
+
+class HudTerro 
 {
   public: 
-    void event(sf::Event event); 
+    HudTerro (sf::RenderWindow window);  
+    void init(); 
+    void event(sf::RenderWindow window, sf::Event event); 
     void callback(tgui::Callback callback); 
     void draw(); 
+    void setwf(WaitFor w); 
+
+    /* In the main loop, the 4 methods must be called in this specific order : 
+     * init(); 
+     * event(window, event); 
+     * callback(callback); 
+     * draw(); 
+     */
 
 
   private: 
     unsigned int w; 
     unsigned int h; 
+    int i; 
     tgui::Gui hud; 
     std::list<Stuff*> inventory; 
-    std::list<std::string> currentActions; 
+    std::list<Actions> actionsList; 
     std::list<tgui::Button::Ptr> buttonsList; 
-    bool waitForClick; 
+    WaitFor waitFor; 
     ButtonState currentState; 
     ButtonState nextState; 
+    Stuff* currentStuff; 
 
 };
 
-Hud (sf::RenderWindow window);  
 
 
 #endif
