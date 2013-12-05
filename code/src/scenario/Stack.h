@@ -2,6 +2,11 @@
 #define STACK_H
 
 enum SoN {STUFF,NPC};
+class Action {};
+class Stuff {};
+class Npc {};
+class HudTerro {};
+class Simulation {};
 
 class Stack {
  public :
@@ -11,7 +16,7 @@ class Stack {
 	void sendNpc (Npc*);
 	void sendStuff(Stuff*);
 	void setHud (HudTerro* h);
-	void setSim (simulation* s);
+	void setSim (Simulation* s);
 	Npc* getNpc ();
 	Stuff getStuff () ;
 	Stuff* getBasic();
