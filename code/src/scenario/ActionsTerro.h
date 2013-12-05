@@ -7,8 +7,10 @@
 #include "StuffList.h"
 #include "simulation/npc.h"
 #include "generation/tile.h"
+#include "Actions.h"
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
+
 
 std::string stringOfActions (Actions a);
 

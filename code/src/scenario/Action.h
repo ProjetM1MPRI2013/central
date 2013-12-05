@@ -9,7 +9,6 @@ class Player;
 class Simulation;
 #include "../simulation/simulation.h"
 
-enum Actions {DROP,ATTACK,PLANT,RELOAD,NONE};
 
 class Action {
  public:

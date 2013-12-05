@@ -1,6 +1,7 @@
 #include "Stack.h"
 
 Stack::Stack (){
+  actionsName = Actions::NONE;
 };
 
 void Stack::setHud(HudTerro* h ) {
@@ -8,10 +9,10 @@ void Stack::setHud(HudTerro* h ) {
 };
 
 Stuff* Stack::getBasic() {
-	return this->BasicStuff;
+	return this->basicStuff;
 };
 
-Stuff* Stack::getSim() {
+Simulation* Stack::getSim() {
 	return this->sim;
 };
 
@@ -22,25 +23,25 @@ Stuff* Stack::getStuff() {
 };
 
 
-Npc* Stack::getNpc()) {
+NPC* Stack::getNpc()) {
 	Npc* n((this->NpcList).front());
 	(this->NpcList).pop_front();
 	return n;
 };
 
 Actions Stack::getActionsName() {
-	return (this->ActionsName);
+	return (this->actionsName);
 };
 
-Actions Stack::setActionsName(Actions a) {
-	(this->ActionsName)= a;
+void Stack::setActionsName(Actions a) {
+	(this->actionsName)= a;
 };
 
 void Stack::cancel () {
 	this->SoNList.clear ();
 	this->NpcList.clear ();
 	this->StuffList.clear ();
-	this->BasicStuff = 0;
+	this->basicStuff = 0;
 	this->ActionName = NONE;
 };
 
@@ -51,10 +52,10 @@ std::list<SoN> SoNOfActions (Actions a) {
 			return std::list<SoN>;
 		break;
 		case ATTACK :
-			return (std::list<SoN> (1,NPC));
+			return (std::list<SoN> (1,SON_NPC));
 		break;
 		case RELOAD :
-			return (std::list<SoN> (1,STUFF));
+			return (std::list<SoN> (1,SON_STUFF));
 		break;
 		case PLANT :
 			return std::list<SoN>;
@@ -63,7 +64,7 @@ std::list<SoN> SoNOfActions (Actions a) {
 };
 
 Action ActionOfState(Stack* s, Actions a) {
-	Stuff* b(s->BasicStuff());
+  Stuff* b(s->getBasic());
 	Simulation* sim(s->getSim());
 	switch (a)
 		{
@@ -100,7 +101,7 @@ void Stack::sendAction () {
 		(this->hud)->setwf(CLICK) = NONE;
 	};
 	else
-	{ if ((this->SoNList).front()= NPC)
+	{ if ((this->SoNList).front()= SON_NPC)
 		{
 			(this->hud).setwf(CLICK)
 		}
@@ -113,12 +114,12 @@ void Stack::sendAction () {
 
 void Stack::newAction(Actions a, Stuff* sf) {
 	this->SoNList = (SoNOfActions a);
-	this->BasicStuff-> sf;
+	this->basicStuff-> sf;
 	this->sendAction();
 };
 
 void SendNpc(Npc* n) {
-	if ((this->SoNList).front() = NPC)
+	if ((this->SoNList).front() = SON_NPC)
 	{
 		(this->NpcList).push_front(Npc*);
 		(this->SoNList).pop_front();
