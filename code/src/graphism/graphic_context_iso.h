@@ -42,8 +42,8 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   void addSpriteTilePack(SpriteTilePack stp);
 
  private:
-  vector<TexturePack> texVector;
-  vector<SpriteTilePack> tilepackVector;
+  std::vector<TexturePack> texVector;
+  std::vector<SpriteTilePack> tilepackVector;
   Geography* map;
    
 };
