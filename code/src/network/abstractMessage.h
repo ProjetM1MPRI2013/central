@@ -50,6 +50,8 @@ public :
    */
   virtual AbstractMessage* copy() =0 ;
 
+  virtual ~AbstractMessage(){ }
+
 };
 
 #endif // ABSTRACTMESSAGE_H

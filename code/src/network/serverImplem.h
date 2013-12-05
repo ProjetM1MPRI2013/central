@@ -35,9 +35,11 @@ class ServerImplem : public Server {
 
   virtual void broadcast_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
     //TODO missing implementation
+    return ;
   }
   virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
     //TODO missing implementation
+    return *(new std::vector<AbstractMessage *>()) ;
   }
 
  public :
