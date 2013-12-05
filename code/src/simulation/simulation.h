@@ -112,8 +112,8 @@ public :
 private :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
-  Client client;
-  Server server;
+  Client* client;
+  Server* server;
   bool isServer;
   int MAP_SIZE;
   int TILE_SIZE_X;
