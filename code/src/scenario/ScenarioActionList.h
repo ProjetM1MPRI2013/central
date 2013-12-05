@@ -21,27 +21,30 @@ class ChangeDirection: public ScenarioAction {
    */
   NewMov newMovement;
 
-  ChangeDirection(int id, NewMov mov);
+  ChangeDirection(int id, NewMov mov, Simulation* s);
 
   virtual void run();
 };
 
 class AddCops: public ScenarioAction {
 
-	public:
-		int number;
-		float x;
-		float y;
-		AddCops (int n, float xx, float yy);
+ public:
+  int number;
+  float x;
+  float y;
+  AddCops (int n, float xx, float yy,Simulation* s);
+  virtual void run ();
 };
 
 
 
 class AddCams: public ScenarioAction {
-	public:
-		int number;
-		float x;
-		float y;
+ public:
+  int number;
+  float x;
+  float y;
+  AddCams(int number,float x,float y,Simulation* s);
+  virtual void run ();
 };
 
 /**
@@ -59,7 +62,7 @@ class Explosion: public ScenarioAction {
    */
   int power;
 
-  Explosion (Tile* t,int p);
+  Explosion (Tile* t,int p,Simulation* s);
 
   virtual void run ();
 };
@@ -75,7 +78,7 @@ public:
    */
   NPC* target;
 
-  KillNPC(NPC* t);
+  KillNPC(NPC* t,Simulation* s);
 
   virtual void run ();
 };

@@ -36,6 +36,7 @@ class Camera {
  public :
   bool isInSight(NPC& npc);
   Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
+  Camera(float x, float y, float entretien);
   float getEntretien();
 };
 

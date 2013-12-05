@@ -12,12 +12,12 @@ Client& Network::createClient(ClientInfo c_info){
     return *(new ClientImplem(c_info)) ;
 }
 
-Server& Network::createDummyServer(){
-    return *(new DummyServer()) ;
+Server* Network::createDummyServer(){
+    return (new DummyServer()) ;
 }
 
-Client& Network::createDummyClient(Server& server){
-        return *(new DummyClient((DummyServer&) server)) ;
+Client* Network::createDummyClient(Server* server){
+        return (new DummyClient((DummyServer*) server)) ;
 }
 
 

@@ -2,8 +2,8 @@
 #include "dummyClient.h"
 #include "netEvent.h"
 
-DummyClient::DummyClient(DummyServer& server) : received_messages(){
-  this->server = &server ;
+DummyClient::DummyClient(DummyServer* server) : received_messages(){
+  this->server = server ;
   this->server->addClient(*this);
   this->addMessage(*(new NetEvent(NetEvent::SERV_RESP)),NetEvent::getMsgType());
 }
