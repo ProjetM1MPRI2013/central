@@ -15,7 +15,7 @@ class Action;
 #include "eventListener.h"
 #include "time.h"
 #include "player.h"
-#include "../ne"
+#include "../network/network.h"
 
 /**
  * @brief The Simulation class

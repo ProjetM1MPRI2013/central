@@ -2,6 +2,7 @@
 #define UPDATEGENERATOR_H
 #include "server.h"
 #include "gameUpdate.h"
+class Simulation;
 #include "simulation/simulation.h"
 
 /**

@@ -3,6 +3,7 @@
 
 #include "server.h"
 #include "client.h"
+class UpdateGenerator;
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
 #include "simulation/simulation.h"
