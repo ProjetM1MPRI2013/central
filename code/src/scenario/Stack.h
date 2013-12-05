@@ -5,13 +5,20 @@ enum SoN {STUFF,NPC};
 
 class Stack {
  public :
-	Stack (HudTerro h);
+	Stack ();
 	void cancel ();
 	void newAction (string sg, Stuff* sf);
 	void sendNpc (Npc*);
 	void sendStuff(Stuff*);
+	void setHud (HudTerro* h);
+	void setSim (simulation* s);
+	Npc* getNpc ();
+	Stuff getStuff () ;
+	Stuff* getBasic();
+	Simulation* getSim();
  private :
-	HudTerro hud ;
+	Simulation* sim;
+	HudTerro* hud ;
 	void sendAction ();
 	std::string ActionName;
 	Stuff* BasicStuff;
@@ -19,5 +26,10 @@ class Stack {
 	std::list<Npc*> NpcList;
 	std::list<Stuff*> StuffList;
 };
+
+std::list<SoN> SoNOfActions (Actions* a);
+
+Action ActionOfState(Stack* s, Actions* a);
+
 
 #endif
