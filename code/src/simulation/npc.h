@@ -137,5 +137,7 @@ class NPC : public WithUuid, public Positionable {
   int TextureOffsetX();
   
   int TextureOffsetY();
+
+  bool TextureIsInit();
 };
 #endif

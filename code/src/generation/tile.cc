@@ -115,17 +115,17 @@ sf::Sprite Tile::getSprite(){
   return sprite;
 }
 
-void setTexture(SpriteTilePack* stp){
+void Tile::setTexture(SpriteTilePack* stp){
   this->stp = stp;
   this->sprite.setTexture(stp->texture);
   this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
   return;
 }
     
-int getOriginSpriteX(){
-  return stp->originX:
+int Tile::getOriginSpriteX(){
+  return stp->originX;
 }
     
-int getOriginSpriteY(){
+int Tile::getOriginSpriteY(){
   return stp->originY;
 }

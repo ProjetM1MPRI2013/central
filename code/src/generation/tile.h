@@ -9,7 +9,7 @@ enum TileType {roadH, roadV, intersection, banque, immeuble}; // énumération d
 
 struct SpriteTilePack
 {
-  sf::Texture tex;
+  sf::Texture texture;
   // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
   int originX;
   int originY;
