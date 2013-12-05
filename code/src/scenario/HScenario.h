@@ -1,13 +1,13 @@
 #ifndef HSCENARIO_H
 #define HSCENARIO_H
 
-
+class Simulation;
 #include "Action.h"
 #include "ActionsTerro.h"
 #include "ActionsPC.h"
 #include "ScenarioAction.h"
 
-class Simulation;
+
 
 //Quickfix
 //Replace with includes
