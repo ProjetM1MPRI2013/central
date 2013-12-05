@@ -8,6 +8,9 @@ class Npc {};
 class HudTerro {};
 class Simulation {};
 
+#include "Action.cc"
+#include "../hud/hudTerro.cc"
+
 class Stack {
  public :
 	Stack ();

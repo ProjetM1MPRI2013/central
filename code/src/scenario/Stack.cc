@@ -1,6 +1,5 @@
 #include "Stack.h"
-#include "Action.cc"
-#include "../hud/hudTerro.cc"
+
 
 
 Stack::Stack (){
