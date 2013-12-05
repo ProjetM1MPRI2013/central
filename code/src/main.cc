@@ -5,6 +5,10 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <interfaceinit/interface_init.h>
 #include <generation/geography.h>
+
+int client () {
+
+}
 int main() {
 	int sizeFenetre[3];
 	bool isFullScreen;
