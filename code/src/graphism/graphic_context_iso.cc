@@ -18,11 +18,11 @@
     int w = map->getMapWidth(), h = map->getMapHeight();
     states.transform *= getTransform();
     
-    for(int k = h-1; k > -w; k--)
+    for(int k = w-1; k > -h; k--)
     {
-      for(int j = h - 1; j >= 0; j--)
+      for(int j = min(w - 1, h+k-1); j >= max(k,0); j--)          // Vérifié par le calcul
       {
-        int i = k-j;
+        int i = j - k;
         Tile* tilec = map->getTile(i,j);
         sf::Sprite sp = tilec->getSprite();
         sp.setPosition(sf::Vector2f( i * DOWN_TILE(0) + j * RIGHT_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X,  i * DOWN_TILE(1) + j * RIGHT_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y));

@@ -213,10 +213,20 @@ class Tile {
      */
     void setCoordBorough(Coordinates& CBorough);
     
+    
+    /**
+     *@brief Sets the texture of the tile
+     */
     void setTexture(SpriteTilePack* stp);
     
+    /**
+     *@brief Get the origin X of the building in the texture
+     */
     int getOriginSpriteX();
     
+    /**
+     *@brief Get the origin Y of the building in the texture
+     */
     int getOriginSpriteY();
     
 }
