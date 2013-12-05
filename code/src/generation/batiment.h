@@ -28,7 +28,7 @@ class Batiment {
    * @param file : the file where the buildings caracteristics are
    * @param line : the line of the file we have to see for this building
    */ 
-  Batiment(std::string file, int line);
+  Batiment(const char* file, int line);
   
   TileType getType();
   int getWeight();

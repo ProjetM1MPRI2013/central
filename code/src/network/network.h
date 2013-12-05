@@ -3,6 +3,7 @@
 
 #include "server.h"
 #include "client.h"
+class UpdateGenerator;
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
 #include "simulation/simulation.h"
@@ -49,7 +50,7 @@ public :
      * No serialization is carried out. Only hard copy of the data passed.
      * @return An instance of the Server Class.
      */
-    static Server& createDummyServer() ;
+    static Server* createDummyServer() ;
 
     /**
      * @brief createDummyClient
@@ -63,7 +64,7 @@ public :
      * @param server The server to communicate with
      * @return The newly created client.
      */
-    static Client& createDummyClient(Server & server) ;
+    static Client* createDummyClient(Server * server) ;
 
 
     /**

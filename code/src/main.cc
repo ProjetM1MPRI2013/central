@@ -11,6 +11,7 @@
 #include <simulation/simulation.h>
 #include <time.h>
 #include <thread>
+#include <tilemap.h>
 
 void client(int id, Geography * geo, int nbPlayer, int mapSize,
 		int TileSizeX, int TileSizeY, Network net, Server* serveur,
@@ -22,6 +23,8 @@ void client(int id, Geography * geo, int nbPlayer, int mapSize,
 	sf::RenderWindow window;
 	Simulation simu = Simulation(mapSize, TileSizeX, TileSizeY, nbPlayer, id,
 			geo);
+
+	TileMap tilemap = TileMap(&simu,geo);
 	if (isFullScreen) {
 		window.create(video_mode, "Game", sf::Style::Fullscreen);
 	} else {
@@ -58,8 +61,7 @@ void client(int id, Geography * geo, int nbPlayer, int mapSize,
 		tPrec = tNow;
 		sf::Time dtTime = sf::seconds(dt);
 		simu.run(dtTime);
-		window.clear();
-
+		tilemap.run(&window);
 		window.display();
 	}
 	return;

@@ -1,6 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 class Action;
+class Player;
 #include "../scenario/Action.h"
 #include "../scenario/Stuff.h"
 #include "ScenarioAction.h"
@@ -15,7 +16,8 @@ class Action;
 #include "eventListener.h"
 #include "time.h"
 #include "player.h"
-#include "../ne"
+#include "../network/network.h"
+
 
 /**
  * @brief The Simulation class

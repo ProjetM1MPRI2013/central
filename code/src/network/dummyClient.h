@@ -26,7 +26,7 @@ public:
    * The server will copy any update to the client
    * @param server : the server the Client will connect to
    */
-  DummyClient(DummyServer& server);
+  DummyClient(DummyServer* server);
 
   /**
    * @brief addMessage : adds a pending message to this client

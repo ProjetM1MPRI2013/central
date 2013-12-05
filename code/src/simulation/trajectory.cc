@@ -1,5 +1,6 @@
 #include "trajectory.h"
 #include "../generation/tile.h"
+#include "tilewrapper.h"
 
 #include <vector>
 #include <list>

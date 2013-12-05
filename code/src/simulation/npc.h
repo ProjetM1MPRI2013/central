@@ -41,6 +41,18 @@ class NPC : public WithUuid, public Positionable {
 
   /**
    * @brief NPC
+   * Creates a new NPC with an empty trajectory
+   * (for the client, since creating the trajectory would compute the pathfinding)
+   * @param s : the NPC's speed
+   * @param f : the NPC's initial fear level
+   * @param h : the NPC's hitbox size
+   * @param tex: the texture pack of the sprite cheet of the animation
+   */
+  NPC(float s,float f,float h,TexturePack* tex);
+
+
+  /**
+   * @brief NPC
    * creates a new NPC by copying an existing one
    * @param n: the NPC to copy
    */
@@ -83,6 +95,14 @@ class NPC : public WithUuid, public Positionable {
    * @return the NPC's Trajectory as a reference
    */
   Trajectory& getTrajectory();
+
+  /**
+   * @brief setTrajectory
+   * sets the NPC's trajectory
+   * (the server shouldn't use it)
+   * @param t : the new trajectory
+   */
+  void setTrajectory(Trajectory& t);
 
   /**
    * @brief setSpeed

@@ -13,6 +13,17 @@ NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& ma
   return;
 }
 
+NPC::NPC(float s,float f,float h,TexturePack* tex) {
+  trajectory = Trajectory();
+  shocked = false;
+  speed = s;
+  fear = f;
+  hitboxSize = h;
+  anim = Animation(tex);
+  return;
+}
+
+
 NPC::NPC(NPC& n) {
   trajectory = Trajectory(n.getTrajectory());
   shocked = n.isShocked();
@@ -104,6 +115,11 @@ void NPC::TextureAnim(TexturePack* tex){
 
 Trajectory& NPC::getTrajectory() {
   return trajectory;
+}
+
+void NPC::setTrajectory(Trajectory& t) {
+  trajectory = t;
+  return;
 }
 
 int NPC::TextureOffsetX(){
