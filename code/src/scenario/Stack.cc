@@ -27,7 +27,7 @@ Npc* Stack::getNpc()) {
 };
 
 
-void Stack::clear () {
+void Stack::cancel () {
 	this->SoNList.clear ();
 	this->NpcList.clear ();
 	this->StuffList.clear ();
@@ -101,13 +101,13 @@ void Stack::SendAction () {
 	};
 };
 
-void Stack::newAction(string sg, Stuff* sf) {
-	this->SoNList = SoNOfString sg;
+void Stack::newAction(Actions* a, Stuff* sf) {
+	this->SoNList = SoNOfActions a;
 	this->BasicStuff-> sf;
 	this->sendAction();
 };
 
-void SendNpc(Npc*) {
+void SendNpc(Npc* n) {
 	if ((this->SoNList).front() = NPC)
 	{
 		(this->NpcList).push_front(Npc*);
@@ -119,7 +119,7 @@ void SendNpc(Npc*) {
 		/*todo : envoyer message d'erreur*/
 	};
 };
-void SendStuff(Stuff*) {
+void SendStuff(Stuff* s) {
 	if ((this->SoNList).front() = Stuff)
 	{
 		(this->StuffList).push_front(Stuff*);
