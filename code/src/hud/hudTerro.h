@@ -7,11 +7,13 @@
 #include <sstream> 
 #include "scenario/ActionsTerro.h" 
 
+enum ButtonState {INVENT, ACTIONS} 
+
 class Hud 
 {
   public: 
-    void event(); 
-    void callback(); 
+    void event(sf::Event event); 
+    void callback(tgui::Callback callback); 
     void draw(); 
 
 
@@ -23,7 +25,8 @@ class Hud
     std::list<std::string> currentActions; 
     std::list<tgui::Button::Ptr> buttonsList; 
     bool waitForClick; 
-
+    ButtonState currentState; 
+    ButtonState nextState; 
 
 };
 
