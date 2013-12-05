@@ -1,38 +1,46 @@
 #include "ActionsTerro.h"
 
 /*to ask to denys to implemente */
-bool isInThePack(Stuff* stuff) { return true ;};
 int distance(NPC* npc) {return 0;};
 bool isPlantable (Tile* t) {return true;};
 
 
-Drop :: Drop (Stuff* s) : Action ("Drop") {
+
+bool isInThePack(Simulation* s, Stuff* stuff) {
+  std::list<Stuff*> inventory = s->getPlayer()->getInventory();
+  for (std::list<Stuff*>::iterator it = inventory.begin(); it != inventory.end(); ++it){
+    if ((*it)->stuffID == stuff->stuffID){return true;};
+  };
+  return false;
+};
+
+Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
   stu = s;
 };
 
-Attack :: Attack (Weapon* weapon,NPC* victim)  : Action ("Attack") {
+Attack :: Attack (Weapon* weapon,NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
   vict = victim;
   weap = weapon;
 };
 
 
-Plant :: Plant (Bomb* bomb,Tile* zone )  : Action ("Plant") {
+Plant :: Plant (Bomb* bomb,Tile* zone, Simulation* sim)  : Action ("Plant",sim) {
   bo = bomb;
   z = zone;
 };
 
-Reload :: Reload (Gun* gun,Ammunition* ammunition) : Action ("Reload") {
+Reload :: Reload (Gun* gun, Ammunition* ammunition, Simulation* sim) : Action ("Reload",sim) {
   g = gun;
   ammu = ammunition;
 };
 
-bool Drop::isActionPossible(){return isInThePack(this->stu);};
+bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {return;};
 
 
 bool Plant::isActionPossible(){
   return (
-	  (isInThePack(this->bo)) 
+	  (isInThePack(this->simulation,this->bo)) 
 	  && (isPlantable (this->z))
 	  );
 };
@@ -40,8 +48,8 @@ void Plant::doAction () {return;};
 
 
 bool Reload::isActionPossible(){
-  return ((isInThePack(this->g))
-	  && (isInThePack( this->ammu))
+  return ((isInThePack(this->simulation,this->g))
+	  && (isInThePack(this->simulation,this->ammu))
 	  );
 };
 void Reload::doAction () {return;};
@@ -49,7 +57,7 @@ void Reload::doAction () {return;};
 
 
 bool Attack::isActionPossible(){
-  return ((isInThePack(this-> weap))
+  return ((isInThePack(this->simulation,this-> weap))
 	  && ( (this->weap)->getRange() <= distance (this->vict) )
 	  );
 };

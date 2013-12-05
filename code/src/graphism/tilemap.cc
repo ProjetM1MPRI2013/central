@@ -60,15 +60,14 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 
-void createTiles(int* Tilesbite, Geography geo)
+void TileMap::createTiles()
   {
 	unsigned int mapwidth = 100;
 	unsigned int mapheight = 100;
-//	Tilesbite = malloc((mapwidth*mapheight) * sizeof(int)); (à remettre quand j'appelerai la fonction)
         for (unsigned int i = 0; i < mapwidth; ++i)
             for (unsigned int j = 0; j < mapheight; ++j)
             {
-		switch((geo.getTile(i,j))->getType()) {
+		switch((geo->getTile(i,j))->getType()) {
 		 
 		case BLANK: {
 		Tilesbite[i + j * mapwidth]=0;
@@ -83,19 +82,19 @@ void createTiles(int* Tilesbite, Geography geo)
 		Tilesbite[i + j * mapwidth]=3;
 			   }
 		case HOUSE: {
-		if ((geo.getTile(i,j))->getAnxiety()<50)
+		if ((geo->getTile(i,j))->getAnxiety()<50)
 		{Tilesbite[i + j * mapwidth]=4;}
 		  else {
-			 if ((geo.getTile(i,j))->getAnxiety()<75)
+			 if ((geo->getTile(i,j))->getAnxiety()<75)
 			 	{Tilesbite[i + j * mapwidth]=5;}
 			 else {Tilesbite[i + j * mapwidth]=6;}
 			}
 			   }
 		case BANK: {
-		if ((geo.getTile(i,j))->getAnxiety()<50)
+		if ((geo->getTile(i,j))->getAnxiety()<50)
 		{Tilesbite[i + j * mapwidth]=7;}
 		  else {
-			 if ((geo.getTile(i,j))->getAnxiety()<75)
+			 if ((geo->getTile(i,j))->getAnxiety()<75)
 			 	{Tilesbite[i + j * mapwidth]=8;}
 			 else {Tilesbite[i + j * mapwidth]=9;}
 			} 
@@ -103,4 +102,18 @@ void createTiles(int* Tilesbite, Geography geo)
 	    }
 	    }
 	    return;
+}
+
+TileMap::TileMap(Simulation* simu, Geography* geo){
+this->simu=simu;
+this->geo=geo;
+this->load("../../../sprite/tileset.jpg", sf::Vector2u(225, 225), Tilesbite , 100, 100);
+createTiles();
+}
+
+void TileMap::run(sf::RenderWindow* window){
+  this->createTiles();
+  window->clear();
+  window->draw(*this);
+  window->display();
 }
