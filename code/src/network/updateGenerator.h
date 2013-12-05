@@ -19,7 +19,7 @@ public:
    * @param globalState : the global state that will be synced over the network
    * @param server : the server used for communication
    */
-  UpdateGenerator(Simulation& globalState, Server& server);
+  UpdateGenerator(Simulation* globalState, Server* server);
 
   /**
    * @brief update : A call to this method will generate the gameUpdates for all the Clients, and will
