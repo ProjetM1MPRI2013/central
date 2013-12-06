@@ -1,5 +1,8 @@
 #include "Stack.h"
 #include "../hud/hudTerro.h"
+/*todo*/
+
+Tile* getTile(Simulation* s) {return 0};
 
 Stack::Stack (){
   actionsName = Actions::NONE;
@@ -81,10 +84,10 @@ Action* Stack::ActionOfStack(Actions a) {
       Stuff* amu(this->getStuff());
       return (Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim);
       };
-      /*
 	case PLANT :
-	return (Action *) new Plant (b,TODO);
-      */
+	{
+	return (Action *) new Plant (b, getTyle(sim));
+	}
     default:
       std::cerr << "Stack.cc : error in ActionOfState \n";
     };
