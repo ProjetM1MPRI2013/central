@@ -110,6 +110,7 @@ public :
     void addAgent(Agent* agent);
     void addCam(Camera* camera);
 
+    Geography* getMap(){return map;}
 
 private :
   std::list<Camera*> cameras;

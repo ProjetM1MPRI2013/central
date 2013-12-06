@@ -6,9 +6,10 @@
 class UpdateGenerator;
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
+class LocalStateUpdater;
 #include "simulation/simulation.h"
 #include "simulation/localState.h"
-
+class LocalState;
 
 /**
  * @brief The Network class

@@ -1,7 +1,8 @@
 #ifndef LOCALSTATEUPDATER_H
 #define LOCALSTATEUPDATER_H
 #include "client.h"
-#include "simulation/localState.h"
+#include "localState.h"
+class LocalState;
 
 /**
  * @brief The LocalStateUpdater class : class used to handle and apply updates received by the server
