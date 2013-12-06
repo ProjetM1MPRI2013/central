@@ -7,7 +7,7 @@
 #include "Action.h"
 #include "Actions.h"
 
-class Stuff : public Clickable {
+class Stuff {
  public :
   /**
    * @brief The stuff name
