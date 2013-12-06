@@ -32,7 +32,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     nbRand = rand();
     nbInter2 = nbRand % maxInter;
   }
-  Batiment batiment; //On va le créer à chaque fois car sinon, probleme de pointeur
+  Batiment batiment; 
   int heightInter, widthInter, choose, poids, widthRoadh, heightRoadv;
   poids = -1;
   // On choisit le type d'intersection que l'on va utiliser de maière aléatoire, à l'aide d'un poids donner à chaque intersection
@@ -114,7 +114,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
 	while(ord2<ord1){
 	  for(i2=0; i2<widthInter; i2++){
 	    for(j2=0; j2<heightRoadv; j2++) {
-	      this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0));
+	      this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);
 	    }
 	  }
 	  ord2 = ord2 + widthInter;
@@ -124,7 +124,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       while(abs2<abs1){
 	for(i2=0; i2<widthRoadh; i2++){
 	  for(j2=0; j2<heightInter; j2++) {
-	    this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0));
+	    this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);
 	  }
 	}
 	abs2 = abs2 + heightInter;
@@ -132,7 +132,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       if(i<nbInter1) {
 	for(i2=0; i2<widthInter; i2++){
 	  for(j2=0; j2<heightInter; j2++) {
-	    this->map[abs1+i2][ord1+j2] = new Tile(abs2+i2, ord0+j2, INTER, false, 0., 1., true, true, true, true, float(1.),  Coordinates(abs1,ord1),  Coordinates(0,0));
+	    this->map[abs1+i2][ord1+j2] = new Tile(abs2+i2, ord0+j2, INTER, false, 0., 1., true, true, true, true, float(1.),  Coordinates(abs1,ord1),  Coordinates(0,0), NULL);
 	  }
 	}
       }
@@ -145,7 +145,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     while(ord2<ord1){
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightRoadv; j2++) {
-	  this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0));
+	  this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);
 	}
       }
     }
@@ -166,7 +166,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1) {
   int i, j;
   for(i=abs0; i<abs1; i++){
     for(j=ord0; j<ord1; j++){
-      this->map[i][j] = new Tile(i,j,BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0));
+      this->map[i][j] = new Tile(i,j,BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
     }
   }
 }

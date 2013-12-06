@@ -1,9 +1,9 @@
-
 #include "Action.h"
 
-Action::Action(std::string n) {
+Action::Action(std::string n, Simulation* s) {
   name = n;
-  this->playerID = ""; /* to do find the player id*/
+  simulation = s;
+  this->playerID = this->simulation->getPlayer()->getID ();
 };
 
 bool Action::isActionPossible(){

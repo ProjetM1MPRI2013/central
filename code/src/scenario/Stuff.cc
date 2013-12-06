@@ -1,4 +1,6 @@
 #include "Stuff.h"
+#include "Action.h"
+#include "ActionsTerro.h"
 
 int Stuff::counter = 0;
 
@@ -13,5 +15,5 @@ Stuff::Stuff (std::string n) {
   stuffID = counter;
   counter = counter + 1;
 
-  this->actionsPossible.push_back("DropStuff");
+  this->actionsPossible.push_back(DROP);
 };

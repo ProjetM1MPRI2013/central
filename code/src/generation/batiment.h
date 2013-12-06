@@ -34,6 +34,9 @@ class Batiment {
    * @brief create a NULL Batiment
    */
   Batiment();
+
+
+
   
   TileType getType();
   int getHeight();

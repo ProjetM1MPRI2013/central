@@ -26,6 +26,7 @@ Tile& Geography::getTileRef(int i,int j){
 	return *(map[i][j]);
 }
 
+
 int Geography::getMapWidth(){
   return(MAP_WIDTH);
 }
@@ -40,3 +41,4 @@ size_t Geography::hachage(std::string seed) {
 void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1) { 
   return;
 }
+

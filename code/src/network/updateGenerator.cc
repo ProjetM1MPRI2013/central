@@ -1,7 +1,7 @@
 #include "updateGenerator.h"
 
-UpdateGenerator::UpdateGenerator(Simulation& globalState, Server& server) :
-  globalState(&globalState), server(&server)
+UpdateGenerator::UpdateGenerator(Simulation* globalState, Server* server) :
+  globalState(globalState), server(server)
 {
 }
 

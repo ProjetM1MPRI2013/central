@@ -3,6 +3,7 @@
 
 #include "server.h"
 #include "client.h"
+class UpdateGenerator;
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
 #include "simulation/simulation.h"
@@ -49,7 +50,7 @@ public :
      * No serialization is carried out. Only hard copy of the data passed.
      * @return An instance of the Server Class.
      */
-    static Server& createDummyServer() ;
+    static Server* createDummyServer() ;
 
     /**
      * @brief createDummyClient
@@ -63,7 +64,7 @@ public :
      * @param server The server to communicate with
      * @return The newly created client.
      */
-    static Client& createDummyClient(Server & server) ;
+    static Client* createDummyClient(Server * server) ;
 
 
     /**
@@ -74,7 +75,7 @@ public :
      * @param server : will be used to send the messages
      * @return A new updater in charge of synchronizing the global state.
      */
-    static UpdateGenerator& createUpdater(Simulation& globalState, Server& server) ;
+    static UpdateGenerator* createUpdater(Simulation* globalState, Server* server) ;
 
     /**
      * @brief createUpdater : creates a new updater in charge of receiving and applying updates received from the
@@ -83,7 +84,7 @@ public :
      * @param client : the object used for communication
      * @return A new updater in charge of synchronizing the local state through the network.
      */
-    static LocalStateUpdater& createUpdater(LocalState& localState, Client& client) ;
+    static LocalStateUpdater* createUpdater(LocalState* localState, Client* client) ;
 
 };
 

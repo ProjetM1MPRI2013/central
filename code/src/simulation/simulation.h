@@ -1,6 +1,9 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
-#include "Action.h"
+class Action;
+class Player;
+#include "../scenario/Action.h"
+#include "../scenario/Stuff.h"
 #include "ScenarioAction.h"
 #include "npc.h"
 #include "SFML/System.hpp"
@@ -13,6 +16,8 @@
 #include "eventListener.h"
 #include "time.h"
 #include "player.h"
+#include "../network/network.h"
+
 
 /**
  * @brief The Simulation class
@@ -23,6 +28,16 @@
 class Simulation {
 
 public :
+
+  /**
+   * @brief Set the Server object
+   */
+  void setServer(Server*);
+
+  /**
+   * @brief Set the Client object
+   */
+  void setClient(Client*);
 
   /**
    * @brief Get a player by is playerID;
@@ -36,9 +51,6 @@ public :
 
 	//crée un nouveau npc et l'ajoute dans une case
 	void ajouterNPC(int i,int j);
-
-	//supprime un npc dans la case i,j
-	void supprimerNPC(int i,int j);
 
 	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
 	void peopleGeneration();
@@ -80,7 +92,6 @@ public :
      */
     void scenarioActionPerformed(ScenarioAction a);
 
-
     //Cette fonction ne devrait pas exister [Adrien K.]
     ///**
     //  * @brief
@@ -88,10 +99,24 @@ public :
     // */
     //int actionTerroPerformed(Action a);
     int getSous();
+    void enleveSous(int n);
+
+    void supprimerNPC(NPC *);
+
+    void supprimerNPCDansCase(int i,int j);
+
+    void addAction(ScenarioAction * action);
+
+    void addAgent(Agent* agent);
+    void addCam(Camera* camera);
+
 
 private :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
+  Client* client;
+  Server* server;
+  bool isServer;
   int MAP_SIZE;
   int TILE_SIZE_X;
   int TILE_SIZE_Y;
@@ -106,9 +131,9 @@ private :
   Geography* oldMap;
   std::list<Player*> players;
   std::list<NPC *> NPCs;
+  std::list<ScenarioAction *> pendingActions;
 
 };
-
 //#include "eventListener.h"
 
 #endif // SIMULATION_H

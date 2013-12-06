@@ -3,13 +3,12 @@
 
 #include <string>
 #include "tile.h"
+#include <SFML/Graphics.hpp>
+
+class Tile;
 
 class Geography {
 
-  
-  
- public:
-  
  protected:
   static const int MAP_HEIGHT = 100;
   static const int MAP_WIDTH = 100;

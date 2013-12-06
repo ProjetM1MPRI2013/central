@@ -5,6 +5,7 @@
 #include <string>
 #include "Clickable.h"
 #include "Action.h"
+#include "Actions.h"
 
 class Stuff : public Clickable {
  public :
@@ -23,7 +24,7 @@ class Stuff : public Clickable {
   /**
    * @brief Return the list of actions possible
    */
-  std::list<std::string> getActionsPossible ();
+  std::list<Actions> getActionsPossible ();
 
   Stuff (std::string n);
 
@@ -31,7 +32,7 @@ class Stuff : public Clickable {
   /**
    * @brief The list of all actions possible on the object.
    */
-  std::list<std::string> actionsPossible;
+  std::list<Actions> actionsPossible;
 
  private:
   /**

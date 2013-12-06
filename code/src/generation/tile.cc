@@ -1,6 +1,7 @@
 #include "tile.h"
 #include "position.h"
 #include "npc.h"
+#include "../simulation/tilewrapper.h"
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
@@ -12,8 +13,13 @@ int Coordinates::getOrd() {
   return ord;
 }
 
+bool Coordinates::equals(Coordinates& c) {
+  return (abs==c.getAbs() && ord==c.getOrd());
+}
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin) :
+
+
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp) :
   batOrigin(batOriginO),
   coord(abs,ord),
   coordBorough(boroughOrigin) {
@@ -29,8 +35,12 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   //this->batOrigin = batOriginO;
   this->lenghtBat = getTLenght(typeO);
   this->weightBat = getTWeight(typeO);
-  this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas
+  // this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas // MrKulu : Inutile si je rajoute le SpriteTilePack : 
+  this->stp = stp;
+  this->sprite.setTexture(stp->texture);
+  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
   this->destructionLevel = 0.;
+  wrapper = NULL;
 }
 
 float Tile::getAnxiety(){
@@ -68,7 +78,7 @@ float Tile::getTWeight(TileType type) {
   };
   return 10; //should not happens
 }
-
+/*
 sf::Sprite& Tile::getTSprite(TileType type) {
   switch (type) {
   case ROADH: break;
@@ -80,7 +90,10 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   default: std::cerr << "Error : Tile : default case should not happen in getTSprite";
   };
   //TODO
-}
+}*/
+
+TileType Tile::getType(){
+return (this -> type);}
 
 std::list<NPC*> Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
@@ -119,4 +132,62 @@ void Tile::removeNPC (NPC* a){
 
 Coordinates& Tile::getCoord() {
   return coord;
+}
+
+
+sf::Sprite Tile::getSprite(){
+  return sprite;
+}
+
+void Tile::setTexture(SpriteTilePack* stp){
+  this->stp = stp;
+  this->sprite.setTexture(stp->texture);
+  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  return;
+}
+    
+int Tile::getOriginSpriteX(){
+  return stp->originX;
+}
+    
+int Tile::getOriginSpriteY(){
+  return stp->originY;
+}
+
+bool Tile::equals(Tile& t) {
+  return (coord.equals(t.getCoord()));
+}
+
+
+TileWrapper* Tile::getWrapper() {
+  return wrapper;
+}
+
+void Tile::setWrapper(TileWrapper* t) {
+  wrapper = t;
+  return;
+}
+
+void Tile::resetWrapper() {
+  if (wrapper) {
+    delete wrapper;
+    wrapper = NULL;
+  }
+  return;
+}
+
+
+bool Tile::getGou() {
+  return gou;
+}
+
+bool Tile::getGoh() {
+  return goh;
+}
+bool Tile::getGor() {
+  return gor;
+}
+bool Tile::getGol() {
+  return gol;
+
 }

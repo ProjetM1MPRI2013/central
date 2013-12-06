@@ -3,7 +3,7 @@
 
 
 Weapon::Weapon (std::string n): Stuff(n) {
-   this->actionsPossible.push_back("Attack");
+  this->actionsPossible.push_back(Actions::ATTACK);
 };
 
 int Weapon::getRange () {return 0;};
@@ -11,7 +11,7 @@ int Weapon::getDamage () {return 0;};
 
 
 Bomb::Bomb () : Stuff("Bomb") {
-  this->actionsPossible.push_back("Plant");
+  this->actionsPossible.push_back(PLANT);
   this->power = 1;
 };
 
@@ -28,7 +28,7 @@ Gun::Gun(int max, int dam,int ran) : Weapon ("Gun") {
   ammunitionMax = max;
   this->range = ran;
   this->damage = dam;
-  this->actionsPossible.push_back("Reload");
+  this->actionsPossible.push_back(RELOAD);
 };
 
 

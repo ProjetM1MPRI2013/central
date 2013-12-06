@@ -8,18 +8,37 @@
 
 enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
+
 class NPC;
+class TileWrapper;
+
+
+struct SpriteTilePack
+{
+  sf::Texture texture;
+  // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
+  int originX;
+  int originY;
+  // Ces variables correspondent à la boite qui encadre l'image dans la texture
+  int X1;
+  int Y1;
+  int X2;
+  int Y2;
+};
+
+
+
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
  */
 class Coordinates {
  private:
-  /*
+  /**
    * abscissa 
    */ 
   int abs;
-  /*
+  /**
    * ordinate 
    */
   int ord;
@@ -35,23 +54,31 @@ class Coordinates {
    * @brief get the abscissa
    */ 
   int getAbs();
+
   /**
    * @brief set the abscissa
    * @param abs : the new abscissa
    */
   void setAbs(int abs);
+
   /**
    * @brief get the abscissa ordinate
    */ 
   int getOrd();
+
   /**
    * @brief set the ordinate
    * @param abs : the new ordinate
    */
   void setOrd(int ord);
-}
-;
 
+  /**
+   * @brief equals
+   * returns true iff the abs and ord of the Coordinates are equal to those of the other Coordinates
+   * @param c: the Coordinates to compare
+   */
+  bool equals(Coordinates& c);
+};
 
 /**
  * @brief A tile of the map
@@ -64,6 +91,7 @@ class Tile {
    */
   TileType type;
   sf::Sprite sprite;
+  SpriteTilePack* stp;
   bool destructible;
   float anxiety;
   float populationDensity;
@@ -131,7 +159,9 @@ class Tile {
    * @param type : type of the batiment
    * @return the sprite of the bat
    */
-  sf::Sprite& getTSprite(TileType type);
+  // sf::Sprite& getTSprite(TileType type);
+
+  TileWrapper* wrapper;
   
   public:
   /**
@@ -149,8 +179,11 @@ class Tile {
    * @param speed : initial speed into the tile
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
+   * @param stp : the informations about the texture of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin);
+
+    Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp);
+
     TileType getType();
     void setType(TileType t);
     bool isDestructible();
@@ -197,6 +230,32 @@ class Tile {
      *@brief Change the borough of the tile
      */
     void setCoordBorough(Coordinates& CBorough);
+
+    /**
+     * @brief equals
+     * returns true iff the Tile is has the same coordinatees as the other tile
+     * @param t: the Tile to compare
+     */
+    bool equals(Tile& t);
+
+    TileWrapper* getWrapper();
+    void setWrapper(TileWrapper*);
+    void resetWrapper();
+    
+    /**
+     *@brief Sets the texture of the tile
+     */
+    void setTexture(SpriteTilePack* stp);
+    
+    /**
+     *@brief Get the origin X of the building in the texture
+     */
+    int getOriginSpriteX();
+    
+    /**
+     *@brief Get the origin Y of the building in the texture
+     */
+    int getOriginSpriteY();
     
 };
 

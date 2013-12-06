@@ -12,7 +12,7 @@ class Simulation; // Forward declaration
 class ScenarioAction {
  public :
 
-  ScenarioAction (std::string n);
+  ScenarioAction (std::string n, Simulation* s);
 
   /**
    * @brief The time when the action was performed.
@@ -30,7 +30,7 @@ class ScenarioAction {
    */
   virtual void run ();
 
-  static Simulation* simulation;
+  Simulation* simulation;
 } ;
 
 

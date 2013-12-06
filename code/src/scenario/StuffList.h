@@ -3,6 +3,7 @@
 
 #include "Clickable.h"
 #include "Stuff.h"
+#include <list>
 
 class Weapon : public Stuff {
  public:
