@@ -2,6 +2,39 @@
 class Stuff;
 #include "../scenario/Stack.h"
 
+std::string stringOfActions (Actions a) {
+  switch (a)
+    {
+    case DROP :
+      return "Drop";
+      break;
+    case ATTACK :
+      return "Attack";
+      break;
+    case RELOAD :
+      return "Reload";
+      break;
+    case PLANT :
+      return "Plant";
+      break;
+    };
+};
+
+HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
+{
+  this->stack = Stack();
+  this->w = window.getSize().x; 
+  this->h = window.getSize().y; 
+  this->hud = tgui::Gui(window);
+  this->inventory = simulation.getPlayer()->getInventory(); 
+  this->waitFor = WF_NONE; 
+  this->currentState = BS_INVENT; 
+  this->nextState = BS_INVENT; 
+  stack.setHud(this);
+
+};
+>>>>>>> fix
+
 void HudTerro::init() {
   this->currentState = this->nextState; 
   if (this->currentState == BS_INVENT)
