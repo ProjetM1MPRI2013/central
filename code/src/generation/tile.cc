@@ -18,7 +18,8 @@ bool Coordinates::equals(Coordinates& c) {
 }
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin, SpriteTilePack* stp) :
+
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp) :
   batOrigin(batOriginO),
   coord(abs,ord),
   coordBorough(boroughOrigin) {

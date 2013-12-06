@@ -181,7 +181,9 @@ class Tile {
    * @param boroughOrigin : initial borough of the tile
    * @param stp : the informations about the texture of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates& batOrigin, Coordinates& boroughOrigin, SpriteTilePack* stp);
+
+    Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp);
+
     TileType getType();
     void setType(TileType t);
     bool isDestructible();

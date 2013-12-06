@@ -8,13 +8,12 @@
 class Tile;
 
 class Geography {
- private :
-  static const int MAP_WIDTH  = 100;
-  static const int MAP_HEIGHT = 100;
-  Tile* map[MAP_WIDTH][MAP_HEIGHT];
 
  protected:
-  virtual size_t hachage(std::string seed);
+  static const int MAP_HEIGHT = 100;
+  static const int MAP_WIDTH = 100;
+  Tile* map[MAP_HEIGHT][MAP_WIDTH];
+  virtual std::size_t hachage(std::string seed);
   virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1);
 	
  public :
@@ -27,8 +26,8 @@ class Geography {
   float getAnxiety(int i, int j);
   Tile* getTile(int i,int j);
   Tile& getTileRef(int i,int j);
-  int getMapHeight();
   int getMapWidth();
+  int getMapHeight();
   
 }
 ;

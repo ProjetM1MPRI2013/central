@@ -1,17 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include <test/test.h>
+#include "test/test.h"
 #include <boost/asio.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <interfaceinit/interface_init.h>
-#include <generation/geography.h>
-#include <network/network.h>
-#include <network/netEvent.h>
-#include <simulation/simulation.h>
+#include "interfaceinit/interface_init.h"
+#include "generation/geography.h"
+#include "network/network.h"
+#include "network/netEvent.h"
+#include "simulation/simulation.h"
 #include <time.h>
 #include <thread>
-#include <tilemap.h>
+#include "graphism/tilemap.h"
 
 void client(int id, Geography * geo, int nbPlayer, int mapSize,
 		int TileSizeX, int TileSizeY, Network net, Server* serveur,

@@ -7,7 +7,6 @@
 
 enum SoN {SON_STUFF,SON_NPC};
 class HudTerro;
-#include "../hud/hudTerro.h"
 
 Tile* getTyle(Simulation* s);
 
