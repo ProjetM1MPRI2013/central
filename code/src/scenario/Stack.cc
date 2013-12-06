@@ -1,4 +1,5 @@
 #include "Stack.h"
+#include "../hud/hudTerro.h"
 
 Stack::Stack (){
   actionsName = Actions::NONE;
@@ -23,8 +24,8 @@ Stuff* Stack::getStuff() {
 };
 
 
-NPC* Stack::getNpc()) {
-	Npc* n((this->NpcList).front());
+NPC* Stack::getNpc() {
+	NPC* n((this->NpcList).front());
 	(this->NpcList).pop_front();
 	return n;
 };
@@ -42,100 +43,107 @@ void Stack::cancel () {
 	this->NpcList.clear ();
 	this->StuffList.clear ();
 	this->basicStuff = 0;
-	this->ActionName = NONE;
+	this->actionsName = Actions::NONE;
 };
 
 std::list<SoN> SoNOfActions (Actions a) {
-	switch (a)
-	{
-		case DROP :
-			return std::list<SoN>;
-		break;
-		case ATTACK :
-			return (std::list<SoN> (1,SON_NPC));
-		break;
-		case RELOAD :
-			return (std::list<SoN> (1,SON_STUFF));
-		break;
-		case PLANT :
-			return std::list<SoN>;
-		break;
-	};
+  switch (a)
+    {
+    case DROP :
+      return std::list<SoN> ();
+    case ATTACK :
+      return (std::list<SoN> (1,SON_NPC));
+    case RELOAD :
+      return (std::list<SoN> (1,SON_STUFF));
+    case PLANT :
+      return std::list<SoN> ();
+    default:
+      std::cerr << "Stack.cc : error in SoNOfActions \n";
+      break;
+    };
+  return std::list<SoN> ();
 };
 
-Action ActionOfState(Stack* s, Actions a) {
-  Stuff* b(s->getBasic());
-	Simulation* sim(s->getSim());
-	switch (a)
-		{
-			case DROP :
-				return Drop::Drop(b,sim);
-			break;
-			case ATTACK :
-				Npc* victim((s->NpcList).front());
-				return Attack::Attack((Weapon*)b,victim,sim);
-			break;
-			case RELOAD :
-				Ammunition* amu((s->StuffList).front());
-				return Reload::Reload ((Gun*)b,amu,sim);
-			break;
-			case PLANT :
-				return Plant::Plant (b,/*todo trouver la zone*/);
-			break;
-		};
+Action* Stack::ActionOfStack(Actions a) {
+  Stuff* b (this->getBasic());
+  Simulation* sim(this->getSim());
+  switch (a)
+    {
+    case Actions::DROP :
+      return (Action *) new Drop(b,sim);
+    case Actions::ATTACK :
+      {
+	NPC* victim(this->getNpc());
+	return (Action *) new Attack((Weapon*)b,victim,sim);
+      };
+    case Actions::RELOAD :
+      {
+      Stuff* amu(this->getStuff());
+      return (Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim);
+      };
+      /*
+	case PLANT :
+	return (Action *) new Plant (b,TODO);
+      */
+    default:
+      std::cerr << "Stack.cc : error in ActionOfState \n";
+    };
+  return new Action("lolol error", sim);
 };
 
 void Stack::sendAction () {
 	if ((this->SoNList).empty())
 	{
-		Action a(ActionOfStack(this,this->ActionName));
-		if (a.isActionPossible ())
-		{
-			a.doAction();
-		}
+		Action* a (this->ActionOfStack(this->actionsName));
+		if (a->isActionPossible ())
+		  {
+		    a->doAction();
+		  }
 		else
-		{
-			/*todo envoyer un message d'erreur*/
-		};
-		this.cancel();
-		(this->hud)->setwf(CLICK) = NONE;
-	};
+		  {
+		    /*todo envoyer un message d'erreur*/
+		  };
+		this->cancel();
+		(this->hud)->setwf(WF_NONE);
+	}
 	else
-	{ if ((this->SoNList).front()= SON_NPC)
-		{
-			(this->hud).setwf(CLICK)
-		}
-		else
-		{
-			(this->hud).setwf(ITEM)
-		}
+	  { if ((this->SoNList).front() == SON_NPC)
+	      {
+		(this->hud)->setwf(WF_CLICK);
+	      };
+	    /*
+	      else
+	      {
+	      (this->hud).setwf(ITEM)
+	      }
+	    */
 	};
 };
 
 void Stack::newAction(Actions a, Stuff* sf) {
-	this->SoNList = (SoNOfActions a);
-	this->basicStuff-> sf;
-	this->sendAction();
+  this->SoNList = (SoNOfActions (a));
+  this->basicStuff = sf;
+  this->sendAction();
 };
 
-void SendNpc(Npc* n) {
-	if ((this->SoNList).front() = SON_NPC)
+void Stack::sendNpc(NPC* n) {
+	if ((this->SoNList).front() == SON_NPC)
 	{
-		(this->NpcList).push_front(Npc*);
+		(this->NpcList).push_front(n);
 		(this->SoNList).pop_front();
-		this->sendAction;
+		this->sendAction();
 	}
 	else
 	{
 		/*todo : envoyer message d'erreur*/
 	};
 };
-void SendStuff(Stuff* s) {
-	if ((this->SoNList).front() = Stuff)
+void Stack::sendStuff(Stuff* s) {
+	if ((this->SoNList).front() == SON_STUFF)
 	{
-		(this->StuffList).push_front(Stuff*);
+		(this->StuffList).push_front(s);
 		(this->SoNList).pop_front();
-		this->sendAction;
+		this->sendAction();
 	}
 	else
 	{

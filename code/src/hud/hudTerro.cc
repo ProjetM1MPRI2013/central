@@ -9,9 +9,9 @@ HudTerro::HudTerro(sf::RenderWindow window)
   this->h = window.getsize().y; 
   tgui::Gui (this->hud)(window); 
   this->inventory = simulation->getPlayer()->getInventory(); 
-  this->waitFor = NONE; 
-  this->currentState = INVENT; 
-  this->nextState = INVENT; 
+  this->waitFor = WF_NONE; 
+  this->currentState = BS_INVENT; 
+  this->nextState = BS_INVENT; 
   stack.setHud(this);
 
 };
@@ -19,7 +19,7 @@ HudTerro::HudTerro(sf::RenderWindow window)
 HudTerro::init() = 
 {
   this->currentState = this->nextState; 
-  if (this->currentState = INVENT) 
+  if (this->currentState = BS_INVENT) 
   {
     // if the inventory must be updated
     if ((this->inventory) != (simulation->getPlayer()->getInventory())) 
@@ -102,7 +102,7 @@ HudTerro::event(sf::RenderWindow window, sf::Event event) =
       };
     };
 
-    if (waitFor == CLICK) 
+    if (waitFor == WF_CLICK) 
     {
       if (event.type == sf::Event::MouseButtonPressed) 
       {
@@ -134,7 +134,7 @@ HudTerro::callback(tgui::Callback callback) =
 {
   while((this->hud)->pollCallback(callback))
   {
-    if ((this->currentState) == INVENT)
+    if ((this->currentState) == BS_INVENT)
     {
       if (callback.id > 0 && callback.id <= (this->buttonsList).size()) 
       {
@@ -182,16 +182,16 @@ HudTerro::callback(tgui::Callback callback) =
         (this->buttonsList).push_back(button); 
 
         // Update the flag 
-        this->nextState = ACTIONS; 
+        this->nextState = BS_ACTIONS; 
       };
     };
 
-    if (this->currentState == ACTIONS) 
+    if (this->currentState == BS_ACTIONS) 
     {
       // the button 'Inventory' is clicked. 
       if (callback.id == 0) 
       {
-        this->nextState = INVENT;
+        this->nextState = BS_INVENT;
         (this->actionsList).clear;   
       };
 

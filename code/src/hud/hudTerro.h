@@ -7,9 +7,9 @@
 #include <sstream> 
 #include "../scenario/ActionsTerro.h" 
 
-enum ButtonState {INVENT, ACTIONS} 
+enum ButtonState {BS_INVENT, BS_ACTIONS} ;
 
-enum WaitFor {NONE, CLICK} 
+enum WaitFor {WF_NONE, WF_CLICK};
 
 class HudTerro 
 {
@@ -28,8 +28,8 @@ class HudTerro
      * draw(); 
      */
 
-
-  private: 
+    
+ private: 
     unsigned int w; 
     unsigned int h; 
     int i; 
@@ -41,7 +41,7 @@ class HudTerro
     ButtonState currentState; 
     ButtonState nextState; 
     Stuff* currentStuff; 
-
+    
 };
 
 

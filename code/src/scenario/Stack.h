@@ -1,5 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
+#include <cerrno>
+#include <iostream>
 #include "ActionsTerro.h"
 #include "Actions.h"
 
@@ -67,6 +69,9 @@ class Stack {
    * @brief get the simulation
    */
   Simulation* getSim();
+
+  Action* ActionOfStack(Actions a);
+
  private :
   /**
    * @brief if the Action is completed, look if it possible and do the action,
@@ -84,8 +89,6 @@ class Stack {
 };
 
 std::list<SoN> SoNOfActions (Actions a);
-
-Action* ActionOfState(Stack* s, Actions a);
 
 
 #endif
