@@ -22,6 +22,13 @@ class WithUuid {
      */
     WithUuid(): uuid(boost::uuids::random_generator()()) {}
 
+    /**
+     * @brief WithUuid
+     * Creates a new WithUuid object, with a given uuid
+     * @param uuid: the uuid
+     */
+    WithUuid(boost::uuids::uuid uuid);
+
     friend class WithUuidCmp;
     
     /**
