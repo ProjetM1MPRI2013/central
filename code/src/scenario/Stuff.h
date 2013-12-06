@@ -32,7 +32,7 @@ class Stuff : public Clickable {
   /**
    * @brief The list of all actions possible on the object.
    */
-  std::list<std::string> actionsPossible;
+  std::list<Actions> actionsPossible;
 
  private:
   /**

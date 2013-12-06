@@ -3,7 +3,7 @@
 
 
 Weapon::Weapon (std::string n): Stuff(n) {
-   this->actionsPossible.push_back(ATTACK);
+  this->actionsPossible.push_back(Actions::ATTACK);
 };
 
 int Weapon::getRange () {return 0;};
