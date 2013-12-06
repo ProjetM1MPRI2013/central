@@ -6,9 +6,6 @@
 #include "Actions.h"
 #include "preHud.h"
 
-enum SoN {
-	SON_STUFF, SON_NPC
-};
 
 Tile* getTyle(Simulation* s);
 
@@ -90,6 +87,6 @@ private:
 	std::list<Stuff*> StuffList;
 };
 
-std::list<SoN> SoNOfActions(Actions a);
+
 
 #endif
