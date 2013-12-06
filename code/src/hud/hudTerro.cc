@@ -1,19 +1,6 @@
 #include "hudTerro.h"
-class Stuff
+class Stuff;
 #include "../scenario/Stack.h"
-
-HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
-{
-  this->stack = Stack();
-  this->w = window.getSize().x; 
-  this->h = window.getSize().y; 
-  this->hud = tgui::Gui(window);
-  this->inventory = simulation.getPlayer()->getInventory(); 
-  this->waitFor = WF_NONE; 
-  this->currentState = BS_INVENT; 
-  this->nextState = BS_INVENT; 
-  stack.setHud(this);
-};
 
 void HudTerro::init() {
   this->currentState = this->nextState; 
@@ -216,4 +203,15 @@ void HudTerro::setwf(WaitFor w)
   this->waitFor = w; 
 };
 
-
+HudTerro::HudTerro (sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
+{
+  this->stack = Stack();
+  this->w = window.getSize().x;
+  this->h = window.getSize().y;
+  this->hud = tgui::Gui(window);
+  this->inventory = simulation.getPlayer()->getInventory();
+  this->waitFor = WF_NONE;
+  this->currentState = BS_INVENT;
+  this->nextState = BS_INVENT;
+  stack.setHud(this);
+};
