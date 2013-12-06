@@ -38,7 +38,7 @@ int Geography::getMapHeight(){
 size_t Geography::hachage(std::string seed) { 
   return 0;
 }
-void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1) { 
+void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file) { 
   return;
 }
 

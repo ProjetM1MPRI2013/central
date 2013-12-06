@@ -14,7 +14,7 @@ class Geography {
   static const int MAP_WIDTH = 100;
   Tile* map[MAP_HEIGHT][MAP_WIDTH];
   virtual std::size_t hachage(std::string seed);
-  virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1);
+  virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file);
 	
  public :
   /**

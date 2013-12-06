@@ -41,7 +41,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==INTER) {
       nbRand = rand();
-      if (nbRand > poids) {choose = i;}
+      if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
   Batiment intersection = Batiment(file, choose);
@@ -52,7 +52,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADH && batiment.getHeight() == heightInter) {
       nbRand = rand();
-      if (nbRand > poids) {choose = i;}
+      if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
   Batiment roadh = Batiment(file, choose);
@@ -62,7 +62,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADV && batiment.getWidth() == widthInter) {
       nbRand = rand();
-      if (nbRand > poids) {choose = i ;}
+      if (nbRand > poids) {choose = i ; poids = nbRand;}
     }
   }
   Batiment roadv = Batiment(file, choose);
@@ -108,7 +108,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     }
     for (j=0; j<nbInter2; j++) {
       ord1 = ordInter[j];
-      fillBuildings(abs0, ord0, abs1, ord1);
+      fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
       ord2 = ord0;
       if(i<nbInter1){
 	while(ord2<ord1){
@@ -144,7 +144,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       ord0 = ord1;
     }
     ord1 = MAP_HEIGHT - 1;
-    fillBuildings(abs0, ord0, abs1, ord1);
+    fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
     ord2 = ord0;
     while(ord2<ord1){
       for(i2=0; i2<widthInter; i2++){
@@ -167,12 +167,46 @@ std::size_t Generation1::hachage(std::string seed) {
 }
 
 
-void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1) {
-  // On commence par une version débile en mettant des cases BLANK partout
-  int i, j;
-  for(i=abs0; i<abs1; i++){
-    for(j=ord0; j<ord1; j++){
-      this->map[i][j] = new Tile(i,j,BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
+
+void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file) {
+  int nbRand, i, j;
+  int poidsBank = 100;
+  int poidsHouse = 150;
+  srand(nbRand);
+  int choose = 0;
+  int poids = -1;
+  Batiment batiment; 
+  for(i=1; i<=nbLine; i++) {
+    batiment = Batiment(file, i);
+    if(batiment.getType()==BANK && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
+      nbRand = rand();
+      nbRand = nbRand % poidsBank;
+      if (nbRand > poids) {choose = i; poids = nbRand;}
+    }
+    if(batiment.getType()==HOUSE && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
+      nbRand = rand();
+      nbRand = nbRand % poidsHouse;
+      if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
+  if(choose==0){
+    for(i=abs0; i<abs1; i++){
+      for(j=ord0; j<ord1; j++){
+	this->map[i][j] = new Tile(i,j,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
+      }
+    }
+  }
+  else {
+    batiment = Batiment(file, choose);
+    int width = batiment.getWidth();
+    int height = batiment.getHeight();
+    for(i=abs0; i<abs0 + width ; i++){
+      for(j=ord0; j<ord1 + height; j++){
+	this->map[i][j] = new Tile(i,j,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
+      }
+    }
+    fillBuildings(abs0 + width, int(ord0), int(abs1), int(ord1), int(nbRand), int(nbLine), std::string(file));
+    fillBuildings(abs0, ord0 + height, abs0 + width -1 , ord1, nbRand, int(nbLine), file);
+  }
+  return;
 }
