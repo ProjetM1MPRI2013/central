@@ -181,10 +181,16 @@ class Tile {
    * @param boroughOrigin : initial borough of the tile
    * @param stp : the informations about the texture of the tile
    */
-
     Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp);
 
+    /**
+     * @brief gives the type of the tile, it's a generalist type
+     * @return the type of the tile, which is in a enum
+     */
     TileType getType();
+    /**
+     * 
+     */
     void setType(TileType t);
     bool isDestructible();
     float getAnxiety();

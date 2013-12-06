@@ -205,6 +205,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
 	this->map[i][j] = new Tile(i,j,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
       }
     }
+    // il faut prendre d'autres rectangles pour que cela touche toujours le bord !!! (ou mieux)
     fillBuildings(abs0 + width, int(ord0), int(abs1), int(ord1), int(nbRand), int(nbLine), std::string(file));
     fillBuildings(abs0, ord0 + height, abs0 + width -1 , ord1, nbRand, int(nbLine), file);
   }
