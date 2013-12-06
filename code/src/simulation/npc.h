@@ -41,14 +41,15 @@ class NPC : public WithUuid, public Positionable {
 
   /**
    * @brief NPC
-   * Creates a new NPC with an empty trajectory
+   * Creates a new NPC with an empty trajectory and a given uuid
    * (for the client, since creating the trajectory would compute the pathfinding)
    * @param s : the NPC's speed
    * @param f : the NPC's initial fear level
    * @param h : the NPC's hitbox size
    * @param tex: the texture pack of the sprite cheet of the animation
+   * @param uuid: the uuid for the NPC
    */
-  NPC(float s,float f,float h,TexturePack* tex);
+  NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid);
 
 
   /**
@@ -159,7 +160,7 @@ class NPC : public WithUuid, public Positionable {
    * @brief getSprite
    * @return returns the sprite of the NPC
    */  
-  sf::Sprite getSprite();
+  sf::Sprite& getSprite();
   
   /**
    * @brief getAnim

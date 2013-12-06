@@ -35,11 +35,17 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
     * @param target: the target where the map have to be drawn at
     * @param states: transformations applied to the map
     **/
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   
   void addTexturePack(TexturePack t);
 
   void addSpriteTilePack(SpriteTilePack stp);
+
+  /**
+   * @brief load
+   * Loads the textures on the objects of the map
+   **/
+  void load();
 
  private:
   std::vector<TexturePack> texVector;

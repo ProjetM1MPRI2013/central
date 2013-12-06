@@ -7,3 +7,8 @@
 boost::uuids::uuid WithUuid::getUuid() {
   return uuid;
 }
+
+WithUuid::WithUuid(boost::uuids::uuid uuid) {
+  this->uuid = uuid;
+  return;
+}

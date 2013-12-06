@@ -13,7 +13,7 @@ NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& ma
   return;
 }
 
-NPC::NPC(float s,float f,float h,TexturePack* tex) {
+NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : WithUuid(uuid) {
   trajectory = Trajectory();
   shocked = false;
   speed = s;
@@ -93,7 +93,7 @@ bool NPC::hasArrived() {
   return trajectory.getHasArrived();
 }
 
-sf::Sprite NPC::getSprite(){
+sf::Sprite& NPC::getSprite(){
   assert(this->anim.isInit());
   this->anim.nextFrame();                  // Pas certain 
   return this->anim.getSprite();

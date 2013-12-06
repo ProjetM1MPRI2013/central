@@ -215,7 +215,7 @@ class Tile {
     void setLenghtBat(int l);
     int getWeightBat();
     void setWeightBat(int w);
-    sf::Sprite getSprite();
+    sf::Sprite& getSprite();
     Coordinates& getCoord();
     void setCoord(Coordinates& coord);
 
@@ -262,6 +262,11 @@ class Tile {
      *@brief Get the origin Y of the building in the texture
      */
     int getOriginSpriteY();
+
+    /**
+     * @brief Returns true if the tile has a texture
+     **/
+    bool TextureIsInit();
     
 };
 

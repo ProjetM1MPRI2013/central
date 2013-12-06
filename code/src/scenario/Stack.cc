@@ -6,9 +6,12 @@ Tile* getTile(Simulation* s) {return 0;};
 
 Stack::Stack (){
   actionsName = Actions::NONE;
+  basicStuff = 0;
+  hud = 0;
+  sim = 0;
 };
 
-void Stack::setHud(HudTerro* h ) {
+void Stack::setHud(PreHud* h) {
 	this->hud = h;
 };
 
@@ -77,12 +80,12 @@ Action* Stack::ActionOfStack(Actions a) {
     case Actions::ATTACK :
       {
 	NPC* victim(this->getNpc());
-	return (Action *) new Attack((Weapon*)b,victim,sim);
+	return ((Action *) new Attack((Weapon*)b,victim,sim));
       };
     case Actions::RELOAD :
       {
       Stuff* amu(this->getStuff());
-      return (Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim);
+      return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
       };
 	case PLANT :
 	{
