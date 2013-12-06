@@ -1,4 +1,5 @@
-#include "hudTerro.h" 
+#include "hudTerro.h"
+class Stuff
 #include "../scenario/Stack.h"
 
 HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
@@ -12,12 +13,11 @@ HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation
   this->currentState = BS_INVENT; 
   this->nextState = BS_INVENT; 
   stack.setHud(this);
-
 };
 
 void HudTerro::init() {
   this->currentState = this->nextState; 
-  if (this->currentState = BS_INVENT) 
+  if (this->currentState == BS_INVENT)
   {
     // if the inventory must be updated
     if ((this->inventory) != (simulation.getPlayer()->getInventory())) 
@@ -32,7 +32,7 @@ void HudTerro::init() {
 
       // Updtate the inventory 
       (this->inventory).clear();
-      this->inventory = (simulation.getPlayer()->getInventory()); 
+      this->inventory == (simulation.getPlayer()->getInventory());
 
       // Create the new buttons 
       this->i = 0; 
