@@ -77,6 +77,6 @@ Tile& TileWrapper::getTile() {
 
 
 bool TileWrapperComparator::operator() (TileWrapper* lhs,TileWrapper* rhs) const {
-  assert(lhs->getDistance()!=-1 && !rhs->getDistance()!=-1);
+  assert(lhs->getDistance()!=-1 && rhs->getDistance()!=-1);
   return ((lhs->getDistance()+lhs->getHeuristic()) > (rhs->getDistance()+lhs->getHeuristic()));
 }
