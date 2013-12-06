@@ -2,7 +2,7 @@
 #include "../hud/hudTerro.h"
 /*todo*/
 
-Tile* getTile(Simulation* s) {return 0};
+Tile* getTile(Simulation* s) {return 0;};
 
 Stack::Stack (){
   actionsName = Actions::NONE;
@@ -86,7 +86,7 @@ Action* Stack::ActionOfStack(Actions a) {
       };
 	case PLANT :
 	{
-	return (Action *) new Plant (b, getTyle(sim));
+	  return (Action *) new Plant ((Bomb *)b, getTile(sim));
 	}
     default:
       std::cerr << "Stack.cc : error in ActionOfState \n";
