@@ -101,6 +101,8 @@ void HudTerro::event(sf::RenderWindow window, sf::Event event)
           case sf::Keyboard::D: 
             //NewMovement (NewMov::P_RIGHT); 
             break; 
+	default:
+	  break;
         };
       };
 
@@ -120,6 +122,8 @@ void HudTerro::event(sf::RenderWindow window, sf::Event event)
           case sf::Keyboard::D: 
             //NewMovement (NewMov::R_RIGHT); 
             break; 
+	default:
+	  break;
         };
       };
     };

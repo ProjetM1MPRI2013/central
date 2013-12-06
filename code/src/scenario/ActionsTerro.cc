@@ -4,23 +4,6 @@
 int distance(NPC* npc) {return 0;};
 bool isPlantable (Tile* t) {return true;};
 
-std::string stringOfActions (Actions a) {
-	switch (a)
-		{
-			case DROP :
-				return "Drop";
-			break;
-			case ATTACK :
-				return "Attack";
-			break;
-			case RELOAD :
-				return "Reload";
-			break;
-			case PLANT :
-				return "Plant";
-			break;
-		};
-};
 
 
 bool isInThePack(Simulation* s, Stuff* stuff) {

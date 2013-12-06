@@ -86,7 +86,7 @@ Action* Stack::ActionOfStack(Actions a) {
       };
 	case PLANT :
 	{
-	  return (Action *) new Plant ((Bomb *)b, getTile(sim));
+	  return (Action *) new Plant ((Bomb *)b, getTile(sim),sim);
 	}
     default:
       std::cerr << "Stack.cc : error in ActionOfState \n";

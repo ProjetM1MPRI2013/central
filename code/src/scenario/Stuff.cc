@@ -15,5 +15,5 @@ Stuff::Stuff (std::string n) {
   stuffID = counter;
   counter = counter + 1;
 
-  this->actionsPossible.push_back(ACTIONS::DROP);
+  this->actionsPossible.push_back(Actions::DROP);
 };
