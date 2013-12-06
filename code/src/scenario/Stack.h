@@ -7,7 +7,6 @@
 
 enum SoN {SON_STUFF,SON_NPC};
 class HudTerro;
-#include "../hud/hudTerro.h"
 
 /**
  * @brief The object Stack will stack informations needed to create an action and send it when he can
