@@ -114,7 +114,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
 	while(ord2<ord1){
 	  for(i2=0; i2<widthInter; i2++){
 	    for(j2=0; j2<heightRoadv; j2++) {
-	      this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);
+	      if(i2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, false, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
+	      else if(i2==(widthInter-1)){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, false, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
+	      else {this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
 	    }
 	  }
 	  ord2 = ord2 + widthInter;
@@ -124,7 +126,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       while(abs2<abs1){
 	for(i2=0; i2<widthRoadh; i2++){
 	  for(j2=0; j2<heightInter; j2++) {
-	    this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);
+	    if(j2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., false, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
+	    else if(j2 ==(heightInter - 1)){this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, false, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
+	    else {this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
 	  }
 	}
 	abs2 = abs2 + heightInter;
@@ -145,7 +149,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     while(ord2<ord1){
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightRoadv; j2++) {
-	  this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);
+	  if(i2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, false, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
+	  else if(i2==(widthInter-1)){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, false, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
+	  else {this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
 	}
       }
     }
