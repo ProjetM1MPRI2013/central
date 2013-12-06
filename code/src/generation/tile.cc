@@ -1,6 +1,6 @@
 #include "tile.h"
-#include "position.h"
-#include "npc.h"
+#include "../simulation/position.h"
+#include "../simulation/npc.h"
 #include "../simulation/tilewrapper.h"
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}

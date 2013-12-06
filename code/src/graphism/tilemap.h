@@ -9,10 +9,10 @@
 #include <fstream>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <../network/network.h>
-#include <../network/netEvent.h>
+#include "../network/network.h"
+#include "../network/netEvent.h"
 #include <chat_event.h>
-#include "geography.h"
+#include "../generation/geography.h"
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:

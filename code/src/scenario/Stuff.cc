@@ -4,7 +4,7 @@
 
 int Stuff::counter = 0;
 
-std::list<std::string> Stuff::getActionsPossible () {return actionsPossible;};
+std::list<Actions> Stuff::getActionsPossible () {return actionsPossible;};
 
 Stuff::Stuff (std::string n) {
   name = n;
@@ -15,5 +15,5 @@ Stuff::Stuff (std::string n) {
   stuffID = counter;
   counter = counter + 1;
 
-  this->actionsPossible.push_back(DROP);
+  this->actionsPossible.push_back(ACTIONS::DROP);
 };
