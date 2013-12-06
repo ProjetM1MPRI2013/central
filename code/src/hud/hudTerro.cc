@@ -20,6 +20,8 @@ std::string stringOfActions (Actions a) {
     };
 };
 
+
+
 HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
 {
   this->stack = Stack();
@@ -33,7 +35,7 @@ HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) : simulation
   stack.setHud(this);
 
 };
->>>>>>> fix
+
 
 void HudTerro::init() {
   this->currentState = this->nextState; 
@@ -234,17 +236,4 @@ void HudTerro::draw()
 void HudTerro::setwf(WaitFor w)
 {
   this->waitFor = w; 
-};
-
-HudTerro::HudTerro (sf::RenderWindow window, Simulation& simulation) : simulation(simulation)
-{
-  this->stack = Stack();
-  this->w = window.getSize().x;
-  this->h = window.getSize().y;
-  this->hud = tgui::Gui(window);
-  this->inventory = simulation.getPlayer()->getInventory();
-  this->waitFor = WF_NONE;
-  this->currentState = BS_INVENT;
-  this->nextState = BS_INVENT;
-  stack.setHud(this);
 };
