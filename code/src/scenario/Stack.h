@@ -8,6 +8,8 @@
 enum SoN {SON_STUFF,SON_NPC};
 class HudTerro;
 
+Tile* getTyle(Simulation* s);
+
 /**
  * @brief The object Stack will stack informations needed to create an action and send it when he can
  */

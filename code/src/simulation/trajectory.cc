@@ -64,12 +64,12 @@ void Trajectory::pathfinding(Geography& map) {//stupide pour l'instant, A* apres
   Tile& tileStart = start.isInTile(map);
   Tile& tileTarget = target.isInTile(map);
 
-  TileWrapper* s = new TileWrapper(&tileStart,tileStart);
+  TileWrapper* s = new TileWrapper(&tileStart,tileTarget);
   s->setDistance(0);
   s->setOpen(true);
   open.push(s);
 
-  TileWrapper* t = new TileWrapper(&tileTarget,tileStart);
+  TileWrapper* t = new TileWrapper(&tileTarget,tileTarget);
 
   TileWrapper* temp;
   bool found = false;
@@ -105,7 +105,7 @@ void Trajectory::pathfinding(Geography& map) {//stupide pour l'instant, A* apres
         if (y) {
           explore(y,z,open);
         } else {
-          TileWrapper* y = new TileWrapper(&tempTile,tileStart);
+          TileWrapper* y = new TileWrapper(&tempTile,tileTarget);
           explore(y,z,open);
         }
       }

@@ -6,7 +6,6 @@
 TileWrapper::TileWrapper() {
   tile = NULL;
   distance = -1;
-  infinite = true;
   parent = NULL;
   heuristic = -1;
   open = false;
@@ -18,7 +17,6 @@ TileWrapper::TileWrapper(Tile* t,Tile& s) {
   tile = t;
   t->setWrapper(this);
   distance = -1;
-  infinite = true;
   parent = NULL;
   float i = s.getCoord().getAbs() - (*t).getCoord().getAbs();
   float j = s.getCoord().getOrd() - (*t).getCoord().getOrd();
@@ -39,15 +37,6 @@ void TileWrapper::setDistance(float d) {
 
 float TileWrapper::getHeuristic() const {
   return heuristic;
-}
-
-bool TileWrapper::isInfinite() const {
-  return infinite;
-}
-
-void TileWrapper::setInfinite(bool b) {
-  infinite = b;
-  return;
 }
 
 bool TileWrapper::isOpen() const {
@@ -88,6 +77,6 @@ Tile& TileWrapper::getTile() {
 
 
 bool TileWrapperComparator::operator() (TileWrapper* lhs,TileWrapper* rhs) const {
-  assert(!lhs->isInfinite() && !rhs->isInfinite());
+  assert(lhs->getDistance()!=-1 && !rhs->getDistance()!=-1);
   return ((lhs->getDistance()+lhs->getHeuristic()) > (rhs->getDistance()+lhs->getHeuristic()));
 }
