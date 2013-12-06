@@ -26,12 +26,12 @@ Tile& Geography::getTileRef(int i,int j){
 	return *(map[i][j]);
 }
 
-int Geography::getMapLenght(){
-  return(MAP_LENGHT);
+int Geography::getMapWidth(){
+  return(MAP_WIDTH);
 }
 
-int Geography::getMapWeight(){
-  return(MAP_WEIGHT);
+int Geography::getMapHeight(){
+  return(MAP_HEIGHT);
 }
 
 size_t Geography::hachage(std::string seed) { 

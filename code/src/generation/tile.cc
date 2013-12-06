@@ -13,7 +13,7 @@ int Coordinates::getOrd() {
 }
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates& batOriginO, Coordinates& boroughOrigin) :
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin) :
   batOrigin(batOriginO),
   coord(abs,ord),
   coordBorough(boroughOrigin) {

@@ -150,7 +150,7 @@ class Tile {
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates& batOrigin, Coordinates& boroughOrigin);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin);
     TileType getType();
     void setType(TileType t);
     bool isDestructible();

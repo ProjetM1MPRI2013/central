@@ -13,8 +13,8 @@ Batiment::Batiment(std::string file, int line){
     assert(getline(fichier, ligne));
   }
   fichier.close();
-  size_t espace0 = 0; 
-  size_t espace = ligne.find(" ");
+  std::size_t espace0 = 0; 
+  std::size_t espace = ligne.find(" ");
   assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace);
 
@@ -29,12 +29,12 @@ Batiment::Batiment(std::string file, int line){
   espace = ligne.find(" ",espace0);
   assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
-  this->weight = atoi(mot.c_str());
+  this->height = atoi(mot.c_str());
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
   assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
-  this->lenght = atoi(mot.c_str());
+  this->width = atoi(mot.c_str());
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
   assert(espace!=std::string::npos);
@@ -42,8 +42,8 @@ Batiment::Batiment(std::string file, int line){
   std::string nombre;
   size_t espace1, espace2;
   espace2 = 2;
-  for(i = 0; i<this->lenght; i++){
-    for(j = 0; j<this->weight; j++) {
+  for(i = 0; i<this->width; i++){
+    for(j = 0; j<this->height; j++) {
       espace1 = espace2 + 1;
       espace2 = mot.find_first_of("|]",espace1);
       assert(espace2!=std::string::npos);
@@ -78,16 +78,26 @@ Batiment::Batiment(std::string file, int line){
 }
 
 
+Batiment::Batiment() {
+  this->type = TileType::BLANK;
+  this->height = 1;
+  this->width = 1;
+  this->speed[1][1] = 0;
+  this->filePictures = "";
+  this->picture = new Coordinates(0,0);
+}
+
+
 TileType Batiment::getType() {
   return(this->type);
 }
 
-int Batiment::getWeight() {
-  return(this->weight);
+int Batiment::getHeight() {
+  return(this->height);
 }
 
-int Batiment::getLenght() {
-  return(this->lenght);
+int Batiment::getWidth() {
+  return(this->width);
 }
 
 floatMatrix Batiment::getSpeed() {

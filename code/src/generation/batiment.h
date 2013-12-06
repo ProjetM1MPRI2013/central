@@ -16,8 +16,8 @@ class Batiment {
 
  private: 
   TileType type;
-  int weight;
-  int lenght;
+  int height;
+  int width;
   floatMatrix speed;
   std::string filePictures;
   Coordinates* picture;
@@ -29,10 +29,15 @@ class Batiment {
    * @param line : the line of the file we have to see for this building
    */ 
   Batiment(std::string file, int line);
+
+  /**
+   * @brief create a NULL Batiment
+   */
+  Batiment();
   
   TileType getType();
-  int getWeight();
-  int getLenght();
+  int getHeight();
+  int getWidth();
   floatMatrix getSpeed();
   std::string getFilePictures();
   Coordinates* getPicture();
