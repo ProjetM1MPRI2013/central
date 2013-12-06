@@ -9,13 +9,13 @@
  **/
 struct TexturePack {
   sf::Texture texture;
-  unsigned int nbAnim;
-  unsigned int* nbFrames;
-  unsigned int* widthSprite;
-  unsigned int heightSprite;
-  int* offsetX;
-  int* offsetY;
-  bool* isLoop;
+  std::vector<int> nbAnim;
+  std::vector<int> nbFrames;
+  std::vector<int> widthSprite;
+  int heightSprite;
+  std::vector<int> offsetX;
+  std::vector<int> offsetY;
+  std::vector<bool> isLoop;
 };
 
 /**
@@ -48,7 +48,7 @@ class Animation
   /**
    * @brief Give the sprite of the animation
    **/
-  virtual sf::Sprite getSprite();
+  virtual sf::Sprite& getSprite();
   
   /**
    * @brief Gives the horizontal offset of the location of where the sprite should be drawn

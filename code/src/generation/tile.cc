@@ -37,8 +37,11 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->weightBat = getTWeight(typeO);
   // this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas // MrKulu : Inutile si je rajoute le SpriteTilePack : 
   this->stp = stp;
-  this->sprite.setTexture(stp->texture);
-  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  if(stp)
+    {
+      this->sprite.setTexture(stp->texture);
+      this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+    }  
   this->destructionLevel = 0.;
   wrapper = NULL;
 }
@@ -135,14 +138,18 @@ Coordinates& Tile::getCoord() {
 }
 
 
-sf::Sprite Tile::getSprite(){
-  return sprite;
+sf::Sprite& Tile::getSprite(){
+  sf::Sprite& rs = sprite;
+  return rs;
 }
 
 void Tile::setTexture(SpriteTilePack* stp){
   this->stp = stp;
-  this->sprite.setTexture(stp->texture);
-  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  if(stp)
+    {
+      this->sprite.setTexture(stp->texture);
+      this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+    }
   return;
 }
     
@@ -190,4 +197,7 @@ bool Tile::getGor() {
 bool Tile::getGol() {
   return gol;
 
+}
+bool Tile::TextureIsInit() {
+  return (stp != NULL);
 }
