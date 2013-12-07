@@ -171,9 +171,17 @@ int main() {
 		       gci.addTexturePack(tp1);
 		       gci.addSpriteTilePack(stp1);
 		       gci.addSpriteTilePack(stp2);
-		       gci.load(); // Charge les textures de la map
+		       gci.load(); // Charge les textures de base de la map
 
                        //inputState s = { true, window };
+
+		       // Chargement de la vue
+
+		       sf::View isoView;
+		       isoView.setSize(sf::Vector2f(size.x,size.y));  // A placer dans la boucle pricipale si on veut avoir une fenêtre de taille variable pendant le jeu.
+		       isoView.setCenter(OFFSET_X+40,OFFSET_Y+20);  // Pour tester
+
+		       window.setView(isoView); // Pour tester
 
                        while (window.isOpen()) {
 			 sf::Event event;
