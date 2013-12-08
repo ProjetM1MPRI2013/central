@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include "batiment.h"
+#include <iostream>
 
 
 /**

@@ -6,6 +6,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include "interfaceinit/interface_init.h"
 #include "generation/geography.h"
+#include "generation/generation1.h"
 #include "network/network.h"
 #include "network/netEvent.h"
 #include "simulation/simulation.h"
@@ -13,12 +14,35 @@
 #include <thread>
 #include "graphism/tilemap.h"
 #include "graphism/graphic_context_iso.h"
+#include <unistd.h>
+#include <stdio.h>
+
+#define DEBUG true
+
+#ifdef WINDOWS
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+ #endif
+
+void printcwd(){
+  char cCurrentPath[FILENAME_MAX];		
+  if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+    {
+      std::cerr << "main: printcwd failed" << std::endl;
+    }	       		
+  std::printf ("The current working directory is %s", cCurrentPath);
+}
+
+
 
 void client(int id, Geography * geo, int nbPlayer, int mapSize,
-                int TileSizeX, int TileSizeY, Network net, Server* serveur,
+                int TileSizeX, int TileSizeY, Server* serveur,
                 int sizeFenetre[3], bool isFullScreen) {
 
-        Client* client = net.createDummyClient(serveur);
+  Client* client = Network::createDummyClient(serveur);
         sf::VideoMode video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1],
                         sizeFenetre[2]);
         sf::RenderWindow window;
@@ -107,23 +131,22 @@ int main() {
         if (b == 0) {
                 return 0;
         } else {
-                std::cout << 1 <<std::endl;
-                Geography geo = Geography("424242");
+                std::cout << 1 <<std::endl;		
+
+                Geography geo = (Geography) Generation1("424242");
+		geo.printMatrix();
 
                 std::cout << 2 <<std::endl;
-                Network net;
+                Server* serveur = Network::createDummyServer();
 
                 std::cout << 3 <<std::endl;
-                Server* serveur = net.createDummyServer();
-
-                std::cout << 4 <<std::endl;
                 std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
-                                50, (Network) net, serveur, (int *) sizeFenetre,
+                                50, serveur, (int *) sizeFenetre,
                                 (bool) isFullScreen);
 
-                std::cout << 5 <<std::endl;
+                std::cout << 4 <<std::endl;
 		choucroute.join();
-                std::cout << 6 <<std::endl;
+                std::cout << 5 <<std::endl;
                 return 1;
         };
         //Defintion of the window
@@ -150,9 +173,11 @@ int main() {
 		       Geography geo = Geography("424242"); // Il faudra un jour qu'on m'explique ce que dois faire main, parce que là c'est n'importe quoi ~ MrKulu
 
 		       sf::Texture a1, b1, b2;
-		       assert(!a1.loadFromFile("Anim.png"));
-		       assert(!b1.loadFromFile("Road_NS.png"));
-		       assert(!b2.loadFromFile("maison1.png"));
+		       //A priori le working directory est src/interfaceinit, alors il faut remonter loin ...
+		       printcwd();
+		       assert(!a1.loadFromFile("../../../sprite/Anim.png"));
+		       assert(!b1.loadFromFile("../../../sprite/Road_NS.png"));
+		       assert(!b2.loadFromFile("../../../sprite/maison1.png"));
 		       
 		       // Definition of the Context Iso
 

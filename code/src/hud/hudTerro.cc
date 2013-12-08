@@ -16,7 +16,12 @@ std::string stringOfActions(Actions a) {
 	case PLANT:
 		return "Plant";
 		break;
+	case NONE:
+	  return "None";
+	  break;
 	};
+	//Should not happens
+	return "Error";
 }
 ;
 
@@ -146,7 +151,7 @@ void HudTerro::callback(tgui::Callback callback) {
 			if (callback.id > 0 && callback.id <= (this->buttonsList).size()) {
 				// Save the selected item
 				std::list<Stuff*>::iterator it = (this->inventory).begin();
-				for (int i = 1; i < callback.id; i++) {
+				for (unsigned int i = 1; i < callback.id; i++) {
 					++it;
 				};
 				this->currentStuff = (*it);
@@ -203,7 +208,7 @@ void HudTerro::callback(tgui::Callback callback) {
 			// an action is clicked.
 			if (callback.id > 0 && callback.id < (this->buttonsList).size()) {
 				std::list<Actions>::iterator it = (this->actionsList).begin();
-				for (int i = 1; i < callback.id; i++) {
+				for (unsigned int i = 1; i < callback.id; i++) {
 					++it;
 				};
 				stack.newAction((*it), this->currentStuff);

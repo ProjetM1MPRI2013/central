@@ -4,6 +4,8 @@
 #include <string>
 #include "tile.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <cerrno>
 
 class Tile;
 
@@ -90,6 +92,8 @@ class Geography {
    */
   int getMapHeight();
   
+
+  void printMatrix();
 }
 ;
 

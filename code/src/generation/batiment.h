@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <assert.h> 
+#include <iostream>
 #include <string>
 #include "tile.h"
 
@@ -30,7 +31,7 @@ class Batiment {
   /**
    * the mask of speed of the building, each tile can have a different factor for the speed of the perso
    */
-  floatMatrix speed;
+  floatMatrix* speed;
   /**
    * the name of the file where the sprite of the building is
    */
@@ -52,7 +53,7 @@ class Batiment {
    * @brief create a NULL Batiment
    */
   Batiment();
-
+  ~Batiment();
 
 
   /**
@@ -74,7 +75,7 @@ class Batiment {
    * @brief gives the mask of speed of the building
    * @return the mask of speed of the building, each tile can have a different factor for the speed of the perso
    */
-  floatMatrix getSpeed();
+  floatMatrix* getSpeed();
   /**
    * @brief gives the name of the file where the sprite of the building is
    * @return the name of the file where the sprite of the building is
