@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <assert.h> 
+#include <iostream>
 #include <string>
 #include "tile.h"
 
@@ -15,11 +16,29 @@ typedef std::vector<std::vector<float>> floatMatrix;
 class Batiment {
 
  private: 
+  /**
+   * the type of the building, one of the enum
+   */
   TileType type;
+   /**
+   * the height of the building
+   */
   int height;
+  /**
+   * the width of the building
+   */
   int width;
-  floatMatrix speed;
+  /**
+   * the mask of speed of the building, each tile can have a different factor for the speed of the perso
+   */
+  floatMatrix* speed;
+  /**
+   * the name of the file where the sprite of the building is
+   */
   std::string filePictures;
+  /**
+   * the position of the sprite of the building in the file
+   */
   Coordinates* picture;
 
  public:
@@ -34,15 +53,38 @@ class Batiment {
    * @brief create a NULL Batiment
    */
   Batiment();
+  ~Batiment();
 
 
-
-  
+  /**
+   * @brief gives the type of the building
+   * @return the type, one of the enum
+   */
   TileType getType();
+  /**
+   * @brief gives the height of the building
+   * @return the height of the building
+   */
   int getHeight();
+  /**
+   * @brief gives the width of the building
+   * @return the width of the building
+   */
   int getWidth();
-  floatMatrix getSpeed();
+  /**
+   * @brief gives the mask of speed of the building
+   * @return the mask of speed of the building, each tile can have a different factor for the speed of the perso
+   */
+  floatMatrix* getSpeed();
+  /**
+   * @brief gives the name of the file where the sprite of the building is
+   * @return the name of the file where the sprite of the building is
+   */
   std::string getFilePictures();
+  /**
+  * @brief gives the position of the sprite of the building in the file
+  * @return the position of the sprite of the building in the file
+  */
   Coordinates* getPicture();
   
   

@@ -3,7 +3,14 @@
 #include "../simulation/npc.h"
 #include "../simulation/tilewrapper.h"
 
+#define DEBUG true
+
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
+
+Coordinates::Coordinates(const Coordinates& a){
+  this->abs = a.abs;
+  this->ord = a.ord;
+}
 
 int Coordinates::getAbs() {
   return abs;
@@ -19,10 +26,11 @@ bool Coordinates::equals(Coordinates& c) {
 
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp) :
-  batOrigin(batOriginO),
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0) :
   coord(abs,ord),
+  batOrigin(batOriginO),
   coordBorough(boroughOrigin) {
+  if (DEBUG){std::cout << "Tile : begin\n";}
   this->type = typeO;
   this->destructible = destructibleO;
   this->anxiety = anxietyO;
@@ -36,11 +44,15 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->lenghtBat = getTLenght(typeO);
   this->weightBat = getTWeight(typeO);
   // this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas // MrKulu : Inutile si je rajoute le SpriteTilePack : 
-  this->stp = stp;
-  this->sprite.setTexture(stp->texture);
-  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  this->stp = stp0;
+  if(this->stp)
+    {
+      this->sprite.setTexture(this->stp->texture);
+      this->sprite.setTextureRect(sf::IntRect(this->stp->X1,this->stp->Y1,this->stp->X2,this->stp->Y2));
+    }  
   this->destructionLevel = 0.;
   wrapper = NULL;
+  if (DEBUG){std::cout << "Tile : end\n";}
 }
 
 float Tile::getAnxiety(){
@@ -135,14 +147,18 @@ Coordinates& Tile::getCoord() {
 }
 
 
-sf::Sprite Tile::getSprite(){
-  return sprite;
+sf::Sprite& Tile::getSprite(){
+  sf::Sprite& rs = sprite;
+  return rs;
 }
 
 void Tile::setTexture(SpriteTilePack* stp){
   this->stp = stp;
-  this->sprite.setTexture(stp->texture);
-  this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+  if(stp)
+    {
+      this->sprite.setTexture(stp->texture);
+      this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+    }
   return;
 }
     
@@ -191,3 +207,26 @@ bool Tile::getGol() {
   return gol;
 
 }
+bool Tile::TextureIsInit() {
+  return (stp != NULL);
+}
+
+void Tile::printTileType(){
+  switch(this->type){
+  case ROADH:
+    std::cout << "ROADH";
+  case  ROADV:
+    std::cout << "ROADV";
+  case  INTER:
+    std::cout << "INTER";
+  case  BANK:
+    std::cout << "BANK ";
+  case  HOUSE:
+    std::cout << "HOUSE";
+  case  BLANK:
+    std::cout << "BLANK";
+  default:
+    std::cerr << "Tile : printTileType error" << std::endl;
+    break;
+  }
+};

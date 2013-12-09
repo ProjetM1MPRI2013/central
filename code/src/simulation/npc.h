@@ -160,7 +160,7 @@ class NPC : public WithUuid, public Positionable {
    * @brief getSprite
    * @return returns the sprite of the NPC
    */  
-  sf::Sprite getSprite();
+  sf::Sprite& getSprite();
   
   /**
    * @brief getAnim

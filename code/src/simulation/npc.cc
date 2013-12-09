@@ -93,7 +93,7 @@ bool NPC::hasArrived() {
   return trajectory.getHasArrived();
 }
 
-sf::Sprite NPC::getSprite(){
+sf::Sprite& NPC::getSprite(){
   assert(this->anim.isInit());
   this->anim.nextFrame();                  // Pas certain 
   return this->anim.getSprite();

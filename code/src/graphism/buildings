@@ -1,2 +1,1 @@
-Type largeur longueur matriceVitesse fichierImage posImage
-BANK  4 2 [[1|1|1|1||1|1|1|1]] sprite.jpg (10,12)
+BANK 4 3 [[1.1|1.2|2.3|0.4||0.5|0.6|0.7|0.8||1|2|3|4]] sprite.jpg (10,12)

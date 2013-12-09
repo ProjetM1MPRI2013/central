@@ -33,7 +33,7 @@ struct SpriteTilePack
  * Useful to caracterize a tile in the map
  */
 class Coordinates {
- private:
+ public:
   /**
    * abscissa 
    */ 
@@ -42,13 +42,14 @@ class Coordinates {
    * ordinate 
    */
   int ord;
- public:
+
   /**
    * @brief create a point, with an abscissa and an ordinate
    * @param abs : the abscissa
    * @param ord : the ordinate
    */
   Coordinates(int abs, int ord);
+  Coordinates(const Coordinates& a);
 
   /**
    * @brief get the abscissa
@@ -119,7 +120,7 @@ class Tile {
   /*
    * the origin of the batiment, which is rectangular (we can decompose a batiment)
    */
-  Coordinates& batOrigin;
+  Coordinates batOrigin;
   /*
    * total lenght of the bat
    */
@@ -135,7 +136,7 @@ class Tile {
   /*
    * coordinates of the caracteristic tile of the borough of our tile
    */
-  Coordinates& coordBorough;
+  Coordinates coordBorough;
 
   /**
    * @brief List of the NPC currently in the tile
@@ -180,11 +181,19 @@ class Tile {
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
    * @param stp : the informations about the texture of the tile
+   *
+   * The batOrigin and the boroughOrigin argument are copied during the construction, they can be deleted after the call to the constructo
    */
-
     Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp);
 
+    /**
+     * @brief gives the type of the tile, it's a generalist type
+     * @return the type of the tile, which is in a enum
+     */
     TileType getType();
+    /**
+     * 
+     */
     void setType(TileType t);
     bool isDestructible();
     float getAnxiety();
@@ -209,7 +218,7 @@ class Tile {
     void setLenghtBat(int l);
     int getWeightBat();
     void setWeightBat(int w);
-    sf::Sprite getSprite();
+    sf::Sprite& getSprite();
     Coordinates& getCoord();
     void setCoord(Coordinates& coord);
 
@@ -256,6 +265,13 @@ class Tile {
      *@brief Get the origin Y of the building in the texture
      */
     int getOriginSpriteY();
+
+    /**
+     * @brief Returns true if the tile has a texture
+     **/
+    bool TextureIsInit();
+
+    void printTileType();
     
 };
 

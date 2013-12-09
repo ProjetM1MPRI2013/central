@@ -40,9 +40,10 @@ void Animation::setAnim(const int t)
   return;
 }
 
-sf::Sprite Animation::getSprite()
+sf::Sprite& Animation::getSprite()
 {
-  return this->spr;
+  sf::Sprite& rs = spr;
+  return rs;
 }
 
 
