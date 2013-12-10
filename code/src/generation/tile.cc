@@ -215,8 +215,8 @@ bool Tile::TextureIsInit() {
 
 void Tile::printTileType(){
   //if (DEBUG) {std::cout << "Print Tile Type" << std::endl;}
-  std::cout << this->lenghtBat;
-  std::cout << this->type;
+  //std::cout << this->lenghtBat;
+  //std::cout << this->type;
   switch(this->type){
   case ROADH:
     std::cout << "ROADH";

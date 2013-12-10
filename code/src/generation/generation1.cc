@@ -34,12 +34,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   nbInter2 = 0;
   while (nbInter1 < minInter) {
     nbRand = rand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbInter1 = (nbRand % maxInter) + 1;
   }
   if (DEBUG) {std::cout << "nbInter1 : " << nbInter1 << std::endl;};
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   while (nbInter2 < minInter)  {
     nbRand = rand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbInter2 = (nbRand % maxInter) + 1;
   }
   if (DEBUG) {std::cout << "nbInter2 : " << nbInter2 << std::endl;};
@@ -58,6 +60,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==INTER) {
       nbRand = rand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
@@ -72,6 +75,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
       nbRand = rand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
@@ -83,6 +87,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
       nbRand = rand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i ; poids = nbRand;}
     }
   }
@@ -96,9 +101,11 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   max = MAP_WIDTH - nbInter1*widthInter;
   for (i=0; i<nbInter1; i++) {
     nbRand = rand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
     while(nbRand % widthRoadV != 0){
       nbRand = rand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       nbRand = nbRand % (max-min+1);
     }
     absInter[i] = nbRand + min;
@@ -110,6 +117,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   max = MAP_HEIGHT - nbInter2*heightInter;
   for (j=0; j<nbInter2; j++) {
     nbRand = rand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
     while(nbRand % heightRoadH != 0){
       nbRand = rand();
