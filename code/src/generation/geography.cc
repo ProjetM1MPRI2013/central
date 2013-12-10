@@ -6,6 +6,12 @@
 
 Geography::Geography(std::string seed){
   //new Generation1(seed); ?? Generation1 inherits from Geography
+  for (int i=0;i<MAP_HEIGHT;i++) {
+    for (int j=0;j<MAP_WIDTH;j++) {
+      map[i][j] = NULL;
+    }
+  }
+  return;
 }
 
 float Geography::getAnxiety(int i, int j){

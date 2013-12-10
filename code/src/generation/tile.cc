@@ -220,16 +220,22 @@ void Tile::printTileType(){
   switch(this->type){
   case ROADH:
     std::cout << "ROADH";
+    break;
   case  ROADV:
     std::cout << "ROADV";
+    break;
   case  INTER:
     std::cout << "INTER";
+    break;
   case  BANK:
     std::cout << "BANK ";
+    break;
   case  HOUSE:
     std::cout << "HOUSE";
+    break;
   case  BLANK:
     std::cout << "BLANK";
+    break;
   default:
     std::cerr << "Tile : printTileType error" << std::endl;
     break;
