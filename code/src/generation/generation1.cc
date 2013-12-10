@@ -139,7 +139,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(j=0; j<nbInter2; j++){
       ord1 = ordInter[j];
       // On met des batiments dans le pâté de maison
-      fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
+      fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
       // On met la route verticale
       longV = (abs1 - abs0) / widthRoadV ;
       for(k=0; k<longV; k++) {
@@ -168,7 +168,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     }
     // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
     ord1 = MAP_HEIGHT;
-    fillBuildings(abs0,ord0,abs1,ord1, nbRand, nbLine, file);
+    fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     longH = (ord1 - ord0) / heightRoadH;
     for(k=0; k<longV; k++) {
       for(i2=0; i2<widthInter; i2++){
@@ -186,7 +186,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for(j=0; j<nbInter2; j++){
     ord1 = ordInter[j];
     // On met des batiments dans le paté de maison
-    fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
+    fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     // On met la route verticale
     longV = (abs1 - abs0) / widthRoadV ;
     for(k=0; k<longV; k++) {
@@ -199,7 +199,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     ord0 = ord1 + heightInter;
   }
   ord1 = MAP_HEIGHT;
-  fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
+  fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
 }
@@ -215,7 +215,7 @@ std::size_t Generation1::hachage(std::string seed) {
 
 void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file) {
   //J'ai choisis une valeur par défault pour la seed [Adrien K.]
-  int nbRand = 424242;
+  int nbRand = seed;
   
   int fillbcpt = 0;
   
