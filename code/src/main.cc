@@ -170,7 +170,7 @@ int main() {
 
 		       // Loading Textures
 
-		       Geography geo = Geography("424242"); // Il faudra un jour qu'on m'explique ce que dois faire main, parce que là c'est n'importe quoi ~ MrKulu
+		       Geography geo = (Geography) Generation1("424242"); // Il faudra un jour qu'on m'explique ce que dois faire main, parce que là c'est n'importe quoi ~ MrKulu
 
 		       sf::Texture a1, b1, b2;
 		       //A priori le working directory est src/interfaceinit, alors il faut remonter loin ...

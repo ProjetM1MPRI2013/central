@@ -20,11 +20,11 @@ class Geography {
   /**
    * Height of the map
    */
-  static const int MAP_HEIGHT = 100;
+  static const int MAP_HEIGHT = 12;
   /**
    * Width of the map
    */
-  static const int MAP_WIDTH = 100;
+  static const int MAP_WIDTH = 12;
   /**
    * The map, which is a matrix of tiles
    */

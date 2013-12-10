@@ -31,7 +31,9 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   batOrigin(batOriginO),
   coordBorough(boroughOrigin) {
   if (DEBUG){std::cout << "Tile : begin\n";}
+  if (DEBUG){std::cout << abs << " " << ord << std::endl;}
   this->type = typeO;
+  if (DEBUG){std::cout << typeO << std::endl;}
   this->destructible = destructibleO;
   this->anxiety = anxietyO;
   this->populationDensity = populationDensityO;
