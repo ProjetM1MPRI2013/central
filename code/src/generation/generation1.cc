@@ -49,7 +49,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   //J'initialise choose a -1 par défault, je ne suis pas sur que cela soit une bonne idée [Adrien K.]
   int choose = 0;
 
-  int heightInter, widthInter, poids, widthRoadh, heightRoadv;
+  int heightInter, widthInter, poids, widthRoadV, heightRoadH;
   poids = -1;
   // On choisit le type d'intersection que l'on va utiliser de maière aléatoire, à l'aide d'un poids donner à chaque intersection
   int i, j, i2, j2;
@@ -70,25 +70,25 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   // On choisit une sprite de route horizontale avec la bonne largeur
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
-    if(batiment.getType()==ROADH && batiment.getHeight() == heightInter) {
+    if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
       nbRand = rand();
       if (nbRand > poids) {choose = i; poids = nbRand;}
     }
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   Batiment roadh = Batiment(file, choose);
-  widthRoadh = roadh.getWidth();
+  heightRoadH = roadh.getHeight();
   // On choisit une sprite de route verticale avec la bonne longueur
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
-    if(batiment.getType()==ROADV && batiment.getWidth() == widthInter) {
+    if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
       nbRand = rand();
       if (nbRand > poids) {choose = i ; poids = nbRand;}
     }
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   Batiment roadv = Batiment(file, choose);
-  heightRoadv = roadv.getHeight();
+  widthRoadV = roadv.getWidth();
   int absInter[nbInter1];
   int ordInter[nbInter2];
   int min, max;
@@ -97,7 +97,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for (i=0; i<nbInter1; i++) {
     nbRand = rand();
     nbRand = nbRand % (max-min+1);
-    while(nbRand % widthRoadh != 0){
+    while(nbRand % widthRoadV != 0){
       nbRand = rand();
       nbRand = nbRand % (max-min+1);
     }
@@ -111,7 +111,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for (j=0; j<nbInter2; j++) {
     nbRand = rand();
     nbRand = nbRand % (max-min+1);
-    while(nbRand % heightRoadv != 0){
+    while(nbRand % heightRoadH != 0){
       nbRand = rand();
       nbRand = nbRand % (max-min+1);
     }
@@ -121,83 +121,78 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   }
 
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;}; //9
-  int abs0, ord0, abs1, ord1, abs2, ord2;
+
+  int abs0, ord0, abs1, ord1, longV, longH, k;
   abs0 = 0;
   ord0 = 0;
-  for (i=0; i<=nbInter1; i++) {
-    if (DEBUG) {std::cout << "i : " << i << std::endl;};
-    if(i<nbInter1) {
-      abs1 = absInter[i] ;
-	}
-    else {
-      abs1 = MAP_WIDTH-1;
-    }
-    for (j=0; j<nbInter2; j++) {
-      if (DEBUG) {std::cout << "j : " << j << std::endl;};
+  for(i=0; i<nbInter1; i++){
+    abs1 = absInter[i];
+    // On parcoure les pâtés de maison "complets" sur une même route horizontale
+    for(j=0; j<nbInter2; j++){
       ord1 = ordInter[j];
+      // On met des batiments dans le pâté de maison
       fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
-      if (DEBUG) {std::cout << "i : " << i << std::endl;};
-      if (DEBUG) {std::cout << "j : " << j << std::endl;};
-      if (DEBUG) {std::cout << "ord1 : " << ord1 << std::endl;};
-      ord2 = ord0;
-      if (DEBUG) {std::cout << "ord2 : " << ord2 << std::endl;};
-      if(i<nbInter1){
-	while(ord2<ord1){
-	  if (DEBUG) {std::cout << "ord2 : " << ord2 << std::endl;};
-	  for(i2=0; i2<widthInter; i2++){
-	    for(j2=0; j2<heightRoadv; j2++) {
-	      if(i2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, false, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
-	      else if(i2==(widthInter-1)){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, false, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
-	      else {this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
-	    }
-	  }
-	  ord2 = ord2 + widthInter;
-	}
-      }
-      abs2 = abs0;
-      if (DEBUG) {std::cout << "abs1 : " << abs1 << std::endl;};
-      while(abs2<abs1){
-	if (DEBUG) {std::cout << "abs2 : " << abs2 << std::endl;};
-	for(i2=0; i2<widthRoadh; i2++){
-	  if (DEBUG) {std::cout << "i2 : " << i2 << std::endl;};
-	  for(j2=0; j2<heightInter; j2++) {
-	    if (DEBUG) {std::cout << "j2 : " << j2 << std::endl;};
-	    if(j2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., false, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
-	    else if(j2 ==(heightInter - 1)){this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, false, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
-	    else {this->map[abs1+i2][ord2+j2] = new Tile(abs2+i2, ord0+j2, ROADH, false, 0., 1., true, true, true, true, float(1.), Coordinates(abs2,ord0), Coordinates(0,0), NULL);}
+      // On met la route verticale
+      longV = (abs1 - abs0) / widthRoadV ;
+      for(k=0; k<longV; k++) {
+	for(i2=0; i2<widthRoadV; i2++){
+	  for(j2=0; j2<heightInter; j2++){
+	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL);
 	  }
 	}
-	if(DEBUG){std::cout << "endForAbs i2" << std::endl;}
-	abs2 = abs2 + heightInter;
       }
-      if(DEBUG){std::cout << "endWhileAbs" << std::endl;}
-      if(i<nbInter1) {
-	if (DEBUG) {std::cout << "On met une intersection" << std::endl;};
+      // On met la route horizontale
+      longH = (ord1 - ord0) / heightRoadH;
+      for(k=0; k<longV; k++) {
 	for(i2=0; i2<widthInter; i2++){
-	  for(j2=0; j2<heightInter; j2++) {
-	    this->map[abs1+i2][ord1+j2] = new Tile(abs2+i2, ord0+j2, INTER, false, 0., 1., true, true, true, true, float(1.),  Coordinates(abs1,ord1),  Coordinates(0,0), NULL);
+	  for(j2=0; j2<heightRoadH; j2++){
+	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
 	  }
 	}
-	if (DEBUG) {std::cout << "Fin intersection" << std::endl;};
       }
-      abs0 = abs1;
-      ord0 = ord1;
-    }
-    ord1 = MAP_HEIGHT - 1;
-    fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
-    ord2 = ord0;
-    while(ord2<ord1){
+      // On met l'intersection
       for(i2=0; i2<widthInter; i2++){
-	for(j2=0; j2<heightRoadv; j2++) {
-	  if(i2==0){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, false, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
-	  else if(i2==(widthInter-1)){this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, false, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
-	  else {this->map[abs1+i2][ord2+j2] = new Tile(abs0+i2, ord2+j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0,ord2), Coordinates(0,0), NULL);}
+	for(j2=0; j2<heightInter; j2++){
+	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord1), Coordinates(0,0), NULL);
 	}
       }
-      ord2 = ord2 + widthInter;
+      ord0 = ord1 + heightInter;
     }
-    
+    // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
+    ord1 = MAP_HEIGHT;
+    fillBuildings(abs0,ord0,abs1,ord1, nbRand, nbLine, file);
+    longH = (ord1 - ord0) / heightRoadH;
+    for(k=0; k<longV; k++) {
+      for(i2=0; i2<widthInter; i2++){
+	for(j2=0; j2<heightRoadH; j2++){
+	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
+	}
+      }
+    }
+    abs0 = abs1 + widthInter;
+    ord0 = 0;
   }
+  // On s'occupe maintenant du bord bas de la carte, pour lequel il n'y a qu'un pâté de maison et une route verticale
+  abs1 = MAP_WIDTH;
+  // On parcoure les pates de maison "complets" sur une même route horizontale
+  for(j=0; j<nbInter2; j++){
+    ord1 = ordInter[j];
+    // On met des batiments dans le paté de maison
+    fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
+    // On met la route verticale
+    longV = (abs1 - abs0) / widthRoadV ;
+    for(k=0; k<longV; k++) {
+      for(i2=0; i2<widthRoadV; i2++){
+	for(j2=0; j2<heightInter; j2++){
+	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL);
+	}
+      }
+    }
+    ord0 = ord1 + heightInter;
+  }
+  ord1 = MAP_HEIGHT;
+  fillBuildings(abs0, ord0, abs1, ord1, nbRand, nbLine, file);
+  
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
 }
 
@@ -213,15 +208,15 @@ std::size_t Generation1::hachage(std::string seed) {
 void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file) {
   //J'ai choisis une valeur par défault pour la seed [Adrien K.]
   int nbRand = 424242;
-
+  
   int fillbcpt = 0;
-
+  
   if (DEBUG){std::cout << "fillBuildings : begin\n";}
   if (DEBUG){std::cout << "abs0: " << abs0 << std::endl;}
   if (DEBUG){std::cout << "ord0: " << ord0 << std::endl;}
   if (DEBUG){std::cout << "abs1: " << abs1 << std::endl;}
   if (DEBUG){std::cout << "ord1: " << ord1 << std::endl;}
-
+  
   if(abs0==abs1 || ord0==ord1){
     if (DEBUG){std::cout << "fillBuildings : end" << std::endl;}
     return;
@@ -235,14 +230,14 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   Batiment batiment; 
   for(i3=0; i3<nbLine; i3++) {
     batiment = Batiment(file, i3);
-
+    
     if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
     if(batiment.getType()==BANK && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
       nbRand = rand();
       nbRand = nbRand % poidsBank;
       if (nbRand > poids) {choose = i3; poids = nbRand;}
     }
-
+    
     if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
     if(batiment.getType()==HOUSE && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
       nbRand = rand();
@@ -250,7 +245,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
       if (nbRand > poids) {choose = i3; poids = nbRand;}
     }
   }
-
+  
   if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
   if(choose==0){
     if (DEBUG){std::cout << "fillBuildings : if " << choose << " " << abs1 << " " << ord1 <<"\n";}
@@ -275,7 +270,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
 	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
       }
     }
-
+    
     // il faut prendre d'autres rectangles pour que cela touche toujours le bord !!! (ou mieux)
     fillBuildings(abs0 + width, int(ord0), int(abs1), int(ord1), int(nbRand), int(nbLine), std::string(file));
     fillBuildings(abs0, ord0 + height, abs0 + width , ord1, nbRand, int(nbLine), file);

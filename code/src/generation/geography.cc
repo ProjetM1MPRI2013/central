@@ -1,6 +1,7 @@
 #include "geography.h"
 #include "tile.h"
 
+#define DEBUG true
 
 
 Geography::Geography(std::string seed){
@@ -44,11 +45,15 @@ void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, 
 
 
 void Geography::printMatrix(){
-  for (int i = 0; i < this->MAP_HEIGHT; i++){
-    for (int j = 0; j < this->MAP_WIDTH; j++){
+  if (DEBUG) {std::cout << "Print Matrix" << std::endl;}
+  for (int i = 0; i < this->MAP_WIDTH; i++){
+    if (DEBUG) {std::cout << "i: " << i << std::endl;}
+    for (int j = 0; j < this->MAP_HEIGHT; j++){
+      if (DEBUG) {std::cout << "j: " << j << std::endl;}
       std::cout << "\t";
       if (this->getTile(i,j) == 0){std::cout << "VOID ";}
       else {this->getTile(i,j)->printTileType();}
+      //else {std::cout << this->getTile(i,j)->getType() << std::endl;}
     }
     std::cout << std::endl;
   }
