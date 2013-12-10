@@ -53,9 +53,9 @@ void Geography::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, 
 void Geography::printMatrix(){
   if (DEBUG) {std::cout << "Print Matrix" << std::endl;}
   for (int i = 0; i < this->MAP_WIDTH; i++){
-    if (DEBUG) {std::cout << "i: " << i << std::endl;}
+    //if (DEBUG) {std::cout << "i: " << i << std::endl;}
     for (int j = 0; j < this->MAP_HEIGHT; j++){
-      if (DEBUG) {std::cout << "j: " << j << std::endl;}
+      //if (DEBUG) {std::cout << "j: " << j << std::endl;}
       std::cout << "\t";
       if (this->getTile(i,j) == 0){std::cout << "VOID ";}
       else {this->getTile(i,j)->printTileType();}
