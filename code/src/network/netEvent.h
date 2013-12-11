@@ -125,7 +125,7 @@ public:
    * @brief getType
    * @return the type of this message
    */
-  NetEvent::Type inline getType(){ return type ;}
+  NetEvent::Type inline getType() const { return type ;}
 
   /**
    * @brief setType
@@ -137,7 +137,7 @@ public:
     this->data = data ;
   }
 
-  virtual inline void * getData(){
+  virtual inline void * getData() const {
     return data ;
   }
 

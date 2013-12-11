@@ -45,8 +45,9 @@ public:
      * @brief addMessage : adds a received message to the server with the given type
      * @param msg : the message to add
      * @param msgType : the type of the message
+     * The server gains ownership of the message passed in argument.
      */
-    void addMessage(AbstractMessage& msg, std::string msgType, DummyClient *cli) ;
+    void addMessage(AbstractMessage* msg, std::string msgType, DummyClient *cli) ;
 
 private :
     /**

@@ -25,14 +25,14 @@ void DummyServer::addClient(DummyClient &cli){
     clients.push_back(&cli) ;
 }
 
-void DummyServer::addMessage(AbstractMessage &msg, std::string msgType, DummyClient *cli){
+void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyClient *cli){
   if(msgType.compare(NetEvent::getMsgType()) == 0)
     {
       //Handle netEvents
-      NetEvent & event = (NetEvent &) msg ;
-      if(handle_netEvent(event, cli))
+      NetEvent * event = (NetEvent *) msg ;
+      if(handle_netEvent(*event, cli))
         {
-          delete &msg ;
+          delete msg ;
           return ;
         }
     }
@@ -43,7 +43,7 @@ void DummyServer::addMessage(AbstractMessage &msg, std::string msgType, DummyCli
       p = received_messages.insert(MapType::value_type(msgType, new vector<AbstractMessage *>()) ).first ;
     }
   lock.lock() ;
-  p->second->push_back(&msg) ;
+  p->second->push_back(msg) ;
   lock.unlock() ;
 }
 
@@ -53,8 +53,8 @@ void DummyServer::sendUpdate(GameState &game_state){
     {
         //Create gameUpdate from gameState
         //Missing code here
-        GameUpdate game_update ;
-        (*cli)->addMessage(game_update, GameUpdate::getMsgType()) ;
+        //Deprecated this part will be moved to UpdateGenerator
+        (*cli)->addMessage(NULL, GameUpdate::getMsgType()) ;
     }
 }
 
@@ -78,7 +78,7 @@ void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, 
       //Broadcast message
       for(DummyClient * client : clients)
         {
-          client->addMessage(*msg.copy(),msgType);
+          client->addMessage(msg.copy(),msgType);
         }
     }
   else
@@ -90,8 +90,7 @@ void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, 
           //TODO : display error message
           return ;
         }
-      it->second->addMessage(msg, msgType);
-
+      it->second->addMessage(msg.copy(), msgType);
     }
 }
 
@@ -140,7 +139,7 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
         break ;
       }
     case NetEvent::SERV_TRY : {
-        client->addMessage(*(new NetEvent(NetEvent::SERV_RESP)), NetEvent::getMsgType());
+        client->addMessage(new NetEvent(NetEvent::SERV_RESP), NetEvent::getMsgType());
         break ;
       }
     }

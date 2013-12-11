@@ -3,7 +3,7 @@
 #include "server.h"
 #include "gameUpdate.h"
 class Simulation;
-#include "simulation/simulation.h"
+class Player ;
 
 /**
  * @brief The UpdateGenerator class : class used to generate updates on the Server side.
@@ -36,7 +36,14 @@ private :
    * @param player : the player the update will be sent to
    * @return the generated update
    */
-  GameUpdate* generateUpdate(Player& player) ;
+  GameUpdate generateUpdate(Player &player) ;
+
+  /**
+   * @brief addAllNpcs : adds updates for all the NPCs present in the tile
+   * @param update
+   * @param tile
+   */
+  void addAllNpcs(GameUpdate& update, Tile& tile) ;
 };
 
 #endif // UPDATEGENERATOR_H

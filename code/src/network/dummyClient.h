@@ -32,8 +32,10 @@ public:
    * @brief addMessage : adds a pending message to this client
    * @param msg : the message to add
    * @param msgType : the type of message to add
+   * The Client gains ownership of the message in argument.
+   * The message must not be deleted after the call.
    */
-  void addMessage(AbstractMessage &msg, std::string msgType) ;
+  void addMessage(AbstractMessage *msg, std::string msgType) ;
 
 protected :
   /**
@@ -68,12 +70,12 @@ protected :
    * @param event
    * @return true if the event must not be passed to the user. false otherwise
    */
-  virtual bool handle_netEvent(NetEvent& event) ;
+  virtual bool handle_netEvent(const NetEvent& event) ;
 
     /*
      * Methods inherited from the Client interface
      */
-  virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) ;
+  virtual void send_message(AbstractMessage &msg, bool reliable, std::string msgType ) ;
 
   virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
 

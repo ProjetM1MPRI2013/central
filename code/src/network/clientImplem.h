@@ -54,6 +54,11 @@ public :
     ClientImplem(ClientInfo c_info) ;
     ~ClientImplem() ;
 
+private :
+    //Prevent copy
+    ClientImplem(ClientImplem&) = delete ;
+    ClientImplem operator =(const ClientImplem&) = delete ;
+
 protected :
     virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
       //TODO missing implementation

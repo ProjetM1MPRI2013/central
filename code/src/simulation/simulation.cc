@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "position.h"
+#include "generation/generation1.h"
 
 Simulation::Simulation(int MAP_SIZE, int TILE_SIZE_X, int TILE_SIZE_Y,
 		int NB_JOUEURS, int id, Geography* map) {
@@ -29,6 +30,12 @@ Simulation::Simulation(int MAP_SIZE, int TILE_SIZE_X, int TILE_SIZE_Y,
 
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
+}
+
+Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(1,1,1,p_vect.size(),0,NULL) {
+  this->setGeography(new Generation1(seed));
+  for(Player* p : p_vect)
+      this->players.push_back(p);
 }
 
 void Simulation::setServer(Server* s) {
@@ -341,7 +348,9 @@ void Simulation::lisserMatrice() {
 void Simulation::run(sf::Time dt) {
 	int chance;
 	if (sous[0] < 0) {
+	    if(!NPCs.empty())
 		this->NPCs.pop_back();
+	    if(!cameras.empty())
 		this->cameras.pop_back();
 	}
 
@@ -412,4 +421,14 @@ void Simulation::addAgent(Agent* agent) {
 
 void Simulation::addCam(Camera* cam) {
 	cameras.push_back(cam);
+}
+
+void Simulation::setGeography(Geography *g){
+  this->map = g ;
+}
+
+void Simulation::scenarioActionPerformed(ScenarioAction a){
+  //TOUTDOUX
+  return ;
+
 }

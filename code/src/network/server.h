@@ -34,6 +34,7 @@ public :
    * relevant data will be sent to the network.
    * There is no guarantee that the data will effectively be delivered (using
    * UDP protocol for the real implementation).
+   * @deprecated : use the update genarator class instead
    */
   virtual void sendUpdate(GameState &game_state) = 0 ;
 
@@ -41,9 +42,11 @@ public :
    * @brief broadcastMessage : broadcasts a message of the given type to all the clients
    * @param msg : the message to send
    * @param reliable : whether the server should wait for an ack or not.
+   * The caller retains ownership of the message. The message can be deleted as soon as the
+   * function returns.
    */
   template <typename MsgType>
-  void broadcastMessage(MsgType msg, bool reliable = true){
+  void broadcastMessage(MsgType& msg, bool reliable = true){
     send_message(msg,reliable,MsgType::getMsgType());
   }
 
@@ -63,6 +66,7 @@ public :
    *
    * A call to receiveMessages<MessageBase>() won't return instances of MessageChild if
    * some have been received.
+   * The caller gains ownership of all the messages in the vector.
    */
   template <typename MsgType>
   std::vector<MsgType *> & receiveMessages(){
@@ -76,9 +80,10 @@ public :
    * @param msg : The message to send
    * @param player : the ID of the player to send the message to
    * @param reliable : wether or not the server should wait for an ACK.
+   * The caller retain ownership of the message passed in argument.
    */
   template <typename MsgType>
-  void sendMessage(MsgType msg, int player, bool reliable = true){
+  void sendMessage(MsgType& msg, int player, bool reliable = true){
     send_message(msg,reliable,MsgType::getMsgType(), player);
   }
 

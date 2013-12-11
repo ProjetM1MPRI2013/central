@@ -5,7 +5,7 @@
 DummyClient::DummyClient(DummyServer* server) : received_messages(){
   this->server = server ;
   this->server->addClient(*this);
-  this->addMessage(*(new NetEvent(NetEvent::SERV_RESP)),NetEvent::getMsgType());
+  this->addMessage(new NetEvent(NetEvent::SERV_RESP),NetEvent::getMsgType());
 }
 
 DummyClient::~DummyClient(){
@@ -17,13 +17,13 @@ DummyClient::~DummyClient(){
   received_messages.clear();
 }
 
-void DummyClient::addMessage(AbstractMessage &msg, std::string msgType){
+void DummyClient::addMessage(AbstractMessage *msg, std::string msgType){
 
   if(msgType.compare(NetEvent::getMsgType()) == 0){
-      NetEvent& event = (NetEvent &) msg ;
-      if(handle_netEvent(event))
+      NetEvent* event = (NetEvent *) msg ;
+      if(handle_netEvent(*event))
         {
-          delete &msg ;
+          delete msg ;
           return ;
         }
     }
@@ -31,12 +31,12 @@ void DummyClient::addMessage(AbstractMessage &msg, std::string msgType){
   if(received_messages[msgType] == NULL)
       received_messages[msgType] = new std::vector<AbstractMessage *>() ;
 
-  received_messages[msgType]->push_back(&msg) ;
+  received_messages[msgType]->push_back(msg) ;
   lock.unlock() ;
 }
 
 void DummyClient::send_message(AbstractMessage& msg, bool , std::string msgType ) {
-  server->addMessage(msg, msgType, this) ;
+  server->addMessage(msg.copy(), msgType, this) ;
 }
 
 std::vector<AbstractMessage *>& DummyClient::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
@@ -56,7 +56,7 @@ std::vector<AbstractMessage *>& DummyClient::receive_messages(std::string msgTyp
     }
 }
 
-bool DummyClient::handle_netEvent(NetEvent &event){
+bool DummyClient::handle_netEvent(const NetEvent &event){
   switch(event.getType())
     {
     case NetEvent::CLI_LOST : {
@@ -66,7 +66,7 @@ bool DummyClient::handle_netEvent(NetEvent &event){
         break ;
       }
     case NetEvent::CLI_TRY : {
-        server->addMessage(*(new NetEvent(NetEvent::CLI_RESP)), NetEvent::getMsgType(), this);
+        server->addMessage(new NetEvent(NetEvent::CLI_RESP), NetEvent::getMsgType(), this);
         return true ;
         break ;
       }

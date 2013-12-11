@@ -1,8 +1,12 @@
 #ifndef NPCUPDATE_H
 #define NPCUPDATE_H
-#include "simulation/position.h"
-#include "simulation/npc.h"
+
 #include <boost/uuid/uuid.hpp>
+
+#include "simulation/position.h"
+
+class NPC ;
+
 
 /**
  * @brief The NpcUpdate class : Container for informations that will be passed as an update through the network.
@@ -14,7 +18,7 @@ public:
    * @brief NpcUpdate : creates an update from the given NPC
    * @param npc : the npc to store informations about.
    */
-  NpcUpdate(NPC npc);
+  NpcUpdate(NPC& npc);
 
   boost::uuids::uuid id ;
   Position currentPosition ;

@@ -1,7 +1,8 @@
 #ifndef LOCALSTATEUPDATER_H
 #define LOCALSTATEUPDATER_H
 #include "client.h"
-#include "localState.h"
+#include "playerUpdate.h"
+
 class LocalState;
 
 /**
@@ -29,6 +30,8 @@ public:
 private :
   LocalState * localState ;
   Client * client ;
+
+  void applyPlayerUpdate(PlayerUpdate &p_update) ;
 };
 
 #endif // LOCALSTATEUPDATER_H
