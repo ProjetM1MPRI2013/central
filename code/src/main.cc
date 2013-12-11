@@ -140,12 +140,15 @@ int main() {
                 Server* serveur = Network::createDummyServer();
 
                 std::cout << 3 <<std::endl;
-                std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
+                /*                std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
                                 50, serveur, (int *) sizeFenetre,
-                                (bool) isFullScreen);
+                                (bool) isFullScreen);*/
+                // joseph : faut pas ouvrir de fenêtre dans un thread autre que le principal, ça passe pas sous OS X
+                // bien entendu, inutile de troller
+                client((int) b, &geo, 1, 100, 50, 50, serveur, (int *) sizeFenetre,(bool) isFullScreen);
 
                 std::cout << 4 <<std::endl;
-		choucroute.join();
+		//choucroute.join();
                 std::cout << 5 <<std::endl;
                 return 1;
         };
