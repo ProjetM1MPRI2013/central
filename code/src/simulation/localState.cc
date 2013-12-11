@@ -3,18 +3,11 @@
 LocalState::LocalState(Player& _player, std::string _seed):
   owner_player(_player){
   local_map = new Geography(_seed);
-  //view_range = _player->getViewRange();
-  view_range = 10;
-
-  /*initialization of the local_viewed*/
-//  potential_viewed = new Tile** [2*view_range+1];
-//  for (int i = 0; i < 2*view_range+1; ++i)
-//     potential_viewed[i] = new Tile* [2*view_range+1];
-//  rebuildLocalMap();
+//  view_range = 10;
 }
 
-float LocalState::getLocalTime(){
-  return localtime_ms;
+sf::Time &LocalState::getLocalTime(){
+  return localtime;
 }
 
 /**
@@ -51,6 +44,9 @@ Tile& LocalState::getTile(Position p, Layers l){
 }
 
 void LocalState::update(){
-  //TODO {denys} : remove this fake timer
-  localtime_ms +=1000;
+  owner_player.updatePosition(localtime);
+}
+
+Geography& LocalState::getLocalMap(){
+  return *local_map;
 }

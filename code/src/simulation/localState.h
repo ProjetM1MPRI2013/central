@@ -42,7 +42,11 @@ class LocalState {
    */
   Player& getOwnerLocalState();
 
-
+  /**
+   * @brief getLocalMap
+   * @return a reference to a localmap
+   */
+  Geography& getLocalMap();
   /**
    * @brief LocalState::getRelativePlayerTile
    * @param x : number of tiles to the right from the players position
@@ -52,7 +56,7 @@ class LocalState {
    */
   Tile& getRelativePlayerTile(int x, int y);
 
-  float getLocalTime();
+  sf::Time& getLocalTime();
   /**
    * @brief update
    * Updates all parameters of local state.
@@ -60,6 +64,7 @@ class LocalState {
   void update();
 
   private :
+  sf::Time localtime;
   /**
    * @brief localtime_ms
    * local time in milliseconds
