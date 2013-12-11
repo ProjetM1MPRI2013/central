@@ -24,12 +24,10 @@ class LocalState {
   /**
    * @brief LocalState
    * @param _player : a player to which this local state belongs
-   * @param _simul : a simulator which creates a local state for a user.
+   * @param _seed : a seed used for map creating
    * Default constructor
    */
-  //TODO{denys} : I don't know how to implement a link with map and other parameters, and this should be re-done later
-  //It's an example how not to do, but i'm very sorry...
-  LocalState(Player* _player, Simulation* _simul);
+  LocalState(Player& _player, std::string _seed);
   /**
    * @brief getTile
    * @param p : position of the tile
@@ -38,27 +36,21 @@ class LocalState {
    */
   Tile& getTile(Position p, Layers l);
 
-  /**
-   * @brief getViewedTiles
-   * @param l : layers to return
-   * @return a pointer to the massive of tiles which a viewed
-   */
-  Tile*** getViewedTiles(Layers l);
-
-  /**
+   /**
    * @brief getPlayerLocalState
-   * @return a pointe of the player to whom belongs this localState
+   * @return a reference to the player to whom belongs this localState
    */
-  Player* getPlayerLocalState();
+  Player& getOwnerLocalState();
+
 
   /**
-   * @brief getRelativePlayerTile
-   * @param x : difference by absciss
-   * @param y : difference by ordinate
-   * @return a relative tile of the player view_range map.
+   * @brief LocalState::getRelativePlayerTile
+   * @param x : number of tiles to the right from the players position
+   * @param y : number of tiles to the top from the players position
+   * @return a reference to a Tile if on map, or owner's tile otherwise
    * getRelativePlayerTile(1, 0) returns a right neighbor tile
    */
-  Tile* getRelativePlayerTile(int x, int y);
+  Tile& getRelativePlayerTile(int x, int y);
 
   float getLocalTime();
   /**
@@ -77,19 +69,9 @@ class LocalState {
    * @brief local_npc
    * An npc for which this local state exists
    */
-  Player* owner_player;
-  Tile ***potential_viewed;
+  Player& owner_player;
   int view_range;
 
-  //TODO{denys} : this should be remade later
-  Geography &local_map;
-
-  Simulation *parent_sim;
-
-  /**
-   * @brief rebuildLocalMap
-   * rebuilds a local map shich is viewed by player
-   */
-  void rebuildLocalMap();
+  Geography *local_map;
 } ;
 #endif
