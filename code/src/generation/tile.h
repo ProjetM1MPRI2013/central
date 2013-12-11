@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cerrno>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
@@ -25,6 +26,7 @@ struct SpriteTilePack
   int X2;
   int Y2;
 };
+
 
 
 
@@ -87,7 +89,7 @@ class Coordinates {
 class Tile {
 
  private:
-  /*
+  /**
    * type of the batiment of the case
    */
   TileType type;
@@ -97,64 +99,63 @@ class Tile {
   float anxiety;
   float populationDensity;
   float destructionLevel;
-  /*
+  /**
    * possibility to go straight
    */
   bool goh;
-  /*
+  /**
    * possibility to go above, between 0 and 1
    */
   bool gou;
-  /*
+  /**
    * possibility to go to the right, between 0 and 1
    */
   bool gor;
-  /*
+  /**
    * possibility to go to the left, between 0 and 1
    */
   bool gol;
-  /*
+  /**
    * caracterisation of the speed into the tile, between 0 and 1
    */
   float speed;
-  /*
+  /**
    * the origin of the batiment, which is rectangular (we can decompose a batiment)
    */
   Coordinates batOrigin;
-  /*
-   * total lenght of the bat
+  /**
+   * total width of the bat
    */
-  int lenghtBat;
-  /*
-   * total weight of the bat
+  int widthBat;
+  /**
+   * total height of the bat
    */
-  int weightBat;
-  /*
+  int heightBat;
+  /**
    * coordinates of the tile
    */
   Coordinates coord;
-  /*
+  /**
    * coordinates of the caracteristic tile of the borough of our tile
    */
   Coordinates coordBorough;
+
+  /**
+   * the name of the file where the sprite of the building of the tile is
+   */
+  std::string filePictures;
+  
+  /**
+   * the position of the sprite of the building of the tile in the file
+   */
+  Coordinates* picture;
 
   /**
    * @brief List of the NPC currently in the tile
    */
   std::list<NPC*> listNPC;
 
-  /**
-   * @brief lenght of a bat thanks to its type
-   * @param type : type of the batiment
-   * @return the lenght of the bat
-   */
-  float getTLenght(TileType type);
-  /**
-   * @brief weight of a bat thanks to its type
-   * @param type : type of the batiment
-   * @return the weight of the bat
-   */
-  float getTWeight(TileType type);
+
   /**
    * @brief sprite of the bat thanks to its type
    * @param type : type of the batiment
@@ -181,10 +182,13 @@ class Tile {
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
    * @param stp : the informations about the texture of the tile
-   *
+   * @param filePicturesO : the name of the file where the sprite of the building of the tile is
+   * @param pictureO : he position of the sprite of the building of the tile in the file
+   * @param widthO : the width of the building of the tile
+   * @param height0 : the height of the building of the tile
    * The batOrigin and the boroughOrigin argument are copied during the construction, they can be deleted after the call to the constructo
    */
-    Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO);
 
     /**
      * @brief gives the type of the tile, it's a generalist type
@@ -214,13 +218,16 @@ class Tile {
     void setSpeed(float speed);
     Coordinates& getBatOrigin();
     void setBatOrigin(Coordinates& p);
-    int getLenghtBat();
-    void setLenghtBat(int l);
-    int getWeightBat();
-    void setWeightBat(int w);
+    int getWidthBat();
+    void setWidthBat(int l);
+    int getHeightBat();
+    void setHeightBat(int w);
     sf::Sprite& getSprite();
     Coordinates& getCoord();
     void setCoord(Coordinates& coord);
+    std::string getFilePictures();
+    int getPictureX();
+    int getPictureY();
 
     /**
      * @brief Return the list of the NPC in the tile, sorted by x-y

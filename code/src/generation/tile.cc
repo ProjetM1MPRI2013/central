@@ -26,10 +26,11 @@ bool Coordinates::equals(Coordinates& c) {
 
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0) :
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
   coord(abs,ord),
   batOrigin(batOriginO),
-  coordBorough(boroughOrigin) {
+  coordBorough(boroughOrigin),
+  picture(pictureO){
   if (DEBUG){std::cout << "Tile : begin\n";}
   if (DEBUG){std::cout << abs << " " << ord << std::endl;}
   this->type = typeO;
@@ -43,8 +44,8 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->gor = gorO;
   this->speed = speedO;
   //this->batOrigin = batOriginO;
-  this->lenghtBat = getTLenght(typeO);
-  this->weightBat = getTWeight(typeO);
+  this->widthBat = widthO;
+  this->heightBat = heightO;
   // this->sprite = getTSprite(typeO); //à modifier, car cela dépend si origine ou pas // MrKulu : Inutile si je rajoute le SpriteTilePack : 
   this->stp = stp0;
   if(this->stp)
@@ -54,6 +55,7 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
     }  
   this->destructionLevel = 0.;
   wrapper = NULL;
+  this->filePictures = filePicturesO;
   if (DEBUG){std::cout << "Tile : end\n";}
 }
 
@@ -67,31 +69,6 @@ void Tile::setAnxiety(float f){
   return;
 }
 
-float Tile::getTLenght(TileType type) {
-  switch (type) {
-  case ROADH: return 0;
-  case ROADV: return 0;
-  case INTER: return 0;
-  case BANK: return 0;
-  case HOUSE: return 0;
-  case BLANK: return 0;
-  default: std::cerr << "Error : Tile : default case should not happen in getTLength";
-  };
-  return 10; //should not happens
-}
-
-float Tile::getTWeight(TileType type) {
-  switch (type) {
-  case ROADH: return 0;
-  case ROADV: return 0;
-  case INTER: return 0;
-  case BANK: return 0;
-  case HOUSE: return 0;
-  case BLANK: return 0;
-  default: std::cerr << "Error : Tile : default case should not happen in getTWeight";
-  };
-  return 10; //should not happens
-}
 /*
 sf::Sprite& Tile::getTSprite(TileType type) {
   switch (type) {
@@ -211,6 +188,18 @@ bool Tile::getGol() {
 }
 bool Tile::TextureIsInit() {
   return (stp != NULL);
+}
+
+std::string Tile::getFilePictures() {
+  return(filePictures);
+}
+
+int Tile::getPictureX() {
+  return(picture->getAbs());
+}
+
+int Tile::getPictureY() {
+  return(picture->getOrd());
 }
 
 void Tile::printTileType(){

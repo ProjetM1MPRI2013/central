@@ -68,6 +68,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   Batiment intersection = Batiment(file, choose);
   heightInter = intersection.getHeight();
   widthInter = intersection.getWidth();
+  std::string fileInter = intersection.getFilePictures();
+  Coordinates* pictureInter = intersection.getPicture();
+  floatMatrix speedInter = intersection.getSpeed();
   if (DEBUG) {std::cout << "heightInter " << heightInter << std::endl;};
   if (DEBUG) {std::cout << "widthInter " << widthInter << std::endl;};
   // On choisit une sprite de route horizontale avec la bonne largeur
@@ -82,6 +85,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   Batiment roadh = Batiment(file, choose);
   heightRoadH = roadh.getHeight();
+  std::string fileRoadH = roadh.getFilePictures();
+  Coordinates* pictureRoadH = roadh.getPicture();
+  floatMatrix speedRoadH = roadh.getSpeed();
   // On choisit une sprite de route verticale avec la bonne longueur
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
@@ -94,6 +100,9 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   Batiment roadv = Batiment(file, choose);
   widthRoadV = roadv.getWidth();
+  std::string fileRoadV = roadv.getFilePictures();
+  Coordinates* pictureRoadV = roadv.getPicture();
+  floatMatrix speedRoadV = roadv.getSpeed();
   int absInter[nbInter1];
   int ordInter[nbInter2];
   int min, max;
@@ -145,7 +154,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longV; k++) {
 	for(i2=0; i2<widthRoadV; i2++){
 	  for(j2=0; j2<heightInter; j2++){
-	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL);
+	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
 	  }
 	}
       }
@@ -154,14 +163,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longH; k++) {
 	for(i2=0; i2<widthInter; i2++){
 	  for(j2=0; j2<heightRoadH; j2++){
-	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
+	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
 	  }
 	}
       }
       // On met l'intersection
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightInter; j2++){
-	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord1), Coordinates(0,0), NULL);
+	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, speedInter[i2][j2], Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
 	}
       }
       ord0 = ord1 + heightInter;
@@ -173,7 +182,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(k=0; k<longH; k++) {
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightRoadH; j2++){
-	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
+	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
 	}
       }
     }
@@ -192,7 +201,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(k=0; k<longV; k++) {
       for(i2=0; i2<widthRoadV; i2++){
 	for(j2=0; j2<heightInter; j2++){
-	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL);
+	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
 	}
       }
     }
@@ -257,10 +266,16 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
   if(choose==-1){
     if (DEBUG){std::cout << "fillBuildings : if " << choose << " " << abs1 << " " << ord1 <<"\n";}
+    choose++;
+    batiment = Batiment(file, choose);
+    while(batiment.getType() != BLANK) {
+      choose++;
+      batiment = Batiment(file, choose);
+    }
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	std::cout << i3 << " " << j3 << std::endl;
-	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
+	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, batiment.getFilePictures(), batiment.getPicture(), 1, 1);
       }
     }
   }
@@ -269,13 +284,16 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     batiment = Batiment(file, choose);
     int width = batiment.getWidth();
     int height = batiment.getHeight();
+    std::string filePicture = batiment.getFilePictures();
+    Coordinates* picture = batiment.getPicture();
+    floatMatrix speedBat = batiment.getSpeed();
     if (DEBUG){std::cout << "abs0: " << abs0 << std::endl;}
     if (DEBUG){std::cout << "ord0: " << ord0 << std::endl;}
     if (DEBUG){std::cout << "width: " << width << std::endl;}
     if (DEBUG){std::cout << "height: " << height << std::endl;}
     for(i3=abs0; i3<abs0 + width ; i3++){
       for(j3=ord0; j3<ord0 + height; j3++){
-	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
+	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, speedBat[i3][j3], Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
       }
     }
     
