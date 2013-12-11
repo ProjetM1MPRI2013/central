@@ -151,7 +151,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       }
       // On met la route horizontale
       longH = (ord1 - ord0) / heightRoadH;
-      for(k=0; k<longV; k++) {
+      for(k=0; k<longH; k++) {
 	for(i2=0; i2<widthInter; i2++){
 	  for(j2=0; j2<heightRoadH; j2++){
 	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
@@ -170,7 +170,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     ord1 = MAP_HEIGHT;
     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     longH = (ord1 - ord0) / heightRoadH;
-    for(k=0; k<longV; k++) {
+    for(k=0; k<longH; k++) {
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightRoadH; j2++){
 	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, float(1.), Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL);
@@ -225,15 +225,15 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   if (DEBUG){std::cout << "abs1: " << abs1 << std::endl;}
   if (DEBUG){std::cout << "ord1: " << ord1 << std::endl;}
   
-  if(abs0==abs1 || ord0==ord1){
-    if (DEBUG){std::cout << "fillBuildings : end" << std::endl;}
-    return;
-  }
+  //if(abs0==abs1 || ord0==ord1){
+  //if (DEBUG){std::cout << "fillBuildings : end" << std::endl;}
+  //return;
+  //}
   int i3, j3;
   int poidsBank = 100;
   int poidsHouse = 150;
   srand(nbRand);
-  int choose = 0;
+  int choose = -1;
   int poids = -1;
   Batiment batiment; 
   for(i3=0; i3<nbLine; i3++) {
@@ -255,10 +255,10 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   }
   
   if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
-  if(choose==0){
+  if(choose==-1){
     if (DEBUG){std::cout << "fillBuildings : if " << choose << " " << abs1 << " " << ord1 <<"\n";}
-    for(i3=abs0; i3<abs1; i3++){
-      for(j3=ord0; j3<ord1; j3++){
+    for(i3=abs0; i3<=abs1; i3++){
+      for(j3=ord0; j3<=ord1; j3++){
 	std::cout << i3 << " " << j3 << std::endl;
 	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL);
       }
@@ -279,9 +279,9 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
       }
     }
     
-    // il faut prendre d'autres rectangles pour que cela touche toujours le bord !!! (ou mieux)
-    fillBuildings(abs0 + width, int(ord0), int(abs1), int(ord1), int(nbRand), int(nbLine), std::string(file));
-    fillBuildings(abs0, ord0 + height, abs0 + width , ord1, nbRand, int(nbLine), file);
+    // on a rempli une partie du rectangle, on applique alors une réccurence pour compléter ce qui reste. Cette partie restante est l'union disjointe de deux rectangles.
+    fillBuildings(abs0 + width, ord0, abs1, ord1, nbRand, nbLine, file);
+    fillBuildings(abs0, ord0 + height, abs0 + width - 1 , ord1, nbRand, nbLine, file);
   }
   if (DEBUG){std::cout << "fillBuildings : end";}
   return;
