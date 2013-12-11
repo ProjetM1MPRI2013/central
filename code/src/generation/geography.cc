@@ -1,7 +1,7 @@
 #include "geography.h"
 #include "tile.h"
 
-#define DEBUG true
+#define DEBUG false
 
 
 Geography::Geography(std::string seed){

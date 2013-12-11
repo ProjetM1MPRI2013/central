@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 
-#define DEBUG true
+#define DEBUG false
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
 
