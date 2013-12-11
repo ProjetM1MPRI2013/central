@@ -60,48 +60,50 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 
-void TileMap::createTiles()
-  {
-	unsigned int mapwidth = 100;
-	unsigned int mapheight = 100;
-        for (unsigned int i = 0; i < mapwidth; ++i)
-            for (unsigned int j = 0; j < mapheight; ++j)
-            {
-		switch((geo->getTile(i,j))->getType()) {
-		 
-		case BLANK: {
-		Tilesbite[i + j * mapwidth]=0;
-			   }
-		case ROADV: {
-		Tilesbite[i + j * mapwidth]=1;
-			   }
-		case ROADH: {
-		Tilesbite[i + j * mapwidth]=2;
-			   }
-		case INTER: {
-		Tilesbite[i + j * mapwidth]=3;
-			   }
-		case HOUSE: {
-		if ((geo->getTile(i,j))->getAnxiety()<50)
-		{Tilesbite[i + j * mapwidth]=4;}
-		  else {
-			 if ((geo->getTile(i,j))->getAnxiety()<75)
-			 	{Tilesbite[i + j * mapwidth]=5;}
-			 else {Tilesbite[i + j * mapwidth]=6;}
-			}
-			   }
-		case BANK: {
-		if ((geo->getTile(i,j))->getAnxiety()<50)
-		{Tilesbite[i + j * mapwidth]=7;}
-		  else {
-			 if ((geo->getTile(i,j))->getAnxiety()<75)
-			 	{Tilesbite[i + j * mapwidth]=8;}
-			 else {Tilesbite[i + j * mapwidth]=9;}
-			} 
-		     }
-	    }
-	    }
-	    return;
+void TileMap::createTiles() {
+  unsigned int mapwidth = 100;
+  unsigned int mapheight = 100;
+  for (unsigned int i = 0; i < mapwidth; ++i) {
+    for (unsigned int j = 0; j < mapheight; ++j) {
+      switch((geo->getTile(i,j))->getType()) {
+      case BLANK:
+        Tilesbite[i + j * mapwidth]=0;
+        break;
+      case ROADV:
+        Tilesbite[i + j * mapwidth]=1;
+        break;
+      case ROADH: 
+        Tilesbite[i + j * mapwidth]=2;
+        break;
+      case INTER:
+        Tilesbite[i + j * mapwidth]=3;
+        break;
+      case HOUSE:
+        if ((geo->getTile(i,j))->getAnxiety()<50)
+          {Tilesbite[i + j * mapwidth]=4;}
+        else {
+          if ((geo->getTile(i,j))->getAnxiety()<75)
+            {Tilesbite[i + j * mapwidth]=5;}
+          else {Tilesbite[i + j * mapwidth]=6;}
+        }
+        break;
+      case BANK:
+        if ((geo->getTile(i,j))->getAnxiety()<50) {
+          Tilesbite[i + j * mapwidth]=7;
+        } else {
+          if ((geo->getTile(i,j))->getAnxiety()<75) {
+            Tilesbite[i + j * mapwidth]=8;
+          } else {
+            Tilesbite[i + j * mapwidth]=9;
+          }
+        } 
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  return;
 }
 
 TileMap::TileMap(Simulation* simu, Geography* geo){

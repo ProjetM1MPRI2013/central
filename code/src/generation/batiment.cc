@@ -2,7 +2,7 @@
 //j'ai bougé les includes dans le .h
 
 
-#define DEBUG true
+#define DEBUG false
 
 Batiment::Batiment(std::string file, int line){
 
@@ -104,7 +104,7 @@ Batiment::Batiment(std::string file, int line){
   this->picture = new Coordinates(atoi(nombre.c_str()), atoi(nombre2.c_str()));
 
 
-  std::cout << "Batiment : end \n";
+  if (DEBUG) {std::cout << "Batiment : end \n";}
 }
 
 

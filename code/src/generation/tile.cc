@@ -3,7 +3,7 @@
 #include "../simulation/npc.h"
 #include "../simulation/tilewrapper.h"
 
-#define DEBUG true
+#define DEBUG false
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
