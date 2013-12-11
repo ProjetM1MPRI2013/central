@@ -874,7 +874,7 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code = sf::Keyboard::F11) {
+				if (event.key.code == sf::Keyboard::F11) {
 					if (isFullScreen) {
 						window.create(video_mode, "Game Interface");
 						isFullScreen = false;
