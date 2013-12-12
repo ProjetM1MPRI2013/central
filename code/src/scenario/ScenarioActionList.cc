@@ -119,56 +119,8 @@ Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s
   location = t;
   power = p;
 };
-
-/*
- *@brief test for 2 int if the tile is in the map
- */
-
-bool isInTheMap (int x, int y, Geography* m ) {
-	//TODO verifier avec chatan
-	return (
-			(x >= 0)
-			&& (x <= m->getMapWidth())
-			&& (y >= 0)
-			&& (y <= m->getMapHeight())
-			);
-};
-/*
- * @brief add a tile to the list if it is on a map
- */
-void neighborsaux (int x,int y , std::list<Tile*> result ,Geography* m ) {
-	if (isInTheMap (x,y,m)) {
-					result.push_front(
-							m->getTile(x,y)
-					);
-	};
-};
-
-/*
- * @brief create the list of tiles witch are at n tile of the tile t0
- */
-std::list<Tile*> neighbors (int n,Tile* t0,Geography* m) {
-	Coordinates c0 = t0->getCoord();
-	int x0 = c0.abs ;
-	int y0 = c0.ord ;
-	std::list<Tile*> result;
-	for (int i = 0 ; i <= n; ++i){
-		for (int j = 0  ; j <= n-i; ++j){
-			neighborsaux (x0+i,y0+j,result,m);
-			if (i > 0) {
-				neighborsaux (x0-i,y0+j,result ,m);
-				if (j>0) {neighborsaux(x0-i,y0-j,result ,m);};
-			};
-			if (j>0) {
-				{neighborsaux(x0-i,y0-j,result ,m);};
-			}
-		};
-	};
-	return result;
-};
-
 void Explosion::run() {
-	std::list<Tile*> nb = neighbors (this->power, this->location,this->simulation->getMap());
+	std::list<Tile*> nb = this->simulation->getMap()->neighbors(this->power, this->location);
 	for (std::list<Tile*>::iterator t = nb.begin(); t != nb.end();++t) {
 		// kill npc in the case:
 		std::list<NPC*> npcs = (*t)->getNPCs();
