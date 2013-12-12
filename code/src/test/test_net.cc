@@ -11,8 +11,8 @@
 using namespace std;
 
 int test_net(){
-  DummyServer *ser = Network::createDummyServer() ;
-  DummyClient *cli = Network::createDummyClient(ser) ;
+  Server *ser = Network::createDummyServer() ;
+  Client *cli = Network::createDummyClient(ser) ;
   NetEvent e ;
   e.setType(NetEvent::PLAYER_JOIN);
   int player_id = 0 ;

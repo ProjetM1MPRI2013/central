@@ -6,15 +6,6 @@
 #include "serverInfo.h"
 #include "abstractMessage.h"
 
-class Server;
-class Client;
-
-/**
- * @brief The GameState class (Temporary, will be replaced by an include when the
- * corresponding class in the simulation module will be defined.
- *
- */
-class GameState {} ;
 
 /**
  * @brief The Server interface.
@@ -39,7 +30,7 @@ public :
    * UDP protocol for the real implementation).
    * @deprecated : use the update genarator class instead
    */
-  virtual void sendUpdate(GameState &game_state) = 0 ;
+  //virtual void sendUpdate(GameState &game_state) = 0 ;
 
   /**
    * @brief broadcastMessage : broadcasts a message of the given type to all the clients

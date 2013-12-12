@@ -20,11 +20,6 @@ struct SpriteTilePack
   // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
   int originX;
   int originY;
-  // Ces variables correspondent à la boite qui encadre l'image dans la texture
-  int X1;
-  int Y1;
-  int X2;
-  int Y2;
 };
 
 
@@ -277,6 +272,11 @@ class Tile {
      * @brief Returns true if the tile has a texture
      **/
     bool TextureIsInit();
+    
+    /**
+     * @brief Returns true iff the tile is the origin of the building
+     **/
+    bool isBatOrigin();
 
     void printTileType();
     

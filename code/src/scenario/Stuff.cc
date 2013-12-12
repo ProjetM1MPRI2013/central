@@ -17,3 +17,12 @@ Stuff::Stuff (std::string n) {
 
   this->actionsPossible.push_back(Actions::DROP);
 };
+
+
+Stuff::Stuff (std::string n, int id){
+  name = n;
+  
+  stuffID = id;
+
+  this->actionsPossible.push_back(Actions::DROP);
+};

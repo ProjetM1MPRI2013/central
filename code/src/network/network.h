@@ -3,15 +3,11 @@
 
 #include "server.h"
 #include "client.h"
-class UpdateGenerator;
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
-class LocalStateUpdater;
-#include "simulation/simulation.h"
-#include "simulation/localState.h"
+
+class Simulation ;
 class LocalState;
-class DummyServer;
-class DummyClient;
 
 /**
  * @brief The Network class
@@ -31,7 +27,7 @@ public :
      * @param s_info : informations provided to start the server
      * @return a newly created server.
      */
-    static Server& createServer(ServerInfo s_info) ;
+    static Server* createServer(ServerInfo s_info) ;
 
     /**
      * @brief createClient
@@ -45,7 +41,7 @@ public :
      * @param c_info : informations provided to start the client
      * @return a newly created client
      */
-    static Client& createClient(ClientInfo c_info) ;
+    static Client* createClient(ClientInfo c_info) ;
 
     /**
      * @brief createDummyServer
@@ -53,7 +49,7 @@ public :
      * No serialization is carried out. Only hard copy of the data passed.
      * @return An instance of the Server Class.
      */
-    static DummyServer* createDummyServer() ;
+    static Server* createDummyServer() ;
 
     /**
      * @brief createDummyClient
@@ -67,7 +63,7 @@ public :
      * @param server The server to communicate with
      * @return The newly created client.
      */
-    static DummyClient* createDummyClient(Server * server) ;
+    static Client* createDummyClient(Server * server) ;
 
 
     /**

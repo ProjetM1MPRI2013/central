@@ -47,7 +47,7 @@ void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyCli
   lock.unlock() ;
 }
 
-void DummyServer::sendUpdate(GameState &game_state){
+/*void DummyServer::sendUpdate(GameState &game_state){
     list<DummyClient*>::iterator cli ;
     for(cli = clients.begin(); cli != clients.end() ; cli++)
     {
@@ -56,7 +56,7 @@ void DummyServer::sendUpdate(GameState &game_state){
         //Deprecated this part will be moved to UpdateGenerator
         (*cli)->addMessage(NULL, GameUpdate::getMsgType()) ;
     }
-}
+}*/
 
 vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &)){
     MapType::iterator p =  received_messages.find(msgType) ;

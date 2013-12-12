@@ -22,9 +22,9 @@ Animation::Animation(TexturePack* tex)
 
 void Animation::nextFrame()
 {
-  if (currentFrame < tex->nbFrames[animT] - 1)
+  if (currentFrame + 1 < tex->nbFrames[animT])
     currentFrame++;
-  else if (currentFrame == tex->nbFrames[animT] - 1 && tex->isLoop[animT])
+  else if (currentFrame + 1 == tex->nbFrames[animT] && tex->isLoop[animT])
     currentFrame = 0;
   
   spr.setTextureRect(sf::IntRect(currentFrame * tex->widthSprite[animT], animT * tex->heightSprite, (currentFrame + 1) * tex->widthSprite[animT] - 1,  (animT + 1) * tex->heightSprite - 1));

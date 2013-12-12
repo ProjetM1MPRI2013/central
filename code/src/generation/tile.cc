@@ -27,8 +27,8 @@ bool Coordinates::equals(Coordinates& c) {
 
 
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
-  coord(abs,ord),
   batOrigin(batOriginO),
+  coord(abs,ord),
   coordBorough(boroughOrigin),
   picture(pictureO){
   if (DEBUG){std::cout << "Tile : begin\n";}
@@ -51,7 +51,7 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   if(this->stp)
     {
       this->sprite.setTexture(this->stp->texture);
-      this->sprite.setTextureRect(sf::IntRect(this->stp->X1,this->stp->Y1,this->stp->X2,this->stp->Y2));
+      // this->sprite.setTextureRect(sf::IntRect(this->stp->X1,this->stp->Y1,this->stp->X2,this->stp->Y2));
     }  
   this->destructionLevel = 0.;
   wrapper = NULL;
@@ -136,7 +136,7 @@ void Tile::setTexture(SpriteTilePack* stp){
   if(stp)
     {
       this->sprite.setTexture(stp->texture);
-      this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
+      // this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
     }
   return;
 }
@@ -200,6 +200,10 @@ int Tile::getPictureX() {
 
 int Tile::getPictureY() {
   return(picture->getOrd());
+}
+
+bool Tile::isBatOrigin() {
+  return(coord.equals(batOrigin));
 }
 
 void Tile::printTileType(){

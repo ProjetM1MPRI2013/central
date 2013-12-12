@@ -5,7 +5,7 @@
 #include "generation/tile.h"
 #include "ScenarioAction.h"
 #include "simulation/player.h"
-//#include "scenario/ActionsTerro.h"
+#include "scenario/ActionsTerro.h"
 #include "NewMov.h"
 #include <iostream>
 #include <cerrno>
