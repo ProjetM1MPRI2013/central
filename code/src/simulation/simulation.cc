@@ -377,7 +377,7 @@ void Simulation::run(sf::Time dt) {
   for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
        it != pendingActions.end(); ++it) {
     ScenarioAction* action = (*it);
-    //envoyer action à tlm et effectuer action
+    //TODO : envoyer action à tlm et effectuer action
   }
   this->pendingActions.clear();
 

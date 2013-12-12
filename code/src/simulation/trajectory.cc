@@ -114,6 +114,7 @@ void Trajectory::pathfinding(Geography& map) {//stupide pour l'instant, A* apres
   assert(found);//si la map est pas connexe voir avec Chatan
   
   posList.push_front(target);
+  //temp n'est pas initialisé à priori, g++ râle. Il faudrait régler ça.
   while (!temp->equals(*s)) {
     temp = temp->getParent();
     assert(temp);

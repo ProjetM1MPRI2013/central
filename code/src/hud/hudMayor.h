@@ -11,6 +11,10 @@ class TileMap;
 
 //enum WaitFor {WF_NONE, WF_CLICK};
 
+enum MayorState {MAYOR_ACTIONS, MAYOR_NUMBERS}; 
+
+enum CurrentAction {CA_CAM, CA_COP}; 
+
 class Simulation;
 
 class HudMayor: public PreHud {
@@ -33,11 +37,14 @@ public:
 private:
 	unsigned int w;
 	unsigned int h;
-	int i;
+	unsigned int i;
 	Simulation& simulation;
 	tgui::Gui hud;
-	std::list<Actions> actionsList;
 	std::list<tgui::Button::Ptr> buttonsList;
+  MayorState currentState; 
+  MayorState nextState; 
+  CurrentAction currentAction; 
+  unsigned int currentNumber; 
 	WaitFor waitFor;
 
 };
