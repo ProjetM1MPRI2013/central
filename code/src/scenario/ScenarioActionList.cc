@@ -128,6 +128,8 @@ void Explosion::run() {
 			this->simulation->addAction(new KillNPC(*n, this->simulation));
 		};
 		//TODO détruire les batiments
+		//TODO juste pour les test
+		(*t)->setAnxiety(100);
 	};
 };
 
