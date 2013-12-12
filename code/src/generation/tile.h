@@ -148,7 +148,7 @@ class Tile {
   /**
    * @brief List of the NPC currently in the tile
    */
-  std::list<NPC*> listNPC;
+  std::list<NPC*>& listNPC;
 
 
   /**
