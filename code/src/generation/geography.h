@@ -49,7 +49,7 @@ class Geography {
   /*
    * @brief add a tile to the list if it is on a map
    */
-  void neighborsaux (int x,int y , std::list<Tile*> result);
+  void neighborsaux (int x,int y , std::list<Tile*>* result);
  public :
   /**
    * @brief Génération aléatoire d'une map à partir d'une seed
@@ -105,6 +105,6 @@ class Geography {
    /*
     *@brief create the list of tiles witch are at n tile of the tile t0
    */
-  std::list<Tile*> neighbors (int n,Tile* t0);
+  std::list<Tile*>* neighbors (int n,Tile* t0);
 };
 #endif // GEOGRAPHY_H
