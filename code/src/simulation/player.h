@@ -4,8 +4,8 @@
 #include "position.h"
 class Simulation;
 #include "simulation.h"
+//#include "scenario/Stuff.h"
 class Stuff;
-#include "scenario/Stuff.h"
 #include "SFML/System.hpp"
 #include <iostream>
 #include <cerrno>

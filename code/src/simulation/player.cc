@@ -1,9 +1,15 @@
 #include "player.h"
+#include "scenario/Stuff.h"
+#include "scenario/StuffList.h"
 
 Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
+  this->addItem((Stuff *) (new Knife()));
+  this->addItem((Stuff *) (new Bomb(2)));
+  this->addItem((Stuff *) (new Gun(5,2,4)));
+  this->addItem((Stuff *) (new Ammunition(10)));
 };
 
 int Player::getID(){
@@ -29,6 +35,7 @@ void Player::setDirection(Direction newd) {
 
 void Player::addItem(Stuff* s) {
   this->inventory.push_back(s);
+  std::cout << "Add item to player " << this->playerID << " : " << s->name << "\n";
   return;
 };
 

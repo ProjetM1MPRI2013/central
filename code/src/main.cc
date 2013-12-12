@@ -56,9 +56,9 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
-	//HudMayor hudMayor = HudMayor(&window,simu);
+	HudTerro hudTerro = HudTerro(&window,simu);
 	while (window.isOpen()) {
-		//hudMayor.init();
+		hudTerro.init();
 		dt = clock.restart();
 		sf::Event event;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)
@@ -81,10 +81,10 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 					}
 				}
 			}
-			//hudMayor.event(&window,event,&tilemap);
+			hudTerro.event(&window,event);
 		}
-		//tgui::Callback callback;
-		//hudMayor.callback(callback);
+		tgui::Callback callback;
+		hudTerro.callback(callback);
 		simu.run(dt);
 		//tilemap.run(&window);
 		graContIso.run(&window);
