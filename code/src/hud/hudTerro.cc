@@ -114,16 +114,16 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 				// je verrai plus tard comment on fait exactement
 				switch (event->key.code) {
 				case sf::Keyboard::Z:
-					//newMovement (NewMov::P_UP);
+					newMovement (NewMov::P_UP,(&this->simulation));
 					break;
 				case sf::Keyboard::Q:
-					//NewMovement (NewMov::P_LEFT);
+					newMovement (NewMov::P_LEFT,(&this->simulation));
 					break;
 				case sf::Keyboard::S:
-					//NewMovement (NewMov::P_DOWN);
+					newMovement (NewMov::P_DOWN,(&this->simulation));
 					break;
 				case sf::Keyboard::D:
-					//NewMovement (NewMov::P_RIGHT);
+					newMovement (NewMov::P_RIGHT,(&this->simulation));
 					break;
 				default:
 					break;
@@ -133,16 +133,16 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 			if (event->type == sf::Event::KeyReleased) {
 				switch (event->key.code) {
 				case sf::Keyboard::Z:
-					//newMovement (NewMov::R_UP);
+					newMovement (NewMov::R_UP,(&this->simulation));
 					break;
 				case sf::Keyboard::Q:
-					//NewMovement (NewMov::R_LEFT);
+					newMovement (NewMov::R_LEFT,(&this->simulation));
 					break;
 				case sf::Keyboard::S:
-					//NewMovement (NewMov::R_DOWN);
+					newMovement (NewMov::R_DOWN,(&this->simulation));
 					break;
 				case sf::Keyboard::D:
-					//NewMovement (NewMov::R_RIGHT);
+					newMovement (NewMov::R_RIGHT,(&this->simulation));
 					break;
 				default:
 					break;
