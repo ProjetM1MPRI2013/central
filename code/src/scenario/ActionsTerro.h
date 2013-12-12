@@ -34,6 +34,7 @@ class Drop : public Action{
    * @param stuff the stuff to drop
    */
   Drop  (Stuff* stuff, Simulation* s);
+  Drop(const Drop& d);
    /**
    * @brief the stuff to drop
    */
@@ -43,6 +44,11 @@ class Drop : public Action{
   bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 class Attack : public Action {
@@ -53,6 +59,7 @@ class Attack : public Action {
    * @param victim the victim
    */
   Attack (Weapon* weapon, NPC* victim, Simulation* s);
+  Attack (const Attack& a);
    /**
    * @brief the weapon
    */
@@ -65,6 +72,11 @@ class Attack : public Action {
   bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 
@@ -77,6 +89,7 @@ class Plant : public Action {
    * @param zone the zone where the bomb will be planted 
    */
   Plant (Bomb* bomb ,Tile* zone, Simulation* s);
+  Plant (const Plant&);
    /**
    * @brief the bomb
    */
@@ -89,6 +102,11 @@ class Plant : public Action {
   bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 
@@ -100,6 +118,7 @@ class Reload : public Action {
    * @param Ammunition the pack of ammunition used
    */
   Reload (Gun* gun,Ammunition* ammunition, Simulation* s);
+  Reload(const Reload&);
    /**
    * @brief the gun
    */
@@ -112,6 +131,11 @@ class Reload : public Action {
   bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 

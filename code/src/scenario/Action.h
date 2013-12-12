@@ -12,7 +12,7 @@ class Simulation;
 
 typedef Simulation HostSimulation;
 
-class Action : AbstractMessage {
+class Action : public AbstractMessage {
  public:
   /**
    * @brief Action name
