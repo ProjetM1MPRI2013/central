@@ -21,11 +21,11 @@ public:
   void setZoom(int resize);
   int getZoom();
   void setCoord(int x,int y);
-  int TileMap::getX();
-  int TileMap::getY();
+  int getX();
+  int getY();
 
   // resize = le niveau actuel de zoom
-  void run(sf::RenderWindow* window,int resize);
+  void run(sf::RenderWindow* window);
 private:
   //les coordonnées du point en haut à gauche. 0,0 veut dire le bord du haut à gauche de l'écran est le bord du haut à gauche de l'écran
   int x,y;

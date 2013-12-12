@@ -1,26 +1,23 @@
-#ifndef HUD_H
-#define HUD_H 
+#ifndef HUDM_H
+#define HUDM_H
 
 #include "SFML/Window.hpp"
-#include <TGUI/TGUI.hpp> 
-#include <string> 
-#include <iostream> 
-#include <sstream> 
+#include <TGUI/TGUI.hpp>
+#include <string>
+#include <iostream>
+#include <sstream>
 #include "../scenario/Stack.h"
-
-enum ButtonState {
-	BS_INVENT, BS_ACTIONS
-};
+class TileMap;
 
 //enum WaitFor {WF_NONE, WF_CLICK};
 
 class Simulation;
 
-class HudTerro: public PreHud {
+class HudMayor: public PreHud {
 public:
-	HudTerro(sf::RenderWindow* window, Simulation& simulation);
+	HudMayor(sf::RenderWindow* window, Simulation& simulation);
 	void init();
-	void event(sf::RenderWindow* window, sf::Event e);
+	void event(sf::RenderWindow* window, sf::Event e, TileMap* tilemap);
 	void callback(tgui::Callback callback);
 	void draw();
 	void setwf(WaitFor w);
@@ -39,13 +36,9 @@ private:
 	int i;
 	Simulation& simulation;
 	tgui::Gui hud;
-	std::list<Stuff*> inventory;
 	std::list<Actions> actionsList;
 	std::list<tgui::Button::Ptr> buttonsList;
 	WaitFor waitFor;
-	ButtonState currentState;
-	ButtonState nextState;
-	Stuff* currentStuff;
 
 };
 

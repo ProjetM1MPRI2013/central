@@ -131,11 +131,12 @@ int TileMap::getY(){
 TileMap::TileMap(Simulation* simu, Geography* geo){
 this->simu=simu;
 this->geo=geo;
+this->zoom = 2;
 this->load("../../../sprite/tileset.png", sf::Vector2u(10,10), Tilesbite , 100, 100);
 createTiles();
 }
 
-void TileMap::run(sf::RenderWindow* window, int resize){
+void TileMap::run(sf::RenderWindow* window){
   this->createTiles();
   //aide au débuggage
   /*for(int i=0;i<100;i++){
@@ -146,7 +147,8 @@ void TileMap::run(sf::RenderWindow* window, int resize){
   }*/
 
   window->clear();
-  this->load("../../../sprite/tileset2.png", sf::Vector2u(resize*100,resize*100), Tilesbite , 100, 100);
+  std::cout << "zoom : " << this->zoom << std::endl;
+  this->load("../../../sprite/tileset2.png", sf::Vector2u((this->zoom)*100,(this->zoom)*100), Tilesbite , 100, 100);
   createTiles();
   window->draw(*this);
   window->display();

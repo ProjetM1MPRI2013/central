@@ -25,12 +25,12 @@ std::string stringOfActions(Actions a) {
 }
 ;
 
-HudTerro::HudTerro(sf::RenderWindow window, Simulation& simulation) :
+HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 		simulation(simulation) {
 	this->stack = Stack();
-	this->w = window.getSize().x;
-	this->h = window.getSize().y;
-	this->hud = tgui::Gui(window);
+	this->w = (*window).getSize().x;
+	this->h = (*window).getSize().y;
+	this->hud = tgui::Gui((*window));
 	this->inventory = simulation.getPlayer()->getInventory();
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
@@ -77,10 +77,9 @@ void HudTerro::init() {
 }
 ;
 
-void HudTerro::event(sf::RenderWindow window, sf::Event event) {
-	while (window.pollEvent(event)) {
+void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 		if (event.type == sf::Event::Closed)
-			window.close();
+			(*window).close();
 
 		if (waitFor == WF_NONE) {
 			if (event.type == sf::Event::KeyPressed) {
@@ -140,8 +139,6 @@ void HudTerro::event(sf::RenderWindow window, sf::Event event) {
 
 		// Pass the event to all the current widgets
 		(this->hud).handleEvent(event);
-	};
-
 }
 ;
 
