@@ -8,14 +8,21 @@
 #include "simulation/npc.h"
 #include "generation/tile.h"
 #include "Actions.h"
+#include "ScenarioActionList.h"
+#include "NewMov.h"
+#include "tile.h"
+#include "position.h"
+#include "player.h"
+#include "npc.h"
 
 
 enum SoN {
 	SON_STUFF, SON_NPC
 };
+
 void SoNOfActions(Actions a,std::list<SoN> l);
 
-enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
+typedef Simulation HostSimulation;
 
 void newMovement (NewMov n);
 
@@ -31,9 +38,11 @@ class Drop : public Action{
    * @brief the stuff to drop
    */
   Stuff* stu;
+  int playerID;
 
   bool isActionPossible ();
   void doAction ();
+  void addPendingActions(HostSimulation* hs);
 };
 
 class Attack : public Action {
@@ -55,6 +64,7 @@ class Attack : public Action {
 
   bool isActionPossible ();
   void doAction ();
+  void addPendingActions(HostSimulation* hs);
 };
 
 
@@ -78,6 +88,7 @@ class Plant : public Action {
 
   bool isActionPossible ();
   void doAction ();
+  void addPendingActions(HostSimulation* hs);
 };
 
 
@@ -100,6 +111,7 @@ class Reload : public Action {
  
   bool isActionPossible ();
   void doAction ();
+  void addPendingActions(HostSimulation* hs);
 };
 
 

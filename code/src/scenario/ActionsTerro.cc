@@ -3,8 +3,21 @@
 #include <list>
 
 /*to ask to denys to implemente */
-int distance(NPC* npc) {return 0;};
-bool isPlantable (Tile* t) {return true;};
+bool isPlantable (Tile* t) {
+switch(t->getType())
+// todo choisir les quelles sont plantables
+	{case(ROADH) : return true;
+	case(ROADV) : return true;
+	case(INTER) : return true;
+	case(BANK) : return false;
+	case(HOUSE): return false;
+	case(BLANK): return false;
+	};
+};
+
+float distance(Simulation* s, NPC* npc) {
+	s->getPlayer()->getPosition()->distance(npc->getPosition());
+};
 
 
 
@@ -38,6 +51,7 @@ void SoNOfActions(Actions a,std::list<SoN> l) {
 
 Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
   stu = s;
+  this->playerID = this->simulation->getPlayer()->getID();
 };
 
 Attack :: Attack (Weapon* weapon,NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
@@ -58,6 +72,10 @@ Reload :: Reload (Gun* gun, Ammunition* ammunition, Simulation* sim) : Action ("
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {return;};
+void Drop::addPendingActions(HostSimulation* hs){
+  hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
+  hs->deleteAction(this);
+}
 
 
 bool Plant::isActionPossible(){
@@ -68,6 +86,12 @@ bool Plant::isActionPossible(){
 };
 void Plant::doAction () {return;};
 
+void Plant::addPendingActions(HostSimulation* hs){
+  //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
+  hs->addAction(new Explosion(this->z,this->bo->getPower(),(Simulation*)hs));
+  hs->deleteAction(this);
+}
+
 
 bool Reload::isActionPossible(){
   return ((isInThePack(this->simulation,this->g))
@@ -76,14 +100,24 @@ bool Reload::isActionPossible(){
 };
 void Reload::doAction () {return;};
 
+void Reload::addPendingActions(HostSimulation* hs){
+  //TODO
+  hs->deleteAction(this);
+}
+
 
 
 bool Attack::isActionPossible(){
   return ((isInThePack(this->simulation,this-> weap))
-	  && ( (this->weap)->getRange() <= distance (this->vict) )
+	  && ( (this->weap)->getRange() <= distance (this->simulation,this->vict) )
 	  );
 };
 void Attack::doAction () {return;};
+
+void Attack::addPendingActions(HostSimulation* hs){
+  hs->addAction(new KillNPC(this->vict, (Simulation*)hs));
+  hs->deleteAction(this);
+}
 
 
 void newMovement (NewMov n){

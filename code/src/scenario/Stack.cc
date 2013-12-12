@@ -1,9 +1,14 @@
 #include "Stack.h"
 #include "../hud/hudTerro.h"
-/*todo*/
 
-Tile* getTile(Simulation* s) {return 0;};
 
+Tile* getTile(Simulation* s) {
+	return &(
+		s->getPlayer()->getPosition()->isInTile(
+				*(s->getMap())
+				)
+		)
+		;};
 
 Stack::Stack (){
   actionsName = Actions::NONE;

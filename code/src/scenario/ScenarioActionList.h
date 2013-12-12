@@ -5,7 +5,8 @@
 #include "generation/tile.h"
 #include "ScenarioAction.h"
 #include "simulation/player.h"
-#include "scenario/ActionsTerro.h"
+//#include "scenario/ActionsTerro.h"
+#include "NewMov.h"
 #include <iostream>
 #include <cerrno>
 
@@ -82,4 +83,15 @@ public:
   virtual void run ();
 };
 
+class DropItem : public ScenarioAction{
+ public :
+  Stuff* stuff;
+  int playerID;
+  /**
+   *@param stuffO : item to drop
+   *@param id : id of the player
+   */
+  DropItem(Stuff* stuffO,int id, Simulation* s);
+  virtual void run ();
+};
 #endif

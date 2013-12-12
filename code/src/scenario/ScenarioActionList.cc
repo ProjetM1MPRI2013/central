@@ -1,6 +1,7 @@
 #include "ScenarioActionList.h"
 #include "simulation.h"
 #include "ActionsPC.h"
+#include "ActionsTerro.h"
 
 /*****************
  *ChangeDirection*
@@ -119,8 +120,6 @@ KillNPC::KillNPC(NPC* t,Simulation* s) : ScenarioAction("KillNPC",s){
 };
 
 void KillNPC::run(){
-  //Supprime un NPC de la case du NPC target, vue qu'il n'existe pas de methode pour supprimer un NPC précis -_-' [Adrien K]
-  //TODO : gérer le cas ou le NPC n'existe pas
     simulation->supprimerNPC(target);
   return;
 };
@@ -153,3 +152,14 @@ void AddCams::run(){
   };
   simulation->enleveSous((int)COST_CAM2*number);
 };
+
+
+DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropItem",s){
+  this->stuff = stuffO;
+  this->simulation = s;
+  this->playerID = id;
+}
+
+void DropItem::run (){
+  this->simulation->getPlayerByID(this->playerID)->removeItem(stuff);
+}
