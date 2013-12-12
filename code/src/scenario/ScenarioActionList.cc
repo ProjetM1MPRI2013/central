@@ -124,7 +124,7 @@ void KillNPC::run(){
   return;
 };
 
-AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){     //TODO : répartir là où on peut
+AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){
   x = xx;
   y = yy;
   number = n;
@@ -133,13 +133,13 @@ AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCop
 
 void AddCops::run(){
   for (int i=0;i<number;i++) {
-    simulation->addAgent(new Agent(x+i,y+i,COST_COP1,0));
+    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
   };
   simulation->enleveSous((int)COST_COP2*number);
   return;
 };
 
-AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){     //TODO : répartir là où on peut
+AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){
   x = xx;
   y = yy;
   number = n;
@@ -147,8 +147,14 @@ AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCam
 };
 
 void AddCams::run(){
-  for (int i=0;i<number;i++) {
+  for (int i=1;i<number/4;i++) {
     simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1));
+    simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1));
+    simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1));
+    simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1));
+  };
+  for (int i= number/4 + 1;i<number%4 + number/4 +1;i++) {
+	  simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1));
   };
   simulation->enleveSous((int)COST_CAM2*number);
 };
