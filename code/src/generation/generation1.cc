@@ -31,10 +31,12 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   fichier.close();
-  maxInter = 4;
-  minInter = 3;
+  maxInter = 9;
+  minInter = 4;
+  assert(minInter <= maxInter);
   nbInter1 = 0;
   nbInter2 = 0;
+  // On choisit le nombre d'intersections sur l'axe des abscisses
   while (nbInter1 < minInter) {
     nbRand = randomGen();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
@@ -42,6 +44,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   }
   if (DEBUG) {std::cout << "nbInter1 : " << nbInter1 << std::endl;};
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  // On choisit le nombre d'intersections sur l'axe des ordonnées
   while (nbInter2 < minInter)  {
     nbRand = randomGen();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
@@ -114,38 +117,87 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << fileRoadV << std::endl;}
   Coordinates* pictureRoadV = roadv.getPicture();
   floatMatrix speedRoadV = roadv.getSpeed();
+
+  // On choisit les abscisses et les ordonnées des intersections
   int absInter[nbInter1];
   int ordInter[nbInter2];
   int min, max;
+  int nbRand2;
+  int seuil1 = 666;
+  int seuil2 = 6;
   min = 0;
   max = MAP_WIDTH - nbInter1*widthInter;
+  if (DEBUG) {std::cout << "min : " << min << std::endl;}
+  if (DEBUG) {std::cout << "max : " << max << std::endl;}
   for (i=0; i<nbInter1; i++) {
     nbRand = randomGen();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
-    while(nbRand % widthRoadV != 0){
+    if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
+      nbRand2 = randomGen();
+      nbRand2 = nbRand2 % seuil1;
+    }
+    else {
+      nbRand2 = -1;
+    }
+    while(nbRand % widthRoadV != 0 || nbRand2 > seuil2){
       nbRand = randomGen();
       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       nbRand = nbRand % (max-min+1);
+      if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
+	nbRand2 = randomGen();
+	nbRand2 = nbRand2 % seuil1;
+      }
+      else {
+	nbRand2 = -1;
+      }
     }
+    if (DEBUG) {std::cout << "Tour de boucle choix inter abs : " << i << std::endl;}
     absInter[i] = nbRand + min;
     min = absInter[i] + widthInter;
-    max = max - widthInter;
+    max = max + widthInter;
+    if (DEBUG) {std::cout << "nbRand : " << nbRand << std::endl;}
+    if (DEBUG) {std::cout << "nbRand2 : " << nbRand2 << std::endl;}
+    if (DEBUG) {std::cout << "absInter[i] : " << absInter[i] << std::endl;}
+    if (DEBUG) {std::cout << "min : " << min << std::endl;}
+    if (DEBUG) {std::cout << "max : " << max << std::endl;}
+    assert(absInter[i] < MAP_WIDTH);
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   min = 0;
   max = MAP_HEIGHT - nbInter2*heightInter;
+  if (DEBUG) {std::cout << "min : " << min << std::endl;}
+  if (DEBUG) {std::cout << "max : " << max << std::endl;}
   for (j=0; j<nbInter2; j++) {
     nbRand = randomGen();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
-    while(nbRand % heightRoadH != 0){
+    if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
+      nbRand2 = randomGen();
+      nbRand2 = nbRand2 % seuil1;
+    }
+    else {
+      nbRand2 = -1;
+    }
+    while(nbRand % heightRoadH != 0 || nbRand2 > seuil2){
       nbRand = randomGen();
       nbRand = nbRand % (max-min+1);
+      if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
+	nbRand2 = randomGen();
+	nbRand2 = nbRand2 % seuil1;
+      }
+      else {
+      nbRand2 = -1;
+      }
     }
+     if (DEBUG) {std::cout << "Tour de boucle choix inter ord : " << j << std::endl;}
     ordInter[j] = nbRand + min;
     min = ordInter[j] + heightInter;
-    max = max - heightInter;
+    max = max + heightInter;
+    if (DEBUG) {std::cout << "ordInter[j] : " << ordInter[j] << std::endl;}
+    if (DEBUG) {std::cout << "min : " << min << std::endl;}
+    if (DEBUG) {std::cout << "max : " << max << std::endl;}
+    assert(ordInter[j] < MAP_HEIGHT);
   }
 
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;}; //9
