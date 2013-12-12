@@ -2,7 +2,7 @@
 #include "simulation.h"
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
-
+#include "geography.h"
 /*****************
  *ChangeDirection*
  *****************/
@@ -119,15 +119,23 @@ Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s
   location = t;
   power = p;
 };
+
+/*
+ *@brief test for 2 int if the tile is in the map
+ */
+
 bool isInTheMap (int x, int y, Geography* m ) {
 	//TODO verifier avec chatan
 	return (
 			(x >= 0)
-			// TODO && (x <= m->getMapWeight()) && (y >= 0) && (y <= m->getMapLenght())
+			&& (x <= m->getMapWidth())
+			&& (y >= 0)
+			&& (y <= m->getMapHeight())
 			);
 };
-
-
+/*
+ * @brief add a tile to the list if it is on a map
+ */
 void neighborsaux (int x,int y , std::list<Tile*> result ,Geography* m ) {
 	if (isInTheMap (x,y,m)) {
 					result.push_front(
@@ -136,6 +144,9 @@ void neighborsaux (int x,int y , std::list<Tile*> result ,Geography* m ) {
 	};
 };
 
+/*
+ * @brief create the list of tiles witch are at n tile of the tile t0
+ */
 std::list<Tile*> neighbors (int n,Tile* t0,Geography* m) {
 	Coordinates c0 = t0->getCoord();
 	int x0 = c0.abs ;
