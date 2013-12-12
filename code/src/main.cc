@@ -23,25 +23,8 @@
 
 #define DEBUG false
 
-#ifdef WINDOWS
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#else
-#include <unistd.h>
-#define GetCurrentDir getcwd
-#endif
-
-void printcwd() {
-	char cCurrentPath[FILENAME_MAX];
-	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))) {
-		std::cerr << "main: printcwd failed" << std::endl;
-	}
-	std::printf("The current working directory is %s", cCurrentPath);
-}
-
 void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 		sf::VideoMode video_mode, Client* clientPtr, Geography& geo) {
-
 	sf::RenderWindow window;
 	if (isFullScreen) {
 		window.create(video_mode, "Game Interface", sf::Style::Fullscreen);
@@ -81,13 +64,16 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 					}
 				}
 			}
-			hudTerro.event(&window,event);
+			hudTerro.event(&window,&event);
 		}
-		tgui::Callback callback;
-		hudTerro.callback(callback);
+
+		hudTerro.callback();
 		simu.run(dt);
 		//tilemap.run(&window);
 		graContIso.run(&window);
+		window.setView(window.getDefaultView());
+		//window.clear();
+		hudTerro.draw();
 		window.display();
 	}
 	return;

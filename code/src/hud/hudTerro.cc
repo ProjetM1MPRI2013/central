@@ -2,6 +2,24 @@
 class Stuff;
 #include "../scenario/Stack.h"
 
+#define DEBUG false
+#define THEME_CONFIG_FILE_HUD_TERRO "../widgets/Black.conf"
+#ifdef WINDOWSTEST
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+
+void printcwd() {
+	char cCurrentPath[FILENAME_MAX];
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))) {
+		std::cerr << "main: printcwd failed" << std::endl;
+	}
+	std::cerr << "The current working directory is "<< cCurrentPath << std::endl;
+}
+
 std::string stringOfActions(Actions a) {
 	switch (a) {
 	case DROP:
@@ -32,10 +50,18 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 	this->h = (*window).getSize().y;
 	this->hud = tgui::Gui((*window));
 	this->inventory = simulation.getPlayer()->getInventory();
+	(this->inventory).clear();
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
 	this->nextState = BS_INVENT;
 	stack.setHud((PreHud*) this);
+	std::cerr << "created Hudterro" << std::endl;
+	(this->hud).setGlobalFont("../fonts/leadcoat.ttf");
+
+	//tgui::Picture::Ptr picture3(this->hud);
+	//picture3->load("../interfaceinit/pic.jpg");
+	//picture3->setSize(w, h);
+	//picture3->setPosition(0, 0);
 
 }
 ;
@@ -45,7 +71,6 @@ void HudTerro::init() {
 	if (this->currentState == BS_INVENT) {
 		// if the inventory must be updated
 		if ((this->inventory) != (simulation.getPlayer()->getInventory())) {
-
 			// Delete the old buttons
 			for (std::list<tgui::Button::Ptr>::iterator it =
 					(this->buttonsList).begin();
@@ -56,36 +81,38 @@ void HudTerro::init() {
 
 			// Updtate the inventory
 			(this->inventory).clear();
-			this->inventory == (simulation.getPlayer()->getInventory());
+			this->inventory = (simulation.getPlayer()->getInventory());
 
 			// Create the new buttons
 			this->i = 0;
 			for (std::list<Stuff*>::iterator it = (this->inventory).begin();
 					it != (this->inventory).end(); ++it) {
 				tgui::Button::Ptr button(this->hud);
-				button->load("../widgets∕Black.conf");
+				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->i) * 100, this->h - 100);
+				std::cerr << "button placed at " << (50 + (this->i) * 100) << "x" << this->h - 100 << std::endl;
 				button->setText((*it)->name);
-				button->bindCallback(tgui::Button::LeftMouseClicked);
 				button->setCallbackId(this->i + 1);
+				button->bindCallback(tgui::Button::LeftMouseClicked);
 				(this->buttonsList).push_back(button);
 				(this->i)++;
+				std::cerr << "adding " << (*it)->name << std::endl;
 			};
 		};
 	};
 }
 ;
 
-void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
-		if (event.type == sf::Event::Closed)
+void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
+		if (event->type == sf::Event::Closed)
 			(*window).close();
 
 		if (waitFor == WF_NONE) {
-			if (event.type == sf::Event::KeyPressed) {
+			if (event->type == sf::Event::KeyPressed) {
 				// Je crois qu'on veut rajouter une action terro newmovement
 				// je verrai plus tard comment on fait exactement
-				switch (event.key.code) {
+				switch (event->key.code) {
 				case sf::Keyboard::Z:
 					//newMovement (NewMov::P_UP);
 					break;
@@ -103,8 +130,8 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 				};
 			};
 
-			if (event.type == sf::Event::KeyReleased) {
-				switch (event.key.code) {
+			if (event->type == sf::Event::KeyReleased) {
+				switch (event->key.code) {
 				case sf::Keyboard::Z:
 					//newMovement (NewMov::R_UP);
 					break;
@@ -124,26 +151,29 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 		};
 
 		if (waitFor == WF_CLICK) {
-			if (event.type == sf::Event::MouseButtonPressed) {
-				if (event.mouseButton.button == sf::Mouse::Left) {
+			if (event->type == sf::Event::MouseButtonPressed) {
+				if (event->mouseButton.button == sf::Mouse::Left) {
 					// TODO : envoyer le clic si c'est un NPC
 				} else {
 					stack.cancel();
 				};
 			} else {
-				if (event.type == sf::Event::KeyPressed) {
+				if (event->type == sf::Event::KeyPressed) {
 					stack.cancel();
 				};
 			};
 		};
 
 		// Pass the event to all the current widgets
-		(this->hud).handleEvent(event);
+		//std::cerr << "passe dedans" << std::endl;
+		(this->hud).handleEvent((*event));
 }
 ;
 
-void HudTerro::callback(tgui::Callback callback) {
+void HudTerro::callback() {
+	tgui::Callback callback;
 	while ((this->hud).pollCallback(callback)) {
+		std::cerr<< "in callback" << std::endl;
 		if ((this->currentState) == BS_INVENT) {
 			if (callback.id > 0 && callback.id <= (this->buttonsList).size()) {
 				// Save the selected item
@@ -170,7 +200,7 @@ void HudTerro::callback(tgui::Callback callback) {
 						(this->actionsList).begin();
 						it != (this->actionsList).end(); ++it) {
 					tgui::Button::Ptr button(this->hud);
-					button->load("../widgets∕Black.conf");
+					button->load(THEME_CONFIG_FILE_HUD_TERRO);
 					button->setSize(80, 40);
 					button->setPosition(50 + (this->i) * 100, this->h - 100);
 					button->setText(stringOfActions(*it));
@@ -182,7 +212,7 @@ void HudTerro::callback(tgui::Callback callback) {
 
 				// Create the 'Inventory' button.
 				tgui::Button::Ptr button(this->hud);
-				button->load("../widgets∕Black.conf");
+				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->w - 100), this->h - 100);
 				button->setText("Inventory");
@@ -217,6 +247,8 @@ void HudTerro::callback(tgui::Callback callback) {
 
 void HudTerro::draw() {
 	(this->hud).draw();
+	std::vector<sf::String> t = (this->hud).getWidgetNames();
+	//std::cerr << "I'm drawing, Bitch " << t.size() << std::endl;
 }
 ;
 
