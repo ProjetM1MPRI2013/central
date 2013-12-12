@@ -2,7 +2,7 @@
 #define PREHUD_H
 
 enum WaitFor {
-	WF_NONE, WF_CLICK
+	WF_NONE, WF_CLICK, WF_STUFF, WF_ERROR
 };
 
 class PreHud {

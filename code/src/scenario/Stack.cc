@@ -89,7 +89,7 @@ void Stack::sendAction () {
 		  }
 		else
 		  {
-		    /*todo envoyer un message d'erreur*/
+			//(this->hud)->setwf(WF_NOTPOSSIBLE);
 		  };
 		this->cancel();
 		(this->hud)->setwf(WF_NONE);
@@ -102,7 +102,7 @@ void Stack::sendAction () {
 	    /*
 	      else
 	      {
-	      (this->hud).setwf(ITEM)
+	      (this->hud)->setwf(WF_STUFF)
 	      }
 	    */
 	};
@@ -123,6 +123,7 @@ void Stack::sendNpc(NPC* n) {
 	}
 	else
 	{
+		//(this->hud)->setwf(WF_ERROR);
 		/*todo : envoyer message d'erreur*/
 	};
 };
@@ -135,6 +136,7 @@ void Stack::sendStuff(Stuff* s) {
 	}
 	else
 	{
+		//(this->hud)->setwf(WF_ERROR);
 		/*todo : envoyer message d'erreur*/
 	};
 };
