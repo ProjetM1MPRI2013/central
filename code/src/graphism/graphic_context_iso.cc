@@ -2,6 +2,8 @@
 #include "../simulation/npc.h"
 #include <list>
 #include "../simulation/position.h"
+#include <iostream>
+#include <unistd.h>
 
 
   GraphicContextIso::GraphicContextIso(Geography* map, Simulation* sim)
@@ -24,7 +26,7 @@
             Tile* tilec = map->getTile(i,j);
             
             assert(tilec);
-            assert(!tilec->TextureIsInit());
+            assert(tilec->TextureIsInit());
             
             if(tilec->isBatOrigin())
             {
@@ -35,7 +37,7 @@
               std::list<NPC *> lnpc = tilec->getNPCs();
               for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
                 {
-                  assert(!(**ci).TextureIsInit());
+                  assert((**ci).TextureIsInit());
                   
                   sf::Sprite& sfn = (**ci).getSprite();
                   Position& p = (**ci).getPosition();
@@ -58,24 +60,25 @@ void GraphicContextIso::load()
         {
           int i = j - k;
           Tile* tilec = map->getTile(i,j);
-          
-          assert(tilec);
+
+          assert(tilec != NULL);
           
           if(!tilec->TextureIsInit())
             {
               std::string s = tilec->getFilePictures();
-              try
+	      s.pop_back();
+	      try
 		{
-		  SpriteTilePack stp = tilemap.at(s);
-		  tilec->setTexture(&stp);
+		  tilec->setTexture(&(tilemap.at(s)));
 		}
               catch(...)
 		{
 		  sf::Texture t;
+		  std::cout << "chargement de " << s << std::endl;
 		  assert(t.loadFromFile(s));
 		  SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(), .originY = tilec->getPictureY()};
 		  tilemap[s] = stp;
-		  tilec->setTexture(&stp);
+		  tilec->setTexture(&tilemap[s]);
 		}
             }
           
@@ -101,5 +104,17 @@ void GraphicContextIso::addTexturePack(TexturePack t)
 void GraphicContextIso::addSpriteTilePack(SpriteTilePack stp)
 {
   tilepackVector.push_back(stp);
+  return;
+}
+
+void GraphicContextIso::run(sf::RenderWindow* window)
+{
+  window->clear();
+  Position p = *sim->getPlayer()->getPosition();
+  this->view.setSize(sf::Vector2f(window->getSize().x,window->getSize().y));
+  this->view.setCenter(sf::Vector2f(p.getX() + OFFSET_X,p.getY() + OFFSET_Y - (map->getMapWidth()) * RIGHT_TILE(1) ));
+  window->setView(this->view);
+  window->draw(*this);
+    
   return;
 }

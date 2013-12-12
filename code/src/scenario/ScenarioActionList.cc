@@ -2,7 +2,7 @@
 #include "simulation.h"
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
-
+#include "geography.h"
 /*****************
  *ChangeDirection*
  *****************/
@@ -119,13 +119,8 @@ Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s
   location = t;
   power = p;
 };
-std::list<Tile*> neighbors (int n,Tile* t0) {
-	//TODO ask chatan to implemente
-	std::list<Tile*> result;
-	return result;
-};
 void Explosion::run() {
-	std::list<Tile*> nb = neighbors (this->power, this->location);
+	std::list<Tile*> nb = this->simulation->getMap()->neighbors(this->power, this->location);
 	for (std::list<Tile*>::iterator t = nb.begin(); t != nb.end();++t) {
 		// kill npc in the case:
 		std::list<NPC*> npcs = (*t)->getNPCs();
