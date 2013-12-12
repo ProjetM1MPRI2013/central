@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "hud/hudMayor.h"
 #include "hud/hudTerro.h"
+#include <TGUI/TGUI.hpp>
 
 #define DEBUG false
 
@@ -64,8 +65,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 					}
 				}
 			}
-			hudTerro.event(&window,&event);
-		}
+			hudTerro.event(&window,event);
+		};
 
 		hudTerro.callback();
 		simu.run(dt);
