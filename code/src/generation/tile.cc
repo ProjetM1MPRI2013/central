@@ -133,7 +133,7 @@ sf::Sprite& Tile::getSprite(){
 
 void Tile::setTexture(SpriteTilePack* stp){
   this->stp = stp;
-  if(stp)
+  if(stp != NULL)
     {
       this->sprite.setTexture(stp->texture);
       // this->sprite.setTextureRect(sf::IntRect(stp->X1,stp->Y1,stp->X2,stp->Y2));
@@ -187,7 +187,7 @@ bool Tile::getGol() {
 
 }
 bool Tile::TextureIsInit() {
-  return (stp != NULL);
+  return (this->stp != NULL);
 }
 
 std::string Tile::getFilePictures() {
