@@ -16,7 +16,7 @@ switch(t->getType())
 };
 
 float distance(Simulation* s, NPC* npc) {
-	s->getPlayer()->getPosition()->distance(npc->getPosition());
+	return s->getPlayer()->getPosition()->distance(npc->getPosition());
 };
 
 
