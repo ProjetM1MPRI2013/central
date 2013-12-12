@@ -12,10 +12,10 @@ typedef std::string EventName;
   /** We need a function from (target,type,listener) to callback,
    *  We create three maps : target -> (type -> (listener -> callback))
    */
-  template <typename RefE> using ref = std::reference_wrapper<RefE>;
-  typedef std::map<ref<EventListener>, std::function<void ()>, WithUuidCmp> listenerMap;
+  template <typename RefE> using reference = std::reference_wrapper<RefE>;
+  typedef std::map<reference<EventListener>, std::function<void ()>, WithUuidCmp> listenerMap;
   typedef std::map<EventName, listenerMap> eventMap;
-  typedef std::map<ref<EventTarget>,eventMap, WithUuidCmp> targetMap;
+  typedef std::map<reference<EventTarget>,eventMap, WithUuidCmp> targetMap;
 
 class EventManager {
 

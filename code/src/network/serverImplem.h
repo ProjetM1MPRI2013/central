@@ -58,7 +58,7 @@ class ServerImplem : public Server {
   /*
    * Methods from Server Interface
    */
-  void sendUpdate(GameState& game_state) ;
+  //deprecated void sendUpdate(GameState& game_state) ;
   //vector<Event>& receiveEvents() ;
   //virtual vector<NetEvent>& receiveNetEvents() ;
 } ;

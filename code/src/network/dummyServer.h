@@ -98,7 +98,8 @@ protected :
 
 public :
 
-  virtual void sendUpdate(GameState &game_state) ;
+    // deprecated
+    //virtual void sendUpdate(GameState &game_state) ;
 
 };
 

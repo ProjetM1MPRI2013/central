@@ -40,7 +40,7 @@ void printcwd() {
 }
 
 void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
-		sf::VideoMode video_mode, DummyClient* clientPtr, Geography& geo) {
+		sf::VideoMode video_mode, Client* clientPtr, Geography& geo) {
 
 	sf::RenderWindow window;
 	if (isFullScreen) {
@@ -92,7 +92,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 }
 
 void serverLoop(int id, int tileW, int tileH, int nbPlayers,
-		DummyServer* serverPtr, Geography& geo) {
+		Server* serverPtr, Geography& geo) {
 
 	Simulation simu = Simulation(&geo, tileW, tileH, nbPlayers, id);
 	simu.setServer(serverPtr);
@@ -131,9 +131,8 @@ int main() {
 		Geography geo = (Geography) Generation1("424242");
 		//geo.printMatrix();
 
-		DummyServer* serverPtr = Network::createDummyServer();
-		DummyClient* clientPtr = Network::createDummyClient(serverPtr);
-		serverPtr->addClient(*clientPtr);
+		Server* serverPtr = Network::createDummyServer();
+		Client* clientPtr = Network::createDummyClient(serverPtr);
 
 		std::thread serverThread { std::bind(serverLoop, 0, tileW, tileH,
 				nbPlayers, serverPtr, geo) };

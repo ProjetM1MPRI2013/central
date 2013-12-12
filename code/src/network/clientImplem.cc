@@ -1,5 +1,7 @@
 #include "clientImplem.h"
+
 #include <boost/bind.hpp>
+#include <assert.h>
 
 
 using namespace boost::asio ;
@@ -7,6 +9,9 @@ using namespace std ;
 
 
 ClientImplem::ClientImplem(ClientInfo c_info) :ack_set(), received_messages() {
+
+  //Not implemented yet
+  assert(false) ;
 
     //init fields
     service = new io_service() ;
