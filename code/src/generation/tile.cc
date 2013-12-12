@@ -27,8 +27,8 @@ bool Coordinates::equals(Coordinates& c) {
 
 
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
-  coord(abs,ord),
   batOrigin(batOriginO),
+  coord(abs,ord),
   coordBorough(boroughOrigin),
   picture(pictureO){
   if (DEBUG){std::cout << "Tile : begin\n";}
