@@ -72,11 +72,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   heightInter = intersection.getHeight();
   widthInter = intersection.getWidth();
   std::string fileInter = intersection.getFilePictures();
+  if (DEBUG) {std::cout << fileInter << std::endl;}
   Coordinates* pictureInter = intersection.getPicture();
   floatMatrix speedInter = intersection.getSpeed();
   if (DEBUG) {std::cout << "heightInter " << heightInter << std::endl;};
   if (DEBUG) {std::cout << "widthInter " << widthInter << std::endl;};
   // On choisit une sprite de route horizontale avec la bonne largeur
+  choose = 0;
+  poids = -1;
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
@@ -89,9 +92,12 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   Batiment roadh = Batiment(file, choose);
   heightRoadH = roadh.getHeight();
   std::string fileRoadH = roadh.getFilePictures();
+  if (DEBUG) {std::cout << fileRoadH << std::endl;}
   Coordinates* pictureRoadH = roadh.getPicture();
   floatMatrix speedRoadH = roadh.getSpeed();
   // On choisit une sprite de route verticale avec la bonne longueur
+  choose = 0;
+  poids = -1;
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
@@ -104,6 +110,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   Batiment roadv = Batiment(file, choose);
   widthRoadV = roadv.getWidth();
   std::string fileRoadV = roadv.getFilePictures();
+  if (DEBUG) {std::cout << roadv.getType() << std::endl;}
+  if (DEBUG) {std::cout << fileRoadV << std::endl;}
   Coordinates* pictureRoadV = roadv.getPicture();
   floatMatrix speedRoadV = roadv.getSpeed();
   int absInter[nbInter1];
