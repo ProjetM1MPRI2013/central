@@ -22,6 +22,8 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 			// on en déduit sa position dans la texture du tileset
 			int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
 			int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+			//std::cout<<" tu= " << tu << " tv= " << tv << std::endl;
+			//sleep(2);
 
 			// on récupère un pointeur vers le quad à définir dans le tableau de vertex
 			sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
@@ -58,7 +60,6 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	// et on dessine enfin le tableau de vertex
 	target.draw(m_vertices, states);
 }
-
 
 void TileMap::createTiles() {
   unsigned int mapwidth = 100;
@@ -115,7 +116,17 @@ createTiles();
 
 void TileMap::run(sf::RenderWindow* window){
   this->createTiles();
+  //aide au débuggage
+  /*for(int i=0;i<100;i++){
+	  for(int j=0;j<100;j++){
+		std::cout << (Tilesbite[i+j*100]) << "\t";
+	  }
+	  std::cout<<std::endl;
+  }*/
+
   window->clear();
+  this->load("../../../sprite/tileset.png", sf::Vector2u(225, 225), Tilesbite , 100, 100);
+  createTiles();
   window->draw(*this);
   window->display();
 }
