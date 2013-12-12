@@ -4,6 +4,7 @@
 #include "../simulation/position.h"
 
 
+
   GraphicContextIso::GraphicContextIso(Geography* map, Simulation* sim)
   {
     this->map = map;
@@ -101,5 +102,17 @@ void GraphicContextIso::addTexturePack(TexturePack t)
 void GraphicContextIso::addSpriteTilePack(SpriteTilePack stp)
 {
   tilepackVector.push_back(stp);
+  return;
+}
+
+void GraphicContextIso::run(sf::RenderWindow* window)
+{
+  window->clear();
+  Position p = *sim->getPlayer()->getPosition();
+  this->view.setRect(window->getSize().x,window->getSize().y);
+  this->view.setCenter(sf::Vector2f(p.getX() + OFFSET_X,p.getY() + OFFSET_Y - (map->getMapWidth()) * RIGHT_TILE(1) ));
+  window->setView(this->view);
+  window->draw(*this);
+    
   return;
 }

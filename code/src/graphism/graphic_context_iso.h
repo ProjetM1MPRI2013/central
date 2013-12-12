@@ -49,13 +49,21 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
    * Loads the textures on the objects of the map
    **/
   void load();
+  
+  
+  /**
+   * @brief run
+   * Runs one computation of the graphical output of the map
+   **/
+  void run();
 
  private:
   std::vector<TexturePack> texVector;
   std::vector<SpriteTilePack> tilepackVector;
+  std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
   Geography* map;
   Simulation* sim;
-  std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
+  sf::View view; // todo : des operations sur la view (zoom, etc...)
    
 };
 
