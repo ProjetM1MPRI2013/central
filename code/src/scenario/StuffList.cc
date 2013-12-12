@@ -10,11 +10,12 @@ int Weapon::getRange () {return 0;};
 int Weapon::getDamage () {return 0;};
 
 
-Bomb::Bomb () : Stuff("Bomb") {
+Bomb::Bomb (int p) : Stuff("Bomb") {
   this->actionsPossible.push_back(PLANT);
-  this->power = 1;
+  this->power = p;
 };
 
+int Bomb::getpower() {return this->power;};
 
 Knife::Knife () : Weapon ("Knife") {
 };

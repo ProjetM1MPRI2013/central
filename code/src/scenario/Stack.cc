@@ -4,6 +4,7 @@
 
 Tile* getTile(Simulation* s) {return 0;};
 
+
 Stack::Stack (){
   actionsName = Actions::NONE;
   basicStuff = 0;
@@ -51,25 +52,6 @@ void Stack::cancel () {
 	this->basicStuff = 0;
 	this->actionsName = Actions::NONE;
 };
-
-std::list<SoN> SoNOfActions (Actions a) {
-  switch (a)
-    {
-    case DROP :
-      return std::list<SoN> ();
-    case ATTACK :
-      return (std::list<SoN> (1,SON_NPC));
-    case RELOAD :
-      return (std::list<SoN> (1,SON_STUFF));
-    case PLANT :
-      return std::list<SoN> ();
-    default:
-      std::cerr << "Stack.cc : error in SoNOfActions \n";
-      break;
-    };
-  return std::list<SoN> ();
-};
-
 Action* Stack::ActionOfStack(Actions a) {
   Stuff* b (this->getBasic());
   Simulation* sim(this->getSim());
@@ -127,7 +109,7 @@ void Stack::sendAction () {
 };
 
 void Stack::newAction(Actions a, Stuff* sf) {
-  this->SoNList = (SoNOfActions (a));
+  (SoNOfActions (a,(this->SoNList)));
   this->basicStuff = sf;
   this->sendAction();
 };

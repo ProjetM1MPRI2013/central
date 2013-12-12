@@ -61,8 +61,9 @@ public :
 	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
 	void peopleGeneration();
 
-	Simulation(int MAP_SIZE,int TILE_SIZE_X,int TILE_SIZE_Y,int NB_JOUEURS,int id, Geography* map);
 
+	Simulation(int tileW,int tileH,int nbPlayers,int id);
+	Simulation(Geography* map, int tileW,int tileH,int nbPlayers,int id);
 	Simulation(std::string seed, std::vector<Player*> players) ;
 
  	 /**

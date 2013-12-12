@@ -9,12 +9,16 @@
 #include "generation/tile.h"
 #include "Actions.h"
 
+
+enum SoN {
+	SON_STUFF, SON_NPC
+};
+void SoNOfActions(Actions a,std::list<SoN> l);
+
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
 
-
-std::string stringOfActions (Actions a);
-
 void newMovement (NewMov n);
+
 
 class Drop : public Action{
  public : 

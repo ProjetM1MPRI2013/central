@@ -1,4 +1,6 @@
 #include "ActionsTerro.h"
+#include <iostream>
+#include <list>
 
 /*to ask to denys to implemente */
 int distance(NPC* npc) {return 0;};
@@ -13,6 +15,26 @@ bool isInThePack(Simulation* s, Stuff* stuff) {
   };
   return false;
 };
+
+
+void SoNOfActions(Actions a,std::list<SoN> l) {
+  switch (a)
+    {
+    case DROP : break;
+    case ATTACK :
+      l.push_front(SON_NPC);
+    break;
+    case RELOAD :
+      l.push_front(SON_STUFF);
+    break;
+    case PLANT :
+    break;
+    default:
+      std::cerr << "Stack.cc : error in SoNOfActions \n";
+      break;
+    };
+};
+
 
 Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
   stu = s;
