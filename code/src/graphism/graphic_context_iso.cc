@@ -65,17 +65,18 @@ void GraphicContextIso::load()
             {
               std::string s = tilec->getFilePictures();
               try
-              {
-                SpriteTilePack stp = tilemap.at(s);
-                tilec->setTexture(stp);
-              }
-              catch
-              {
-                sf::Texture t;
-                assert(t.loadFromFile(s));
-                SpriteTilePack stp = { .texture = t; .originX = tilec->getPictureY; .originY = tilec->getPictureY()};
-                tilemap[s] = stp;
-              }
+		{
+		  SpriteTilePack stp = tilemap.at(s);
+		  tilec->setTexture(&stp);
+		}
+              catch(...)
+		{
+		  sf::Texture t;
+		  assert(t.loadFromFile(s));
+		  SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(), .originY = tilec->getPictureY()};
+		  tilemap[s] = stp;
+		  tilec->setTexture(&stp);
+		}
             }
           
           std::list<NPC *> lnpc = tilec->getNPCs();
