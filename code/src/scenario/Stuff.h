@@ -26,7 +26,20 @@ class Stuff {
    */
   std::list<Actions> getActionsPossible ();
 
+
+  /**
+   * @brief Host Stuff constructor.
+   *  The host HAS TO USED this constructor. Generates a new unique identifier.
+   */
   Stuff (std::string n);
+
+
+  /**
+   * @brief Client Stuff constructor.
+   * @param id: the unique identifier of the Stuff.
+   * The client HAS TO USED this constructor, with an identifier given by the server.
+   */
+  Stuff (std::string n, int id);
 
  protected:
   /**
