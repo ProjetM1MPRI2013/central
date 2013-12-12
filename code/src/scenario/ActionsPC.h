@@ -12,28 +12,42 @@
 #define COST_CAM2 1 //cout de placement d'une caméra
 
 class AddCop : public Action {
-public:
-	bool IsActionPossible ();
-	void doAction();
-	AddCop (int number, float x, float y, Simulation* s);
-private:
-	int number;
-	float x;
-	float y;
+ public:
+  bool IsActionPossible ();
+  void doAction();
+  AddCop (int number, float x, float y, Simulation* s);
+  AddCop(const AddCop&);
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 
 
+ private:
+  int number;
+  float x;
+  float y;
 };
 
 class AddCam : public Action {
-public:
-	bool IsActionPossible ();
-	void doAction();
-	AddCam (int number,float x, float y, Simulation* s);
-private:
-	int number;
-	float x;
-	float y;
-
+ public:
+  bool IsActionPossible ();
+  void doAction();
+  AddCam (int number,float x, float y, Simulation* s);
+  AddCam(const AddCam&);
+  
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
+  
+  
+ private:
+  int number;
+  float x;
+  float y;
+  
 };
 
 

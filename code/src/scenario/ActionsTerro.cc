@@ -96,7 +96,8 @@ Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
 
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
-void Drop::doAction () {return;};
+void Drop::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
+
 void Drop::addPendingActions(HostSimulation* hs){
   hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
   hs->deleteAction(this);
@@ -109,7 +110,7 @@ bool Plant::isActionPossible(){
 	  && (isPlantable (this->z))
 	  );
 };
-void Plant::doAction () {return;};
+void Plant::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
 void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
@@ -123,7 +124,7 @@ bool Reload::isActionPossible(){
 	  && (isInThePack(this->simulation,this->ammu))
 	  );
 };
-void Reload::doAction () {return;};
+void Reload::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
 void Reload::addPendingActions(HostSimulation* hs){
   //TODO
@@ -137,7 +138,7 @@ bool Attack::isActionPossible(){
 	  && ( (this->weap)->getRange() <= distance (this->simulation,this->vict) )
 	  );
 };
-void Attack::doAction () {return;};
+void Attack::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
 void Attack::addPendingActions(HostSimulation* hs){
   hs->addAction(new KillNPC(this->vict, (Simulation*)hs));
