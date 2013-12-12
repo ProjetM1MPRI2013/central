@@ -87,31 +87,20 @@ bool Geography::isInTheMap (int x, int y) {
 
 void Geography::neighborsaux (int x,int y , std::list<Tile*>* result) {
 	if (isInTheMap (x,y)) {
-		std::cout << "nobody7 : neighboraux : isInTheMap = true" << std::endl;
-		std::cout << "nobody7.2 : neighboraux : isInTheMap = true" << std::endl;
-		if (result->empty()){
-							std::cout << "nobody avant 7': la liste est vide" << std::endl;
-							}
-		else {std::cout << "nobody AVANT 7' la liste n'est pas vide" << std::endl;};
 					result->push_front(
 						 this->getTile(x,y)
 					);
-		std::cout << "nobody7' ok" << std::endl;
 	}
 	else {
 	  return;
 	};
-	if (result->empty()){
-						std::cout << "nobody : la liste est vide" << std::endl;
-						}
-	else {std::cout << "nobody7'' la liste n'est pas vide" << std::endl;};
+
 };
 
 /*
  * @brief create the list of tiles witch are at n tile of the tile t0
  */
 std::list<Tile*>* Geography::neighbors (int n,Tile* t0) {
-	std::cout << "nobody8 :: debut neighbors" << std::endl;
 	Coordinates c0 = t0->getCoord();
 	int x0 = c0.abs ;
 	int y0 = c0.ord ;
@@ -129,10 +118,5 @@ std::list<Tile*>* Geography::neighbors (int n,Tile* t0) {
 			}
 		};
 	};
-	std::cout << "nobody9 :: fin neighbors" << std::endl;
-	if (result->empty()){
-		std::cout << "nobody : la liste est vide" << std::endl;
-	}
-
 	return result;
 };
