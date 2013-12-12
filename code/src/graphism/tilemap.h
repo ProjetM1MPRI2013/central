@@ -21,8 +21,8 @@ public:
   void setZoom(int resize);
   int getZoom();
   void setCoord(int x,int y);
-  int TileMap::getX();
-  int TileMap::getY();
+  int getX();
+  int getY();
 
   // resize = le niveau actuel de zoom
   void run(sf::RenderWindow* window,int resize);

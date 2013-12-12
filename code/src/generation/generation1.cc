@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 
-#define DEBUG false
+#define DEBUG true
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
 
@@ -28,8 +28,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   fichier.close();
-  maxInter = 1;
-  minInter = 1;
+  maxInter = 6;
+  minInter = 3;
   nbInter1 = 0;
   nbInter2 = 0;
   while (nbInter1 < minInter) {
@@ -271,16 +271,23 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
   if(choose==-1){
     if (DEBUG){std::cout << "fillBuildings : if " << choose << " " << abs1 << " " << ord1 <<"\n";}
-    choose++;
-    batiment = Batiment(file, choose);
-    while(batiment.getType() != BLANK) {
-      choose++;
-      batiment = Batiment(file, choose);
+    for(i3=0; i3<nbLine; i3++) {
+      batiment = Batiment(file, i3);
+      
+      if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
+      if(batiment.getType()==BLANK) {
+	nbRand = rand();
+	nbRand = nbRand % poidsBank;
+	if (nbRand > poids) {choose = i3; poids = nbRand;}
+      }
     }
+    batiment = Batiment(file, choose);
+    std::string filePicture = batiment.getFilePictures();
+    Coordinates* picture = batiment.getPicture();
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	std::cout << i3 << " " << j3 << std::endl;
-	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, batiment.getFilePictures(), batiment.getPicture(), 1, 1);
+	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, 1, 1);
       }
     }
   }
