@@ -154,12 +154,12 @@ void AddCams::run(){
 };
 
 
-DropItem::DropItem(Stuff* stuffO, int id, Simulation* s){
+DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropItem",s){
   this->stuff = stuffO;
   this->simulation = s;
   this->playerID = id;
 }
 
 void DropItem::run (){
-  this->simulation->getPlayerByID(this->playerID)->getInventory()->remove(stuff);
+  this->simulation->getPlayerByID(this->playerID)->removeItem(stuff);
 }

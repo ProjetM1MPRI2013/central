@@ -75,7 +75,7 @@ void Plant::doAction () {return;};
 
 void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
-  hs->addAction(new Explosion(this->z,this->bo->getPower(),(Simulation*)s));
+  hs->addAction(new Explosion(this->z,this->bo->getPower(),(Simulation*)hs));
   hs->deleteAction(this);
 }
 
@@ -102,7 +102,7 @@ bool Attack::isActionPossible(){
 void Attack::doAction () {return;};
 
 void Attack::addPendingActions(HostSimulation* hs){
-  hs->addAction(new KillNPC(this->target, (Simulation*)hs));
+  hs->addAction(new KillNPC(this->vict, (Simulation*)hs));
   hs->deleteAction(this);
 }
 

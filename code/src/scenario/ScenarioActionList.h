@@ -5,11 +5,10 @@
 #include "generation/tile.h"
 #include "ScenarioAction.h"
 #include "simulation/player.h"
-#include "scenario/ActionsTerro.h"
+//#include "scenario/ActionsTerro.h"
+#include "NewMov.h"
 #include <iostream>
 #include <cerrno>
-
-enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
 
 /**
  * @brief The player changes of direction.

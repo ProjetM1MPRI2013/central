@@ -15,7 +15,7 @@ Bomb::Bomb (int p) : Stuff("Bomb") {
   this->power = p;
 };
 
-int Bomb::getpower() {return this->power;};
+int Bomb::getPower() {return this->power;};
 
 Knife::Knife () : Weapon ("Knife") {
 };

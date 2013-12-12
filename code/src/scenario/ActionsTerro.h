@@ -9,6 +9,7 @@
 #include "generation/tile.h"
 #include "Actions.h"
 #include "ScenarioActionList.h"
+#include "NewMov.h"
 
 
 enum SoN {

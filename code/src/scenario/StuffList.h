@@ -21,7 +21,7 @@ class Weapon : public Stuff {
 class Bomb : public Stuff {
  public :
   Bomb (int p);
-  int getpower ();
+  int getPower ();
  private:
   int power;
 };
