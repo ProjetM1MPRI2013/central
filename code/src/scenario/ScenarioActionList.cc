@@ -100,18 +100,6 @@ void ChangeDirection::run(){
   return;
 };
 
-/***********
- *Explosion*
- ***********/
-Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
-  location = t;
-  power = p;
-};
-
-void Explosion::run(){
-  return;
-};
-
 /*********
  *KillNPC*
  *********/
@@ -123,6 +111,31 @@ void KillNPC::run(){
     simulation->supprimerNPC(target);
   return;
 };
+
+/***********
+ *Explosion*
+ ***********/
+Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
+  location = t;
+  power = p;
+};
+std::list<Tile*> neighbors (int n,Tile* t0) {
+	//TODO ask chatan to implemente
+	std::list<Tile*> result;
+	return result;
+};
+void Explosion::run() {
+	std::list<Tile*> nb = neighbors (this->power, this->location);
+	for (std::list<Tile*>::iterator t = nb.begin(); t != nb.end();++t) {
+		// kill npc in the case:
+		std::list<NPC*> npcs = (*t)->getNPCs();
+		for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
+			this->simulation->addAction(new KillNPC(*n, this->simulation));
+		};
+		//TODO détruire les batiments
+	};
+};
+
 
 AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){
   x = xx;
