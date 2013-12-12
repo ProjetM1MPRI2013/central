@@ -3,16 +3,18 @@
 
 class Simulation; // Forward declaration
 #include <string>
+#include "network/abstractMessage.h"
 
 /**
  * @brief An elementary action.
  * Implement a method run to performed the action.
  * This method will be called by to simulation.
  */
-class ScenarioAction {
+class ScenarioAction : public AbstractMessage {
  public :
 
   ScenarioAction (std::string n, Simulation* s);
+  ScenarioAction(const ScenarioAction&);
 
   /**
    * @brief The time when the action was performed.
@@ -31,7 +33,13 @@ class ScenarioAction {
   virtual void run ();
 
   Simulation* simulation;
-} ;
+
+  //AbstractMessage functions
+  static std::string getMsgType();
+  virtual std::string & toString();
+  static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
+};
 
 
 #endif

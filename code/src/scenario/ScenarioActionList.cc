@@ -3,6 +3,8 @@
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
 #include "geography.h"
+
+
 /*****************
  *ChangeDirection*
  *****************/
@@ -88,6 +90,11 @@ ChangeDirection::ChangeDirection(int id, NewMov mov,Simulation* s) : ScenarioAct
   newMovement = mov;
 };
 
+ChangeDirection::ChangeDirection(const ChangeDirection& a) : ScenarioAction("ChangeDirection",a.simulation){
+  this->playerID = a.playerID;
+  this->newMovement = a.newMovement;
+}
+
 void ChangeDirection::run(){
   Direction a = simulation->getPlayerByID(playerID)->getDirection();
   Couple* b = directionToInt(a);
@@ -107,6 +114,10 @@ KillNPC::KillNPC(NPC* t,Simulation* s) : ScenarioAction("KillNPC",s){
   target = t;
 };
 
+KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
+  this->target = a.target;
+}
+
 void KillNPC::run(){
     simulation->supprimerNPC(target);
   return;
@@ -115,10 +126,17 @@ void KillNPC::run(){
 /***********
  *Explosion*
  ***********/
+
 Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
   location = t;
   power = p;
 };
+
+Explosion::Explosion(const Explosion& a) : ScenarioAction("Explosion",a.simulation){
+  this->location = a.location;
+  this->power = a.power;
+}
+
 void Explosion::run() {
 	std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
 	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
@@ -134,12 +152,22 @@ void Explosion::run() {
 };
 
 
+/***********
+ * AddCops *
+ ***********/
+
 AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){
   x = xx;
   y = yy;
   number = n;
   this->simulation = s;
 };
+
+AddCops::AddCops(const AddCops& a) : ScenarioAction("AddCops",a.simulation){
+  this->number = a.number;
+  this->x = a.x;
+  this->y = a.y;
+}
 
 void AddCops::run(){
 	 for (int i=1;i<number/4;i++) {
@@ -166,12 +194,22 @@ void AddCops::run(){
   return;
 };
 
+/***********
+ * AddCams *
+ ***********/
+
 AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){
   x = xx;
   y = yy;
   number = n;
   this->simulation = s;
 };
+
+AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
+  this->number = a.number;
+  this->x = a.x;
+  this->y = a.y;
+}
 
 void AddCams::run(){
   for (int i=1;i<number/4;i++) {
@@ -198,12 +236,55 @@ void AddCams::run(){
 };
 
 
+/************
+ * DropItem *
+ ************/
+
 DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropItem",s){
   this->stuff = stuffO;
   this->simulation = s;
   this->playerID = id;
 }
 
+DropItem::DropItem(const DropItem& a) : ScenarioAction("DropItem",a.simulation){
+  this->stuff = a.stuff;
+  this->playerID = a.playerID;
+}
+
 void DropItem::run (){
   this->simulation->getPlayerByID(this->playerID)->removeItem(stuff);
+}
+
+
+/***********************************
+ * AbstractMessage implementations *
+ **********************************/
+
+AbstractMessage* ChangeDirection::copy(){
+    return (AbstractMessage*) new ChangeDirection(*this);
+}
+
+
+AbstractMessage* AddCops::copy(){
+    return (AbstractMessage*) new AddCops(*this);
+}
+
+
+AbstractMessage* AddCams::copy(){
+    return (AbstractMessage*) new AddCams(*this);
+}
+
+
+AbstractMessage* Explosion::copy(){
+    return (AbstractMessage*) new Explosion(*this);
+}
+
+
+AbstractMessage* KillNPC::copy(){
+    return (AbstractMessage*) new KillNPC(*this);
+}
+
+
+AbstractMessage* DropItem::copy(){
+    return (AbstractMessage*) new DropItem(*this);
 }

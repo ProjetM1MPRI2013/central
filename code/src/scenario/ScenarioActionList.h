@@ -23,8 +23,14 @@ class ChangeDirection: public ScenarioAction {
   NewMov newMovement;
 
   ChangeDirection(int id, NewMov mov, Simulation* s);
+  ChangeDirection(const ChangeDirection&);
 
   virtual void run();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 class AddCops: public ScenarioAction {
@@ -33,7 +39,14 @@ class AddCops: public ScenarioAction {
   float x;
   float y;
   AddCops (int n, float xx, float yy,Simulation* s);
+  AddCops (const AddCops&);
+
   virtual void run ();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 
@@ -44,7 +57,14 @@ class AddCams: public ScenarioAction {
   float x;
   float y;
   AddCams(int number,float x,float y,Simulation* s);
+  AddCams(const AddCams&);
+
   virtual void run ();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 /**
@@ -63,8 +83,14 @@ class Explosion: public ScenarioAction {
   int power;
 
   Explosion (Tile* t,int p,Simulation* s);
+  Explosion (const Explosion&);
 
   virtual void run ();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 
@@ -79,19 +105,34 @@ public:
   NPC* target;
 
   KillNPC(NPC* t,Simulation* s);
+  KillNPC(const KillNPC&);
 
   virtual void run ();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
 
 class DropItem : public ScenarioAction{
  public :
   Stuff* stuff;
   int playerID;
+
   /**
    *@param stuffO : item to drop
    *@param id : id of the player
    */
   DropItem(Stuff* stuffO,int id, Simulation* s);
+  DropItem (const DropItem&);
+  
   virtual void run ();
+
+  //AbstractMessage functions
+  //virtual std::string & toString();
+  //static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
 };
+
 #endif
