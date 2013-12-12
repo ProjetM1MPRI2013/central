@@ -4,13 +4,15 @@
 #include "network/network.h"
 #include "network/netEvent.h"
 #include "simulation/localState.h"
+#include "network/dummyClient.h"
+#include "network/dummyServer.h"
 
 
 using namespace std;
 
 int test_net(){
-  Server *ser = Network::createDummyServer() ;
-  Client *cli = Network::createDummyClient(ser) ;
+  DummyServer *ser = Network::createDummyServer() ;
+  DummyClient *cli = Network::createDummyClient(ser) ;
   NetEvent e ;
   e.setType(NetEvent::PLAYER_JOIN);
   int player_id = 0 ;

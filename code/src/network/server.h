@@ -6,6 +6,9 @@
 #include "serverInfo.h"
 #include "abstractMessage.h"
 
+class Server;
+class Client;
+
 /**
  * @brief The GameState class (Temporary, will be replaced by an include when the
  * corresponding class in the simulation module will be defined.
@@ -107,6 +110,7 @@ public :
   virtual bool isConnected(int player) = 0 ;
 
   virtual ~Server() {}
+
 
 
   //only reason for private members in this interface is that templates cannot be

@@ -10,6 +10,8 @@ class LocalStateUpdater;
 #include "simulation/simulation.h"
 #include "simulation/localState.h"
 class LocalState;
+class DummyServer;
+class DummyClient;
 
 /**
  * @brief The Network class
@@ -51,7 +53,7 @@ public :
      * No serialization is carried out. Only hard copy of the data passed.
      * @return An instance of the Server Class.
      */
-    static Server* createDummyServer() ;
+    static DummyServer* createDummyServer() ;
 
     /**
      * @brief createDummyClient
@@ -65,7 +67,7 @@ public :
      * @param server The server to communicate with
      * @return The newly created client.
      */
-    static Client* createDummyClient(Server * server) ;
+    static DummyClient* createDummyClient(Server * server) ;
 
 
     /**

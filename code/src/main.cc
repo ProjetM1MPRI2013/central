@@ -9,6 +9,8 @@
 #include "generation/generation1.h"
 #include "network/network.h"
 #include "network/netEvent.h"
+#include "network/dummyServer.h"
+#include "network/dummyClient.h"
 #include "simulation/simulation.h"
 #include <time.h>
 #include <thread>
@@ -36,140 +38,119 @@ void printcwd(){
   std::printf ("The current working directory is %s", cCurrentPath);
 }
 
+void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH, sf::RenderWindow& window, sf::VideoMode video_mode, DummyClient* clientPtr, Geography& geo) {
 
+  Simulation simu = Simulation(&geo, tileW,tileH,nbPlayers,1);
+  TileMap tilemap = TileMap(&simu,&geo);
+  simu.setClient(clientPtr);
 
-void client(int id, Geography * geo, int nbPlayer, int mapSize,
-                int TileSizeX, int TileSizeY, Server* serveur,
-                int sizeFenetre[3], bool isFullScreen) {
-
-  Client* client = Network::createDummyClient(serveur);
-        sf::VideoMode video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1],
-                        sizeFenetre[2]);
-        sf::RenderWindow window;
-        Simulation simu = Simulation(mapSize, TileSizeX, TileSizeY, nbPlayer, id,
-                        geo);
-
-        TileMap tilemap = TileMap(&simu,geo);
-        if (isFullScreen) {
-                window.create(video_mode, "Game", sf::Style::Fullscreen);
-        } else {
-                window.create(video_mode, "Game");
+	sf::Clock clock;
+	sf::Time dt = sf::Time::Zero;
+  while (window.isOpen()) {
+		dt = clock.restart();
+    sf::Event event;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)
+     && sf::Keyboard::isKeyPressed(sf::Keyboard::F4)) {
+      window.close();
+    }
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+      if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F11) {
+          if (isFullScreen) {
+            window.create(video_mode, "Game Interface");
+            isFullScreen = false;
+          } else {
+            window.create(video_mode, "Game Interface",
+                sf::Style::Fullscreen);
+            isFullScreen = true;
+          }
         }
-
-        sf::Vector2u size = window.getSize();
-        unsigned int w = size.x;
-        unsigned int h = size.y;
-        double dt;
-        time_t tPrec;
-        time_t tNow;
-        time(&tPrec);
-        while (window.isOpen()) {
-                sf::Event event;
-                while (window.pollEvent(event)) {
-                        if (event.type == sf::Event::Closed)
-                                window.close();
-                        if (event.type == sf::Event::KeyPressed) {
-                                if (event.key.code == sf::Keyboard::F11) {
-                                        if (isFullScreen) {
-                                                window.create(video_mode, "Game Interface");
-                                                isFullScreen = false;
-                                        } else {
-                                                window.create(video_mode, "Game Interface",
-                                                                sf::Style::Fullscreen);
-                                                isFullScreen = true;
-                                        }
-                                }
-                        }
-                }
-                time(&tNow);
-                dt = difftime(tNow, tPrec);
-                tPrec = tNow;
-                sf::Time dtTime = sf::seconds(dt);
-                simu.run(dtTime);
-                tilemap.run(&window, 1);
-                window.display();
-        }
-        return;
+      }
+    }
+    simu.run(dt);
+    tilemap.run(&window, 0);
+    window.display();
+  }
+  return;
 }
 
-int server() {
+void serverLoop(int id, int tileW, int tileH, int nbPlayers, sf::RenderWindow* window, DummyServer* serverPtr, Geography& geo) {
 
-        return 0;
+  Simulation simu = Simulation(&geo, tileW,tileH,nbPlayers,id);
+  simu.setServer(serverPtr);
+
+  sf::Clock clock;
+  sf::Time dt = sf::Time::Zero;
+  while (window->isOpen()) {
+    dt = clock.restart();
+    sf::Event event;
+    simu.run(dt);
+  }
+
+  return;
 }
 
-//        struct inputState {
-//                bool hasFocus;
-//                sf::RenderWindow& window;
-//        };
-//        int
-//void updateInputState(inputState& s) {
-//                sf::Event event;
-//                while (s.window.pollEvent(event)) {
-//                        switch (event.type) {
-//                        case sf::Event::LostFocus:
-///                                s.hasFocus = false;
-//                                break;
-//                        case sf::Event::GainedFocus:
-//                                s.hasFocus = true;
-//                                break;
-//                        }
-//                }
-//        }
-
-//        void handleKeys(inputState& s) {
-//                // Close window on Alt+F4
-//                if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)
-//                                && sf::Keyboard::isKeyPressed(sf::Keyboard::F4)) {
-//                        s.window.close();
-//                }
-//        }
 
 int main() {
-        int sizeFenetre[3];
-        bool isFullScreen;
-        int b = interface_initiale(sizeFenetre, &isFullScreen);
-        if (b == 0) {
-                return 0;
-        } else {
-                std::cout << 1 <<std::endl;		
+  sf::RenderWindow window;
+  int sizeFenetre[3], b;
+  bool isFullScreen;
+  sf::VideoMode video_mode;
+  if (DEBUG) {
+    b = 1; isFullScreen = true;
+    video_mode = sf::VideoMode::getDesktopMode();
+  } else {
+    b = interface_initiale(sizeFenetre, &isFullScreen);
+    video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
+  }
 
-                Geography geo = (Geography) Generation1("424242");
-		geo.printMatrix();
+  if (isFullScreen) {
+    window.create(video_mode, "Game", sf::Style::Fullscreen);
+  } else {
+    window.create(video_mode, "Game");
+  }
 
-                std::cout << 2 <<std::endl;
-                Server* serveur = Network::createDummyServer();
+  if (b == 0) {
+    return 0;
+  } else {
+    int nbPlayers = 1;
+    int tileW = 50; int tileH = 50;
+    Geography geo = (Geography) Generation1("424242");
+    //geo.printMatrix();
+    DummyServer* serverPtr = Network::createDummyServer();
+    DummyClient* clientPtr = Network::createDummyClient(serverPtr);
+    serverPtr->addClient(*clientPtr);
 
-                std::cout << 3 <<std::endl;
-                /*                std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
-                                50, serveur, (int *) sizeFenetre,
-                                (bool) isFullScreen);*/
-                // joseph : faut pas ouvrir de fenêtre dans un thread autre que le principal, ça passe pas sous OS X
-                // bien entendu, inutile de troller
-                client((int) b, &geo, 1, 100, 50, 50, serveur, (int *) sizeFenetre,(bool) isFullScreen);
+    std::thread serverThread{std::bind(serverLoop, 0, tileW, tileH, nbPlayers, &window, serverPtr, geo)};
+    clientLoop(1, nbPlayers, isFullScreen, tileW, tileH, window, video_mode, clientPtr, geo);
+    serverThread.join();
 
-                std::cout << 4 <<std::endl;
-		//choucroute.join();
-                std::cout << 5 <<std::endl;
-                return 1;
-        };
+    return 1;
+  };
+
+
+        // ISO Map, not used for now
         //Defintion of the window
-               if (b == 0) {
-                       return 0;
-               } else {
-		 sf::VideoMode video_mode = sf::VideoMode(sizeFenetre[0],
-							  sizeFenetre[1], sizeFenetre[2]);
-		 sf::RenderWindow window;
-		       
-                       if (isFullScreen) {
-                               window.create(video_mode, "Game", sf::Style::Fullscreen);
-                       } else {
-                               window.create(video_mode, "Game");
-                       }
+        if (b == 0) {
+          return 0;
+        } else {
+          sf::VideoMode video_mode = sf::VideoMode(sizeFenetre[0],
+              sizeFenetre[1], sizeFenetre[2]);
+          sf::RenderWindow window;
 
-                       sf::Vector2u size = window.getSize();
-                       unsigned int w = size.x;
-                       unsigned int h = size.y;
-		       //End Defintion of the window
+          if (isFullScreen) {
+            window.create(video_mode, "Game", sf::Style::Fullscreen);
+          } else {
+            window.create(video_mode, "Game");
+          }
+
+          sf::Vector2u size = window.getSize();
+          unsigned int w = size.x;
+          unsigned int h = size.y;
+          //End Defintion of the window
 
 		       // Loading Textures
 
