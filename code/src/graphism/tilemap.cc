@@ -3,6 +3,15 @@
 #include "tile.h"
 #include <SFML/Graphics/Transformable.hpp>
 
+int TileMap::getZoom(){
+	return this->zoom;
+}
+
+void TileMap::setZoom(int resize){
+	this->zoom = resize;
+}
+
+
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 		const int* tiles, unsigned int width, unsigned int height) {
 	// on charge la texture du tileset
@@ -14,14 +23,14 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 	m_vertices.resize(width * height * 4);
 
 	// on remplit le tableau de vertex, avec un quad par tuile
-	for (unsigned int i = 0; i < width; ++i)
-		for (unsigned int j = 0; j < height; ++j) {
+	for (unsigned int i = x; i < width; ++i)
+		for (unsigned int j = y; j < height; ++j) {
 			// on récupère le numéro de tuile courant
 			int tileNumber = tiles[i + j * width];
 
 			// on en déduit sa position dans la texture du tileset
-			int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
-			int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+			int tu = tileNumber % (m_tileset.getSize().x / 78);
+			int tv = tileNumber / (m_tileset.getSize().x / 78);
 			//std::cout<<" tu= " << tu << " tv= " << tv << std::endl;
 			//sleep(2);
 
@@ -38,15 +47,14 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 					* tileSize.y);
 
 			// on définit ses quatre coordonnées de texture
-			quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-			quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv
+			quad[0].texCoords = sf::Vector2f(tu * 78, tv * 78);
+			quad[1].texCoords = sf::Vector2f((tu + 1) * 78, tv
 					* tileSize.y);
-			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1)
+			quad[2].texCoords = sf::Vector2f((tu + 1) * 78, (tv + 1)
 					* tileSize.y);
-			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1)
+			quad[3].texCoords = sf::Vector2f(tu * 78, (tv + 1)
 					* tileSize.y);
 		}
-
 	return true;
 }
 
@@ -107,14 +115,27 @@ void TileMap::createTiles() {
   return;
 }
 
+void TileMap::setCoord(int x,int y){
+	this->x=x;
+	this->y=y;
+}
+
+int TileMap::getX(){
+	return this->x;
+}
+
+int TileMap::getY(){
+	return this->y;
+}
+
 TileMap::TileMap(Simulation* simu, Geography* geo){
 this->simu=simu;
 this->geo=geo;
-this->load("../../../sprite/tileset.png", sf::Vector2u(78, 78), Tilesbite , 100, 100);
+this->load("../../../sprite/tileset.png", sf::Vector2u(10,10), Tilesbite , 100, 100);
 createTiles();
 }
 
-void TileMap::run(sf::RenderWindow* window){
+void TileMap::run(sf::RenderWindow* window, int resize){
   this->createTiles();
   //aide au débuggage
   /*for(int i=0;i<100;i++){
@@ -125,7 +146,7 @@ void TileMap::run(sf::RenderWindow* window){
   }*/
 
   window->clear();
-  this->load("../../../sprite/tileset2.png", sf::Vector2u(78, 78), Tilesbite , 100, 100);
+  this->load("../../../sprite/tileset2.png", sf::Vector2u(resize*100,resize*100), Tilesbite , 100, 100);
   createTiles();
   window->draw(*this);
   window->display();

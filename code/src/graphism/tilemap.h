@@ -18,8 +18,18 @@ class TileMap : public sf::Drawable, public sf::Transformable
 public:
   TileMap(Simulation* simu, Geography* geo);
   bool load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
-  void run(sf::RenderWindow* window);
+  void setZoom(int resize);
+  int getZoom();
+  void setCoord(int x,int y);
+  int TileMap::getX();
+  int TileMap::getY();
+
+  // resize = le niveau actuel de zoom
+  void run(sf::RenderWindow* window,int resize);
 private:
+  //les coordonnées du point en haut à gauche. 0,0 veut dire le bord du haut à gauche de l'écran est le bord du haut à gauche de l'écran
+  int x,y;
+  int zoom;
   int Tilesbite[10000];
   Simulation* simu;
   Geography* geo;
