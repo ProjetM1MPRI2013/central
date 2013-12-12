@@ -1,13 +1,14 @@
 #include "geography.h"
 #include "tile.h"
+#include <assert.h>
 
 #define DEBUG false
 
 
 Geography::Geography(std::string seed){
   //new Generation1(seed); ?? Generation1 inherits from Geography
-  for (int i=0;i<MAP_HEIGHT;i++) {
-    for (int j=0;j<MAP_WIDTH;j++) {
+  for (int i=0;i<MAP_WIDTH;i++) {
+    for (int j=0;j<MAP_HEIGHT;j++) {
       map[i][j] = NULL;
     }
   }
@@ -26,7 +27,8 @@ void Geography::setAnxiety(int i, int j, float anxiety){
 }
 
 Tile * Geography::getTile(int i,int j){
-	return (map[i][j]);
+  assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
+  return (map[i][j]);
 }
 
 Tile& Geography::getTileRef(int i,int j){
@@ -69,7 +71,7 @@ void Geography::printMatrix(){
  */
 
 bool Geography::isInTheMap (int x, int y) {
-	//TODO verifier avec chatan
+
 	std::cout << "nobody6 : isInTheMap" << std::endl;
 	return (
 
@@ -82,6 +84,7 @@ bool Geography::isInTheMap (int x, int y) {
 /*
  * @brief add a tile to the list if it is on a map
  */
+
 void Geography::neighborsaux (int x,int y , std::list<Tile*>* result) {
 	if (isInTheMap (x,y)) {
 		std::cout << "nobody7 : neighboraux : isInTheMap = true" << std::endl;
@@ -94,6 +97,9 @@ void Geography::neighborsaux (int x,int y , std::list<Tile*>* result) {
 						 this->getTile(x,y)
 					);
 		std::cout << "nobody7' ok" << std::endl;
+	}
+	else {
+	  return;
 	};
 	if (result->empty()){
 						std::cout << "nobody : la liste est vide" << std::endl;
