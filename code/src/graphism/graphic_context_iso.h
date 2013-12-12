@@ -6,6 +6,8 @@
 #include "animation.h"          // TexturePack
 #include "../generation/tile.h" // SpriteTilePack
 #include "../generation/geography.h"
+#include "../simulation/simulation.h"
+#include <unordered_map>
 
 #define OFFSET_Y 1000                     /* Pour toujours avoir des images dans un cadre positif */
 #define OFFSET_X 1000
@@ -25,9 +27,10 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   /**
     * @brief Constructor of the GraphicContextIso class
     * @param map: the map that should be drawn
+    * @param sim: the simulation
     * This function loads all the textures and keeps a pointer to the map for a further rendition
     **/
-  GraphicContextIso(Geography* map); 
+  GraphicContextIso(Geography* map, Simulation* sim); 
   
   /**
     * @brief draw
@@ -51,6 +54,8 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   std::vector<TexturePack> texVector;
   std::vector<SpriteTilePack> tilepackVector;
   Geography* map;
+  Simulation* sim;
+  std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
    
 };
 
