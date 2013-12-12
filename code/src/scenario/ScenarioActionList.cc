@@ -1,6 +1,7 @@
 #include "ScenarioActionList.h"
 #include "simulation.h"
 #include "ActionsPC.h"
+#include "ActionsTerro.h"
 
 /*****************
  *ChangeDirection*

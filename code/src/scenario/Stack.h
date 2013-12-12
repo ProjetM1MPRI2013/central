@@ -2,9 +2,10 @@
 #define STACK_H
 #include <cerrno>
 #include <iostream>
-#include "ActionsTerro.h"
 #include "Actions.h"
 #include "preHud.h"
+#include "simulation/simulation.h"
+#include "scenario/ActionsTerro.h"
 
 
 Tile* getTyle(Simulation* s);

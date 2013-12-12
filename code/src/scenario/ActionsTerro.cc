@@ -38,7 +38,7 @@ void SoNOfActions(Actions a,std::list<SoN> l) {
 
 Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
   stu = s;
-  this->playerID = s->getPlayer()->getID();
+  this->playerID = this->simulation->getPlayer()->getID();
 };
 
 Attack :: Attack (Weapon* weapon,NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
@@ -59,7 +59,7 @@ Reload :: Reload (Gun* gun, Ammunition* ammunition, Simulation* sim) : Action ("
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {return;};
-void Drop::addPendingActions(hostSimulation* hs){
+void Drop::addPendingActions(HostSimulation* hs){
   hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
   hs->deleteAction(this);
 }
@@ -73,7 +73,7 @@ bool Plant::isActionPossible(){
 };
 void Plant::doAction () {return;};
 
-void Plant::addPendingActions(hostSimulation* hs){
+void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
   hs->addAction(new Explosion(this->z,this->bo->getPower(),(Simulation*)s));
   hs->deleteAction(this);
@@ -87,7 +87,7 @@ bool Reload::isActionPossible(){
 };
 void Reload::doAction () {return;};
 
-void Reload::addPendingActions(hostSimulation* hs){
+void Reload::addPendingActions(HostSimulation* hs){
   //TODO
   hs->deleteAction(this);
 }
@@ -101,7 +101,7 @@ bool Attack::isActionPossible(){
 };
 void Attack::doAction () {return;};
 
-void Attack::addPendingActions(hostSimulation* hs){
+void Attack::addPendingActions(HostSimulation* hs){
   hs->addAction(new KillNPC(this->target, (Simulation*)hs));
   hs->deleteAction(this);
 }

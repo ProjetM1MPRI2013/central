@@ -90,7 +90,7 @@ Player* Simulation::getPlayer() {
 ;
 
 void Simulation::deleteAction(Action* a){
-  this->toDelete->push_back(a);
+  this->toDelete.push_back(a);
   return;
 }
 
@@ -373,18 +373,16 @@ void Simulation::run(sf::Time dt) {
     if (!this->cameras.empty()){
       this->cameras.pop_back();}
   }
-  
-  ScenarioAction* action;
 
   for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
        it != pendingActions.end(); ++it) {
-    action = (*it);
+    ScenarioAction* action = (*it);
     //envoyer action à tlm et effectuer action
   }
   this->pendingActions.clear();
 
   //On supprime les actions déjà traitées
-  this->toDelete->clear();
+  this->toDelete.clear();
 
   /*on empile les dt jusqu'à obtenir plus d'une seconde*/
   this->smallTime = smallTime + dt.asSeconds();

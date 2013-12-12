@@ -16,7 +16,7 @@ void Action::doAction(){
   return;
 };
 
-void Action::addPendingActions(hostSimulation* hs){
+void Action::addPendingActions(HostSimulation* hs){
   std::cerr << "addPendingActions called but not implemented for the Action type :" << name << "\n";
   return;
 }

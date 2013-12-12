@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cerrno>
 
+enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
+
 /**
  * @brief The player changes of direction.
  */
@@ -86,7 +88,11 @@ class DropItem : public ScenarioAction{
  public :
   Stuff* stuff;
   int playerID;
-  DropItem(Stuff* s, Simlation* s);
+  /**
+   *@param stuffO : item to drop
+   *@param id : id of the player
+   */
+  DropItem(Stuff* stuffO,int id, Simulation* s);
   virtual void run ();
-}
+};
 #endif

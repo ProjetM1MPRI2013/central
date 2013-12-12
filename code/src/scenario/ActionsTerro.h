@@ -14,11 +14,10 @@
 enum SoN {
 	SON_STUFF, SON_NPC
 };
+
 void SoNOfActions(Actions a,std::list<SoN> l);
 
-typedef simulation hostSimulation;
-
-enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
+typedef Simulation HostSimulation;
 
 void newMovement (NewMov n);
 
@@ -38,7 +37,7 @@ class Drop : public Action{
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(hostSimulation* hs);
+  void addPendingActions(HostSimulation* hs);
 };
 
 class Attack : public Action {
@@ -60,7 +59,7 @@ class Attack : public Action {
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(hostSimulation* hs);
+  void addPendingActions(HostSimulation* hs);
 };
 
 
@@ -84,7 +83,7 @@ class Plant : public Action {
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(hostSimulation* hs);
+  void addPendingActions(HostSimulation* hs);
 };
 
 
@@ -107,7 +106,7 @@ class Reload : public Action {
  
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(hostSimulation* hs);
+  void addPendingActions(HostSimulation* hs);
 };
 
 
