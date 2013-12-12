@@ -24,7 +24,7 @@ class Generation1 : public Geography
    */
   Generation1(std::string seed);
   std::size_t hachage(std::string seed);
-
+    
  private:
   /**
    * @brief puts some buildings in a rectangular aera
