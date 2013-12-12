@@ -9,6 +9,7 @@ class Player;
 class Simulation;
 #include "../simulation/simulation.h"
 
+typedef simulation hostSimulation;
 
 class Action {
  public:
@@ -44,6 +45,12 @@ class Action {
    * The default behavior does nothing.
    */
   virtual void doAction ();
+
+  /**
+   * @brief Add pending actions
+   * This method convert theaction to a list of ScenarioAction and add the to the host simulation scenario action pending list.
+   */
+  virtual void addPendingActions(hostSimulation* hs);
   
  protected:
   Simulation* simulation;

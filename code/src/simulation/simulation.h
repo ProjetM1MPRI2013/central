@@ -39,6 +39,8 @@ public :
    */
   virtual void setClient(Client*);
 
+  virtual Client* getClient();
+
   /**
    * @brief Get a player by is playerID;
    */
@@ -93,14 +95,6 @@ public :
      */
     virtual void setGeography(Geography* g);
 
-
-    /**
-     * @brief actionPerformed
-     * @param a : the action that was performed
-     * Called by the scenario, notifies the simulation that an action was performed: movement, firing, etc.
-     */
-    virtual void scenarioActionPerformed(ScenarioAction a);
-
     //Cette fonction ne devrait pas exister [Adrien K.]
     ///**
     //  * @brief
@@ -114,10 +108,20 @@ public :
 
     virtual void supprimerNPCDansCase(int i,int j);
 
-    virtual void addAction(ScenarioAction * action);
 
+    /**
+     * @brief addAction
+     * Called by the scenario, notifies the simulation that an action has to be performed: movement, firing, etc.
+     */
+    virtual void addAction(ScenarioAction * action);
+    
     virtual void addAgent(Agent* agent);
     virtual void addCam(Camera* camera);
+
+    /**
+     * @brief Add the action to a list, and will be deleted later
+     */
+    virtual void deleteAction(Action* a);
 
     virtual Geography* getMap(){return map;}
 
@@ -142,6 +146,8 @@ protected :
   std::list<Player*> players;
   std::list<NPC *> NPCs;
   std::list<ScenarioAction *> pendingActions;
+  //liste des actions déjà traité
+  std::list<Action*> toDelete;
 
 };
 //#include "eventListener.h"

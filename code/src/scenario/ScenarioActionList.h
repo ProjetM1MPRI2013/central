@@ -82,4 +82,11 @@ public:
   virtual void run ();
 };
 
+class DropItem : public ScenarioAction{
+ public :
+  Stuff* stuff;
+  int playerID;
+  DropItem(Stuff* s, Simlation* s);
+  virtual void run ();
+}
 #endif

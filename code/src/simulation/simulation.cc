@@ -40,7 +40,7 @@ Simulation::Simulation(Geography* map, int tileW, int tileH, int nbPlayers, int 
 Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(1,1,p_vect.size(),0) {
   this->setGeography(new Generation1(seed));
   for(Player* p : p_vect)
-      this->players.push_back(p);
+    this->players.push_back(p);
 }
 
 void Simulation::setServer(Server* s) {
@@ -56,6 +56,10 @@ void Simulation::setClient(Client* c) {
   return;
 }
 ;
+
+Client* Simulation::getClient(){
+  return this->client;
+}
 
 void Simulation::addPlayer(Player* p){
   this->players.push_back(p);
@@ -84,6 +88,11 @@ Player* Simulation::getPlayer() {
   return this->getPlayerByID(this->Id);
 }
 ;
+
+void Simulation::deleteAction(Action* a){
+  this->toDelete->push_back(a);
+  return;
+}
 
 int Simulation::isInTileX(NPC* npc) {
   Position position = npc->getPosition();
@@ -374,6 +383,9 @@ void Simulation::run(sf::Time dt) {
   }
   this->pendingActions.clear();
 
+  //On supprime les actions déjà traitées
+  this->toDelete->clear();
+
   /*on empile les dt jusqu'à obtenir plus d'une seconde*/
   this->smallTime = smallTime + dt.asSeconds();
 
@@ -411,8 +423,8 @@ void Simulation::run(sf::Time dt) {
     (*it)->updatePosition(dt, *map);
     Tile& tileAfter = (*it)->getPosition().isInTile(*map);
     if (!tileBefore.equals(tileAfter)) {
-    tileBefore.removeNPC(*it);
-    tileAfter.addNPC(*it);
+      tileBefore.removeNPC(*it);
+      tileAfter.addNPC(*it);
     }
   }
 
@@ -440,10 +452,4 @@ void Simulation::setGeography(Geography *g){
   if (g) {
     this->MAP_SIZE = map->getMapWidth();
   }
-}
-
-void Simulation::scenarioActionPerformed(ScenarioAction a){
-  //TOUTDOUX
-  return ;
-
 }
