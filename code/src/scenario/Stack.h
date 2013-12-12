@@ -6,7 +6,7 @@
 #include "preHud.h"
 #include "simulation/simulation.h"
 #include "scenario/ActionsTerro.h"
-
+#include "tile.h"
 
 Tile* getTyle(Simulation* s);
 
