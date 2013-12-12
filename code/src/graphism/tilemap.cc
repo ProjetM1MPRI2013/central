@@ -110,7 +110,7 @@ void TileMap::createTiles() {
 TileMap::TileMap(Simulation* simu, Geography* geo){
 this->simu=simu;
 this->geo=geo;
-this->load("../../../sprite/tileset.png", sf::Vector2u(225, 225), Tilesbite , 100, 100);
+this->load("../../../sprite/tileset.png", sf::Vector2u(78, 78), Tilesbite , 100, 100);
 createTiles();
 }
 
@@ -125,7 +125,7 @@ void TileMap::run(sf::RenderWindow* window){
   }*/
 
   window->clear();
-  this->load("../../../sprite/tileset.png", sf::Vector2u(225, 225), Tilesbite , 100, 100);
+  this->load("../../../sprite/tileset2.png", sf::Vector2u(78, 78), Tilesbite , 100, 100);
   createTiles();
   window->draw(*this);
   window->display();
