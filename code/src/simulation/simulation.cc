@@ -8,34 +8,36 @@
 #include "position.h"
 #include "generation/generation1.h"
 
-Simulation::Simulation(int MAP_SIZE, int TILE_SIZE_X, int TILE_SIZE_Y,
-                       int NB_JOUEURS, int id, Geography* map) {
-  this->MAP_SIZE = MAP_SIZE;
-  this->TILE_SIZE_X = TILE_SIZE_X;
-  this->TILE_SIZE_Y = TILE_SIZE_Y;
-  this->NB_JOUEURS = NB_JOUEURS;
-  this->map = map;
-  this->oldMap = map;
-  this->Id = id;
+Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
+{
+	this->TILE_SIZE_X = tileW;
+	this->TILE_SIZE_Y = tileH;
+	this->NB_JOUEURS = nbPlayers;
+	this->map = map;
+	this->oldMap = map;
+	this->Id = id;
 
-  int t[NB_JOUEURS];
-  for (int i = 0; i < NB_JOUEURS; i++) {
-    t[i] = 0;
-  }
-  this->mesSous = 0;
-  this->sous = t;
-  this->relativeTime = 0;
-  this->absoluteTime = 0;
-  this->smallTime = 0;
-
+	int t[NB_JOUEURS];
+	for (int i = 0; i < NB_JOUEURS; i++) {
+		t[i] = 0;
+	}
+	this->mesSous = 0;
+	this->sous = t;
+	this->relativeTime = 0;
+	this->absoluteTime = 0;
+	this->smallTime = 0;
 
   this->players.push_back(new Player(id,0,0));
 
-  std::list<NPC*> NPCs;
-  this->NPCs = NPCs;
+	std::list<NPC*> NPCs;
+	this->NPCs = NPCs;
 }
 
-Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(1,1,1,p_vect.size(),0,NULL) {
+Simulation::Simulation(Geography* map, int tileW, int tileH, int nbPlayers, int id) : Simulation(tileW, tileH, nbPlayers, id) {
+  this->setGeography(map);
+}
+
+Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(1,1,p_vect.size(),0) {
   this->setGeography(new Generation1(seed));
   for(Player* p : p_vect)
       this->players.push_back(p);
@@ -435,6 +437,9 @@ void Simulation::addCam(Camera* cam) {
 
 void Simulation::setGeography(Geography *g){
   this->map = g ;
+  if (g) {
+    this->MAP_SIZE = map->getMapWidth();
+  }
 }
 
 void Simulation::scenarioActionPerformed(ScenarioAction a){
