@@ -55,7 +55,7 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
    * @brief run
    * Runs one computation of the graphical output of the map
    **/
-  void run();
+  void run(sf::RenderWindow* window);
 
  private:
   std::vector<TexturePack> texVector;
