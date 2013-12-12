@@ -144,10 +144,10 @@ void TileMap::run(sf::RenderWindow* window){
 		std::cout << (Tilesbite[i+j*100]) << "\t";
 	  }
 	  std::cout<<std::endl;
-  }*/
+  };*/
 
   window->clear();
-  std::cout << "zoom : " << this->zoom << std::endl;
+  //std::cout << "zoom : " << this->zoom << std::endl;
   this->load("../../../sprite/tileset2.png", sf::Vector2u((this->zoom)*100,(this->zoom)*100), Tilesbite , 100, 100);
   createTiles();
   window->draw(*this);
