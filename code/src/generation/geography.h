@@ -52,8 +52,8 @@ class Geography {
    * @param y : the ordinate of the tile we want to add
    * @param result : the list we are filling
    */
-  void neighborsaux (int x,int y , std::list<Tile*> result);
-  
+  void neighborsaux (int x,int y , std::list<Tile*>* result);
+
  public :
   /**
    * @brief Génération aléatoire d'une map à partir d'une seed
@@ -114,6 +114,6 @@ class Geography {
    * @param n : depth of the search
    * @param t0 : origin tile of the search
    */
-  std::list<Tile*> neighbors (int n,Tile* t0);
+  std::list<Tile*>* neighbors (int n,Tile* t0);
 };
 #endif // GEOGRAPHY_H

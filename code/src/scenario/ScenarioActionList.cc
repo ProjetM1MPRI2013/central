@@ -120,8 +120,8 @@ Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s
   power = p;
 };
 void Explosion::run() {
-	std::list<Tile*> nb = this->simulation->getMap()->neighbors(this->power, this->location);
-	for (std::list<Tile*>::iterator t = nb.begin(); t != nb.end();++t) {
+	std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
+	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
 		// kill npc in the case:
 		std::list<NPC*> npcs = (*t)->getNPCs();
 		for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
