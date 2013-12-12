@@ -51,6 +51,10 @@ Tile& Position::isInTile(Geography& map) {
   return (map.getTileRef(i,j));
 }
 
+std::pair<int,int> Position::isInTile(){
+  return std::pair<int,int>(x/TILE_SIZE_X, y/TILE_SIZE_Y) ;
+}
+
 float Position::distance(Position& p) {
   float dx,dy,d;
   dx = x-p.getX();

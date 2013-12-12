@@ -140,12 +140,15 @@ int main() {
                 Server* serveur = Network::createDummyServer();
 
                 std::cout << 3 <<std::endl;
-                std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
+                /*                std::thread choucroute = std::thread(&client, (int) b, &geo, 1, 100, 50,
                                 50, serveur, (int *) sizeFenetre,
-                                (bool) isFullScreen);
+                                (bool) isFullScreen);*/
+                // joseph : faut pas ouvrir de fenêtre dans un thread autre que le principal, ça passe pas sous OS X
+                // bien entendu, inutile de troller
+                client((int) b, &geo, 1, 100, 50, 50, serveur, (int *) sizeFenetre,(bool) isFullScreen);
 
                 std::cout << 4 <<std::endl;
-		choucroute.join();
+		//choucroute.join();
                 std::cout << 5 <<std::endl;
                 return 1;
         };
@@ -170,7 +173,7 @@ int main() {
 
 		       // Loading Textures
 
-		       Geography geo = Geography("424242"); // Il faudra un jour qu'on m'explique ce que dois faire main, parce que là c'est n'importe quoi ~ MrKulu
+		       Geography geo = (Geography) Generation1("424242"); // Il faudra un jour qu'on m'explique ce que dois faire main, parce que là c'est n'importe quoi ~ MrKulu
 
 		       sf::Texture a1, b1, b2;
 		       //A priori le working directory est src/interfaceinit, alors il faut remonter loin ...

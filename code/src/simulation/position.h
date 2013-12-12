@@ -1,6 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include <utility>
+
 #include "geography.h"
 
 
@@ -83,6 +85,15 @@ class Position {
    * @return the Tile in which the Position is located
    */
   Tile& isInTile(Geography& map);
+
+  /**
+   * @brief isInTile : gives the indices corresponding to the tile this
+   * position is in.
+   * @return (i,j) if this position is in tile of absciss i and ordinate j.
+   * Based on Tile& isInTile(Geography&).
+   * If the call to this function return (i,j), then isInTile(map) returns map.getTile(i,j).
+   */
+  std::pair<int,int> isInTile() ;
 
   /**
    * @brief distance

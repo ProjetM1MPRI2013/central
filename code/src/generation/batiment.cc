@@ -2,7 +2,7 @@
 //j'ai bougé les includes dans le .h
 
 
-#define DEBUG true
+#define DEBUG false
 
 Batiment::Batiment(std::string file, int line){
 
@@ -44,7 +44,7 @@ Batiment::Batiment(std::string file, int line){
   if (DEBUG) {std::cout << mot << std::endl;}
   this->width = atoi(mot.c_str());
   
-  this->speed = new std::vector<std::vector<float>>(this->width,std::vector<float>(this->height,0));
+  this->speed = std::vector<std::vector<float>>(this->width,std::vector<float>(this->height,0));
 			   
   espace0 = espace + 1;
   espace = ligne.find(" ",espace0);
@@ -66,7 +66,7 @@ Batiment::Batiment(std::string file, int line){
 	//std::cout << "buidings : 0 < expected speed value <= 1" << std::endl; 
       }
       
-      (*(this->speed))[i][j] = atof(nombre.c_str());
+      (this->speed)[i][j] = atof(nombre.c_str());
       //std::cout << atof(nombre.c_str()) << std::endl;
     }
     espace2 = mot.find_first_of("|]",espace1)+1;
@@ -104,7 +104,7 @@ Batiment::Batiment(std::string file, int line){
   this->picture = new Coordinates(atoi(nombre.c_str()), atoi(nombre2.c_str()));
 
 
-  std::cout << "Batiment : end \n";
+  if (DEBUG) {std::cout << "Batiment : end \n";}
 }
 
 
@@ -114,13 +114,9 @@ Batiment::Batiment() {
   this->width = 1;
   //OMG cette assignation dans un vector vide [Adrien K.]
   //this->speed[1][1] = 0;
-  this ->speed = new std::vector<std::vector<float>>(1,std::vector<float>(1,0));
+  this ->speed = std::vector<std::vector<float>>(1,std::vector<float>(1,0));
   this->filePictures = "";
   this->picture = new Coordinates(0,0);
-}
-
-Batiment::~Batiment(){
-  delete this->speed;
 }
 
 TileType Batiment::getType() {
@@ -135,7 +131,7 @@ int Batiment::getWidth() {
   return(this->width);
 }
 
-floatMatrix* Batiment::getSpeed() {
+floatMatrix Batiment::getSpeed() {
   return(this->speed);
 }
 
