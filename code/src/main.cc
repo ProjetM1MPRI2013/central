@@ -86,7 +86,7 @@ void client(int id, Geography * geo, int nbPlayer, int mapSize,
                 tPrec = tNow;
                 sf::Time dtTime = sf::seconds(dt);
                 simu.run(dtTime);
-                tilemap.run(&window);
+                tilemap.run(&window, 1);
                 window.display();
         }
         return;
