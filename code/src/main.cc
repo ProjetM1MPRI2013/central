@@ -49,9 +49,10 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 		window.create(video_mode, "Game Interface");
 	Simulation simu = Simulation(&geo, tileW, tileH, nbPlayers, 1);
 	simu.setClient(clientPtr);
-
-	TileMap tilemap = TileMap(&simu, &geo);
-	geo.printMatrix();
+	GraphicContextIso graContIso = GraphicContextIso(&geo,&simu);
+	graContIso.load();
+	//TileMap tilemap = TileMap(&simu, &geo);
+	//geo.printMatrix();
 
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
@@ -85,7 +86,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 		//tgui::Callback callback;
 		//hudMayor.callback(callback);
 		simu.run(dt);
-		tilemap.run(&window);
+		//tilemap.run(&window);
+		graContIso.run(&window);
 		window.display();
 	}
 	return;
