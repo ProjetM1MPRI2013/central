@@ -49,6 +49,12 @@ public :
    */
   virtual Player* getPlayer ();
 
+
+  /**
+   * @brief Add a player to the player list
+   */
+  virtual void addPlayer(Player* p);
+
 	//crée un nouveau npc et l'ajoute dans une case
 	void ajouterNPC(int i,int j);
 

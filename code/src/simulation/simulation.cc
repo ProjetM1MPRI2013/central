@@ -28,6 +28,9 @@ Simulation::Simulation(int MAP_SIZE, int TILE_SIZE_X, int TILE_SIZE_Y,
   this->absoluteTime = 0;
   this->smallTime = 0;
 
+
+  this->players.push_back(new Player(id,0,0));
+
   std::list<NPC*> NPCs;
   this->NPCs = NPCs;
 }
@@ -51,6 +54,11 @@ void Simulation::setClient(Client* c) {
   return;
 }
 ;
+
+void Simulation::addPlayer(Player* p){
+  this->players.push_back(p);
+  return;
+}
 
 void Simulation::addAction(ScenarioAction * action) {
   this->pendingActions.push_back(action);
@@ -347,13 +355,14 @@ void Simulation::lisserMatrice() {
 
 void Simulation::run(sf::Time dt) {
   int chance;
-  // joseph : craquage total de gaspard !
-  // faut vérifier que les listes sont pas vides avant de pop
-  /*	if (sous[0] < 0) {
-        this->NPCs.pop_back();
-        this->cameras.pop_back();
-        }*/
-
+  //Adrien K. normalement ça devrait être bon.
+  if (sous[0] < 0) {
+    if (!this->agents.empty()){
+      this->agents.pop_back();}
+    if (!this->cameras.empty()){
+      this->cameras.pop_back();}
+  }
+  
   ScenarioAction* action;
 
   for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
