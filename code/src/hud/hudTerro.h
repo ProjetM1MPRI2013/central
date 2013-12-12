@@ -16,12 +16,13 @@ enum ButtonState {
 
 class Simulation;
 
+void printcwd ();
 class HudTerro: public PreHud {
 public:
 	HudTerro(sf::RenderWindow* window, Simulation& simulation);
 	void init();
-	void event(sf::RenderWindow* window, sf::Event e);
-	void callback(tgui::Callback callback);
+	void event(sf::RenderWindow* window, sf::Event* e);
+	void callback();
 	void draw();
 	void setwf(WaitFor w);
 	Stack stack;
