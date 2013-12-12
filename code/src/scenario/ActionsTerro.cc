@@ -3,8 +3,21 @@
 #include <list>
 
 /*to ask to denys to implemente */
-int distance(NPC* npc) {return 0;};
-bool isPlantable (Tile* t) {return true;};
+bool isPlantable (Tile* t) {
+switch(t->getType())
+// todo choisir les quelles sont plantables
+	{case(ROADH) : return true;
+	case(ROADV) : return true;
+	case(INTER) : return true;
+	case(BANK) : return false;
+	case(HOUSE): return false;
+	case(BLANK): return false;
+	};
+};
+
+float distance(Simulation* s, NPC* npc) {
+	s->getPlayer()->getPosition()->distance(npc->getPosition());
+};
 
 
 
@@ -96,7 +109,7 @@ void Reload::addPendingActions(HostSimulation* hs){
 
 bool Attack::isActionPossible(){
   return ((isInThePack(this->simulation,this-> weap))
-	  && ( (this->weap)->getRange() <= distance (this->vict) )
+	  && ( (this->weap)->getRange() <= distance (this->simulation,this->vict) )
 	  );
 };
 void Attack::doAction () {return;};

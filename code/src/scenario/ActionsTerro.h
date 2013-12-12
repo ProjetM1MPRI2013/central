@@ -10,6 +10,10 @@
 #include "Actions.h"
 #include "ScenarioActionList.h"
 #include "NewMov.h"
+#include "tile.h"
+#include "position.h"
+#include "player.h"
+#include "npc.h"
 
 
 enum SoN {

@@ -15,7 +15,7 @@ class Weapon : public Stuff {
   /**
    * @brief Compute the range of the weapon .  
    */
-  virtual int getRange () ;
+  virtual float getRange () ;
 };
 
 class Bomb : public Stuff {
@@ -30,7 +30,7 @@ class Knife : public Weapon {
  public : 
   Knife () ;
   int getDamage();
-  int getRange();
+  float getRange();
  private :
   /**
    * @brief The material 0 if it's in plastic, 1 in wood 
@@ -48,7 +48,7 @@ class Gun : public Weapon {
    * @param dam Damagemade by a shot
    * @param range Range of the gun
    */
-  Gun (int max, int dam, int range) ;
+  Gun (int max, int dam, float range) ;
   /**
    * @brief Number of ammunition in the gun   
    */
@@ -59,7 +59,7 @@ class Gun : public Weapon {
   int ammunitionMax;
 
   int getDamage();
-  int getRange();
+  float getRange();
 
  private: 
   /**
@@ -69,7 +69,7 @@ class Gun : public Weapon {
   /**
    * @brief range of the gun   
    */
-  int range;
+  float range;
   
 };
 
