@@ -78,6 +78,7 @@ Batiment::Batiment(std::string file, int line){
   assert(espace!=std::string::npos);
   mot = ligne.substr (espace0, espace - espace0 +1);
   this->filePictures = mot;
+  if (DEBUG) {std::cout << "nom fichier : " << mot << std::endl;}
   espace0 = espace + 1;
 														      
   //std::cout << ligne << std::endl;

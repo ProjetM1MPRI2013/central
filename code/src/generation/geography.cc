@@ -71,23 +71,25 @@ void Geography::printMatrix(){
  */
 
 bool Geography::isInTheMap (int x, int y) {
-	//TODO verifier avec chatan
-	return (
-			(x >= 0)
-			&& (x <= this->getMapWidth())
-			&& (y >= 0)
-			&& (y <= this->getMapHeight())
-			);
+  return (
+	  (x >= 0)
+	  && (x < this->getMapWidth())
+	  && (y >= 0)
+	  && (y < this->getMapHeight())
+	  );
 };
 /*
  * @brief add a tile to the list if it is on a map
  */
 void Geography::neighborsaux (int x,int y , std::list<Tile*> result) {
-	if (isInTheMap (x,y)) {
-					result.push_front(
-						 this->getTile(x,y)
-					);
-	};
+  if (isInTheMap (x,y)) {
+    result.push_front(
+		      this->getTile(x,y)
+		      );
+  }
+  else {
+    return;
+  }
 };
 
 /*

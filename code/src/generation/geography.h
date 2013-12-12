@@ -46,10 +46,14 @@ class Geography {
    * @param file : name of the file with the differents building we can use
    */
   virtual void fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file);
-  /*
+  /**
    * @brief add a tile to the list if it is on a map
+   * @param x : the abscissa of the tile we want to add
+   * @param y : the ordinate of the tile we want to add
+   * @param result : the list we are filling
    */
   void neighborsaux (int x,int y , std::list<Tile*> result);
+  
  public :
   /**
    * @brief Génération aléatoire d'une map à partir d'une seed
@@ -97,13 +101,18 @@ class Geography {
   
 
   void printMatrix();
-  /*
-   *@brief test for 2 int if the tile is in the map
-   */
 
+  /**
+   * @brief test for two int if the tile is in the map
+   * @param x : the abscissa of the coordinate we want to test
+   * @param y : the ordinate of the coordinate we want to test
+   */
   bool isInTheMap (int x, int y);
-   /*
-    *@brief create the list of tiles witch are at n tile of the tile t0
+
+  /**
+   * @brief create the list of tiles witch are at n tile of the tile t0
+   * @param n : depth of the search
+   * @param t0 : origin tile of the search
    */
   std::list<Tile*> neighbors (int n,Tile* t0);
 };
