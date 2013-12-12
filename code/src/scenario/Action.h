@@ -8,10 +8,11 @@
 class Player;
 class Simulation;
 #include "../simulation/simulation.h"
+#include "network/abstractMessage.h"
 
 typedef Simulation HostSimulation;
 
-class Action {
+class Action : AbstractMessage {
  public:
   /**
    * @brief Action name
@@ -52,6 +53,14 @@ class Action {
    */
   virtual void addPendingActions(HostSimulation* hs);
   
+
+  //AbstractMessage functions
+  static std::string getMsgType();
+  virtual std::string & toString();
+  static AbstractMessage* fromString(std::string& msg);
+  virtual AbstractMessage* copy();
+
+
  protected:
   Simulation* simulation;
   

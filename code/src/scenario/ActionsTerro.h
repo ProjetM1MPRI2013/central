@@ -24,7 +24,7 @@ void SoNOfActions(Actions a,std::list<SoN> l);
 
 typedef Simulation HostSimulation;
 
-void newMovement (NewMov n);
+void newMovement (NewMov n, Simulation* s);
 
 
 class Drop : public Action{

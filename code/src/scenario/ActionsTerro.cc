@@ -1,6 +1,7 @@
 #include "ActionsTerro.h"
 #include <iostream>
 #include <list>
+#include "network/client.h"
 
 /*to ask to denys to implemente */
 bool isPlantable (Tile* t) {
@@ -120,7 +121,8 @@ void Attack::addPendingActions(HostSimulation* hs){
 }
 
 
-void newMovement (NewMov n){
-  //TODO
+void newMovement (NewMov n, Simulation* s){
+  NewMovNetwork newMov(n,s->getPlayer()->getID());
+  s->getClient()->sendMessage(newMov,true);
   return;
 };
