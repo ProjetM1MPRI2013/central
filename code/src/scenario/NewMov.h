@@ -5,6 +5,8 @@
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
 
+void printNewMov(NewMov nm);
+
 class NewMovNetwork : public AbstractMessage {
  public:
   NewMov movement;
