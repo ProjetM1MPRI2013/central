@@ -5,6 +5,7 @@
 #include <random>
 
 
+
 #define DEBUG false
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
@@ -312,9 +313,9 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   //return;
   //}
   int i3, j3;
-  int poidsBank = 50;
+  int poidsBank = 26;
   int poidsHouse = 100;
-  srand(nbRand);
+  //srand(nbRand);
   int choose = -1;
   int poids = -1;
   Batiment batiment; 
