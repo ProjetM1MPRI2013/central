@@ -2,7 +2,7 @@
 
 LocalState::LocalState(Player& _player, std::string _seed):
   owner_player(_player){
-  local_map = new Geography(_seed);
+  local_map = (Geography*) new Generation1(_seed);
 //  view_range = 10;
 }
 

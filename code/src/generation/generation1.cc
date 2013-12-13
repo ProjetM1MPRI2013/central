@@ -211,6 +211,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(j=0; j<nbInter2; j++){
       ord1 = ordInter[j];
       // On met des batiments dans le pâté de maison
+      nbRand = randomGen();
       fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
       // On met la route verticale
       longV = (abs1 - abs0) / widthRoadV ;
@@ -243,6 +244,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     }
     // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
     ord1 = MAP_HEIGHT;
+    nbRand = randomGen();
     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     longH = (ord1 - ord0) / heightRoadH;
     for(k=0; k<longH; k++) {
@@ -262,6 +264,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for(j=0; j<nbInter2; j++){
     ord1 = ordInter[j];
     // On met des batiments dans le paté de maison
+    nbRand = randomGen();
     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     // On met la route verticale
     longV = (abs1 - abs0) / widthRoadV ;
@@ -276,6 +279,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     ord0 = ord1 + heightInter;
   }
   ord1 = MAP_HEIGHT;
+  nbRand = randomGen();
   fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
@@ -308,8 +312,8 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   //return;
   //}
   int i3, j3;
-  int poidsBank = 100;
-  int poidsHouse = 150;
+  int poidsBank = 50;
+  int poidsHouse = 100;
   srand(nbRand);
   int choose = -1;
   int poids = -1;

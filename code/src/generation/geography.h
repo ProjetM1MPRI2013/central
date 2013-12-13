@@ -60,6 +60,7 @@ class Geography {
    * @param seed: paramètre de la génération de la map
    */
   Geography(std::string seed);
+  Geography();
   /**
    * @brief Sets the anxiety in a particular tile
    * @param i : abscissa of the tile

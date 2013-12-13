@@ -100,7 +100,7 @@ bool NPC::hasArrived() {
 
 sf::Sprite& NPC::getSprite(){
   assert(this->anim.isInit());
-  this->anim.nextFrame();                  // Pas certain 
+  //this->anim.nextFrame();                  // Pas certain 
   return this->anim.getSprite();
 }
 
