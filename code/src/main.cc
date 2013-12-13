@@ -57,7 +57,16 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 	//geo.printMatrix();
 
         //[joseph] ceci est un NPC de test
-        simu.addNPC(4,11,40,24,2,&tp1);
+        Position start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+        Position target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+        while (start.isInTile(geo).getSpeed()==0) {
+          start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+        }
+        while (target.isInTile(geo).getSpeed()==0) {
+          target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+        }
+
+        simu.addNPC(start.getX(),start.getY(),target.getX(),target.getY(),2,&tp1);
         
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
@@ -140,12 +149,12 @@ int main(int argc, char ** argv) {
 		int nbPlayers = 1;
 		Geography geo;
 		std::cout << argc << std::endl;
-		//if (argc <= 1) {
+		if (argc <= 1) {
                   geo = (Geography) Generation1("424242");
-                  /*}
+                }
 		else {
 		  geo = (Geography) Generation1(std::string (argv[1]));
-                  }*/
+                  }
 
 		//geo.printMatrix();
 
