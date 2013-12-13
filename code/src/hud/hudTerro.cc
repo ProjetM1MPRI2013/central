@@ -72,6 +72,9 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 
 void HudTerro::init() {
 	this->currentState = this->nextState;
+  //std::cerr << "KOUKOU" << std::endl; 
+  //if ((this-> currentState) == BS_INVENT) {std::cerr << "BS_INVENT" << std::endl;};
+  //if ((this-> currentState) == BS_ACTIONS) {std::cerr << "BS_ACTIONS" << std::endl;};
 	if (this->currentState == BS_INVENT) {
 		// if the inventory must be updated
 		if ((this->inventory) != (simulation.getPlayer()->getInventory())) {
@@ -194,8 +197,8 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 void HudTerro::callback(unsigned int callback_id) {
 	//tgui::Callback callback;
 	//while ((this->hud).pollCallback(callback)) {
-		//std::cerr<< "in callback" << std::endl;
-		if ((this->currentState) == BS_INVENT) {
+		std::cerr << "callback : " << callback_id << std::endl;
+    	if ((this->currentState) == BS_INVENT) {
 			if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 				// Save the selected item
 				std::list<Stuff*>::iterator it = (this->inventory).begin();
@@ -215,6 +218,7 @@ void HudTerro::callback(unsigned int callback_id) {
 					//delete &it;
 				};
 				(this->buttonsList).clear();
+        (this->inventory).clear(); 
 
 				// Create the new buttons
 				this->i = 0;
@@ -237,7 +241,7 @@ void HudTerro::callback(unsigned int callback_id) {
 				tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
-				button->setPosition(50 + (this->w - 100), this->h - 100);
+				button->setPosition(50 + (this->w - 200), this->h - 100);
 				button->setText("Inventory");
         button->bindCallback(std::bind(&HudTerro::callback, this, 0),
                              tgui::Button::LeftMouseClicked);
@@ -252,6 +256,7 @@ void HudTerro::callback(unsigned int callback_id) {
 		if (this->currentState == BS_ACTIONS) {
 			// the button 'Inventory' is clicked.
 			if (callback_id == 0) {
+        std::cerr << "Inventory" << std::endl; 
 				this->nextState = BS_INVENT;
 				(this->actionsList).clear();
 			};

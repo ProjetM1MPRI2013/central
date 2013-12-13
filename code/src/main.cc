@@ -52,9 +52,10 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
 	HudTerro hudTerro = HudTerro(window, simu);
-  hudTerro.init();
+  //hudTerro.init();
 	while ((*window).isOpen()) {
 		dt = clock.restart();
+    hudTerro.init(); 
 		sf::Event event;
 		while ((*window).pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
