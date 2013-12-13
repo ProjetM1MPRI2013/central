@@ -139,18 +139,19 @@ float floor2(float x) {
   return ((float) (floor((double(x)))));
 }
 
-void Simulation::ajouterNPC(int i, int j) {
+void Simulation::ajouterNPC(int iStart, int jStart, int iTarget ,int jTarget) {
   Position start, target;
-  int i1, i2, j1, j2;
+  /*  int i1, i2, j1, j2;
   i1 = rand() % (this->MAP_SIZE);
   i2 = rand() % (this->MAP_SIZE);
   j1 = rand() % (this->MAP_SIZE);
-  j2 = rand() % (this->MAP_SIZE);
-  start = Position(i1 * TILE_SIZE_X, j1 * TILE_SIZE_Y);
-  target = Position(i2 * TILE_SIZE_X, j2 * TILE_SIZE_Y);
-  NPC *pnj = new NPC(20, 10, 10, start, target, *map, NULL);
+  j2 = rand() % (this->MAP_SIZE);*/
+  start = Position(iStart * TILE_SIZE_X, jStart * TILE_SIZE_Y);
+  target = Position(iTarget * TILE_SIZE_X, jTarget * TILE_SIZE_Y);
+  NPC *pnj = new NPC(1, 10, 10, start, target, *map, NULL);
   NPCs.push_back(pnj);
 }
+
 
 void Simulation::supprimerNPC(NPC * npc) {
   NPCs.remove(npc);
@@ -167,7 +168,7 @@ void Simulation::peopleGeneration() {
     for (int j = 0; j < MAP_SIZE; j++) {
       chance = (rand() % 100);
       if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-        ajouterNPC(i, j);
+        ajouterNPC(i, j,rand()/MAP_SIZE,rand()/MAP_SIZE);
       }
       if (chance < (map->getTile(i, j)->getPopulationDensity() / 10)) {
         supprimerNPCDansCase(i, j);

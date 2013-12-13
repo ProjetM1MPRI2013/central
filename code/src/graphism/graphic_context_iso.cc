@@ -34,7 +34,8 @@
               sp.setPosition(sf::Vector2f( i * DOWN_TILE(0) + j * RIGHT_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X,  i * DOWN_TILE(1) + j * RIGHT_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) ));
               target.draw(sp, states);
               
-              std::list<NPC *> lnpc = tilec->getNPCs();
+              //[joseph] commenté car je ne sais pas comment créer un texturepack pour les pnj, ce qui fait bugguer l'affichage si on essaye de les dessiner
+              std::list<NPC *> lnpc ;//= tilec->getNPCs();
               for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
                 {
                   assert((**ci).TextureIsInit());

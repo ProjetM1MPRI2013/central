@@ -58,7 +58,7 @@ public :
   virtual void addPlayer(Player* p);
 
 	//crée un nouveau npc et l'ajoute dans une case
-	void ajouterNPC(int i,int j);
+  void ajouterNPC(int iStart,int jStart,int iTarget, int jTarget);
 
 	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
 	void peopleGeneration();

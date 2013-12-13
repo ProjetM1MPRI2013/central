@@ -44,6 +44,11 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 	//TileMap tilemap = TileMap(&simu, &geo);
 	//geo.printMatrix();
 
+        //[joseph] ceci est un NPC de test, il bouge mais n'est pas dessiné
+        // il marche tout droit, c'est parce que j'ai commenté les appels à gou goh gol gor qui ne sont à mon avis pas générées correctement
+        //mais il marche tout droit en faisant A* !
+        simu.ajouterNPC(11,1,24,2);
+        
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
 	HudTerro hudTerro = HudTerro(window, simu);
@@ -122,8 +127,9 @@ int main() {
 		sf::RenderWindow window;
 		window.setKeyRepeatEnabled(false);
 		int nbPlayers = 1;
-		int tileW = 50;
-		int tileH = 50;
+                //[joseph] les 2 variables qui suivent sont stupides, elles doivent nécessairement valloir 1 pour que tout puisse marcher, il faudra les supprimer de simulation
+		int tileW = 1;
+		int tileH = 1;
 		Geography geo = (Geography) Generation1("424242");
 		//geo.printMatrix();
 

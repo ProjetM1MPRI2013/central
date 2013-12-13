@@ -3,6 +3,8 @@
 #include "simulation.h"
 #include "trajectory.h"
 
+#define DEBUG false
+
 NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& map,TexturePack* tex) {
   trajectory = Trajectory(start,target,map);
   shocked = false;
@@ -77,6 +79,9 @@ void NPC::setPosition(Position& p) {
 
 void NPC::updatePosition(sf::Time dt,Geography& map) {
   trajectory.update(dt,speed,map);
+  if(DEBUG) {
+    printf("NPC at %f %f\n",trajectory.getPosition().getX(),trajectory.getPosition().getY());
+  }
   return;
 }
 

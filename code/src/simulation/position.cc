@@ -15,8 +15,8 @@ Position::Position(float x,float y) {
 }
 
 Position::Position(Tile& t) {
-  x = TILE_SIZE_X*(0.5+(float)t.getCoord().getAbs());
-  x = TILE_SIZE_Y*(0.5+(float)t.getCoord().getOrd());
+  x = TILE_SIZE_X*(0.5+t.getCoord().getAbs());
+  y = TILE_SIZE_Y*(0.5+t.getCoord().getOrd());
   return;
 }
 
