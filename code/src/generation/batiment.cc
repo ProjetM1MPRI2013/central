@@ -7,7 +7,7 @@
 Batiment::Batiment(std::string file, int line){
 
   if(DEBUG){std::cout << "Batiment : " << line << std::endl;}
-  
+  assert(line>=0);
   std::fstream fichier;
   fichier.open(file, std::fstream::in);
   assert(fichier);

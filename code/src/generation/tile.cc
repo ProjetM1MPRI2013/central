@@ -36,7 +36,7 @@ void Coordinates::setOrd(int ordO) {
 
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gouO, bool godO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
   batOrigin(batOriginO),
   coord(abs,ord),
   coordBorough(boroughOrigin),
@@ -48,8 +48,8 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->destructible = destructibleO;
   this->anxiety = anxietyO;
   this->populationDensity = populationDensityO;
-  this->goh = gohO;
   this->gou = gouO;
+  this->god = godO;
   this->gol = golO;
   this->gor = gorO;
   this->speed = speedO;
@@ -200,12 +200,12 @@ void Tile::resetWrapper() {
 }
 
 
-bool Tile::getGou() {
-  return gou;
+bool Tile::getGod() {
+  return god;
 }
 
-bool Tile::getGoh() {
-  return goh;
+bool Tile::getGou() {
+  return gou;
 }
 bool Tile::getGor() {
   return gor;
@@ -214,12 +214,12 @@ bool Tile::getGol() {
   return gol;
 }
 
-void Tile::setGou(bool goU){
-  this->gou = goU;
+void Tile::setGod(bool goD){
+  this->god = goD;
   return;
 }
-void Tile::setGoh(bool goH){
-  this->goh = goH;
+void Tile::setGou(bool goU){
+  this->gou = goU;
   return;
 }
 void Tile::setGor(bool goR){

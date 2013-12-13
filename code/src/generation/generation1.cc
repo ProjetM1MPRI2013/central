@@ -238,7 +238,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightInter; j2++){
 	  //this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, speedInter[i2][j2], Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
-	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
+	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
 	}
       }
       ord0 = ord1 + heightInter;

@@ -96,19 +96,19 @@ class Tile {
   float populationDensity;
   float destructionLevel;
   /**
-   * possibility to go straight
-   */
-  bool goh;
-  /**
-   * possibility to go above, between 0 and 1
+   * possibility to go up, ie to go the Tile (i,j+1)
    */
   bool gou;
   /**
-   * possibility to go to the right, between 0 and 1
+   * possibility to go down, ie to go the Tile (i,j-1)
+   */
+  bool god;
+  /**
+   * possibility to go to the right, ie to go to the Tile (i+1,j)
    */
   bool gor;
   /**
-   * possibility to go to the left, between 0 and 1
+   * possibility to go to the left, ie to go to the Tile (i-1,j)
    */
   bool gol;
   /**
@@ -170,10 +170,10 @@ class Tile {
    * @param destructible : is this bat destructible
    * @param anxiety : initial anxiety into the tile
    * @param populationDensity : initial population density into the tile
-   * @param goh : initial possibility to go straight
-   * @param gou : initial possibility to go above
-   * @param gor : initial possibility to go to the right
-   * @param gol : initial possibility to go to the left
+   * @param gou : initial possibility to go up, ie to go the Tile (i,j+1)
+   * @param god : initial possibility to go down, ie to go the Tile (i,j-1)
+   * @param gor : initial possibility to go to the right, ie to go to the Tile (i+1,j)
+   * @param gol : initial possibility to go to the left, ie to go to the Tile (i-1,j)
    * @param speed : initial speed into the tile
    * @param batOrigin : caracteristic point of the bat
    * @param boroughOrigin : initial borough of the tile
@@ -184,7 +184,7 @@ class Tile {
    * @param height0 : the height of the building of the tile
    * The batOrigin and the boroughOrigin argument are copied during the construction, they can be deleted after the call to the constructo
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool goh, bool gou, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool gou, bool god, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO);
 
     /**
      * @brief gives the type of the tile, it's a generalist type
@@ -203,10 +203,10 @@ class Tile {
     void setPopulationDensity(float d);
     float getDestructionLevel();
     void setDestructionLevel(float dl);
-    bool getGoh();
-    void setGoh(bool goh);
     bool getGou();
     void setGou(bool gou);
+    bool getGod();
+    void setGod(bool god);
     bool getGor();
     void setGor(bool gor);
     bool getGol();
