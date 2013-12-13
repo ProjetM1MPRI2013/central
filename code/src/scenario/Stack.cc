@@ -1,6 +1,8 @@
 #include "Stack.h"
 #include "../hud/hudTerro.h"
-
+#include <iostream>
+#include <string>
+#include <fstream>
 
 Tile* getTile(Simulation* s) {
 	return &(
@@ -57,14 +59,17 @@ void Stack::cancel () {
 };
 Action* Stack::ActionOfStack(Actions a) {
   Stuff* b (this->getBasic());
-  std::cout << "nobody ActionOFSTACK" << std::endl ;
+   std::cout<< "nobody ActionOFSTACK" << std::endl ;
 
   Simulation* sim(this->getSim());
   std::cout << "nobody ActionOFSTACK.1" << std::endl ;
   switch (a)
     {
     case Actions::DROP :
-      return (Action *) new Drop(b,sim);
+    {
+       	std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;
+    	return (Action *) new Drop(b,sim);
+    };
     case Actions::ATTACK :
       {
 	NPC* victim(this->getNpc());
@@ -72,25 +77,31 @@ Action* Stack::ActionOfStack(Actions a) {
       };
     case Actions::RELOAD :
       {
-      Stuff* amu(this->getStuff());
-      return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
+    	  std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;
+    	  Stuff* amu(this->getStuff());
+    	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
       };
 	case PLANT :
 	{
-	  return (Action *) new Plant ((Bomb *)b, getTile(sim),sim);
+		std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;
+		return (Action *) new Plant ((Bomb *)b, getTile(sim),sim);
 	}
     default:
+    	std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;
       std::cerr << "Stack.cc : error in ActionOfState \n";
     };
+  std::cout << "nobody ActionOFSTACK.2" << std::endl ;
   return new Action("lolol error", sim);
 };
 
 void Stack::sendAction () {
 	std::cout << "nobody sendAction" << std::endl ;
+	std::cout << "nobody sendAction.0" << std::endl ;
 	if ((this->SoNList).empty())
 	{   std::cout << this->actionsName << std::endl ;
 	std::cout << "nobody sendAction.1" << std::endl ;
 		Action* a (this->ActionOfStack(this->actionsName));
+		std::cout << "nobody sendAction.1.1" << std::endl ;
 		if (a->isActionPossible ())
 		  {
 			std::cout << "nobody sendAction.2" << std::endl ;
@@ -98,7 +109,7 @@ void Stack::sendAction () {
 		    std::cout << "nobody sendAction.3" << std::endl ;
 		  }
 		else
-		  {
+		  { std::cout << "nobody sendAction.2.1" << std::endl ;
 			//(this->hud)->setwf(WF_NOTPOSSIBLE);
 		  };
 		this->cancel();

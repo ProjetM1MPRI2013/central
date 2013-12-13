@@ -5,15 +5,16 @@
 
 /*to ask to denys to implemente */
 bool isPlantable (Tile* t) {
+	std::cout << "nobody isPLANTABLE" << std::endl ;
 switch(t->getType())
 // todo choisir les quelles sont plantables
 	{case(ROADH) : return true;
 	case(ROADV) : return true;
 	case(INTER) : return true;
-	case(BANK) : return false;
-	case(HOUSE): return false;
-	case(BLANK): return false;
-	default: return false;
+	case(BANK) : return true;
+	case(HOUSE): return true;
+	case(BLANK): return true;
+	default: return true;
 	};
  return false;
 };
@@ -96,7 +97,8 @@ Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
 
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
-void Drop::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
+void Drop::doAction () {
+	this->simulation->getClient()->sendMessage(*this,true);};
 
 void Drop::addPendingActions(HostSimulation* hs){
   hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
@@ -110,7 +112,10 @@ bool Plant::isActionPossible(){
 	  && (isPlantable (this->z))
 	  );
 };
-void Plant::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
+void Plant::doAction () {
+	std::cout << "nobody : do action" << std::endl ;
+	this->simulation->getClient()->sendMessage(*this,true);
+	std::cout << "nobody : do action.1" << std::endl ;};
 
 void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
