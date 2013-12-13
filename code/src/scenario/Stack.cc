@@ -93,7 +93,9 @@ void Stack::sendAction () {
 		Action* a (this->ActionOfStack(this->actionsName));
 		if (a->isActionPossible ())
 		  {
+			std::cout << "nobody sendAction.2" << std::endl ;
 		    a->doAction();
+		    std::cout << "nobody sendAction.3" << std::endl ;
 		  }
 		else
 		  {
@@ -117,7 +119,9 @@ void Stack::sendAction () {
 };
 
 void Stack::newAction(Actions a, Stuff* sf) {
+	std::cout << "nobody newAction" << std::endl ;
   (SoNOfActions (a,(this->SoNList)));
+  this->actionsName =a ;
   this->basicStuff = sf;
   this->sendAction();
 };
