@@ -214,9 +214,9 @@ class Tile {
     Coordinates& getBatOrigin();
     void setBatOrigin(Coordinates& p);
     int getWidthBat();
-    void setWidthBat(int l);
+    void setWidthBat(int w);
     int getHeightBat();
-    void setHeightBat(int w);
+    void setHeightBat(int h);
     sf::Sprite& getSprite();
     Coordinates& getCoord();
     void setCoord(Coordinates& coord);

@@ -24,6 +24,16 @@ bool Coordinates::equals(Coordinates& c) {
   return (abs==c.getAbs() && ord==c.getOrd());
 }
 
+void Coordinates::setAbs(int absO) {
+  this->abs = absO;
+  return;
+}
+
+void Coordinates::setOrd(int ordO) {
+  this->ord = ordO;
+  return;
+}
+
 
 
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gohO, bool gouO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
@@ -86,6 +96,11 @@ sf::Sprite& Tile::getTSprite(TileType type) {
 TileType Tile::getType(){
 return (this -> type);}
 
+void Tile::setType(TileType t){
+  this->type = t;
+  return;
+}
+
 std::list<NPC*>& Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
     Position ap = a->getPosition();
@@ -101,6 +116,10 @@ float Tile::getPopulationDensity(){
 
 void Tile::setPopulationDensity(float density){
 	this->populationDensity=density;
+}
+
+bool Tile::isDestructible() {
+  return (destructible) ;
 }
 
 float Tile::getSpeed(){
@@ -123,6 +142,11 @@ void Tile::removeNPC (NPC* a){
 
 Coordinates& Tile::getCoord() {
   return coord;
+}
+
+void Tile::setCoord(Coordinates& coordO) {
+  this->coord = coordO;
+  return;
 }
 
 
@@ -184,8 +208,62 @@ bool Tile::getGor() {
 }
 bool Tile::getGol() {
   return gol;
-
 }
+
+void Tile::setGou(bool goU){
+  this->gou = goU;
+  return;
+}
+void Tile::setGoh(bool goH){
+  this->goh = goH;
+  return;
+}
+void Tile::setGor(bool goR){
+  this->gor = goR;
+  return;
+}
+void Tile::setGol(bool goL){
+  this->gol = goL;
+  return;
+}
+
+Coordinates& Tile::getBatOrigin() {
+  return (this->batOrigin);
+}
+
+void Tile::setBatOrigin(Coordinates& p) {
+  this->batOrigin = p;
+  return;
+}
+
+Coordinates& Tile::getCoordBorough() {
+  return (this->coordBorough);
+}
+
+void Tile::setCoordBorough(Coordinates& p) {
+  this->coordBorough = p;
+  return;
+}
+
+int Tile::getWidthBat() {
+  return widthBat;
+}
+
+void Tile::setWidthBat(int w) {
+  this->widthBat = w;
+  return;
+}
+
+int Tile::getHeightBat() {
+  return heightBat;
+}
+
+void Tile::setHeightBat(int h) {
+  this->heightBat = h;
+  return;
+}
+
+
 bool Tile::TextureIsInit() {
   return (this->stp != NULL);
 }
