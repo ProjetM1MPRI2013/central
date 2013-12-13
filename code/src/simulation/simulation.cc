@@ -7,6 +7,7 @@
 #include <iostream>
 #include "position.h"
 #include "generation/generation1.h"
+#include "network/netEvent.h"
 
 Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
 {
@@ -26,8 +27,8 @@ Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
 	this->relativeTime = 0;
 	this->absoluteTime = 0;
 	this->smallTime = 0;
-
-  this->players.push_back(new Player(id,0,0));
+	
+	this->players.push_back(new Player(id,0,0));
 
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
@@ -53,9 +54,20 @@ void Simulation::setServer(Server* s) {
 void Simulation::setClient(Client* c) {
   this->isServer = false;
   this->client = c;
+  
+  //Ceci ne marche pas, il faudrait que setData prenne un data en entré, et non pas un data*
+  //NetEvent e ;
+  //e.setType(NetEvent::PLAYER_JOIN);
+  //e.setData(&this->getPlayer()->getID());
+  //cli->sendMessage(e);
+
   return;
 }
 ;
+
+bool Simulation::simIsServer(){
+  return this->isServer;
+}
 
 Client* Simulation::getClient(){
   return this->client;
@@ -367,6 +379,7 @@ void Simulation::lisserMatrice() {
 void Simulation::run(sf::Time dt) {
   int chance;
   //Adrien K. normalement ça devrait être bon.
+  //If their is no enough money, remove an agent and a camera
   if (sous[0] < 0) {
     if (!this->agents.empty()){
       this->agents.pop_back();}
@@ -374,11 +387,33 @@ void Simulation::run(sf::Time dt) {
       this->cameras.pop_back();}
   }
 
+
+  //The server retrieve all the new messages from the network (of type Action), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
+  if (this->isServer){
+    std::vector<Action *> actionFromNetwork = this->server->receiveMessages<Action>();
+    for (std::vector<Action *>::iterator it = actionFromNetwork.begin(); it !=  actionFromNetwork.end(); ++it){
+      (*it)->addPendingActions((HostSimulation*) this);
+    }
+    actionFromNetwork.clear();
+  }
+
+  //The client retrieve all the new messages from the network (of type Action), and add them to the list of pending ScenarioAction
+if (!this->isServer){
+  std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
+    for (std::vector<ScenarioAction *>::iterator it = scenarioActionFromNetwork.begin(); it !=  scenarioActionFromNetwork.end(); ++it){
+      this->addAction(*it);
+    }
+  }
+
   for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
        it != pendingActions.end(); ++it) {
     ScenarioAction* action = (*it);
-    (*it)->run();
-    //TODO : envoyer action à tlm et effectuer action
+    action->run();
+    //The server sends the ScenarioAction to the client, so they can do them.
+    if (this->isServer){
+      //Adrien K. je ne suis pas sur que toutes les ScenarioAction doivent être envoyé chez le client.
+      this->server->broadcastMessage(*action,true);
+    }
   }
   this->pendingActions.clear();
 

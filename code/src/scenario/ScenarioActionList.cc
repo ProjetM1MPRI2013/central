@@ -138,17 +138,19 @@ Explosion::Explosion(const Explosion& a) : ScenarioAction("Explosion",a.simulati
 }
 
 void Explosion::run() {
-	std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
-	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
-		// kill npc in the case:
-		std::list<NPC*> npcs = (*t)->getNPCs();
-		for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-			this->simulation->addAction(new KillNPC(*n, this->simulation));
-		};
-		//TODO détruire les batiments
-		//TODO juste pour les test
-		(*t)->setAnxiety(100);
-	};
+  std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
+  for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
+    // kill npc in the case. Only the server had to dot this. The client only destroys the buildings
+    if (this->simulation->simIsServer()){
+      std::list<NPC*> npcs = (*t)->getNPCs();
+      for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
+	this->simulation->addAction(new KillNPC(*n, this->simulation));
+      };
+    }
+    //TODO détruire les batiments
+    //TODO juste pour les test
+    (*t)->setAnxiety(100);
+  };
 };
 
 
