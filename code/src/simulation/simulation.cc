@@ -404,6 +404,11 @@ void Simulation::run(sf::Time dt) {
     std::vector<NewMovNetwork *> movFromNetwork = this->server->receiveMessages<NewMovNetwork>();
     for (std::vector<NewMovNetwork *>::iterator it = movFromNetwork.begin(); it !=  movFromNetwork.end(); ++it){
       this->addAction((ScenarioAction *) new ChangeDirection((*it)->playerID,(*it)->movement,this));
+
+      std::cout << "Host : New Movement from player : " << (*it)->playerID << " ";
+      printNewMov((*it)->movement);
+      std::cout << std::endl;
+
     }
     movFromNetwork.clear();
   }

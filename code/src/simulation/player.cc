@@ -2,6 +2,8 @@
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
 
+#define SPEED_AMPLIFIER 350
+
 Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
@@ -30,6 +32,7 @@ std::list<Stuff*> Player::getInventory () {
 
 void Player::setDirection(Direction newd) {
   this->d = newd;
+  std::cout << "Client : player " << this->playerID << "changes direction \n";
   return;
 };
 
@@ -45,31 +48,31 @@ void Player::removeItem(Stuff* s) {
 };
 
 void Player::updatePosition(sf::Time dt) {
-  float dep = (this->speed) * (dt.asSeconds());
+  float dep = (this->speed) * (dt.asSeconds()) * SPEED_AMPLIFIER;
   switch (this->d){
   case UP : 
-    this->p.add(0,dep);
+    this->p.add(0,-dep);
     break;
   case UPRIGHT :
-    this->p.add(dep / 2, dep / 2);
+    this->p.add(dep / 2, -dep / 2);
     break;
   case RIGHT:
     this->p.add(dep,0);
     break;
   case RIGHTDOWN :
-    this->p.add(dep/2,-dep/2);
+    this->p.add(dep/2,dep/2);
     break;
   case DOWN :
-    this->p.add(0,-dep);
+    this->p.add(0,dep);
     break;
   case DOWNLEFT :
-    this->p.add(-dep/2,-dep/2);
+    this->p.add(-dep/2,dep/2);
     break;
   case LEFT :
     this->p.add(-dep,0);
     break;
   case LEFTUP :
-    this->p.add(-dep/2,dep/2);
+    this->p.add(-dep/2,-dep/2);
     break;
   case STOP :
     break;
