@@ -34,10 +34,7 @@
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
 		sf::VideoMode video_mode, Client* clientPtr, Geography& geo, sf::RenderWindow* window) {
 
-	if (isFullScreen) {
-		(*window).create(video_mode, "Game Interface", sf::Style::Fullscreen);
-	} else
-		(*window).create(video_mode, "Game Interface");
+
 	Simulation simu = Simulation(&geo,nbPlayers, 1);
 	simu.setClient(clientPtr);
 	GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
@@ -118,7 +115,7 @@ void serverLoop(int id,int nbPlayers, Server* serverPtr,
 
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
-	while (window->isOpen ()) {
+	while (window->isOpen()) {
 		dt = clock.restart();
 		sf::Event event;
 		simu.run(dt);
@@ -145,6 +142,10 @@ int main(int argc, char ** argv) {
 		return 0;
 	} else {
 		sf::RenderWindow window;
+		if (isFullScreen) {
+			window.create(video_mode, "Game Interface", sf::Style::Fullscreen);
+		} else
+			window.create(video_mode, "Game Interface");
 		window.setKeyRepeatEnabled(false);
 		int nbPlayers = 1;
 		Geography geo;
