@@ -1,25 +1,40 @@
 #include "Stack.h"
 #include "../hud/hudTerro.h"
-
+#include <iostream>
+#include <string>
+#include <fstream>
 
 Tile* getTile(Simulation* s) {
-	return &(
-		s->getPlayer()->getPosition()->isInTile(
+	std::cout << "getTile" << std::endl ;
+	Player* p = s->getPlayer();
+	std::cout << "getTile 1" << std::endl ;
+	Position* pos = p->getPosition();
+	 std::cout << pos->getX() << "," << pos->getY()  << std::endl ;
+	std::cout << pos->getX() << std ::endl;
+	std::cout << "getTile 2" << std::endl ;
+	Geography* map = s->getMap();
+	std::cout << "getTile 3" << std::endl ;
+	std::cout << map->getMapHeight() << std::endl;
+	std::cout << "getTile 3.2" << std::endl ;
+	Tile t = pos->isInTile(*map);
+	std::cout << "getTile 4" << std::endl ;
+	return &(t
+		/*s->getPlayer()->getPosition()->isInTile(
 				*(s->getMap())
 				)
+				*/
+
 		)
 		;};
 
-Stack::Stack (){
+Stack::Stack (Simulation* s, PreHud* h){
   actionsName = Actions::NONE;
   basicStuff = 0;
-  hud = 0;
-  sim = 0;
+  hud = h;
+  sim = s;
 };
 
-void Stack::setHud(PreHud* h) {
-	this->hud = h;
-};
+
 
 Stuff* Stack::getBasic() {
 	return this->basicStuff;
@@ -59,11 +74,17 @@ void Stack::cancel () {
 };
 Action* Stack::ActionOfStack(Actions a) {
   Stuff* b (this->getBasic());
+   std::cout<< "nobody ActionOFSTACK" << std::endl ;
+
   Simulation* sim(this->getSim());
+  std::cout << "nobody ActionOFSTACK.1" << std::endl ;
   switch (a)
     {
     case Actions::DROP :
-      return (Action *) new Drop(b,sim);
+    {
+       	std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;
+    	return (Action *) new Drop(b,sim);
+    };
     case Actions::ATTACK :
       {
 	NPC* victim(this->getNpc());
@@ -71,29 +92,43 @@ Action* Stack::ActionOfStack(Actions a) {
       };
     case Actions::RELOAD :
       {
-      Stuff* amu(this->getStuff());
-      return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
+    	  std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;
+    	  Stuff* amu(this->getStuff());
+    	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
       };
 	case PLANT :
 	{
-	  return (Action *) new Plant ((Bomb *)b, getTile(sim),sim);
+		std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;
+		Tile* t = getTile(sim);
+		std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;
+		return (Action *) new Plant ((Bomb *)b, t,sim);
 	}
     default:
+    	std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;
       std::cerr << "Stack.cc : error in ActionOfState \n";
     };
+  std::cout << "nobody ActionOFSTACK.2" << std::endl ;
   return new Action("lolol error", sim);
 };
 
 void Stack::sendAction () {
+	std::cout << "nobody sendAction" << std::endl ;
+	std::cout << "nobody sendAction.0" << std::endl ;
 	if ((this->SoNList).empty())
-	{
-		Action* a (this->ActionOfStack(this->actionsName));
+	{   std::cout << this->actionsName << std::endl ;
+	std::cout << "nobody sendAction.1" << std::endl ;
+		Actions name = this->actionsName;
+		std::cout << "nobody sendAction.0" << std::endl ;
+		Action* a (this->ActionOfStack(name));
+		std::cout << "nobody sendAction.1.1" << std::endl ;
 		if (a->isActionPossible ())
 		  {
+			std::cout << "nobody sendAction.2" << std::endl ;
 		    a->doAction();
+		    std::cout << "nobody sendAction.3" << std::endl ;
 		  }
 		else
-		  {
+		  { std::cout << "nobody sendAction.2.1" << std::endl ;
 			//(this->hud)->setwf(WF_NOTPOSSIBLE);
 		  };
 		this->cancel();
@@ -114,7 +149,9 @@ void Stack::sendAction () {
 };
 
 void Stack::newAction(Actions a, Stuff* sf) {
+	std::cout << "nobody newAction" << std::endl ;
   (SoNOfActions (a,(this->SoNList)));
+  this->actionsName =a ;
   this->basicStuff = sf;
   this->sendAction();
 };

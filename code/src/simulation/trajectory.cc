@@ -7,7 +7,7 @@
 #include <cassert>
 #include <queue>
 
-#define DEBUG true
+#define DEBUG false
 Trajectory::Trajectory() {
   Position p1,p2;
   p1 = Position();
@@ -118,7 +118,7 @@ void Trajectory::pathfinding(Geography& map) {
       }
     }
   }
-  if (!found && DEBUG) {
+  if (!found) {
     printf("départ : %f %f, arrivée : %f %f\n",start.getX(),start.getY(),target.getX(),target.getY());
   }
   assert(found);//si la map est pas connexe voir avec Chatan
@@ -135,6 +135,8 @@ void Trajectory::pathfinding(Geography& map) {
   }
   posList.pop_front();
   posList.push_front(start);
+
+  tileTarget.resetWrapper();
 
   while(!open.empty()) {
     TileWrapper* tempWrapper = open.top();

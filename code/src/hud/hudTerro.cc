@@ -45,7 +45,7 @@ std::string stringOfActions(Actions a) {
 
 HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 		simulation(simulation) {
-	this->stack = Stack();
+	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
 	this->bup = false;
@@ -58,7 +58,6 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
 	this->nextState = BS_INVENT;
-	stack.setHud((PreHud*) this);
 	std::cerr << "created Hudterro" << std::endl;
 	(this->hud).setGlobalFont("../fonts/leadcoat.ttf");
 
@@ -179,11 +178,11 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					// TODO : envoyer le clic si c'est un NPC
 				} else {
-					stack.cancel();
+					stack->cancel();
 				};
 			} else {
 				if (event.type == sf::Event::KeyPressed) {
-					stack.cancel();
+					stack->cancel();
 				};
 			};
 		};
@@ -267,7 +266,7 @@ void HudTerro::callback(unsigned int callback_id) {
 				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};
-				stack.newAction((*it), this->currentStuff);
+				stack->newAction((*it), this->currentStuff);
 			};
 		};
 }

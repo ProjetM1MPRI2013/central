@@ -61,7 +61,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
           while (start.isInTile(geo).getSpeed()==0) {
             start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
           }
-          while (target.isInTile(geo).getSpeed()==0) {
+          while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
             target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
           }
           
