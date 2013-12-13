@@ -53,17 +53,20 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 	//TileMap tilemap = TileMap(&simu, &geo);
 	//geo.printMatrix();
 
-        //[joseph] ceci est un NPC de test
-        Position start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
-        Position target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
-        while (start.isInTile(geo).getSpeed()==0) {
-          start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
-        }
-        while (target.isInTile(geo).getSpeed()==0) {
-          target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
-        }
 
-        simu.addNPC(start.getX(),start.getY(),target.getX(),target.getY(),2,&tp1);
+        for (int i=0;i<500;i++) {
+          //[joseph] ceci est un NPC de test
+          Position start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+          Position target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+          while (start.isInTile(geo).getSpeed()==0) {
+            start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+          }
+          while (target.isInTile(geo).getSpeed()==0) {
+            target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+          }
+          
+          simu.addNPC(start.getX(),start.getY(),target.getX(),target.getY(),2,&tp1);
+        }
         
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;

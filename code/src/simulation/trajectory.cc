@@ -118,6 +118,9 @@ void Trajectory::pathfinding(Geography& map) {
       }
     }
   }
+  if (!found && DEBUG) {
+    printf("départ : %f %f, arrivée : %f %f\n",start.getX(),start.getY(),target.getX(),target.getY());
+  }
   assert(found);//si la map est pas connexe voir avec Chatan
   
   posList.push_front(target);
