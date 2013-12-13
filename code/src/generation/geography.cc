@@ -104,8 +104,7 @@ std::list<Tile*>* Geography::neighbors (int n,Tile* t0) {
 	Coordinates c0 = t0->getCoord();
 	int x0 = c0.abs ;
 	int y0 = c0.ord ;
-	std::list<Tile*> liste;
-	std::list<Tile*>* result = &liste;
+	std::list<Tile*>* result = new std::list<Tile*> ;
 	for (int i = 0 ; i <= n; ++i){
 		for (int j = 0  ; j <= n-i; ++j){
 			neighborsaux (x0+i,y0+j,result);
