@@ -2,6 +2,7 @@
 #define LOCAL_STATE_H
 
 #include "player.h"
+#include "generation1.h"
 class Tile; // forward declaration
 class Simulation; //forward declaration
 class Player;
