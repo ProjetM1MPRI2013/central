@@ -8,6 +8,8 @@
 #include "position.h"
 #include "generation/generation1.h"
 #include "network/netEvent.h"
+#include "scenario/NewMov.h"
+#include "scenario/ScenarioActionList.h"
 
 Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
 {
@@ -395,6 +397,15 @@ void Simulation::run(sf::Time dt) {
       (*it)->addPendingActions((HostSimulation*) this);
     }
     actionFromNetwork.clear();
+  }
+
+ //The server retrieve all the new messages from the network (of type NewMovNetwork), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
+  if (this->isServer){
+    std::vector<NewMovNetwork *> movFromNetwork = this->server->receiveMessages<NewMovNetwork>();
+    for (std::vector<NewMovNetwork *>::iterator it = movFromNetwork.begin(); it !=  movFromNetwork.end(); ++it){
+      this->addAction((ScenarioAction *) new ChangeDirection((*it)->playerID,(*it)->movement,this));
+    }
+    movFromNetwork.clear();
   }
 
   //The client retrieve all the new messages from the network (of type Action), and add them to the list of pending ScenarioAction
