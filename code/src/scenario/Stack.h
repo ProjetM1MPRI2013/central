@@ -18,7 +18,7 @@ public:
 	/**
 	 * @brief Create a Stack
 	 */
-	Stack();
+	Stack(Simulation* s,PreHud* h );
 	/**
 	 *@brief Cancel an action which was waiting to be send
 	 */
@@ -45,17 +45,8 @@ public:
 	 */
 	void sendStuff(Stuff* s);
 	/**
-	 * @brief Used to join the hud to the stack
-	 * @param h the hud
-	 */
-	void setHud(PreHud* h);
-	/**
 	 * @brief Used to join the simulation to the stack
 	 * @param s the simulation
-	 */
-	void setSim(Simulation* s);
-	/**
-	 *@brief get the first Npc of the list
 	 */
 	NPC* getNpc();
 	/**

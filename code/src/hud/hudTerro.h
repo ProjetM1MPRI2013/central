@@ -25,7 +25,7 @@ public:
 	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
-	Stack stack;
+	Stack* stack;
 
 	/* In the main loop, the 4 methods must be called in this specific order :
 	 * init();

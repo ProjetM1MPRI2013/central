@@ -25,7 +25,6 @@ public:
 	void callback(tgui::Callback callback);
 	void draw();
 	void setwf(WaitFor w);
-	Stack stack;
 
 	/* In the main loop, the 4 methods must be called in this specific order :
 	 * init();

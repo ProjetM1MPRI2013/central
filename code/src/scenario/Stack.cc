@@ -10,16 +10,14 @@ Tile* getTile(Simulation* s) {
 		)
 		;};
 
-Stack::Stack (){
+Stack::Stack (Simulation* s, PreHud* h){
   actionsName = Actions::NONE;
   basicStuff = 0;
-  hud = 0;
-  sim = 0;
+  hud = h;
+  sim = s;
 };
 
-void Stack::setHud(PreHud* h) {
-	this->hud = h;
-};
+
 
 Stuff* Stack::getBasic() {
 	return this->basicStuff;
@@ -59,7 +57,10 @@ void Stack::cancel () {
 };
 Action* Stack::ActionOfStack(Actions a) {
   Stuff* b (this->getBasic());
+  std::cout << "nobody ActionOFSTACK" << std::endl ;
+
   Simulation* sim(this->getSim());
+  std::cout << "nobody ActionOFSTACK.1" << std::endl ;
   switch (a)
     {
     case Actions::DROP :
@@ -85,8 +86,10 @@ Action* Stack::ActionOfStack(Actions a) {
 };
 
 void Stack::sendAction () {
+	std::cout << "nobody sendAction" << std::endl ;
 	if ((this->SoNList).empty())
-	{
+	{   std::cout << this->actionsName << std::endl ;
+	std::cout << "nobody sendAction.1" << std::endl ;
 		Action* a (this->ActionOfStack(this->actionsName));
 		if (a->isActionPossible ())
 		  {
