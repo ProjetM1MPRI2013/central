@@ -48,6 +48,10 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 	this->stack = Stack();
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
+	this->bup = false;
+	this->bdown = false;
+	this->bleft = false;
+	this->bright = false;
 	this->hud = tgui::Gui((*window));
 	this->inventory = simulation.getPlayer()->getInventory();
 	(this->inventory).clear();
@@ -114,16 +118,28 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 				// je verrai plus tard comment on fait exactement
 				switch (event->key.code) {
 				case sf::Keyboard::Z:
-					newMovement (NewMov::P_UP,(&this->simulation));
+					if (not this->bup) {
+						newMovement (NewMov::P_UP,(&this->simulation));
+						this->bup = true;
+					};
 					break;
 				case sf::Keyboard::Q:
-					newMovement (NewMov::P_LEFT,(&this->simulation));
+					if (not this->bleft) {
+						newMovement (NewMov::P_LEFT,(&this->simulation));
+						this->bleft = true;
+					};
 					break;
 				case sf::Keyboard::S:
-					newMovement (NewMov::P_DOWN,(&this->simulation));
+					if (not this->bdown) {
+						newMovement (NewMov::P_DOWN,(&this->simulation));
+						this->bdown = true;
+					};
 					break;
 				case sf::Keyboard::D:
-					newMovement (NewMov::P_RIGHT,(&this->simulation));
+					if (not this->bright) {
+						newMovement (NewMov::P_RIGHT,(&this->simulation));
+						this->bright = true;
+					};
 					break;
 				default:
 					break;
@@ -134,15 +150,19 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 				switch (event->key.code) {
 				case sf::Keyboard::Z:
 					newMovement (NewMov::R_UP,(&this->simulation));
+					this->bup = false;
 					break;
 				case sf::Keyboard::Q:
 					newMovement (NewMov::R_LEFT,(&this->simulation));
+					this->bleft = false;
 					break;
 				case sf::Keyboard::S:
 					newMovement (NewMov::R_DOWN,(&this->simulation));
+					this->bdown = false;
 					break;
 				case sf::Keyboard::D:
 					newMovement (NewMov::R_RIGHT,(&this->simulation));
+					this->bright = false;
 					break;
 				default:
 					break;

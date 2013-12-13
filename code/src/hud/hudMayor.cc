@@ -9,8 +9,8 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
 	this->hud = tgui::Gui((*window));
-  this->currentState = MAYOR_ACTIONS; 
-  this->nextState = MAYOR_NUMBERS; 
+	this->currentState = MAYOR_ACTIONS;
+	this->nextState = MAYOR_NUMBERS;
 	this->waitFor = WF_NONE;
 
 }

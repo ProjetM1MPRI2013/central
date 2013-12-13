@@ -121,6 +121,7 @@ int main() {
 		return 0;
 	} else {
 		sf::RenderWindow window;
+		window.setKeyRepeatEnabled(false);
 		int nbPlayers = 1;
 		int tileW = 50;
 		int tileH = 50;

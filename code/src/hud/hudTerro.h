@@ -39,6 +39,10 @@ private:
 	unsigned int h;
 	int i;
 	Simulation& simulation;
+	bool bup;
+	bool bdown;
+	bool bleft;
+	bool bright;
 	tgui::Gui hud;
 	std::list<Stuff*> inventory;
 	std::list<Actions> actionsList;
