@@ -47,8 +47,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
 	HudTerro hudTerro = HudTerro(window, simu);
+  hudTerro.init();
 	while ((*window).isOpen()) {
-		hudTerro.init();
 		dt = clock.restart();
 		sf::Event event;
 		while ((*window).pollEvent(event)) {
@@ -71,10 +71,9 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 				}
 
 			}
-			hudTerro.event(window, &event);
+			hudTerro.event(window, event);
 		}
 
-		hudTerro.callback();
 		simu.run(dt);
 		//tilemap.run(window);
 		graContIso.run(window);

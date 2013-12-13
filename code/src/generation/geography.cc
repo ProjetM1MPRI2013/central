@@ -71,8 +71,6 @@ void Geography::printMatrix(){
  */
 
 bool Geography::isInTheMap (int x, int y) {
-
-	std::cout << "nobody6 : isInTheMap" << std::endl;
 	return (
 
 			(x >= 0)

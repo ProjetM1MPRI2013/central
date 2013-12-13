@@ -45,6 +45,7 @@ class Coordinates {
    * @param abs : the abscissa
    * @param ord : the ordinate
    */
+
   Coordinates(int abs, int ord);
   Coordinates(const Coordinates& a);
 
@@ -195,6 +196,7 @@ class Tile {
      */
     void setType(TileType t);
     bool isDestructible();
+    void nobodyTile ();
     float getAnxiety();
     void setAnxiety(float a);
     float getPopulationDensity();

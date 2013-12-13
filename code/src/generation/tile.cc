@@ -68,13 +68,17 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->filePictures = filePicturesO;
   if (DEBUG){std::cout << "Tile : end\n";}
 }
-
+void Tile::nobodyTile(){
+	std::cout << "tile : " << this->getCoord().abs << "," << this->getCoord().ord << std::endl;
+};
 float Tile::getAnxiety(){
   return this->anxiety;
 
 }
 
 void Tile::setAnxiety(float f){
+	std::cout << "nobody : anxiety : " << f << "in " ;
+	nobodyTile();
   this->anxiety=f;
   return;
 }
