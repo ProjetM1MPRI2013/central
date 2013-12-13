@@ -5,10 +5,25 @@
 #include <fstream>
 
 Tile* getTile(Simulation* s) {
-	return &(
-		s->getPlayer()->getPosition()->isInTile(
+	std::cout << "getTile" << std::endl ;
+	Player* p = s->getPlayer();
+	std::cout << "getTile 1" << std::endl ;
+	Position* pos = p->getPosition();
+	 std::cout << pos->getX() << "," << pos->getY()  << std::endl ;
+	std::cout << pos->getX() << std ::endl;
+	std::cout << "getTile 2" << std::endl ;
+	Geography* map = s->getMap();
+	std::cout << "getTile 3" << std::endl ;
+	std::cout << map->getMapHeight() << std::endl;
+	std::cout << "getTile 3.2" << std::endl ;
+	Tile t = pos->isInTile(*map);
+	std::cout << "getTile 4" << std::endl ;
+	return &(t
+		/*s->getPlayer()->getPosition()->isInTile(
 				*(s->getMap())
 				)
+				*/
+
 		)
 		;};
 
@@ -84,7 +99,9 @@ Action* Stack::ActionOfStack(Actions a) {
 	case PLANT :
 	{
 		std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;
-		return (Action *) new Plant ((Bomb *)b, getTile(sim),sim);
+		Tile* t = getTile(sim);
+		std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;
+		return (Action *) new Plant ((Bomb *)b, t,sim);
 	}
     default:
     	std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;
@@ -100,7 +117,9 @@ void Stack::sendAction () {
 	if ((this->SoNList).empty())
 	{   std::cout << this->actionsName << std::endl ;
 	std::cout << "nobody sendAction.1" << std::endl ;
-		Action* a (this->ActionOfStack(this->actionsName));
+		Actions name = this->actionsName;
+		std::cout << "nobody sendAction.0" << std::endl ;
+		Action* a (this->ActionOfStack(name));
 		std::cout << "nobody sendAction.1.1" << std::endl ;
 		if (a->isActionPossible ())
 		  {
