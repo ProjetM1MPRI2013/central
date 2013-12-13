@@ -71,35 +71,41 @@ void Geography::printMatrix(){
  */
 
 bool Geography::isInTheMap (int x, int y) {
-  return (
-	  (x >= 0)
-	  && (x < this->getMapWidth())
-	  && (y >= 0)
-	  && (y < this->getMapHeight())
-	  );
+
+	std::cout << "nobody6 : isInTheMap" << std::endl;
+	return (
+
+			(x >= 0)
+			&& (x <= this->getMapWidth())
+			&& (y >= 0)
+			&& (y <= this->getMapHeight())
+			);
 };
 /*
  * @brief add a tile to the list if it is on a map
  */
-void Geography::neighborsaux (int x,int y , std::list<Tile*> result) {
-  if (isInTheMap (x,y)) {
-    result.push_front(
-		      this->getTile(x,y)
-		      );
-  }
-  else {
-    return;
-  }
+
+void Geography::neighborsaux (int x,int y , std::list<Tile*>* result) {
+	if (isInTheMap (x,y)) {
+					result->push_front(
+						 this->getTile(x,y)
+					);
+	}
+	else {
+	  return;
+	};
+
 };
 
 /*
  * @brief create the list of tiles witch are at n tile of the tile t0
  */
-std::list<Tile*> Geography::neighbors (int n,Tile* t0) {
+std::list<Tile*>* Geography::neighbors (int n,Tile* t0) {
 	Coordinates c0 = t0->getCoord();
 	int x0 = c0.abs ;
 	int y0 = c0.ord ;
-	std::list<Tile*> result;
+	std::list<Tile*> liste;
+	std::list<Tile*>* result = &liste;
 	for (int i = 0 ; i <= n; ++i){
 		for (int j = 0  ; j <= n-i; ++j){
 			neighborsaux (x0+i,y0+j,result);

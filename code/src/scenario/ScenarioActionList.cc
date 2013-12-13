@@ -3,6 +3,8 @@
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
 #include "geography.h"
+
+
 /*****************
  *ChangeDirection*
  *****************/
@@ -88,6 +90,11 @@ ChangeDirection::ChangeDirection(int id, NewMov mov,Simulation* s) : ScenarioAct
   newMovement = mov;
 };
 
+ChangeDirection::ChangeDirection(const ChangeDirection& a) : ScenarioAction("ChangeDirection",a.simulation){
+  this->playerID = a.playerID;
+  this->newMovement = a.newMovement;
+}
+
 void ChangeDirection::run(){
   Direction a = simulation->getPlayerByID(playerID)->getDirection();
   Couple* b = directionToInt(a);
@@ -107,6 +114,10 @@ KillNPC::KillNPC(NPC* t,Simulation* s) : ScenarioAction("KillNPC",s){
   target = t;
 };
 
+KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
+  this->target = a.target;
+}
+
 void KillNPC::run(){
     simulation->supprimerNPC(target);
   return;
@@ -115,24 +126,37 @@ void KillNPC::run(){
 /***********
  *Explosion*
  ***********/
+
 Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
   location = t;
   power = p;
 };
+
+Explosion::Explosion(const Explosion& a) : ScenarioAction("Explosion",a.simulation){
+  this->location = a.location;
+  this->power = a.power;
+}
+
 void Explosion::run() {
-	std::list<Tile*> nb = this->simulation->getMap()->neighbors(this->power, this->location);
-	for (std::list<Tile*>::iterator t = nb.begin(); t != nb.end();++t) {
-		// kill npc in the case:
-		std::list<NPC*> npcs = (*t)->getNPCs();
-		for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-			this->simulation->addAction(new KillNPC(*n, this->simulation));
-		};
-		//TODO détruire les batiments
-		//TODO juste pour les test
-		(*t)->setAnxiety(100);
-	};
+  std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
+  for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
+    // kill npc in the case. Only the server had to dot this. The client only destroys the buildings
+    if (this->simulation->simIsServer()){
+      std::list<NPC*> npcs = (*t)->getNPCs();
+      for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
+	this->simulation->addAction(new KillNPC(*n, this->simulation));
+      };
+    }
+    //TODO détruire les batiments
+    //TODO juste pour les test
+    (*t)->setAnxiety(100);
+  };
 };
 
+
+/***********
+ * AddCops *
+ ***********/
 
 AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCops",s){
   x = xx;
@@ -141,13 +165,40 @@ AddCops::AddCops(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCop
   this->simulation = s;
 };
 
+AddCops::AddCops(const AddCops& a) : ScenarioAction("AddCops",a.simulation){
+  this->number = a.number;
+  this->x = a.x;
+  this->y = a.y;
+}
+
 void AddCops::run(){
-  for (int i=0;i<number;i++) {
-    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
-  };
+	 for (int i=1;i<number/4;i++) {
+	    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+	    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+	    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+	    simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+	  };
+	  if (number%4 == 1) {
+		  simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+	  };
+	  if (number%4 == 2) {
+		  simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+		  simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
+	   };
+	  if (number%4 == 3) {
+		  simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+		  simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
+		  simulation->addAgent(new Agent(x+number/4,y-number/4,(float)COST_COP1,0));
+
+
+	     };
   simulation->enleveSous((int)COST_COP2*number);
   return;
 };
+
+/***********
+ * AddCams *
+ ***********/
 
 AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){
   x = xx;
@@ -156,6 +207,12 @@ AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCam
   this->simulation = s;
 };
 
+AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
+  this->number = a.number;
+  this->x = a.x;
+  this->y = a.y;
+}
+
 void AddCams::run(){
   for (int i=1;i<number/4;i++) {
     simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1));
@@ -163,12 +220,27 @@ void AddCams::run(){
     simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1));
     simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1));
   };
-  for (int i= number/4 + 1;i<number%4 + number/4 +1;i++) {
-	  simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1));
+  if (number%4 == 1) {
+	  simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1));
   };
+  if (number%4 == 2) {
+	  simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1));
+	  simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1));
+   };
+  if (number%4 == 3) {
+	  simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1));
+	  simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1));
+	  simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1));
+
+
+     };
   simulation->enleveSous((int)COST_CAM2*number);
 };
 
+
+/************
+ * DropItem *
+ ************/
 
 DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropItem",s){
   this->stuff = stuffO;
@@ -176,6 +248,45 @@ DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropI
   this->playerID = id;
 }
 
+DropItem::DropItem(const DropItem& a) : ScenarioAction("DropItem",a.simulation){
+  this->stuff = a.stuff;
+  this->playerID = a.playerID;
+}
+
 void DropItem::run (){
   this->simulation->getPlayerByID(this->playerID)->removeItem(stuff);
+}
+
+
+/***********************************
+ * AbstractMessage implementations *
+ **********************************/
+
+AbstractMessage* ChangeDirection::copy(){
+    return (AbstractMessage*) new ChangeDirection(*this);
+}
+
+
+AbstractMessage* AddCops::copy(){
+    return (AbstractMessage*) new AddCops(*this);
+}
+
+
+AbstractMessage* AddCams::copy(){
+    return (AbstractMessage*) new AddCams(*this);
+}
+
+
+AbstractMessage* Explosion::copy(){
+    return (AbstractMessage*) new Explosion(*this);
+}
+
+
+AbstractMessage* KillNPC::copy(){
+    return (AbstractMessage*) new KillNPC(*this);
+}
+
+
+AbstractMessage* DropItem::copy(){
+    return (AbstractMessage*) new DropItem(*this);
 }

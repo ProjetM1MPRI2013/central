@@ -125,6 +125,7 @@ public :
 
     virtual Geography* getMap(){return map;}
 
+    virtual bool simIsServer();
 protected :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;

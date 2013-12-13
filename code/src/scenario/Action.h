@@ -31,6 +31,7 @@ class Action : public AbstractMessage {
   long delay;
 
   Action (std::string n, Simulation* s);
+  Action (const Action&);
 
   /**
    * @brief Check if the action is possible

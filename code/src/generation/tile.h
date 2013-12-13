@@ -227,7 +227,7 @@ class Tile {
     /**
      * @brief Return the list of the NPC in the tile, sorted by x-y
      */
-    std::list<NPC*> getNPCs();
+    std::list<NPC*>& getNPCs();
 
     void addNPC (NPC* a);
     void removeNPC (NPC* a);
