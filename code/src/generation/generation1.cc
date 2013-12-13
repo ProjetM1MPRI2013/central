@@ -2,7 +2,7 @@
 #include <boost/functional/hash.hpp>
 #include "tile.h"
 #include <string>
-#include <random>
+#include "pseudorandom.h"
 
 
 
@@ -18,7 +18,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   //int MAP_WIDTH = 100;
   std::size_t seed1 = hachage(seed);
   if (DEBUG){std::cout << "seed : " << seed1 << std::endl;}
-  std::minstd_rand randomGen (seed1);
+  PseudoRandom randomGen(seed1);
   //srand(int(seed1));
   int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
   std::string file = "../graphism/buildings";
@@ -39,7 +39,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   nbInter2 = 0;
   // On choisit le nombre d'intersections sur l'axe des abscisses
   while (nbInter1 < minInter) {
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbInter1 = (nbRand % maxInter) + 1;
   }
@@ -47,7 +47,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   // On choisit le nombre d'intersections sur l'axe des ordonnées
   while (nbInter2 < minInter)  {
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbInter2 = (nbRand % maxInter) + 1;
   }
@@ -66,7 +66,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     if (DEBUG) {std::cout << "generation1 : For : " << ++debugforcpt << std::endl;};
     batiment = Batiment(file, i);
     if(batiment.getType()==INTER) {
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i; poids = nbRand;}
     }
@@ -87,7 +87,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i; poids = nbRand;}
     }
@@ -105,7 +105,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for(i=0; i<nbLine; i++) {
     batiment = Batiment(file, i);
     if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       if (nbRand > poids) {choose = i ; poids = nbRand;}
     }
@@ -131,22 +131,22 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << "min : " << min << std::endl;}
   if (DEBUG) {std::cout << "max : " << max << std::endl;}
   for (i=0; i<nbInter1; i++) {
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
     if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
-      nbRand2 = randomGen();
+      nbRand2 = randomGen.pseudorand();
       nbRand2 = nbRand2 % seuil1;
     }
     else {
       nbRand2 = -1;
     }
     while(nbRand % widthRoadV != 0 || nbRand2 > seuil2){
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
       nbRand = nbRand % (max-min+1);
       if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
-	nbRand2 = randomGen();
+	nbRand2 = randomGen.pseudorand();
 	nbRand2 = nbRand2 % seuil1;
       }
       else {
@@ -170,21 +170,21 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   if (DEBUG) {std::cout << "min : " << min << std::endl;}
   if (DEBUG) {std::cout << "max : " << max << std::endl;}
   for (j=0; j<nbInter2; j++) {
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
     nbRand = nbRand % (max-min+1);
     if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
-      nbRand2 = randomGen();
+      nbRand2 = randomGen.pseudorand();
       nbRand2 = nbRand2 % seuil1;
     }
     else {
       nbRand2 = -1;
     }
     while(nbRand % heightRoadH != 0 || nbRand2 > seuil2){
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       nbRand = nbRand % (max-min+1);
       if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
-	nbRand2 = randomGen();
+	nbRand2 = randomGen.pseudorand();
 	nbRand2 = nbRand2 % seuil1;
       }
       else {
@@ -212,7 +212,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(j=0; j<nbInter2; j++){
       ord1 = ordInter[j];
       // On met des batiments dans le pâté de maison
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
       // On met la route verticale
       longV = (abs1 - abs0) / widthRoadV ;
@@ -245,7 +245,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     }
     // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
     ord1 = MAP_HEIGHT;
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     longH = (ord1 - ord0) / heightRoadH;
     for(k=0; k<longH; k++) {
@@ -265,7 +265,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   for(j=0; j<nbInter2; j++){
     ord1 = ordInter[j];
     // On met des batiments dans le paté de maison
-    nbRand = randomGen();
+    nbRand = randomGen.pseudorand();
     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     // On met la route verticale
     longV = (abs1 - abs0) / widthRoadV ;
@@ -280,7 +280,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     ord0 = ord1 + heightInter;
   }
   ord1 = MAP_HEIGHT;
-  nbRand = randomGen();
+  nbRand = randomGen.pseudorand();
   fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
@@ -298,7 +298,7 @@ std::size_t Generation1::hachage(std::string seed) {
 void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file) {
   //J'ai choisis une valeur par défault pour la seed [Adrien K.]
   int nbRand = seed;
-  std::minstd_rand randomGen (seed);
+  PseudoRandom randomGen (seed);
   
   int fillbcpt = 0;
   
@@ -324,14 +324,14 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     
     if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
     if(batiment.getType()==BANK && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       nbRand = nbRand % poidsBank;
       if (nbRand > poids) {choose = i3; poids = nbRand;}
     }
     
     if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
     if(batiment.getType()==HOUSE && batiment.getHeight() <= (ord1 - ord0 + 1) && batiment.getWidth() <= (abs1 - abs0 + 1)) {
-      nbRand = randomGen();
+      nbRand = randomGen.pseudorand();
       nbRand = nbRand % poidsHouse;
       if (nbRand > poids) {choose = i3; poids = nbRand;}
     }
@@ -345,10 +345,11 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
       batiment = Batiment(file, i3);
       if (DEBUG){std::cout << "fillBuildings : " << fillbcpt++ << "\n";}
       if(batiment.getType()==BLANK) {
-	nbRand = randomGen();
+	nbRand = randomGen.pseudorand();
 	if (nbRand > poids) {choose = i3; poids = nbRand;}
       }
     }
+    if (DEBUG) {std::cout << "choix BLANK, ligne du bat : " << choose << std::endl;}
     batiment = Batiment(file, choose);
     std::string filePicture = batiment.getFilePictures();
     Coordinates* picture = batiment.getPicture();
