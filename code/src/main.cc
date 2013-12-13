@@ -115,7 +115,7 @@ void serverLoop(int id,int nbPlayers, Server* serverPtr,
 
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
-	while (window->isOpen()) {
+	while (false/*window->isOpen()*/) {
 		dt = clock.restart();
 		sf::Event event;
 		simu.run(dt);
