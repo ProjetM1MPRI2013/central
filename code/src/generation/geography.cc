@@ -76,9 +76,9 @@ bool Geography::isInTheMap (int x, int y) {
 	return (
 
 			(x >= 0)
-			&& (x <= this->getMapWidth())
+			&& (x < this->getMapWidth())
 			&& (y >= 0)
-			&& (y <= this->getMapHeight())
+			&& (y < this->getMapHeight())
 			);
 };
 /*

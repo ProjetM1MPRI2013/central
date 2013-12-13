@@ -31,8 +31,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   }
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
   fichier.close();
-  maxInter = 9;
-  minInter = 4;
+  maxInter = 11;
+  minInter = 5;
   assert(minInter <= maxInter);
   nbInter1 = 0;
   nbInter2 = 0;
