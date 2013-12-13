@@ -17,7 +17,7 @@ class Player;
 #include "time.h"
 #include "player.h"
 #include "../network/network.h"
-
+#include "../graphism/animation.h"
 
 /**
  * @brief The Simulation class
@@ -57,15 +57,24 @@ public :
    */
   virtual void addPlayer(Player* p);
 
-	//crée un nouveau npc et l'ajoute dans une case
-  void ajouterNPC(int iStart,int jStart,int iTarget, int jTarget);
+  /**
+   * @brief addNPC
+   * creates a new NPC
+   * @param iStart: coordinate i of the start position
+   * @param jStart: coordinate j of the start position
+   * @param iTarget: coordinate i of the target position
+   * @param jTarget: coordinate j of the target position
+   * @param speed: the NPC's speed in tiles/s
+   * @param tex: the texturepack for the NPC
+   */
+  void addNPC(int iStart,int jStart,int iTarget, int jTarget, float speed, TexturePack* tex);
 
 	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
 	void peopleGeneration();
 
 
-	Simulation(int tileW,int tileH,int nbPlayers,int id);
-	Simulation(Geography* map, int tileW,int tileH,int nbPlayers,int id);
+	Simulation(int nbPlayers,int id);
+	Simulation(Geography* map,int nbPlayers,int id);
 	Simulation(std::string seed, std::vector<Player*> players) ;
 
  	 /**
@@ -133,8 +142,8 @@ protected :
   Server* server;
   bool isServer;
   int MAP_SIZE;
-  int TILE_SIZE_X;
-  int TILE_SIZE_Y;
+  const int TILE_SIZE_X = 1;
+  const int TILE_SIZE_Y = 1;
   int NB_JOUEURS;
   int Id; //0 pour le maire = le serveur, i pour le joueur i
   int* sous; //tableau des sous de tout le monde

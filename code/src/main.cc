@@ -31,24 +31,33 @@
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::F4) && event.key.alt)
 #endif
 
-void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
+void clientLoop(int id, int nbPlayers, bool isFullScreen,
 		sf::VideoMode video_mode, Client* clientPtr, Geography& geo, sf::RenderWindow* window) {
 
 	if (isFullScreen) {
 		(*window).create(video_mode, "Game Interface", sf::Style::Fullscreen);
 	} else
 		(*window).create(video_mode, "Game Interface");
-	Simulation simu = Simulation(&geo, tileW, tileH, nbPlayers, 1);
+	Simulation simu = Simulation(&geo,nbPlayers, 1);
 	simu.setClient(clientPtr);
 	GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
+        sf::Texture a1;
+        assert(a1.loadFromFile("../../../sprite/Anim.png"));
+        TexturePack tp1;
+        tp1.texture = a1;
+        tp1.nbAnim = {1,12,16};
+        tp1.widthSprite = {16,16,32};
+        tp1.heightSprite = 32;
+        tp1.offsetX = {0,0,0};
+        tp1.offsetY = {8,8,8};
+        tp1.isLoop = {true, true, false};
+        graContIso.addTexturePack(tp1);
 	graContIso.load();
 	//TileMap tilemap = TileMap(&simu, &geo);
 	//geo.printMatrix();
 
-        //[joseph] ceci est un NPC de test, il bouge mais n'est pas dessiné
-        // il marche tout droit, c'est parce que j'ai commenté les appels à gou goh gol gor qui ne sont à mon avis pas générées correctement
-        //mais il marche tout droit en faisant A* !
-        simu.ajouterNPC(11,1,24,2);
+        //[joseph] ceci est un NPC de test
+        simu.addNPC(4,11,40,24,2,&tp1);
         
 	sf::Clock clock;
 	sf::Time dt = sf::Time::Zero;
@@ -91,10 +100,10 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen, int tileW, int tileH,
 	return;
 }
 
-void serverLoop(int id, int tileW, int tileH, int nbPlayers, Server* serverPtr,
+void serverLoop(int id,int nbPlayers, Server* serverPtr,
 		Geography& geo, sf::RenderWindow* window) {
 
-	Simulation simu = Simulation(&geo, tileW, tileH, nbPlayers, id);
+	Simulation simu = Simulation(&geo,nbPlayers, id);
 	simu.setServer(serverPtr);
 
 	sf::Clock clock;
@@ -128,26 +137,24 @@ int main(int argc, char ** argv) {
 		sf::RenderWindow window;
 		window.setKeyRepeatEnabled(false);
 		int nbPlayers = 1;
-                //[joseph] les 2 variables qui suivent sont stupides, elles doivent nécessairement valloir 1 pour que tout puisse marcher, il faudra les supprimer de simulation
-		int tileW = 1;
-		int tileH = 1;
 		Geography geo;
 		std::cout << argc << std::endl;
-		if (argc <= 1) {
-		  geo = (Geography) Generation1("Geriatric Terrorist Anarchy");
-		}
+		//if (argc <= 1) {
+                  geo = (Geography) Generation1("424242");
+                  /*}
 		else {
 		  geo = (Geography) Generation1(std::string (argv[1]));
-		}
+                  }*/
+
 		//geo.printMatrix();
 
 		Server* serverPtr = Network::createDummyServer();
 		Client* clientPtr = Network::createDummyClient(serverPtr);
 
-		std::thread serverThread { std::bind(serverLoop, 0, tileW, tileH,
+		std::thread serverThread { std::bind(serverLoop, 0,
 				nbPlayers, serverPtr, geo ,&window) };
 
-		clientLoop(1, nbPlayers, isFullScreen, tileW, tileH, video_mode,
+		clientLoop(1, nbPlayers, isFullScreen, video_mode,
 				clientPtr, geo, &window);
 		serverThread.join();
 

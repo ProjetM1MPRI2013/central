@@ -88,19 +88,19 @@ void Trajectory::pathfinding(Geography& map) {
       std::list<Tile*> neighbourhood;
       //[joseph] la 2è partie des conditions est normalement rendue inutile par la première
       //ce n'est pas le cas, aparemment à cause de bugs à la génération qui rendent cette première partie inutilisable
-      if (//z->getTile().getGou()&&
+      if (z->getTile().getGou()&&
           z->getTile().getCoord().getAbs()>0) {
         neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs()-1,z->getTile().getCoord().getOrd()));
       }
-      if (//z->getTile().getGol()&&
+      if (z->getTile().getGol()&&
           z->getTile().getCoord().getOrd()>0) {
         neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs(),z->getTile().getCoord().getOrd()-1));
       }
-      if (//z->getTile().getGor()&&
+      if (z->getTile().getGor()&&
           z->getTile().getCoord().getOrd()<map.getMapHeight()-1) {
         neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs(),z->getTile().getCoord().getOrd()+1));
       }
-      if (//z->getTile().getGoh()&&
+      if (z->getTile().getGoh()&&
           z->getTile().getCoord().getAbs()<map.getMapWidth()-1) {
         neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs()+1,z->getTile().getCoord().getOrd()));
       }

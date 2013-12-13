@@ -11,10 +11,8 @@
 #include "scenario/NewMov.h"
 #include "scenario/ScenarioActionList.h"
 
-Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
+Simulation::Simulation(int nbPlayers, int id)
 {
-	this->TILE_SIZE_X = tileW;
-	this->TILE_SIZE_Y = tileH;
 	this->NB_JOUEURS = nbPlayers;
 	this->map = map;
 	this->oldMap = map;
@@ -36,11 +34,11 @@ Simulation::Simulation(int tileW, int tileH, int nbPlayers, int id)
 	this->NPCs = NPCs;
 }
 
-Simulation::Simulation(Geography* map, int tileW, int tileH, int nbPlayers, int id) : Simulation(tileW, tileH, nbPlayers, id) {
+Simulation::Simulation(Geography* map, int nbPlayers, int id) : Simulation(nbPlayers, id) {
   this->setGeography(map);
 }
 
-Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(1,1,p_vect.size(),0) {
+Simulation::Simulation(std::string seed, std::vector<Player *> p_vect) : Simulation(p_vect.size(),0) {
   this->setGeography(new Generation1(seed));
   for(Player* p : p_vect)
     this->players.push_back(p);
@@ -139,7 +137,7 @@ float floor2(float x) {
   return ((float) (floor((double(x)))));
 }
 
-void Simulation::ajouterNPC(int iStart, int jStart, int iTarget ,int jTarget) {
+void Simulation::addNPC(int iStart, int jStart, int iTarget ,int jTarget, float speed, TexturePack* tex) {
   Position start, target;
   /*  int i1, i2, j1, j2;
   i1 = rand() % (this->MAP_SIZE);
@@ -148,7 +146,7 @@ void Simulation::ajouterNPC(int iStart, int jStart, int iTarget ,int jTarget) {
   j2 = rand() % (this->MAP_SIZE);*/
   start = Position(iStart * TILE_SIZE_X, jStart * TILE_SIZE_Y);
   target = Position(iTarget * TILE_SIZE_X, jTarget * TILE_SIZE_Y);
-  NPC *pnj = new NPC(1, 10, 10, start, target, *map, NULL);
+  NPC *pnj = new NPC(speed, 10, 10, start, target, *map, tex);
   NPCs.push_back(pnj);
 }
 
@@ -168,7 +166,8 @@ void Simulation::peopleGeneration() {
     for (int j = 0; j < MAP_SIZE; j++) {
       chance = (rand() % 100);
       if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-        ajouterNPC(i, j,rand()/MAP_SIZE,rand()/MAP_SIZE);
+        //nope
+        //ajouterNPC(i, j,rand()/MAP_SIZE,rand()/MAP_SIZE,NULL);
       }
       if (chance < (map->getTile(i, j)->getPopulationDensity() / 10)) {
         supprimerNPCDansCase(i, j);

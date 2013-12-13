@@ -33,19 +33,18 @@
               sf::Sprite& sp = tilec->getSprite();
               sp.setPosition(sf::Vector2f( i * DOWN_TILE(0) + j * RIGHT_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X,  i * DOWN_TILE(1) + j * RIGHT_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) ));
               target.draw(sp, states);
-              
-              //[joseph] commenté car je ne sais pas comment créer un texturepack pour les pnj, ce qui fait bugguer l'affichage si on essaye de les dessiner
-              std::list<NPC *> lnpc ;//= tilec->getNPCs();
-              for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
-                {
-                  assert((**ci).TextureIsInit());
-                  
-                  sf::Sprite& sfn = (**ci).getSprite();
-                  Position& p = (**ci).getPosition();
-                  sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY() - 32 /* !!!! */)));
-                  target.draw(sfn,states);
-                }
             }
+            std::list<NPC *> lnpc = tilec->getNPCs();
+            for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
+              {
+                assert((**ci).TextureIsInit());
+                
+                sf::Sprite& sfn = (**ci).getSprite();
+                Position& p = (**ci).getPosition();
+                sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()) - 8, floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY() - 32 /* !!!! */)));
+                target.draw(sfn,states);
+              }
+            
           }
       }
     return;
