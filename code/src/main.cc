@@ -21,6 +21,7 @@
 #include "hud/hudMayor.h"
 #include "hud/hudTerro.h"
 #include <TGUI/TGUI.hpp>
+#include <string>
 
 #define DEBUG false
 
@@ -107,7 +108,7 @@ void serverLoop(int id, int tileW, int tileH, int nbPlayers, Server* serverPtr,
 	return;
 }
 
-int main() {
+int main(int argc, char ** argv) {
 	int sizeFenetre[3], b;
 	bool isFullScreen;
 	sf::VideoMode video_mode;
@@ -130,7 +131,14 @@ int main() {
                 //[joseph] les 2 variables qui suivent sont stupides, elles doivent nécessairement valloir 1 pour que tout puisse marcher, il faudra les supprimer de simulation
 		int tileW = 1;
 		int tileH = 1;
-		Geography geo = (Geography) Generation1("424242");
+		Geography geo;
+		std::cout << argc << std::endl;
+		if (argc <= 1) {
+		  geo = (Geography) Generation1("Geriatric Terrorist Anarchy");
+		}
+		else {
+		  geo = (Geography) Generation1(std::string (argv[1]));
+		}
 		//geo.printMatrix();
 
 		Server* serverPtr = Network::createDummyServer();

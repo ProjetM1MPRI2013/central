@@ -15,6 +15,15 @@ Geography::Geography(std::string seed){
   return;
 }
 
+Geography::Geography(){
+  for (int i=0;i<MAP_WIDTH;i++) {
+    for (int j=0;j<MAP_HEIGHT;j++) {
+      map[i][j] = NULL;
+    }
+  }
+  return;
+}
+
 float Geography::getAnxiety(int i, int j){
 
 	return ((this->map[i][j])->getAnxiety());
