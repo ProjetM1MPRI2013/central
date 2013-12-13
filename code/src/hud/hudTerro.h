@@ -21,8 +21,8 @@ class HudTerro: public PreHud {
 public:
 	HudTerro(sf::RenderWindow* window, Simulation& simulation);
 	void init();
-	void event(sf::RenderWindow* window, sf::Event* e);
-	void callback();
+	void event(sf::RenderWindow* window, sf::Event e);
+	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
 	Stack stack;

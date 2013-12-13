@@ -79,7 +79,7 @@ void HudTerro::init() {
 			for (std::list<tgui::Button::Ptr>::iterator it =
 					(this->buttonsList).begin();
 					it != (this->buttonsList).end(); ++it) {
-				delete &it;
+        hud.remove(*it);
 			};
 			(this->buttonsList).clear();
 
@@ -97,8 +97,9 @@ void HudTerro::init() {
 				button->setPosition(50 + (this->i) * 100, this->h - 100);
 				std::cerr << "button placed at " << (50 + (this->i) * 100) << "x" << this->h - 100 << std::endl;
 				button->setText((*it)->name);
-				button->setCallbackId(this->i + 1);
-				button->bindCallback(tgui::Button::LeftMouseClicked);
+				//button->setCallbackId(this->i + 1);
+				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)), 
+                             tgui::Button::LeftMouseClicked);
 				(this->buttonsList).push_back(button);
 				(this->i)++;
 				std::cerr << "adding " << (*it)->name << std::endl;
@@ -108,15 +109,15 @@ void HudTerro::init() {
 }
 ;
 
-void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
-		if (event->type == sf::Event::Closed)
+void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
+		if (event.type == sf::Event::Closed)
 			(*window).close();
 
 		if (waitFor == WF_NONE) {
-			if (event->type == sf::Event::KeyPressed) {
+			if (event.type == sf::Event::KeyPressed) {
 				// Je crois qu'on veut rajouter une action terro newmovement
 				// je verrai plus tard comment on fait exactement
-				switch (event->key.code) {
+				switch (event.key.code) {
 				case sf::Keyboard::Z:
 					if (not this->bup) {
 						newMovement (NewMov::P_UP,(&this->simulation));
@@ -146,8 +147,8 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 				};
 			};
 
-			if (event->type == sf::Event::KeyReleased) {
-				switch (event->key.code) {
+			if (event.type == sf::Event::KeyReleased) {
+				switch (event.key.code) {
 				case sf::Keyboard::Z:
 					newMovement (NewMov::R_UP,(&this->simulation));
 					this->bup = false;
@@ -171,14 +172,14 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 		};
 
 		if (waitFor == WF_CLICK) {
-			if (event->type == sf::Event::MouseButtonPressed) {
-				if (event->mouseButton.button == sf::Mouse::Left) {
+			if (event.type == sf::Event::MouseButtonPressed) {
+				if (event.mouseButton.button == sf::Mouse::Left) {
 					// TODO : envoyer le clic si c'est un NPC
 				} else {
 					stack.cancel();
 				};
 			} else {
-				if (event->type == sf::Event::KeyPressed) {
+				if (event.type == sf::Event::KeyPressed) {
 					stack.cancel();
 				};
 			};
@@ -186,19 +187,19 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event* event) {
 
 		// Pass the event to all the current widgets
 		//std::cerr << "passe dedans" << std::endl;
-		(this->hud).handleEvent((*event));
+		(this->hud).handleEvent(event);
 }
 ;
 
-void HudTerro::callback() {
-	tgui::Callback callback;
-	while ((this->hud).pollCallback(callback)) {
-		std::cerr<< "in callback" << std::endl;
+void HudTerro::callback(unsigned int callback_id) {
+	//tgui::Callback callback;
+	//while ((this->hud).pollCallback(callback)) {
+		//std::cerr<< "in callback" << std::endl;
 		if ((this->currentState) == BS_INVENT) {
-			if (callback.id > 0 && callback.id <= (this->buttonsList).size()) {
+			if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 				// Save the selected item
 				std::list<Stuff*>::iterator it = (this->inventory).begin();
-				for (unsigned int i = 1; i < callback.id; i++) {
+				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};
 				this->currentStuff = (*it);
@@ -210,7 +211,8 @@ void HudTerro::callback() {
 				for (std::list<tgui::Button::Ptr>::iterator it =
 						(this->buttonsList).begin();
 						it != (this->buttonsList).end(); ++it) {
-					delete &it;
+          hud.remove(*it);
+					//delete &it;
 				};
 				(this->buttonsList).clear();
 
@@ -224,8 +226,9 @@ void HudTerro::callback() {
 					button->setSize(80, 40);
 					button->setPosition(50 + (this->i) * 100, this->h - 100);
 					button->setText(stringOfActions(*it));
-					button->bindCallback(tgui::Button::LeftMouseClicked);
-					button->setCallbackId(this->i + 1);
+          button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
+                               tgui::Button::LeftMouseClicked);
+					//button->setCallbackId(this->i + 1);
 					(this->buttonsList).push_back(button);
 					(this->i)++;
 				};
@@ -236,8 +239,9 @@ void HudTerro::callback() {
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->w - 100), this->h - 100);
 				button->setText("Inventory");
-				button->bindCallback(tgui::Button::LeftMouseClicked);
-				button->setCallbackId(0);
+        button->bindCallback(std::bind(&HudTerro::callback, this, 0),
+                             tgui::Button::LeftMouseClicked);
+				//button->setCallbackId(0);
 				(this->buttonsList).push_back(button);
 
 				// Update the flag
@@ -247,21 +251,20 @@ void HudTerro::callback() {
 
 		if (this->currentState == BS_ACTIONS) {
 			// the button 'Inventory' is clicked.
-			if (callback.id == 0) {
+			if (callback_id == 0) {
 				this->nextState = BS_INVENT;
 				(this->actionsList).clear();
 			};
 
 			// an action is clicked.
-			if (callback.id > 0 && callback.id < (this->buttonsList).size()) {
+			if (callback_id > 0 && callback_id < (this->buttonsList).size()) {
 				std::list<Actions>::iterator it = (this->actionsList).begin();
-				for (unsigned int i = 1; i < callback.id; i++) {
+				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};
 				stack.newAction((*it), this->currentStuff);
 			};
 		};
-	};
 }
 ;
 
