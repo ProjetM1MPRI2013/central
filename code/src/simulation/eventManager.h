@@ -18,6 +18,7 @@ typedef std::string EventName;
   typedef std::map<reference<EventTarget>,eventMap, WithUuidCmp> targetMap;
 
 class EventManager {
+  public:
 
 
   /**
@@ -64,8 +65,8 @@ void EventManager::subscribe(EventName event, TargetT& target, EventListener& li
   /* Wrapping in a lambda to avoid type issues. The template ensures type safety. */
   /* Implementation note: we could create the lambda in the EventListener but
    * we may want to pass additional values to the callback in the future */
-  auto run_callback = [&]() { callback(event,target); };
-  targets[std::ref(target)][event][std::ref(listener)] = run_callback;
+  auto run_callback = [callback,event,&target]() { callback(event,target); };
+  targets[target][event][listener] = run_callback;
 }
 
 template <typename TargetT>
@@ -76,4 +77,14 @@ void EventManager::unsubscribe(EventName eventT, TargetT& target, EventListener&
     return;
   }
 }
+
+template <typename TargetT>
+void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&)> callback) {
+  EventManager::subscribe(eventT, target, *this, callback);
+};
+
+template <typename TargetT>
+void EventListener::unsubscribe(EventName eventT, TargetT& target) {
+  EventManager::unsubscribe(eventT, target, *this);
+};
 #endif

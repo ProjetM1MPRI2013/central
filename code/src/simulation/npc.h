@@ -5,6 +5,7 @@
 #include "positionable.h"
 #include "position.h"
 #include "withUuid.h"
+#include "eventTarget.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include "graphism/animation.h"
@@ -14,7 +15,7 @@
  * @brief The NPC class
  * It represents a NPC, and is a subclass of Positionable and Withuuid
  */
-class NPC : public WithUuid, public Positionable {
+class NPC : public EventTarget, public Positionable {
  private:
   Trajectory trajectory;
   float fear;

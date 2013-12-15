@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "hud/hudMayor.h"
 #include "hud/hudTerro.h"
+#include "HScenario.h"
 #include <TGUI/TGUI.hpp>
 #include <string>
 
@@ -36,6 +37,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 
 
 	Simulation simu = Simulation(&geo,nbPlayers, 1);
+  HScenario scenar = HScenario(simu);
+  simu.setScenario(&scenar);
 	simu.setClient(clientPtr);
 	GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
         sf::Texture a1;
