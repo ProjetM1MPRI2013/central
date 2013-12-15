@@ -3,21 +3,26 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#define DEBUG false
+#define LOG false
+
+
+
 
 Tile* getTile(Simulation* s) {
-	std::cout << "getTile" << std::endl ;
+	if (DEBUG) {std::cout << "getTile" << std::endl ;};
 	Player* p = s->getPlayer();
-	std::cout << "getTile 1" << std::endl ;
+	if (DEBUG) {std::cout << "getTile 1" << std::endl ;};
 	Position* pos = p->getPosition();
-	 std::cout << pos->getX() << "," << pos->getY()  << std::endl ;
-	std::cout << pos->getX() << std ::endl;
-	std::cout << "getTile 2" << std::endl ;
+	 if (DEBUG) {std::cout << pos->getX() << "," << pos->getY()  << std::endl ;};
+	if (DEBUG) {std::cout << pos->getX() << std::endl ;};
+	if (DEBUG) {std::cout << "getTile 2" << std::endl ;};
 	Geography* map = s->getMap();
-	std::cout << "getTile 3" << std::endl ;
-	std::cout << map->getMapHeight() << std::endl;
-	std::cout << "getTile 3.2" << std::endl ;
+	if (DEBUG) {std::cout << "getTile 3" << std::endl ;};
+	if (DEBUG) {std::cout << map->getMapHeight() << std::endl ;};
+	if (DEBUG) {std::cout << "getTile 3.2" << std::endl ;};
 	Tile t = pos->isInTile(*map);
-	std::cout << "getTile 4" << std::endl ;
+	if (DEBUG) {std::cout << "getTile 4" << std::endl ;};
 	return &(t
 		/*s->getPlayer()->getPosition()->isInTile(
 				*(s->getMap())
@@ -25,7 +30,7 @@ Tile* getTile(Simulation* s) {
 				*/
 
 		)
-		;};
+;};
 
 Stack::Stack (Simulation* s, PreHud* h){
   actionsName = Actions::NONE;
@@ -74,15 +79,15 @@ void Stack::cancel () {
 };
 Action* Stack::ActionOfStack(Actions a) {
   Stuff* b (this->getBasic());
-   std::cout<< "nobody ActionOFSTACK" << std::endl ;
+  if (DEBUG) {std::cout<< "nobody ActionOFSTACK" << std::endl ;};
 
   Simulation* sim(this->getSim());
-  std::cout << "nobody ActionOFSTACK.1" << std::endl ;
+  if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
   switch (a)
     {
     case Actions::DROP :
     {
-       	std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;
+       	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;};
     	return (Action *) new Drop(b,sim);
     };
     case Actions::ATTACK :
@@ -92,43 +97,43 @@ Action* Stack::ActionOfStack(Actions a) {
       };
     case Actions::RELOAD :
       {
-    	  std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;
+    	  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;};
     	  Stuff* amu(this->getStuff());
     	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
       };
 	case PLANT :
 	{
-		std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;
+		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;};
 		Tile* t = getTile(sim);
-		std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;
+		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;};
 		return (Action *) new Plant ((Bomb *)b, t,sim);
 	}
     default:
-    	std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;
+    	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;};
       std::cerr << "Stack.cc : error in ActionOfState \n";
     };
-  std::cout << "nobody ActionOFSTACK.2" << std::endl ;
+  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2" << std::endl ;};
   return new Action("lolol error", sim);
 };
 
 void Stack::sendAction () {
-	std::cout << "nobody sendAction" << std::endl ;
-	std::cout << "nobody sendAction.0" << std::endl ;
+	if (DEBUG) {std::cout << "nobody sendAction" << std::endl ;};
+	if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
 	if ((this->SoNList).empty())
-	{   std::cout << this->actionsName << std::endl ;
-	std::cout << "nobody sendAction.1" << std::endl ;
+	{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
+	if (DEBUG) {std::cout << "nobody sendAction.1" << std::endl ;};
 		Actions name = this->actionsName;
-		std::cout << "nobody sendAction.0" << std::endl ;
+		if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
 		Action* a (this->ActionOfStack(name));
-		std::cout << "nobody sendAction.1.1" << std::endl ;
+		if (DEBUG) {std::cout << "nobody sendAction.1.1" << std::endl ;};
 		if (a->isActionPossible ())
 		  {
-			std::cout << "nobody sendAction.2" << std::endl ;
+			if (DEBUG) {std::cout << "nobody sendAction.2" << std::endl ;};
 		    a->doAction();
-		    std::cout << "nobody sendAction.3" << std::endl ;
+		    if (DEBUG) {std::cout << "nobody sendAction.3" << std::endl ;};
 		  }
 		else
-		  { std::cout << "nobody sendAction.2.1" << std::endl ;
+		  { if (DEBUG) {std::cout << "nobody sendAction.2.1" << std::endl ;};
 			//(this->hud)->setwf(WF_NOTPOSSIBLE);
 		  };
 		this->cancel();
@@ -149,7 +154,7 @@ void Stack::sendAction () {
 };
 
 void Stack::newAction(Actions a, Stuff* sf) {
-	std::cout << "nobody newAction" << std::endl ;
+	if (DEBUG) {std::cout << "nobody newAction" << std::endl ;};
   (SoNOfActions (a,(this->SoNList)));
   this->actionsName =a ;
   this->basicStuff = sf;

@@ -2,10 +2,11 @@
 #include <iostream>
 #include <list>
 #include "network/client.h"
+#define DEBUG false
+#define LOG true
 
-/*to ask to denys to implemente */
 bool isPlantable (Tile* t) {
-	std::cout << "nobody isPLANTABLE" << std::endl ;
+	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};
 switch(t->getType())
 // todo choisir les quelles sont plantables
 	{case(ROADH) : return true;
@@ -98,7 +99,10 @@ Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {
-	this->simulation->getClient()->sendMessage(*this,true);};
+	if (LOG) {std::cout << "nobody : do action : Drop" << std::endl ;};
+	this->simulation->getClient()->sendMessage(*this,true);
+	if (LOG) {std::cout << "nobody : action done : Drop " << std::endl ;};
+};
 
 void Drop::addPendingActions(HostSimulation* hs){
   hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
@@ -113,9 +117,10 @@ bool Plant::isActionPossible(){
 	  );
 };
 void Plant::doAction () {
-	std::cout << "nobody : do action" << std::endl ;
+	if (LOG) {std::cout << "nobody : do action : Plant" << std::endl ;};
 	this->simulation->getClient()->sendMessage(*this,true);
-	std::cout << "nobody : do action.1" << std::endl ;};
+	if (LOG) {std::cout << "nobody : action done Plant" << std::endl ;};
+};
 
 void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
