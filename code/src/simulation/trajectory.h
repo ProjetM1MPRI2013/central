@@ -7,11 +7,14 @@
 #include "../generation/geography.h"
 #include <vector>
 #include <cmath>
-#include <queue>
+//#include <queue>
+#include<boost/heap/fibonacci_heap.hpp>
 #include "tilewrapper.h"
 
 class Tile;
 class Coordinates;
+
+typedef typename boost::heap::fibonacci_heap<TileWrapper*,boost::heap::compare<TileWrapperComparator>> PriorityQueue;
 
 /**
  * @brief The Trajectory class
@@ -21,10 +24,11 @@ class Trajectory {
  private:
   bool hasArrived;
   std::list<Position> posList;
-  void explore(TileWrapper* y,TileWrapper* z,std::priority_queue<TileWrapper*,std::vector<TileWrapper*>,TileWrapperComparator>& open);
+  void explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open);
   void pathfinding(Geography& map);
 
  public:
+
   /**
    * @brief Trajectory
    * the default constructor, creates a trajectory with default start and target Positions

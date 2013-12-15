@@ -2,6 +2,22 @@
 #define TILE_WRAPPER_H
 
 #include "../generation/tile.h"
+#include<boost/heap/fibonacci_heap.hpp>
+
+/**
+ * @brief The TileWrapperComparator class
+ * a comparator for pointers on TileWrapper
+ * the greatest is the one with the lowest distance+heuristique
+ * (asserts that they actually have a distance)
+ */
+class TileWrapperComparator {
+ public:
+  bool operator() (TileWrapper* lhs,TileWrapper* rhs) const;
+};
+
+
+
+typedef typename boost::heap::fibonacci_heap<TileWrapper*,boost::heap::compare<TileWrapperComparator>> PriorityQueue;
 
 /**
  * @brief The TileWrapper class
@@ -18,7 +34,7 @@ class TileWrapper {
   TileWrapper* parent;
   bool open;
   bool closed;
-
+  PriorityQueue::handle_type handle;
 
  public:
   /**
@@ -106,18 +122,23 @@ class TileWrapper {
    * @return the tile wrapped as a reference
    */
   Tile& getTile();
+
+  /**
+   * @brief getHandle
+   * @return the pointer to the tilewrapper's handle in the pathfinder (trajectory) priority queue
+   */
+  PriorityQueue::handle_type& getHandle();;
+
+  /**
+   * @brief setHandle
+   * sets the tilewrapper's handle in the pathfinder (trajectory) priority queue
+   * @param h : the new handle
+   */
+  void setHandle(PriorityQueue::handle_type & h);;
+
+
 };
 
 
-/**
- * @brief The TileWrapperComparator class
- * a comparator for pointers on TileWrapper
- * the greatest is the one with the lowest distance+heuristique
- * (asserts that they actually have a distance)
- */
-class TileWrapperComparator {
- public:
-  bool operator() (TileWrapper* lhs,TileWrapper* rhs) const;
-};
 
 #endif
