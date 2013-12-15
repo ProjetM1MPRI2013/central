@@ -9,7 +9,7 @@
 
 class EventListener : public WithUuid {
 
-protected :
+public :
  	 /**
      * @brief subscribe to events of type eventT on target using callback
      * @param eventT: type of event being subscribed to (can be empty)

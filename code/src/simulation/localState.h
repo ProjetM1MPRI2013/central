@@ -57,6 +57,12 @@ class LocalState {
    */
   Tile& getRelativePlayerTile(int x, int y);
 
+  /**
+   * @brief addNPC
+   * TODO : implement it later
+   */
+  void addNPC();
+
   sf::Time& getLocalTime();
   /**
    * @brief update
@@ -72,9 +78,10 @@ class LocalState {
    */
   float localtime_ms;
   /**
-   * @brief local_npc
+   * @brief npc_list
    * An npc for which this local state exists
    */
+  std::list<NPC> npc_list;
   Player& owner_player;
   int view_range;
 

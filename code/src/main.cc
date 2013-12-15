@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "hud/hudMayor.h"
 #include "hud/hudTerro.h"
+#include "HScenario.h"
 #include <TGUI/TGUI.hpp>
 #include <string>
 
@@ -36,6 +37,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 
 
 	Simulation simu = Simulation(&geo,nbPlayers, 1);
+  HScenario scenar = HScenario(simu);
+  simu.setScenario(&scenar);
 	simu.setClient(clientPtr);
 	GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
         sf::Texture a1;
@@ -56,6 +59,9 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 
         for (int i=0;i<500;i++) {
           //[joseph] ceci est un NPC de test
+          //on en génère 500 à la création de la map, puis plus après
+          //on aura parfois une erreur assert(found) à la génération : cela signifie que le npc n'a pas trouvé de chemin vers son objectif
+          // ça se produit lorsque ledit objectif est sur un bord de la map, car les fonctions de geography.cc qui disent sur quelles cases voisines il est possible d'aller sont bugguées aux bords de la map
           Position start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
           Position target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
           while (start.isInTile(geo).getSpeed()==0) {

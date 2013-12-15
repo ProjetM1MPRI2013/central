@@ -35,18 +35,20 @@ Trajectory::Trajectory(Trajectory& t) {
 }
 
 
-void Trajectory::explore(TileWrapper* y,TileWrapper* z,std::priority_queue<TileWrapper*,std::vector<TileWrapper*>,TileWrapperComparator>& open) {
+void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {
   if (!y->isClosed()) {
     if (y->isOpen()) {
       if (z->getDistance()+1<y->getDistance()) {
         y->setParent(z);
         y->setDistance(z->getDistance()+1);
+        open.increase(y->getHandle());
       }
     } else {
       y->setOpen(true);
       y->setParent(z);
       y->setDistance(z->getDistance()+1);
-      open.push(y);
+      PriorityQueue::handle_type h = open.push(y);
+      y->setHandle(h);
     }
   }
   return;
@@ -59,7 +61,7 @@ void Trajectory::pathfinding(Geography& map) {
   target = posList.back();
   posList.clear();
   
-  std::priority_queue<TileWrapper*, std::vector<TileWrapper*>, TileWrapperComparator> open;
+  PriorityQueue open;
   std::list<TileWrapper*> closed;
 
   Tile& tileStart = start.isInTile(map);
@@ -68,7 +70,8 @@ void Trajectory::pathfinding(Geography& map) {
   TileWrapper* s = new TileWrapper(&tileStart,tileTarget);
   s->setDistance(0);
   s->setOpen(true);
-  open.push(s);
+  PriorityQueue::handle_type h = open.push(s);
+  s->setHandle(h);
 
   TileWrapper* t = new TileWrapper(&tileTarget,tileTarget);
 

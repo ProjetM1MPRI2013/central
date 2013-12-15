@@ -10,6 +10,7 @@
 #include "network/netEvent.h"
 #include "scenario/NewMov.h"
 #include "scenario/ScenarioActionList.h"
+#include "scenario/HScenario.h"
 
 Simulation::Simulation(int nbPlayers, int id)
 {
@@ -148,6 +149,10 @@ void Simulation::addNPC(int iStart, int jStart, int iTarget ,int jTarget, float 
   target = Position(iTarget * TILE_SIZE_X, jTarget * TILE_SIZE_Y);
   NPC *pnj = new NPC(speed, 10, 10, start, target, *map, tex);
   NPCs.push_back(pnj);
+  if (scenario) {
+    scenario->createdNPC(*pnj);
+  }
+  //EventManager::triggerEvent("NPC::created",*pnj);
 }
 
 
@@ -467,14 +472,19 @@ if (!this->isServer){
     }
   }
 
+
   //Deplacement de tous les NPCs.
   for (std::list<NPC *>::iterator it = NPCs.begin(); it != NPCs.end(); ++it) {
+    bool wasArrived = (*it)->hasArrived();
     Tile& tileBefore = (*it)->getPosition().isInTile(*map);
     (*it)->updatePosition(dt, *map);
     Tile& tileAfter = (*it)->getPosition().isInTile(*map);
     if (!tileBefore.equals(tileAfter)) {
       tileBefore.removeNPC(*it);
       tileAfter.addNPC(*it);
+    }
+    if ((*it)->hasArrived() && !wasArrived) {
+      EventManager::triggerEvent("NPC::arrived", **it);
     }
   }
 
@@ -503,3 +513,8 @@ void Simulation::setGeography(Geography *g){
     this->MAP_SIZE = map->getMapWidth();
   }
 }
+
+void Simulation::setScenario(HScenario* s) {
+  scenario = s;
+}
+

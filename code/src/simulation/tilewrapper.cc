@@ -74,6 +74,15 @@ Tile& TileWrapper::getTile() {
   return *tile;
 }
 
+PriorityQueue::handle_type& TileWrapper::getHandle() {
+  return handle;
+}
+
+void TileWrapper::setHandle(PriorityQueue::handle_type& h) {
+  handle = h;
+  return;
+}
+
 
 
 bool TileWrapperComparator::operator() (TileWrapper* lhs,TileWrapper* rhs) const {

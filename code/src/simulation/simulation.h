@@ -2,6 +2,7 @@
 #define SIMULATION_H
 class Action;
 class Player;
+class HScenario;
 #include "../scenario/Action.h"
 #include "../scenario/Stuff.h"
 #include "ScenarioAction.h"
@@ -135,11 +136,13 @@ public :
     virtual Geography* getMap(){return map;}
 
     virtual bool simIsServer();
+    void setScenario(HScenario* s);
 protected :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
   Client* client;
   Server* server;
+  HScenario* scenario;
   bool isServer;
   int MAP_SIZE;
   const int TILE_SIZE_X = 1;
