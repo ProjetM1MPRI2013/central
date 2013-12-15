@@ -69,7 +69,7 @@ void Geography::printMatrix(){
       //if (DEBUG) {std::cout << "j: " << j << std::endl;}
       std::cout << "\t";
       if (this->getTile(i,j) == 0){std::cout << "VOID ";}
-      else {this->getTile(i,j)->printTileType();}
+      else {this->getTile(i,j)->printTileType(); if(DEBUG) {std::cout << this->getTile(i,j)->getGou() << " " << this->getTile(i,j)->getGod() << " " << this->getTile(i,j)->getGor() << " " << this->getTile(i,j)->getGol();}}
       //else {std::cout << this->getTile(i,j)->getType() << std::endl;}
     }
     std::cout << std::endl;
