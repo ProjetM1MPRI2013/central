@@ -45,6 +45,10 @@ Tile& LocalState::getTile(Position p, Layers l){
 
 void LocalState::update(){
   owner_player.updatePosition(localtime);
+  //for each loop
+  for (NPC &npc: npc_list) {
+      npc.updatePosition(localtime, *local_map);
+    }
 }
 
 Geography& LocalState::getLocalMap(){
