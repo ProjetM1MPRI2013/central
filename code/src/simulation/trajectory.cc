@@ -16,6 +16,8 @@ Trajectory::Trajectory() {
   posList.push_front(p2);
   posList.push_front(p1);
   hasArrived = false;
+  speed = std::pair<float,float>(0,0);
+  acceleration = std::pair<float,float>(0,0);
   return;
 }
 
@@ -25,14 +27,18 @@ Trajectory::Trajectory(Position start,Position target,Geography& map) {
   posList.push_front(start);
   pathfinding(map);
   hasArrived = false;
+  speed = std::pair<float,float>(0,0);
+  acceleration = std::pair<float,float>(0,0);
   return;
 }
 
 Trajectory::Trajectory(Trajectory& t) {
   posList = std::list<Position>(t.getPosList());
   hasArrived = t.getHasArrived();
+  speed = t.getSpeed();
+  acceleration = t.getAcceleration();
   return;
-}
+  }
 
 
 void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {
@@ -89,8 +95,6 @@ void Trajectory::pathfinding(Geography& map) {
       closed.push_front(z);
 
       std::list<Tile*> neighbourhood;
-      //[joseph] la 2è partie des conditions est normalement rendue inutile par la première
-      //ce n'est pas le cas, aparemment à cause de bugs à la génération qui rendent cette première partie inutilisable
       if (z->getTile().getGod()/*&&
 				 z->getTile().getCoord().getAbs()>0*/) {
         neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs(),z->getTile().getCoord().getOrd()-1));
@@ -175,23 +179,40 @@ bool Trajectory::getHasArrived() {
   return hasArrived;
 }
 
-void Trajectory::update(sf::Time dt,float speed,Geography& map) {
+void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
   assert(!posList.empty());//il doit y avoir au moins la position courante  
   if (!hasArrived) {//si on n'est pas arrivé : on avance en ligne droite
     assert(posList.size()>1);//il doit y avoir la position courante et au moins un objectif
-    float dist = dt.asSeconds()*speed;
+    float dist = dt.asSeconds()*speedNorm;//distance parcourue en dt à la vitesse normSpeed
     Position position = posList.front();
     posList.pop_front();
     Position& target = posList.front();
-    float dX = target.getX()-position.getX();
-    float dY = target.getY()-position.getY();
-    float norm = (float)sqrt(pow(dX,2)+pow(dY,2));
-    dX = dX/norm;
-    dY = dY/norm;
-    dX = dX*dist;
-    dY = dY*dist;
+
+    //update the position p(t) -> p(t+dt) = p(t)+dt*s(t)
+    float dX = speed.first*dt.asSeconds();
+    float dY = speed.second*dt.asSeconds();
     position.add(dX,dY);
 
+    //update the speed s(t) -> s(t+dt) = s(t)+dt*a(t)
+    speed.first += acceleration.first * dt.asSeconds();
+    speed.second += acceleration.second * dt.asSeconds();
+    //speed is capped by speedNorm
+    float speedNorm2 = sqrt(pow(speed.first,2)+pow(speed.second,2));
+    if (speedNorm2 > speedNorm) {
+      speed.first = speed.first * speedNorm/speedNorm2;
+      speed.second = speed.second * speedNorm/speedNorm2;
+    }
+    
+    //update the acceleration a(t) -> a(t+dt) = 1/tau * (v0(t+dt)-v(t+dt))
+    float v0X = target.getX()-position.getX();
+    float v0Y = target.getY()-position.getY();
+    float norm = (float)sqrt(pow(v0X,2)+pow(v0Y,2));
+    v0X = v0X*speedNorm/norm;
+    v0Y = v0Y*speedNorm/norm;
+    acceleration.first = 1/tau * (v0X - speed.first);
+    acceleration.second = 1/tau * (v0Y - speed.second);
+
+    
     float dist1 = position.distance(target);
     
     if (dist1 <= dist/2) {//on est assez proche de l'objectif
