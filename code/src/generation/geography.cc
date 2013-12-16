@@ -41,7 +41,8 @@ Tile * Geography::getTile(int i,int j){
 }
 
 Tile& Geography::getTileRef(int i,int j){
-	return *(map[i][j]);
+  assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
+  return *(map[i][j]);
 }
 
 
