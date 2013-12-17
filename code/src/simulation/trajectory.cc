@@ -192,17 +192,17 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
     float dX = speed.first*dt.asSeconds();
     float dY = speed.second*dt.asSeconds();
     position.add(dX,dY);
-    if (position.getX()>map.getMapWidth()) {
-      position.setX(map.getMapWidth()-0.2);
+    if (position.getX()>=map.getMapWidth()) {
+      position.setX(map.getMapWidth()-0.5);
     }
     if (position.getX()<0) {
-      position.setX(0.2);
+      position.setX(0.5);
     }
-    if (position.getY()>map.getMapHeight()) {
-      position.setY(map.getMapHeight()-0.2);
+    if (position.getY()>=map.getMapHeight()) {
+      position.setY(map.getMapHeight()-0.5);
     }
     if (position.getY()<0) {
-      position.setY(0.2);
+      position.setY(0.5);
     }
 
     //update the speed s(t) -> s(t+dt) = s(t)+dt*a(t)
@@ -219,8 +219,10 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
     float v0X = target.getX()-position.getX();
     float v0Y = target.getY()-position.getY();
     float norm = (float)sqrt(pow(v0X,2)+pow(v0Y,2));
-    v0X = v0X*speedNorm/norm;
-    v0Y = v0Y*speedNorm/norm;
+    if (norm>0) {
+      v0X = v0X*speedNorm/norm;
+      v0Y = v0Y*speedNorm/norm;
+    }
     acceleration.first = 1/tau * (v0X - speed.first);
     acceleration.second = 1/tau * (v0Y - speed.second);
 
