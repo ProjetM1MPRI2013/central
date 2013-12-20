@@ -23,6 +23,9 @@ typedef typename boost::heap::fibonacci_heap<TileWrapper*,boost::heap::compare<T
 class Trajectory {
  private:
   bool hasArrived;
+  std::pair<float,float> speed;
+  std::pair<float,float> acceleration;
+  float tau = 0.05;
   std::list<Position> posList;
   void explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open);
   void pathfinding(Geography& map);
@@ -83,9 +86,28 @@ class Trajectory {
    * @brief update
    * updates the Trajectory ie tells it to continue for a short time
    * @param dt : the time for which the Trajectory must continue
+   * @param speedNorm: the NPC's speed's norm
    * @param map : the map on which the Trajectory is located 
    */
-  void update(sf::Time dt,float speed,Geography& map);
+  void update(sf::Time dt,float speedNorm,Geography& map);
+
+  /**
+   * @brief getSpeed
+   * @return the current speed vector of the Trajectory
+   */
+  std::pair<float,float>& getSpeed() {
+    return speed;
+  }
+
+  /**
+   * @brief getAcceleration
+   * @return the current acceleration vector of the Trajectory
+   */
+  std::pair<float,float>& getAcceleration() {
+    return acceleration;
+  }
+
+
 } ;
 
 #endif //TRAJECTORY_H
