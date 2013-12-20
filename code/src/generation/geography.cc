@@ -75,23 +75,37 @@ void Geography::printMatrix(){
     std::cout << std::endl;
   }
 };
+
 /*
  *@brief test for 2 int if the tile is in the map
  */
-
 bool Geography::isInTheMap (int x, int y) {
-	return (
-
-			(x >= 0)
-			&& (x < this->getMapWidth())
-			&& (y >= 0)
-			&& (y < this->getMapHeight())
-			);
+  return (
+	  (x >= 0)
+	  && (x < this->getMapWidth())
+	  && (y >= 0)
+	  && (y < this->getMapHeight())
+	  );
 };
+
+/*
+ *@brief test if a tile is in the map
+ */
+bool Geography::isInTheMapTile (Tile* zone) {
+  int x = (zone->getCoord()).getAbs();
+  int y = (zone->getCoord()).getOrd();
+  return (
+   	  (x >= 0)
+	  && (x < this->MAP_WIDTH)
+	  && (y >= 0)
+	  && (y < this->MAP_HEIGHT)
+	  );
+};
+
+
 /*
  * @brief add a tile to the list if it is on a map
  */
-
 void Geography::neighborsaux (int x,int y , std::list<Tile*>* result) {
 	if (isInTheMap (x,y)) {
 					result->push_front(

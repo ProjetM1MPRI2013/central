@@ -107,8 +107,16 @@ class Geography {
    * @brief test for two int if the tile is in the map
    * @param x : the abscissa of the coordinate we want to test
    * @param y : the ordinate of the coordinate we want to test
+   * @return true if the tile with the coordinates (x,y) is in the map
    */
   bool isInTheMap (int x, int y);
+
+  /**
+   * @brief test if a tile is in the map
+   * @param zone : the tile we can check
+   * @return true if the tile zone is in the map
+   */
+  bool isInTheMapTile (Tile* zone);
 
   /**
    * @brief create the list of tiles witch are at n tile of the tile t0
