@@ -125,7 +125,6 @@ float floor2(float x) {
   return ((float) (floor((double(x)))));
 }
 
-
 void Simulation::addNPC(Position start, Position target, float speed, TexturePack* tex) {
   //on crée le NPC
   NPC *npc = new NPC(speed, 10, 10, start, target, *map, tex);

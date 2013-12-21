@@ -26,7 +26,7 @@ class HScenario;
  * provides events to subscribers
  */
 
-class Simulation {
+class Simulation : public EventTarget {
 
  public :
 

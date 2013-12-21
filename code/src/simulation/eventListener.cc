@@ -2,4 +2,5 @@
 #include "eventListener.h"
 
 
-// Templated functions must be defined in headers
+// Functions are defined in eventManager.h
+// (because they are mutually dependent on eventManager.h functions)

@@ -3,6 +3,7 @@
 
 #include "withUuid.h"
 typedef std::string EventName;
+#include <boost/any.hpp>
 #include "eventListener.h"
 #include "eventTarget.h"
 #include <string>
@@ -13,7 +14,7 @@ typedef std::string EventName;
    *  We create three maps : target -> (type -> (listener -> callback))
    */
   template <typename RefE> using reference = std::reference_wrapper<RefE>;
-  typedef std::map<reference<EventListener>, std::function<void ()>, WithUuidCmp> listenerMap;
+  typedef std::map<reference<EventListener>, std::function<void (boost::any)>, WithUuidCmp> listenerMap;
   typedef std::map<EventName, listenerMap> eventMap;
   typedef std::map<reference<EventTarget>,eventMap, WithUuidCmp> targetMap;
 
@@ -35,8 +36,10 @@ class EventManager {
    * To subscribe to all events from an EventTarget, pass the empty EventName.
    * To subscribe to all events of type EventName, pass the empty EventTarget.
    */
+  template <typename TargetT, typename ArgT>
+  static void subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&, ArgT&)> callback);
   template <typename TargetT>
-  static void subscribe(EventName eventT, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&)> callback);
+  static void subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&)> callback);
 
   /**
    * @brief unsubscribe
@@ -53,19 +56,37 @@ class EventManager {
   static void unsubscribe(EventName eventT, TargetT& target, EventListener& listener);
 
   /* */
-  static void triggerEvent(EventName eventT, EventTarget& target);
+  static void triggerEvent(EventName eventT, EventTarget& target, boost::any arg=boost::any{});
 
   static targetMap targets;
 };
 
 /* Subscribe and unsubscribe implementation in header because of the template */
 
+template <typename TargetT, typename ArgT>
+void EventManager::subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&, ArgT&)> callback) {
+  auto run_callback = [callback,event,&target](boost::any arg) { 
+    if (arg.empty()) {
+      std::cerr << "Event trigger typing error: the event was triggered without an argument yet the callback expects one.";
+    } else {
+      try {
+        auto aarg = boost::any_cast<reference<ArgT>>(arg);
+        callback(event,target,aarg); 
+      } catch (boost::bad_any_cast& e) {
+        std::cerr << "Event trigger typing error: the event argument type and one of the callback types are incompatible" << std::endl;
+      }
+    }
+  };
+  targets[target][event][listener] = run_callback;
+}
+
 template <typename TargetT>
 void EventManager::subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&)> callback) {
-  /* Wrapping in a lambda to avoid type issues. The template ensures type safety. */
-  /* Implementation note: we could create the lambda in the EventListener but
-   * we may want to pass additional values to the callback in the future */
-  auto run_callback = [callback,event,&target]() { callback(event,target); };
+  auto run_callback = [callback,event,&target](boost::any arg) { 
+      /* Note you can listen to an event that has an argument
+       * yet provide a function that does not take one */
+      callback(event,target);
+  };
   targets[target][event][listener] = run_callback;
 }
 
@@ -77,6 +98,11 @@ void EventManager::unsubscribe(EventName eventT, TargetT& target, EventListener&
     return;
   }
 }
+
+template <typename TargetT, typename ArgT>
+void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&, ArgT&)> callback) {
+  EventManager::subscribe(eventT, target, *this, callback);
+};
 
 template <typename TargetT>
 void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&)> callback) {
