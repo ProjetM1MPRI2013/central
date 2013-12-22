@@ -92,7 +92,7 @@ Player* Simulation::getPlayerByID(int pid) {
     };
   };
   if (result == 0) {
-    std::cerr << "getPlayerByID error : Unknown playerID : " << pid << "\n";
+    std::cerr << "getPlayerByID error : Unknown playerID " << pid << std::endl;
   };
   return result;
 }
@@ -185,6 +185,7 @@ void Simulation::peopleGeneration() {
 void Simulation::lisserMatrice() {
   float anxiety;
   float population;
+  //Adrien K. : Heuuuuu, ..... je trouve cette ligne bizarre ...
   *oldMap = *map;
   //interieur de la map
   for (int i = 1; i < MAP_SIZE - 2; i++) {
@@ -400,6 +401,7 @@ void Simulation::run(sf::Time dt) {
     std::vector<Action *> actionFromNetwork = this->server->receiveMessages<Action>();
     for (std::vector<Action *>::iterator it = actionFromNetwork.begin(); it !=  actionFromNetwork.end(); ++it){
       (*it)->addPendingActions((HostSimulation*) this);
+      std::cout << "Host : new Action from network of type " << (*it)->name << "\n";
     }
     actionFromNetwork.clear();
   }
@@ -409,32 +411,37 @@ void Simulation::run(sf::Time dt) {
     std::vector<NewMovNetwork *> movFromNetwork = this->server->receiveMessages<NewMovNetwork>();
     for (std::vector<NewMovNetwork *>::iterator it = movFromNetwork.begin(); it !=  movFromNetwork.end(); ++it){
       this->addAction((ScenarioAction *) new ChangeDirection((*it)->playerID,(*it)->movement,this));
-
+      
       std::cout << "Host : New Movement from player : " << (*it)->playerID << " ";
       printNewMov((*it)->movement);
       std::cout << std::endl;
-
+      
     }
     movFromNetwork.clear();
   }
 
-  //The client retrieve all the new messages from the network (of type Action), and add them to the list of pending ScenarioAction
-if (!this->isServer){
-  std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
+  //The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
+  if (!this->isServer){
+    std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
     for (std::vector<ScenarioAction *>::iterator it = scenarioActionFromNetwork.begin(); it !=  scenarioActionFromNetwork.end(); ++it){
+      std::cout << "Client : add a ScenarioAction from network of type " << (*it)->name << "\n";
+      (*it)->simulation = this;
       this->addAction(*it);
     }
   }
-
+  
   for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
        it != pendingActions.end(); ++it) {
     ScenarioAction* action = (*it);
-    action->run();
     //The server sends the ScenarioAction to the client, so they can do them.
     if (this->isServer){
       //Adrien K. je ne suis pas sur que toutes les ScenarioAction doivent être envoyé chez le client.
+      std::cout << "Host : applying pending Scenario Action of type " << action->name << "\n";
       this->server->broadcastMessage(*action,true);
+    } else {
+      std::cout << "Client : applying pending Scenario Action of type " << action->name << "\n";
     }
+    action->run();
   }
   this->pendingActions.clear();
 

@@ -11,10 +11,14 @@ class Stuff;
 #include <cerrno>
 #include <list>
 
-enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP};
+enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP, ERROR};
 
 class Player{
 public:
+
+  //Pour débugue
+  int isServer = 0;
+
   int getID();
   Position* getPosition();
 

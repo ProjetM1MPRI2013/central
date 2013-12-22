@@ -41,6 +41,8 @@ Couple* directionToInt(Direction a){
     return new Couple(-1,1);   
   case STOP :
     return new Couple(0,0);
+  default:
+    break;
   };
   //ne doit pas arriver
   std::cerr << "ScenarioActionList::directionToInt : Direction not correct " << (int) a << "\n";
@@ -82,7 +84,7 @@ Direction intToDirection(Couple* a){
   if ((a->x == 0)&&(a->y == 0)) {return Direction::STOP;};
   //ne doit pas arriver
   std::cerr << "ScenarioActionList::intToDirection : Couple not correct " << a->x << " " << a->y << "\n";
-  return Direction::STOP;
+  return Direction::ERROR;
 };
 
 ChangeDirection::ChangeDirection(int id, NewMov mov,Simulation* s) : ScenarioAction ("ChangeDirection",s){
@@ -100,7 +102,10 @@ void ChangeDirection::run(){
   Couple* b = directionToInt(a);
   Couple* c = newMovToInt(this->newMovement);
   Couple* newDir = new Couple(b->x + c->x, b->y + c->y);
-  simulation->getPlayerByID(playerID)->setDirection(intToDirection(newDir));
+  Direction d = intToDirection(newDir);
+  if (d != Direction::ERROR){
+    simulation->getPlayerByID(playerID)->setDirection(d);
+  }
   delete b;
   delete c;
   delete newDir;

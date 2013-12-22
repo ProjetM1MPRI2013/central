@@ -4,6 +4,44 @@
 
 #define SPEED_AMPLIFIER 350
 
+
+void printDirection(Direction d){
+  switch (d){
+  case UP :
+    std::cout << "UP";
+    break;
+  case  UPRIGHT :
+    std::cout << "UPRIGHT";
+   break;
+  case  RIGHT :
+    std::cout << "RIGHT";
+   break;
+  case  RIGHTDOWN :
+    std::cout << "RIGHTDOWN";
+   break;
+  case  DOWN :
+    std::cout << "DOWN";
+   break;
+  case  DOWNLEFT :
+    std::cout << "DOWNLEFT";
+   break;
+  case  LEFT :
+    std::cout << "LEFT";
+   break;
+  case  LEFTUP :
+    std::cout << "LEFTUP";
+   break;
+  case  STOP :
+    std::cout << "STOP";
+   break;
+  case ERROR :
+ std::cout << "ERROR";
+  default:
+    std::cout << "printDirection : error";
+  }
+}
+
+
 Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
@@ -31,8 +69,16 @@ std::list<Stuff*> Player::getInventory () {
 };
 
 void Player::setDirection(Direction newd) {
+  if (isServer == 0){
+    std::cout << "Client : player " << this->playerID << " changes direction from ";
+  } else {
+    std::cout << "Server : player " << this->playerID << " changes direction from ";
+  }
+  printDirection (this->d);
+  std::cout << " to ";
+  printDirection(newd);
+  std::cout << "\n";
   this->d = newd;
-  std::cout << "Client : player " << this->playerID << "changes direction \n";
   return;
 };
 
@@ -44,6 +90,7 @@ void Player::addItem(Stuff* s) {
 
 void Player::removeItem(Stuff* s) {
   this->inventory.remove(s);
+  delete s;
   return;
 };
 

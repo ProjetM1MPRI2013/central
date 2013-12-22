@@ -157,13 +157,13 @@ void Attack::addPendingActions(HostSimulation* hs){
 
 
 void newMovement (NewMov n, Simulation* s){
-  NewMovNetwork newMov(n,s->getPlayer()->getID());
+  NewMovNetwork newMovNet(n,s->getPlayer()->getID());
   std::cout << "Client : New Movement from player : " << s->getPlayer()->getID() << " ";
   printNewMov(n);
   std::cout << std::endl;
-  s->getClient()->sendMessage(newMov,true);
+  s->getClient()->sendMessage(newMovNet,true);
 
-  s->addAction((ScenarioAction *) new ChangeDirection( s->getPlayer()->getID(),n,s));
+  //s->addAction((ScenarioAction *) new ChangeDirection( s->getPlayer()->getID(),n,s));
 
   return;
 };
