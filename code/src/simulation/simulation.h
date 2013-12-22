@@ -28,7 +28,7 @@ class HScenario;
 
 class Simulation {
 
-public :
+ public :
 
   /**
    * @brief Set the Server object
@@ -61,83 +61,72 @@ public :
   /**
    * @brief addNPC
    * creates a new NPC
-   * @param iStart: coordinate i of the start position
-   * @param jStart: coordinate j of the start position
-   * @param iTarget: coordinate i of the target position
-   * @param jTarget: coordinate j of the target position
+   * @param start: start position
+   * @param target: target position
    * @param speed: the NPC's speed in tiles/s
    * @param tex: the texturepack for the NPC
    */
-  void addNPC(int iStart,int jStart,int iTarget, int jTarget, float speed, TexturePack* tex);
+  void addNPC(Position start, Position target, float speed, TexturePack* tex);
 
-	//parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
-	void peopleGeneration();
+  //parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
+  void peopleGeneration();
+  
+  
+  Simulation(int nbPlayers,int id);
+  Simulation(Geography* map,int nbPlayers,int id);
+  Simulation(std::string seed, std::vector<Player*> players) ;
+  
+  /**
+   * @brief run
+   * @param dt: short lapse of time
+   * Update all the parameters of Simulation
+   */
+  virtual void run(sf::Time dt);
 
-
-	Simulation(int nbPlayers,int id);
-	Simulation(Geography* map,int nbPlayers,int id);
-	Simulation(std::string seed, std::vector<Player*> players) ;
-
- 	 /**
-     * @brief run
-     * @param dt: short lapse of time
-     * Update all the parameters of Simulation
-    */
-    virtual void run(sf::Time dt);
-
-    /*methode qui agit sur la matrice pour lisser la peur*/
-
-    virtual void lisserMatrice();
-
-		/**
-		*	@brief isInTile
-		* @param npc : the npc you want to know the case he is in
-		* gives the tile the npc is in			
-		*/
-    virtual int isInTileX(NPC* npc);
-
-    virtual int isInTileY(NPC* npc);
-
-    /**
-     * @brief setGeography
-     * @param g : a reference to the data structure created by the city generator
-     * Called by the city generator; locally sets the simulation geography
-     */
-    virtual void setGeography(Geography* g);
-
-    //Cette fonction ne devrait pas exister [Adrien K.]
-    ///**
-    //  * @brief
-    //
-    // */
-    //int actionTerroPerformed(Action a);
-    virtual int getSous();
-    virtual void enleveSous(int n);
-
-    virtual void supprimerNPC(NPC *);
-
-    virtual void supprimerNPCDansCase(int i,int j);
-
-
-    /**
-     * @brief addAction
-     * Called by the scenario, notifies the simulation that an action has to be performed: movement, firing, etc.
-     */
-    virtual void addAction(ScenarioAction * action);
+  /*methode qui agit sur la matrice pour lisser la peur*/
+  
+  virtual void lisserMatrice();
     
-    virtual void addAgent(Agent* agent);
-    virtual void addCam(Camera* camera);
+  /**
+   * @brief setGeography
+   * @param g : a reference to the data structure created by the city generator
+   * Called by the city generator; locally sets the simulation geography
+   */
+  virtual void setGeography(Geography* g);
+  
+  //Cette fonction ne devrait pas exister [Adrien K.]
+  ///**
+  //  * @brief
+  //
+  // */
+  //int actionTerroPerformed(Action a);
+  virtual int getSous();
+  virtual void enleveSous(int n);
+  
+  virtual void supprimerNPC(NPC *);
+  
+  virtual void supprimerNPCDansCase(int i,int j);
+  
+    
+  /**
+   * @brief addAction
+   * Called by the scenario, notifies the simulation that an action has to be performed: movement, firing, etc.
+   */
+  virtual void addAction(ScenarioAction * action);
+    
+  virtual void addAgent(Agent* agent);
+  virtual void addCam(Camera* camera);
 
-    /**
-     * @brief Add the action to a list, and will be deleted later
-     */
-    virtual void deleteAction(Action* a);
+  /**
+   * @brief Add the action to a list, and will be deleted later
+   */
+  virtual void deleteAction(Action* a);
 
-    virtual Geography* getMap(){return map;}
+  virtual Geography* getMap(){return map;}
 
-    virtual bool simIsServer();
-    void setScenario(HScenario* s);
-protected :
+  virtual bool simIsServer();
+  void setScenario(HScenario* s);
+ protected :
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
   Client* client;

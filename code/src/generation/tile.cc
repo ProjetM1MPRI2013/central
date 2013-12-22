@@ -135,7 +135,7 @@ void Tile::setSpeed(float speed){
 }
 
 void Tile::addNPC (NPC* a){
-  listNPC.push_back(a);
+  listNPC.push_front(a);
   return;
 };
 

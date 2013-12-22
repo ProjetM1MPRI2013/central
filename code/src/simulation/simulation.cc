@@ -15,8 +15,9 @@
 Simulation::Simulation(int nbPlayers, int id)
 {
 	this->NB_JOUEURS = nbPlayers;
-	this->map = map;
-	this->oldMap = map;
+        //[joseph]map n'est pas définie donc ce qui suit est juste map = map
+        //this->map = map;
+	//this->oldMap = map;
 	this->Id = id;
 
 	int t[NB_JOUEURS];
@@ -97,72 +98,71 @@ Player* Simulation::getPlayerByID(int pid) {
   return result;
 }
 
+
 Player* Simulation::getPlayer() {
   return this->getPlayerByID(this->Id);
 }
-;
+
 
 void Simulation::deleteAction(Action* a){
   this->toDelete.push_back(a);
   return;
 }
 
-int Simulation::isInTileX(NPC* npc) {
-  Position position = npc->getPosition();
-  float x = position.getX();
-
-  int i;
-  i = x / TILE_SIZE_X;
-  return (i);
-}
-
-int Simulation::isInTileY(NPC* npc) {
-  Position position = npc->getPosition();
-  float y = position.getY();
-
-  int j;
-  j = y / TILE_SIZE_Y;
-  return (j);
-}
 
 //Simplement des casts en float de pow, sqrt et floor
 float pow2(float x, float y) {
   return ((float) (pow((double(x)), double(y))));
 }
 
+
 float sqrt2(float x) {
   return ((float) (sqrt((double) x)));
 }
+
 
 float floor2(float x) {
   return ((float) (floor((double(x)))));
 }
 
-void Simulation::addNPC(int iStart, int jStart, int iTarget ,int jTarget, float speed, TexturePack* tex) {
-  Position start, target;
-  /*  int i1, i2, j1, j2;
-  i1 = rand() % (this->MAP_SIZE);
-  i2 = rand() % (this->MAP_SIZE);
-  j1 = rand() % (this->MAP_SIZE);
-  j2 = rand() % (this->MAP_SIZE);*/
-  start = Position(iStart * TILE_SIZE_X, jStart * TILE_SIZE_Y);
-  target = Position(iTarget * TILE_SIZE_X, jTarget * TILE_SIZE_Y);
-  NPC *pnj = new NPC(speed, 10, 10, start, target, *map, tex);
-  NPCs.push_back(pnj);
+
+void Simulation::addNPC(Position start, Position target, float speed, TexturePack* tex) {
+  //on crée le NPC
+  NPC *npc = new NPC(speed, 10, 10, start, target, *map, tex);
+  //on l'ajoute à la liste
+  NPCs.push_front(npc);
+  //on le met dans sa tile de départ
+  start.isInTile(*map).addNPC(npc);
+
   if (scenario) {
-    scenario->createdNPC(*pnj);
+    scenario->createdNPC(*npc);
   }
   //EventManager::triggerEvent("NPC::created",*pnj);
+  return;
 }
 
 
 void Simulation::supprimerNPC(NPC * npc) {
+  //on le retire de sa tile
+  npc->getPosition().isInTile(*map).removeNPC(npc);
+  //on le retire de la liste
   NPCs.remove(npc);
+  //on le supprime
+  delete npc;
+  return;
 }
 
+
 void Simulation::supprimerNPCDansCase(int i, int j) {
-  map->getTile(i, j)->getNPCs().pop_back();
+  //on récupère le 1er NPC de la tile
+  NPC *npc = map->getTileRef(i,j).getNPCs().front();
+  //on le supprime de la tile
+  map->getTileRef(i,j).removeNPC(npc);
+  //on le supprime de la liste
+  NPCs.remove(npc);
+  return;
 }
+
 
 //Crée et tue les gens dans les cases
 void Simulation::peopleGeneration() {
@@ -171,7 +171,8 @@ void Simulation::peopleGeneration() {
     for (int j = 0; j < MAP_SIZE; j++) {
       chance = (rand() % 100);
       if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-        //nope
+        //[joseph]nope
+        //il faut aussi vérifier qu'il ne spawn pas dans une maison
         //ajouterNPC(i, j,rand()/MAP_SIZE,rand()/MAP_SIZE,NULL);
       }
       if (chance < (map->getTile(i, j)->getPopulationDensity() / 10)) {
@@ -179,7 +180,9 @@ void Simulation::peopleGeneration() {
       }
     }
   }
+  return;
 }
+
 
 //Nivelle la peur via une sorte de norme 2
 void Simulation::lisserMatrice() {
@@ -382,7 +385,9 @@ void Simulation::lisserMatrice() {
                              2))));
   map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
+  return;
 }
+
 
 void Simulation::run(sf::Time dt) {
   int chance;
@@ -490,6 +495,8 @@ void Simulation::run(sf::Time dt) {
       tileBefore.removeNPC(*it);
       tileAfter.addNPC(*it);
     }
+    //je comprends pas trop ce qu'on fait là
+    //pourquoi pas juste hasArrived ?
     if ((*it)->hasArrived() && !wasArrived) {
       EventManager::triggerEvent("NPC::arrived", **it);
     }
@@ -498,30 +505,40 @@ void Simulation::run(sf::Time dt) {
   return;
 }
 
+
 int Simulation::getSous() {
   return (this->sous[0]);
 }
+
+
 void Simulation::enleveSous(int n) {
   this->sous[0] = this->sous[0] - n;
   return;
 }
 
+
 void Simulation::addAgent(Agent* agent) {
   agents.push_back(agent);
+  return;
 }
+
 
 void Simulation::addCam(Camera* cam) {
   cameras.push_back(cam);
+  return;
 }
+
 
 void Simulation::setGeography(Geography *g){
   this->map = g ;
   if (g) {
     this->MAP_SIZE = map->getMapWidth();
   }
+  return;
 }
+
 
 void Simulation::setScenario(HScenario* s) {
   scenario = s;
+  return;
 }
-

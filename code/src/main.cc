@@ -69,8 +69,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
       target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
     }
-          
-    simu.addNPC(start.getX(),start.getY(),target.getX(),target.getY(),2,&tp1);
+    
+    simu.addNPC(start,target,2,&tp1);
   }
         
   sf::Clock clock;
@@ -92,7 +92,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 	    isFullScreen = false;
 	  } else {
 	    (*window).create(video_mode, "Game Interface",
-			     sf::Style::Fullscreen);
+                             sf::Style::Fullscreen);
 	    isFullScreen = true;
 	  }
 	}
