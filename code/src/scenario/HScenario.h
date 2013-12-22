@@ -36,8 +36,8 @@ class HScenario : public EventListener {
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
   void eventTriggered (EventName e, EventTarget& t) ;
-  void createdNPC(NPC& npc);
-  void arrivedNPC(NPC& npc);
+  void createdNPC(EventName e, Simulation& s, NPC& npc);
+  void arrivedNPC(EventName e, NPC& npc);
 
   Simulation& simulation;
 };

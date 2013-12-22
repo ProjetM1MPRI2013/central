@@ -136,7 +136,7 @@ void Simulation::addNPC(Position start, Position target, float speed, TexturePac
   if (scenario) {
     scenario->createdNPC(*npc);
   }
-  //EventManager::triggerEvent("NPC::created",*pnj);
+  EventManager::triggerEvent("NPC::created",*this, *pnj);
   return;
 }
 

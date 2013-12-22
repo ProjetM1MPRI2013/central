@@ -56,12 +56,18 @@ class EventManager {
   static void unsubscribe(EventName eventT, TargetT& target, EventListener& listener);
 
   /* */
-  static void triggerEvent(EventName eventT, EventTarget& target, boost::any arg=boost::any{});
+  template <typename ArgT>
+  static void triggerEvent(EventName event, EventTarget& target, ArgT& arg);
+  static void triggerEvent(EventName event, EventTarget& target, boost::any arg=boost::any{});
 
   static targetMap targets;
 };
 
-/* Subscribe and unsubscribe implementation in header because of the template */
+
+/*
+ * Implementations for EventManager
+*/
+
 
 template <typename TargetT, typename ArgT>
 void EventManager::subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&, ArgT&)> callback) {
@@ -83,7 +89,7 @@ void EventManager::subscribe(EventName event, TargetT& target, EventListener& li
 template <typename TargetT>
 void EventManager::subscribe(EventName event, TargetT& target, EventListener& listener, std::function<void (EventName, TargetT&)> callback) {
   auto run_callback = [callback,event,&target](boost::any arg) { 
-      /* Note you can listen to an event that has an argument
+      /* Note that you can listen to an event that has an argument
        * yet provide a function that does not take one */
       callback(event,target);
   };
@@ -99,18 +105,38 @@ void EventManager::unsubscribe(EventName eventT, TargetT& target, EventListener&
   }
 }
 
-template <typename TargetT, typename ArgT>
-void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&, ArgT&)> callback) {
-  EventManager::subscribe(eventT, target, *this, callback);
+template <typename ArgT>
+void EventManager::triggerEvent(EventName event, EventTarget& target, ArgT& arg) {
+  reference<ArgT> newArg = std::ref(arg);
+  EventManager::triggerEvent(event,target,(boost::any) newArg);
+}
+
+/*
+ * Implementations for EventListener
+ */
+
+template <typename ListenerT, typename TargetT, typename ArgT>
+void EventListener::subscribe(EventName eventT, TargetT& target, ListenerT* self, void (ListenerT::*callback)(EventName, TargetT&, ArgT&)) {
+
+  std::function<void(EventName, TargetT&, ArgT&)> fn = [self,callback](EventName e, TargetT& t, ArgT& arg) { 
+    std::bind(callback,self,e,std::ref(t),std::ref(arg))();
+    return;
+  };
+  EventManager::subscribe(eventT, target, *self, fn);
 };
 
-template <typename TargetT>
-void EventListener::subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&)> callback) {
-  EventManager::subscribe(eventT, target, *this, callback);
+template <typename ListenerT, typename TargetT>
+void EventListener::subscribe(EventName eventT, TargetT& target, ListenerT* self, void (ListenerT::*callback)(EventName, TargetT&)) {
+  std::function<void(EventName, TargetT&)> fn = [self,callback](EventName e, TargetT& t) { 
+    std::bind(callback,self,e,std::ref(t))();
+    return;
+  };
+  EventManager::subscribe(eventT, target, *self, fn);
 };
 
 template <typename TargetT>
 void EventListener::unsubscribe(EventName eventT, TargetT& target) {
   EventManager::unsubscribe(eventT, target, *this);
 };
+
 #endif

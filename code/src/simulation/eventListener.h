@@ -16,10 +16,10 @@ public :
      * @param target: object the event is about
      * @param callback: a method of the instance inheriting from EventListener 
     */
-    template <typename TargetT, typename ArgT>
-    void subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&, ArgT&)> callback);
-    template <typename TargetT>
-    void subscribe(EventName eventT, TargetT& target, std::function<void (EventName, TargetT&)> callback);
+    template <typename ListenerT, typename TargetT, typename ArgT>
+    void subscribe(EventName eventT, TargetT& target, ListenerT* self, void (ListenerT::*callback)(EventName, TargetT&, ArgT&));
+    template <typename ListenerT, typename TargetT>
+    void subscribe(EventName eventT, TargetT& target, ListenerT* self, void (ListenerT::*callback)(EventName, TargetT&));
 
     /**
      * @brief unsubscribe to events of type eventT on target
