@@ -317,3 +317,35 @@ void Tile::printTileType(){
   }
   return;
 };
+
+
+std::list<Tile*> Tile::getNeighbourTiles(Geography& map) {
+  std::list<Tile*> neighbourTiles;
+  if (getGod()) {
+    neighbourTiles.push_front(map.getTile(coord.getAbs(),coord.getOrd()-1));
+  }
+  if (getGol()) {
+    neighbourTiles.push_front(map.getTile(coord.getAbs()-1,coord.getOrd()));
+  }
+  if (getGor()) {
+    neighbourTiles.push_front(map.getTile(coord.getAbs()+1,coord.getOrd()));
+  }
+  if (getGou()) {
+    neighbourTiles.push_front(map.getTile(coord.getAbs(),coord.getOrd()+1));
+  }
+  return neighbourTiles;
+}
+
+
+std::list<NPC*> Tile::getNotTooFarNPCs(Geography& map) {
+  std::list<NPC*> notTooFarNPCs = getNPCs();
+  std::list<Tile*> neighbourTiles = getNeighbourTiles(map);
+  Tile* tempTile;
+  while (!neighbourTiles.empty()) {
+    tempTile = neighbourTiles.front();
+    neighbourTiles.pop_front();
+    std::list<NPC*> tempTileNPCs = tempTile->getNPCs();
+    notTooFarNPCs.splice(notTooFarNPCs.end(),tempTileNPCs);
+  }
+  return notTooFarNPCs;
+}

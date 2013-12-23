@@ -12,7 +12,7 @@ enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des ty
 
 class NPC;
 class TileWrapper;
-
+class Geography;
 
 struct SpriteTilePack
 {
@@ -281,7 +281,20 @@ class Tile {
     bool isBatOrigin();
 
     void printTileType();
+
+    /**
+     * @brief getNeighbourTiles
+     * @return the list of Tiles which can be accesed in one step from this Tile
+     * @param map: the map where the Tile is located
+     */
+    std::list<Tile*> getNeighbourTiles(Geography& map);
     
+    /**
+     * @brief getNotTooFarNPCs
+     * @param map: the map where the Tile is located
+     * @return the list of the NPCs around this tile
+     */
+    std::list<NPC*> getNotTooFarNPCs(Geography& map);
 };
 
 

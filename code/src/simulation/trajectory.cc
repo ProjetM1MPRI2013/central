@@ -94,27 +94,11 @@ void Trajectory::pathfinding(Geography& map) {
       z->setClosed(true);
       closed.push_front(z);
 
-      std::list<Tile*> neighbourhood;
-      if (z->getTile().getGod()/*&&
-				 z->getTile().getCoord().getAbs()>0*/) {
-        neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs(),z->getTile().getCoord().getOrd()-1));
-      }
-      if (z->getTile().getGol()/*&&
-				 z->getTile().getCoord().getOrd()>0*/) {
-        neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs()-1,z->getTile().getCoord().getOrd()));
-      }
-      if (z->getTile().getGor()/*&&
-				 z->getTile().getCoord().getOrd()<map.getMapHeight()-1*/) {
-        neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs()+1,z->getTile().getCoord().getOrd()));
-      }
-      if (z->getTile().getGou()/*&&
-				 z->getTile().getCoord().getAbs()<map.getMapWidth()-1*/) {
-        neighbourhood.push_front(map.getTile(z->getTile().getCoord().getAbs(),z->getTile().getCoord().getOrd()+1));
-      }
+      std::list<Tile*> neighbourTiles = z->getTile().getNeighbourTiles(map);
       
-      while (!neighbourhood.empty()) {
-        Tile* tempTile = neighbourhood.front();
-        neighbourhood.pop_front();
+      while (!neighbourTiles.empty()) {
+        Tile* tempTile = neighbourTiles.front();
+        neighbourTiles.pop_front();
         TileWrapper* y = tempTile->getWrapper();
         if (y) {
           explore(y,z,open);
