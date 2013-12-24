@@ -3,10 +3,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "ActionCreator.h"
 #define DEBUG false
 #define LOG false
-
-
 
 
 Tile* getTile(Simulation* s) {
@@ -32,6 +31,54 @@ Tile* getTile(Simulation* s) {
 		)
 ;};
 
+Stuff* getStuff(std::list<Stuff*> l) {
+	Stuff* s = l.front();
+	l.pop_front();
+	return s;
+};
+
+
+NPC* getNpc(std::list<NPC*> l) {
+	NPC* n= l.front();
+	l.pop_front();
+	return n;
+};
+
+Action* create (Actions a,Stuff* b,std::list<NPC*> npcs,std::list<Stuff*> stuffs,Simulation* sim) {
+if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
+switch (a)
+{
+	case Actions::DROP :
+    	{
+       	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;};
+    	return (Action *) new Drop(b,sim);
+    	};
+    case Actions::ATTACK :
+    	{
+    	NPC* victim = getNpc(npcs);
+    	return ((Action *) new Attack((Weapon*)b,victim,sim));
+    	};
+    case Actions::RELOAD :
+      	  {
+    	  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;};
+    	  Stuff* amu= getStuff(stuffs);
+    	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
+      	  };
+	case PLANT :
+		{
+		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;};
+		Tile* t = getTile(sim);
+		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;};
+		return (Action *) new Plant ((Bomb *)b, t,sim);
+		}
+    default:
+    	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;};
+    	std::cerr << "Stack.cc : error in ActionOfState \n";
+    	};
+	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2" << std::endl ;};
+	return new Action("lolol error", sim);
+};
+
 Stack::Stack (Simulation* s, PreHud* h){
   actionsName = Actions::NONE;
   basicStuff = 0;
@@ -41,34 +88,6 @@ Stack::Stack (Simulation* s, PreHud* h){
 
 
 
-Stuff* Stack::getBasic() {
-	return this->basicStuff;
-};
-
-Simulation* Stack::getSim() {
-	return this->sim;
-};
-
-Stuff* Stack::getStuff() {
-	Stuff* s((this->StuffList).front());
-	(this->StuffList).pop_front();
-	return s;
-};
-
-
-NPC* Stack::getNpc() {
-	NPC* n((this->NpcList).front());
-	(this->NpcList).pop_front();
-	return n;
-};
-
-Actions Stack::getActionsName() {
-	return (this->actionsName);
-};
-
-void Stack::setActionsName(Actions a) {
-	(this->actionsName)= a;
-};
 
 void Stack::cancel () {
 	this->SoNList.clear ();
@@ -77,44 +96,11 @@ void Stack::cancel () {
 	this->basicStuff = 0;
 	this->actionsName = Actions::NONE;
 };
-Action* Stack::ActionOfStack(Actions a) {
-  Stuff* b (this->getBasic());
-  if (DEBUG) {std::cout<< "nobody ActionOFSTACK" << std::endl ;};
 
-  Simulation* sim(this->getSim());
-  if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
-  switch (a)
-    {
-    case Actions::DROP :
-    {
-       	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;};
-    	return (Action *) new Drop(b,sim);
-    };
-    case Actions::ATTACK :
-      {
-	NPC* victim(this->getNpc());
-	return ((Action *) new Attack((Weapon*)b,victim,sim));
-      };
-    case Actions::RELOAD :
-      {
-    	  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;};
-    	  Stuff* amu(this->getStuff());
-    	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
-      };
-	case PLANT :
-	{
-		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;};
-		Tile* t = getTile(sim);
-		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;};
-		return (Action *) new Plant ((Bomb *)b, t,sim);
-	}
-    default:
-    	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;};
-      std::cerr << "Stack.cc : error in ActionOfState \n";
-    };
-  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2" << std::endl ;};
-  return new Action("lolol error", sim);
-};
+
+Action* Stack::ActionOfStack(Actions a) {
+	return create (a,this->basicStuff,this->NpcList,this->StuffList,this->sim);
+  };
 
 void Stack::sendAction () {
 	if (DEBUG) {std::cout << "nobody sendAction" << std::endl ;};
