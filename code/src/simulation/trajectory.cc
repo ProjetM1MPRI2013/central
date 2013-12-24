@@ -6,6 +6,7 @@
 #include <list>
 #include <cassert>
 #include <queue>
+#include <random>
 
 #define DEBUG false
 Trajectory::Trajectory() {
@@ -62,6 +63,11 @@ void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {
 
 void Trajectory::pathfinding(Geography& map) {
   assert(posList.size()>1);//le vecteur doit contenir au moins le départ et l'arrivée
+
+  std::default_random_engine offsetGen (rand());
+  std::uniform_real_distribution<float> offsetDist (0.01,0.99);
+
+  std::pair<float,float> offset (offsetDist(offsetGen),offsetDist(offsetGen));
   Position start,target;
   start = posList.front();
   target = posList.back();
@@ -119,7 +125,9 @@ void Trajectory::pathfinding(Geography& map) {
   while (!temp->equals(*s)) {
     temp = temp->getParent();
     assert(temp);
-    posList.push_front(Position(temp->getTile()));
+    Position tempPos = Position(temp->getTile().getCoord().getAbs() + offset.first,
+                                temp->getTile().getCoord().getOrd() + offset.second);
+    posList.push_front(tempPos);
     if (DEBUG) {
       printf("pathfinding: tile %d %d position %f %f\n",temp->getTile().getCoord().getAbs(),temp->getTile().getCoord().getOrd(),posList.front().getX(),posList.front().getY());
     }

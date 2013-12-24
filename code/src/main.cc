@@ -23,6 +23,7 @@
 #include "HScenario.h"
 #include <TGUI/TGUI.hpp>
 #include <string>
+#include <random>
 
 #define DEBUG false
 
@@ -57,17 +58,22 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   //geo.printMatrix();
 
 
+  std::default_random_engine npcGen (42);
+  std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
+  std::uniform_real_distribution<float> npcDistY(0.01,geo.getMapHeight()-0.01);
+
+
   for (int i=0;i<500;i++) {
     //[joseph] ceci est un NPC de test
     //on en génère 500 à la création de la map, puis plus après
     //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-    Position start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
-    Position target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+    Position start = Position(npcDistX(npcGen),npcDistY(npcGen));
+    Position target = Position(npcDistX(npcGen),npcDistY(npcGen));
     while (start.isInTile(geo).getSpeed()==0) {
-      start = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+      start = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
     while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
-      target = Position(rand()%geo.getMapWidth(),rand()%geo.getMapHeight());
+      target = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
     
     simu.addNPC(start,target,2,&tp1);
