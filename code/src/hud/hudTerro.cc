@@ -20,27 +20,7 @@ void printcwd() {
 	std::cerr << "The current working directory is "<< cCurrentPath << std::endl;
 }
 
-std::string stringOfActions(Actions a) {
-	switch (a) {
-	case DROP:
-		return "Drop";
-		break;
-	case ATTACK:
-		return "Attack";
-		break;
-	case RELOAD:
-		return "Reload";
-		break;
-	case PLANT:
-		return "Plant";
-		break;
-	case NONE:
-	  return "None";
-	  break;
-	};
-	//Should not happens
-	return "Error";
-}
+
 ;
 
 HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :

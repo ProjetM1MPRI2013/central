@@ -35,24 +35,6 @@ bool isInThePack(Simulation* s, Stuff* stuff) {
 };
 
 
-void SoNOfActions(Actions a,std::list<SoN> l) {
-  switch (a)
-    {
-    case DROP : break;
-    case ATTACK :
-      l.push_front(SON_NPC);
-    break;
-    case RELOAD :
-      l.push_front(SON_STUFF);
-    break;
-    case PLANT :
-    break;
-    default:
-      std::cerr << "Stack.cc : error in SoNOfActions \n";
-      break;
-    };
-};
-
 
 Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
   stu = s;
@@ -99,9 +81,7 @@ Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {
-	if (LOG) {std::cout << "nobody : do action : Drop" << std::endl ;};
 	this->simulation->getClient()->sendMessage(*this,true);
-	if (LOG) {std::cout << "nobody : action done : Drop " << std::endl ;};
 };
 
 void Drop::addPendingActions(HostSimulation* hs){
@@ -117,9 +97,7 @@ bool Plant::isActionPossible(){
 	  );
 };
 void Plant::doAction () {
-	if (LOG) {std::cout << "nobody : do action : Plant" << std::endl ;};
 	this->simulation->getClient()->sendMessage(*this,true);
-	if (LOG) {std::cout << "nobody : action done Plant" << std::endl ;};
 };
 
 void Plant::addPendingActions(HostSimulation* hs){

@@ -16,11 +16,6 @@
 #include "npc.h"
 
 
-enum SoN {
-	SON_STUFF, SON_NPC
-};
-
-void SoNOfActions(Actions a,std::list<SoN> l);
 
 typedef Simulation HostSimulation;
 
