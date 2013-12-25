@@ -187,7 +187,7 @@ void HudTerro::callback(unsigned int callback_id) {
 				this->currentStuff = (*it);
 
 				// Get the possible actions for the item
-				this->actionsList = (this->currentStuff)->getActionsPossible();
+				this->actionTypeList = (this->currentStuff)->getActionTypePossible();
 
 				// Delete the old buttons
 				for (std::list<tgui::Button::Ptr>::iterator it =
@@ -201,14 +201,15 @@ void HudTerro::callback(unsigned int callback_id) {
 
 				// Create the new buttons
 				this->i = 0;
-				for (std::list<Actions>::iterator it =
-						(this->actionsList).begin();
-						it != (this->actionsList).end(); ++it) {
+				for (std::list<ActionType*>::iterator it =
+						(this->actionTypeList).begin();
+						it != (this->actionTypeList).end(); ++it)
+				{
 					tgui::Button::Ptr button(this->hud);
 					button->load(THEME_CONFIG_FILE_HUD_TERRO);
 					button->setSize(80, 40);
 					button->setPosition(50 + (this->i) * 100, this->h - 100);
-					button->setText(stringOfActions(*it));
+					button->setText((*it)->name);
           button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
                                tgui::Button::LeftMouseClicked);
 					//button->setCallbackId(this->i + 1);
@@ -237,12 +238,12 @@ void HudTerro::callback(unsigned int callback_id) {
 			if (callback_id == 0) {
         std::cerr << "Inventory" << std::endl; 
 				this->nextState = BS_INVENT;
-				(this->actionsList).clear();
+				(this->actionTypeList).clear();
 			};
 
 			// an action is clicked.
 			if (callback_id > 0 && callback_id < (this->buttonsList).size()) {
-				std::list<Actions>::iterator it = (this->actionsList).begin();
+				std::list<ActionType*>::iterator it = (this->actionTypeList).begin();
 				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};

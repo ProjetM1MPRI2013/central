@@ -7,6 +7,7 @@
 #include "Action.h"
 #include "Actions.h"
 
+
 class Stuff {
  public :
   /**
@@ -22,9 +23,9 @@ class Stuff {
   int stuffID;
 
   /**
-   * @brief Return the list of actions possible
+   * @brief Return the list of ActionType* possible
    */
-  std::list<Actions> getActionsPossible ();
+  std::list<ActionType*> getActionTypePossible ();
 
 
   /**
@@ -43,9 +44,9 @@ class Stuff {
 
  protected:
   /**
-   * @brief The list of all actions possible on the object.
+   * @brief The list of all ActionType* possible on the object.
    */
-  std::list<Actions> actionsPossible;
+  std::list<ActionType*> ActionTypePossible;
 
  private:
   /**

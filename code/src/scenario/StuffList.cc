@@ -3,15 +3,21 @@
 
 
 Weapon::Weapon (std::string n): Stuff(n) {
-  this->actionsPossible.push_back(Actions::ATTACK);
+	std::list<SoN> l_attack ;
+	l_attack.push_back(SON_NPC);
+	ActionType* A_attack = new ActionType  ("attack",l_attack);
+	this->ActionTypePossible.push_back(A_attack);
 };
 
 float Weapon::getRange () {return 0;};
 int Weapon::getDamage () {return 0;};
 
 
+
 Bomb::Bomb (int p) : Stuff("Bomb") {
-  this->actionsPossible.push_back(PLANT);
+	std::list<SoN> l_plant ;;
+	ActionType* A_plant = new ActionType  ("plant",l_plant);
+	this->ActionTypePossible.push_back(A_plant);
   this->power = p;
 };
 
@@ -29,7 +35,10 @@ Gun::Gun(int max, int dam,float ran) : Weapon ("Gun") {
   ammunitionMax = max;
   this->range = ran;
   this->damage = dam;
-  this->actionsPossible.push_back(RELOAD);
+  std::list<SoN> l_reload ;
+  l_reload.push_back(SON_STUFF);
+  ActionType* A_reload = new ActionType  ("reload",l_reload);
+  this->ActionTypePossible.push_back(A_reload);
 };
 
 

@@ -45,7 +45,7 @@ private:
 	bool bright;
 	tgui::Gui hud;
 	std::list<Stuff*> inventory;
-	std::list<Actions> actionsList;
+	std::list<ActionType*> actionTypeList;
 	std::list<tgui::Button::Ptr> buttonsList;
 	WaitFor waitFor;
 	ButtonState currentState;

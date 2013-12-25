@@ -2,9 +2,15 @@
 #include "Action.h"
 #include "ActionsTerro.h"
 
+
+
+
+
+
 int Stuff::counter = 0;
 
-std::list<Actions> Stuff::getActionsPossible () {return actionsPossible;};
+
+std::list<ActionType*> Stuff::getActionTypePossible () {return ActionTypePossible;};
 
 Stuff::Stuff (std::string n) {
   name = n;
@@ -14,8 +20,9 @@ Stuff::Stuff (std::string n) {
    */
   stuffID = counter;
   counter = counter + 1;
-
-  this->actionsPossible.push_back(Actions::DROP);
+  std::list<SoN> l_drop ;
+  ActionType* A_drop = new ActionType  ("drop",l_drop);
+  this->ActionTypePossible.push_back(A_drop);
 };
 
 
@@ -23,6 +30,7 @@ Stuff::Stuff (std::string n, int id){
   name = n;
   
   stuffID = id;
-
-  this->actionsPossible.push_back(Actions::DROP);
+  std::list<SoN> l_drop ;
+  ActionType* A_drop = new ActionType  ("drop",l_drop);
+  this->ActionTypePossible.push_back(A_drop);
 };

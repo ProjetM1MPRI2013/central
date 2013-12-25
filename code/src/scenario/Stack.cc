@@ -7,7 +7,7 @@
 #define DEBUG false
 #define LOG false
 
-
+// découper ici
 Tile* getTile(Simulation* s) {
 	if (DEBUG) {std::cout << "getTile" << std::endl ;};
 	Player* p = s->getPlayer();
@@ -44,8 +44,10 @@ NPC* getNpc(std::list<NPC*> l) {
 	return n;
 };
 
-Action* create (Actions a,Stuff* b,std::list<NPC*> npcs,std::list<Stuff*> stuffs,Simulation* sim) {
-if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
+// TODO ARRETER ICI
+
+Action* create (ActionType* a,Stuff* b,std::list<NPC*> npcs,std::list<Stuff*> stuffs,Simulation* sim) {
+/*if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
 switch (a)
 {
 	case Actions::DROP :
@@ -76,11 +78,12 @@ switch (a)
     	std::cerr << "Stack.cc : error in ActionOfState \n";
     	};
 	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2" << std::endl ;};
+	return new Action("lolol error", sim);*/
 	return new Action("lolol error", sim);
 };
 
 Stack::Stack (Simulation* s, PreHud* h){
-  actionsName = Actions::NONE;
+  actionType = 	NULL;
   basicStuff = 0;
   hud = h;
   sim = s;
@@ -94,23 +97,23 @@ void Stack::cancel () {
 	this->NpcList.clear ();
 	this->StuffList.clear ();
 	this->basicStuff = 0;
-	this->actionsName = Actions::NONE;
+	//this->actionsName = Actions::NONE;
 };
 
 
-Action* Stack::ActionOfStack(Actions a) {
+Action* Stack::ActionOfStack(ActionType* a) {
 	return create (a,this->basicStuff,this->NpcList,this->StuffList,this->sim);
   };
 
 void Stack::sendAction () {
 	if (DEBUG) {std::cout << "nobody sendAction" << std::endl ;};
 	if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
-	if ((this->SoNList).empty())
-	{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
+	if ((this->SoNList).empty()){
+	//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
 	if (DEBUG) {std::cout << "nobody sendAction.1" << std::endl ;};
-		Actions name = this->actionsName;
+		//Actions name = this->actionsName;
 		if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
-		Action* a (this->ActionOfStack(name));
+		Action* a (this->ActionOfStack(this->actionType));
 		if (DEBUG) {std::cout << "nobody sendAction.1.1" << std::endl ;};
 		if (a->isActionPossible ())
 		  {
@@ -137,12 +140,13 @@ void Stack::sendAction () {
 	      }
 	    */
 	};
+
 };
 
-void Stack::newAction(Actions a, Stuff* sf) {
+void Stack::newAction(ActionType* a, Stuff* sf) {
 	if (DEBUG) {std::cout << "nobody newAction" << std::endl ;};
-  (SoNOfActions (a,(this->SoNList)));
-  this->actionsName =a ;
+  this->SoNList = a->SoNlist;
+  this->actionType =a ;
   this->basicStuff = sf;
   this->sendAction();
 };
