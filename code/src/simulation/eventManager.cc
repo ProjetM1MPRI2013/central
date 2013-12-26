@@ -10,3 +10,6 @@ void EventManager::triggerEvent(EventName event, EventTarget& target, boost::any
   }
 }
 
+void EventManager::subscribe(EventName event, EventTarget& target, GenericEventListener& listener, std::function<void (boost::any)> run_callback) {
+  targets[target][event][listener] = run_callback;
+}

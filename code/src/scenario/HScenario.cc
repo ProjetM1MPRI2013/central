@@ -1,10 +1,10 @@
 #include "HScenario.h"
 #include "simulation.h"
 
-#define DEBUG false
+#define DEBUG true
 
 HScenario::HScenario (Simulation& s) : simulation(s) {
-  subscribe("NPC::created",simulation, this, &HScenario::createdNPC);
+  subscribe("NPC::created", simulation, &HScenario::createdNPC);
 };
 
 void HScenario::run(){
@@ -16,12 +16,12 @@ void HScenario::eventTriggered (EventName e, EventTarget& t){
   return;
 };
 
-void HScenario::createdNPC(EventName e, Simulation& s, NPC& npc) {
+void HScenario::createdNPC(Simulation& s, NPC& npc) {
   if (DEBUG) { std::cout << "NPC was created" << std::endl; }
   //std::function<void(EventName, NPC&)> fn = [this](EventName e, NPC& npc) { this->arrivedNPC(npc); } ;
-  subscribe("NPC::arrived", npc, this, &HScenario::arrivedNPC);
+  subscribe("NPC::arrived", npc, &HScenario::arrivedNPC);
 }
 
-void HScenario::arrivedNPC(EventName e, NPC& npc) {
+void HScenario::arrivedNPC(NPC& npc) {
   if (DEBUG) { std::cout << "NPC has arrived" << std::endl; }
 }

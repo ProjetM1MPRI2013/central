@@ -19,7 +19,7 @@ class EventTarget ;
  * Asynchronous communications with the host Simulation class and the Network class.
  * Implement the eventListener interface.
  */
-class HScenario : public EventListener {
+class HScenario : public EventListener<HScenario> {
   
  public :
   
@@ -36,8 +36,8 @@ class HScenario : public EventListener {
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
   void eventTriggered (EventName e, EventTarget& t) ;
-  void createdNPC(EventName e, Simulation& s, NPC& npc);
-  void arrivedNPC(EventName e, NPC& npc);
+  void createdNPC(Simulation& s, NPC& npc);
+  void arrivedNPC(NPC& npc);
 
   Simulation& simulation;
 };
