@@ -11,10 +11,6 @@ void HScenario::run(){
   return;
 };
 
-void HScenario::eventTriggered (EventName e, EventSource& t){
-  return;
-};
-
 void HScenario::createdNPC(Simulation& s, NPC& npc) {
   if (DEBUG) { std::cout << "NPC was created" << std::endl; }
   //std::function<void(EventName, NPC&)> fn = [this](EventName e, NPC& npc) { this->arrivedNPC(npc); } ;
