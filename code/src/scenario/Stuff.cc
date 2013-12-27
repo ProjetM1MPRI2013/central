@@ -21,8 +21,8 @@ Stuff::Stuff (std::string n) {
   stuffID = counter;
   counter = counter + 1;
   std::list<SoN> l_drop ;
-  ActionType* A_drop = new ActionType  ("drop",l_drop);
-  this->ActionTypePossible.push_back(A_drop);
+  //ActionType* A_drop = new ActionType  ("drop",l_drop);
+  //this->ActionTypePossible.push_back(A_drop);
 };
 
 
@@ -31,6 +31,6 @@ Stuff::Stuff (std::string n, int id){
   
   stuffID = id;
   std::list<SoN> l_drop ;
-  ActionType* A_drop = new ActionType  ("drop",l_drop);
-  this->ActionTypePossible.push_back(A_drop);
+  //ActionType* A_drop = new ActionType  ("drop",l_drop);
+  //this->ActionTypePossible.push_back(A_drop);
 };

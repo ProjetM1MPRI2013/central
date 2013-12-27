@@ -49,8 +49,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   tp1.nbAnim = {1,12,16};
   tp1.widthSprite = {16,16,32};
   tp1.heightSprite = 32;
-  tp1.offsetX = {0,0,0};
-  tp1.offsetY = {8,8,8};
+  tp1.offsetX = {8,8,8};
+  tp1.offsetY = {32,32,32};
   tp1.isLoop = {true, true, false};
   graContIso.addTexturePack(tp1);
   graContIso.load();

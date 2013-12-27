@@ -16,36 +16,101 @@
   void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) const
   {
     int w = map->getMapWidth(), h = map->getMapHeight();
+    bool isDrawn[h][w];
     states.transform *= getTransform();
-    
-    for(int k = w-1; k > -h; k--)
+
+    for(int j = 0; j < h; j++)
       {
-        for(int j = std::min(w - 1, h+k-1); j >= std::max(k,0); j--)          // Vérifié par le calcul
-          {
-            int i = j - k;
-            Tile* tilec = map->getTile(i,j);
-            
-            assert(tilec);
-            assert(tilec->TextureIsInit());
-            
-            if(tilec->isBatOrigin())
-            {
-              sf::Sprite& sp = tilec->getSprite();
-              sp.setPosition(sf::Vector2f( i * DOWN_TILE(0) + j * RIGHT_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X,  i * DOWN_TILE(1) + j * RIGHT_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) ));
-              target.draw(sp, states);
-            }
-            std::list<NPC *> lnpc = tilec->getNPCs();
-            for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
-              {
-                assert((**ci).TextureIsInit());
-                
-                sf::Sprite& sfn = (**ci).getSprite();
-                Position& p = (**ci).getPosition();
-                sfn.setPosition(sf::Vector2f( floor(p.getX() * DOWN_TILE(0) + p.getY() * RIGHT_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()) - 8, floor(p.getX() * DOWN_TILE(1) + p.getY() * RIGHT_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY() - 32 /* !!!! */)));
-                target.draw(sfn,states);
-              }
-            
-          }
+	for(int i = 0; i < w; i++)
+	  isDrawn[j][i] = false;
+      }
+    
+    /*
+      isDrawn est une matrice qui indique quelle tile a déjà été affichée.
+      Pour un affichage correct, il faut que tous les éléments au dessus d'une
+      case aient été affichés avant elle-même. Ainsi, l'invariant à conserver
+      est :
+      \forall j,i,j',i' (j' <= j & i' >= i & isDrawn[j][i]) -> isDrawn[j'][i']
+      La condition d'arrêt est donc :
+      isDrawn[h-1][w-1]
+      Avec un parcours par couches comme suit, on minimise le nombre 
+      d'itérations dans le pire des cas (#bluff)
+      On peut prouver que l'algorithme termine (par récurrence sur la seed)
+    */
+    
+    while(not(isDrawn[h-1][w-1]))
+      {
+	for(int k = 0 ; k < std::min(w,h); k++)
+	  {
+	    for(int l = 0 ; l < std::max(w,h) - k; l++)
+	      {
+		for(int b = 0 ; b < 2; b++)
+		  {
+		    int i,j;
+		    if(b)
+		      {
+			i = w - k - 1;
+			j = k + l;
+		      }
+		    else
+		      {
+			i = w - k - l - 1;
+			j = k;
+		      }
+		    if(i < 0 || j >= h)
+		      break;
+		    Tile* tilec = map->getTile(j,i);
+		    
+		    assert(tilec);
+		    assert(tilec->TextureIsInit());
+		    
+		    if(tilec->isBatOrigin())
+		      {
+			int wb = tilec->getWidthBat(), hb = tilec->getHeightBat();
+			bool c1, c2;
+			if(j==0)
+			  c1 = true;
+			else
+			  c1 = isDrawn[j-1][i+1-wb];
+			
+			if(i==w-1)
+			  c2 = true;
+
+			else
+			  c2 = isDrawn[j-1+hb][i+1];
+			
+			if(c1 && c2)
+			  {
+			    sf::Sprite& sp = tilec->getSprite();
+			    sp.setPosition(sf::Vector2f( (i + 1)  * RIGHT_TILE(0) + j * DOWN_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X - 2,  (i + 1) * RIGHT_TILE(1) + j * DOWN_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) - 1));
+			    target.draw(sp, states);
+			    
+
+			    for(int ib = 0; ib < wb; ib++)
+			      {
+				for(int jb = 0; jb < hb; jb++)
+				  {				    
+				    Tile* tilecc = map->getTile(j+jb,i-ib);
+
+				    std::list<NPC *> lnpc = tilecc->getNPCs();
+				    for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
+				      {
+					assert((**ci).TextureIsInit());
+					
+					sf::Sprite& sfn = (**ci).getSprite();
+					Position& p = (**ci).getPosition();
+					sfn.setPosition(sf::Vector2f( floor(p.getY() * RIGHT_TILE(0) + p.getX() * DOWN_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getY() * RIGHT_TILE(1) + p.getX() * DOWN_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY())));
+					target.draw(sfn,states);
+				      }
+				    isDrawn[j+jb][i-ib] = true;
+				  }
+			      }
+
+			  }
+		      }
+		  }	
+	      }
+	  }
       }
     return;
   }
@@ -54,12 +119,11 @@ void GraphicContextIso::load()
 {
   int w = map->getMapWidth(), h = map->getMapHeight();
   
-  for(int k = w-1; k > -h; k--)
+  for(int i = 0; i < w; i ++)
     {
-      for(int j = std::min(w - 1, h+k-1); j >= std::max(k,0); j--)
+      for(int j = 0; j < h; j++)
         {
-          int i = j - k;
-          Tile* tilec = map->getTile(i,j);
+          Tile* tilec = map->getTile(j,i);
 
           assert(tilec != NULL);
           

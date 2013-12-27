@@ -285,7 +285,7 @@ int Tile::getPictureY() {
 }
 
 bool Tile::isBatOrigin() {
-  return(coord.equals(batOrigin));
+  return((coord.getAbs() == batOrigin.getAbs()) && (coord.getOrd() == batOrigin.getOrd() + widthBat - 1));
 }
 
 void Tile::printTileType(){
