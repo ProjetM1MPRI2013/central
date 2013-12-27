@@ -13,7 +13,7 @@ class HScenario;
 #include <cerrno>
 #include "miscellaneous.h"
 #include "eventManager.h"
-#include "eventTarget.h"
+#include "eventSource.h"
 #include "eventListener.h"
 #include "time.h"
 #include "player.h"
@@ -23,10 +23,10 @@ class HScenario;
 /**
  * @brief The Simulation class
  * updates the local state using its own internal rules and the actions provided by the scenario
- * provides events to subscribers
+ * provides events to listeners
  */
 
-class Simulation : public EventTarget {
+class Simulation : public EventSource {
 
  public :
 

@@ -11,7 +11,7 @@ class Simulation;
 
 //Quickfix
 //Replace with includes
-class EventTarget ;
+class EventSource ;
 
 
 /**
@@ -32,10 +32,10 @@ class HScenario : public EventListener<HScenario> {
   
   /**
    * @brief a event has been triggered
-   * @param e: event the listener subscribes to, for instance "isDestroyed"
+   * @param e: event the listener listens to, for instance "isDestroyed"
    * @param t: target generating the event, for instance a building, a zone or an NPC
    */
-  void eventTriggered (EventName e, EventTarget& t) ;
+  void eventTriggered (EventName e, EventSource& t) ;
   void createdNPC(Simulation& s, NPC& npc);
   void arrivedNPC(NPC& npc);
 

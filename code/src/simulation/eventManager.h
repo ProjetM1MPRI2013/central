@@ -4,7 +4,7 @@
 #include "withUuid.h"
 typedef std::string EventName;
 #include <boost/any.hpp>
-#include "eventTarget.h"
+#include "eventSource.h"
 #include <string>
 #include <functional>
 #include <map>
@@ -13,53 +13,53 @@ typedef std::string EventName;
 // No one else may subclass GenericEventListener.
 class GenericEventListener : public WithUuid {};
 
-/** We need a function from (target,type,listener) to callback,
- *  We create three maps : target -> (event -> (listener -> callback))
+/** We need a function from (source,type,listener) to callback,
+ *  We create three maps : source -> (event -> (listener -> callback))
  */
 template <typename T> using reference = std::reference_wrapper<T>;
 typedef std::map<reference<GenericEventListener>, std::function<void (boost::any)>, WithUuidCmp> listenerMap;
 typedef std::map<EventName, listenerMap> eventMap;
-typedef std::map<reference<EventTarget>,eventMap, WithUuidCmp> targetMap;
+typedef std::map<reference<EventSource>,eventMap, WithUuidCmp> sourceMap;
 
 class EventManager {
   public:
 
 
   /**
-   * @brief subscribe
-   * @param eventT: event the listener subscribes to, for instance "isDestroyed"
-   * @param target: target generating the event, for instance a building, a zone or an NPC
+   * @brief listen
+   * @param eventT: event the listener listens to, for instance "isDestroyed"
+   * @param source: source generating the event, for instance a building, a zone or an NPC
    * @param listener: the object inheriting from EventListener that wishes to be notified
    * @param callback: the method of listener that should be called when the event happens
    *
    * Any implementer of EventListener can listen to an event from the simulation. 
-   * For every triple (EventName, EventTarget, EventListener) there can be at most one event subscription.
+   * For every triple (EventName, EventSource, EventListener) there can be at most one event subscription.
    * Oversubscribing will erase the previous callback.
    *
-   * To subscribe to all events from an EventTarget, pass the empty EventName.
-   * To subscribe to all events of type EventName, pass the empty EventTarget.
+   * To listen to all events from an EventSource, pass the empty EventName.
+   * To listen to all events of type EventName, pass the empty EventSource.
    */
-  static void subscribe(EventName event, EventTarget& target, GenericEventListener& listener, std::function<void (boost::any)> callback);
+  static void listen(EventName event, EventSource& source, GenericEventListener& listener, std::function<void (boost::any)> callback);
 
   /**
-   * @brief unsubscribe
-   * @param eventT: event the listener unsubscribes from, for instance "panicBegins"
-   * @param target: target generating the event, for instance a building, a zone or an NPC
+   * @brief unlisten
+   * @param eventT: event the listener stops listening from, for instance "panicBegins"
+   * @param source: source generating the event, for instance a building, a zone or an NPC
    * @param listener: the listener that does not wish to be notified anymore
    *
    * The EventListener won't receive that specific Event from the simulation.
    *
-   * To unsubscribe from all events from an EventTarget, pass the empty EventName.
-   * To unsubscribe from all events of a type, pass the empty EventTarget
+   * To unlisten from all events from an EventSource, pass the empty EventName.
+   * To unlisten from all events of a type, pass the empty EventSource
    */
-  static void unsubscribe(EventName eventT, EventTarget& target, GenericEventListener& listener);
+  static void unlisten(EventName eventT, EventSource& source, GenericEventListener& listener);
 
   /* */
   template <typename ArgT>
-  static void triggerEvent(EventName event, EventTarget& target, ArgT& arg);
-  static void triggerEvent(EventName event, EventTarget& target, boost::any arg=boost::any{});
+  static void triggerEvent(EventName event, EventSource& source, ArgT& arg);
+  static void triggerEvent(EventName event, EventSource& source, boost::any arg=boost::any{});
 
-  static targetMap targets;
+  static sourceMap sources;
 };
 
 
@@ -68,7 +68,7 @@ class EventManager {
 */
 
 template <typename ArgT>
-void EventManager::triggerEvent(EventName event, EventTarget& target, ArgT& arg) {
-  EventManager::triggerEvent(event,target,boost::any(std::ref(arg)));
+void EventManager::triggerEvent(EventName event, EventSource& source, ArgT& arg) {
+  EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
 }
 #endif
