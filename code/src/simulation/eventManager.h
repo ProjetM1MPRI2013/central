@@ -14,9 +14,9 @@ typedef std::string EventName;
 class GenericEventListener : public WithUuid {};
 
 /** We need a function from (target,type,listener) to callback,
- *  We create three maps : target -> (type -> (listener -> callback))
+ *  We create three maps : target -> (event -> (listener -> callback))
  */
-template <typename RefE> using reference = std::reference_wrapper<RefE>;
+template <typename T> using reference = std::reference_wrapper<T>;
 typedef std::map<reference<GenericEventListener>, std::function<void (boost::any)>, WithUuidCmp> listenerMap;
 typedef std::map<EventName, listenerMap> eventMap;
 typedef std::map<reference<EventTarget>,eventMap, WithUuidCmp> targetMap;
@@ -52,8 +52,7 @@ class EventManager {
    * To unsubscribe from all events from an EventTarget, pass the empty EventName.
    * To unsubscribe from all events of a type, pass the empty EventTarget
    */
-  template <typename TargetT>
-  static void unsubscribe(EventName eventT, TargetT& target, GenericEventListener& listener);
+  static void unsubscribe(EventName eventT, EventTarget& target, GenericEventListener& listener);
 
   /* */
   template <typename ArgT>
@@ -67,15 +66,6 @@ class EventManager {
 /*
  * Implementations for EventManager
 */
-
-template <typename TargetT>
-void EventManager::unsubscribe(EventName eventT, TargetT& target, GenericEventListener& listener) {
-  try {
-    targets.at(std::ref(target)).at(eventT).erase(std::ref(listener));
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-}
 
 template <typename ArgT>
 void EventManager::triggerEvent(EventName event, EventTarget& target, ArgT& arg) {
