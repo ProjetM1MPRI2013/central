@@ -136,7 +136,7 @@ void Simulation::addNPC(Position start, Position target, float speed, TexturePac
   if (scenario) {
     scenario->createdNPC(*npc);
   }
-  EventManager::triggerEvent("NPC::created",*this, *pnj);
+  trigger("NPC::created",*pnj);
   return;
 }
 
@@ -497,7 +497,7 @@ void Simulation::run(sf::Time dt) {
     //je comprends pas trop ce qu'on fait là
     //pourquoi pas juste hasArrived ?
     if ((*it)->hasArrived() && !wasArrived) {
-      EventManager::triggerEvent("NPC::arrived", **it);
+      (**it).trigger("NPC::arrived");
     }
   }
 

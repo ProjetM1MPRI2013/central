@@ -2,15 +2,24 @@
 #define EVENT_MANAGER_H
 
 #include "withUuid.h"
-typedef std::string EventName;
 #include <boost/any.hpp>
 #include "eventSource.h"
 #include <string>
 #include <functional>
 #include <map>
 
-// Dummy generic class to store instances of EventListener<T>
-// No one else may subclass GenericEventListener.
+/**
+ * How to use
+ *
+ * Events are just strings
+ * To generate events, derive EventSource.
+ * To listen to events, derive EventListener<YourDerivedClass>.
+ */
+
+/** 
+ * Dummy generic class to store instances of EventListener<T>
+ * No one else may subclass GenericEventListener.
+ */
 class GenericEventListener : public WithUuid {};
 
 /** We need a function from (source,type,listener) to callback,
@@ -42,17 +51,26 @@ class EventManager {
   static void listen(EventName event, EventSource& source, GenericEventListener& listener, std::function<void (boost::any)> callback);
 
   /**
-   * @brief unlisten
-   * @param eventT: event the listener stops listening from, for instance "panicBegins"
+   * @brief 'listener' stops listening from 'event' when triggered by 'source'.
+   * @param event: event the listener stops listening from, for instance "panicBegins"
    * @param source: source generating the event, for instance a building, a zone or an NPC
    * @param listener: the listener that does not wish to be notified anymore
    *
    * The EventListener won't receive that specific Event from the simulation.
    *
-   * To unlisten from all events from an EventSource, pass the empty EventName.
-   * To unlisten from all events of a type, pass the empty EventSource
+   * To unlisten from an event source, pass the event source and the listener.
+   * To unlisten from a type of event, pass only the event name and the listener.
+   * To unlisten from all events, pass only the listener.
    */
-  static void unlisten(EventName eventT, EventSource& source, GenericEventListener& listener);
+  static void unlisten(EventName event, EventSource& source, GenericEventListener& listener);
+  static void unlisten(EventSource& source, GenericEventListener& listener);
+  static void unlisten(EventName event, GenericEventListener& listener);
+  static void unlisten(GenericEventListener& listener);
+
+  /* Remove an event source from the event system. All listeners listening to source
+   * immediately stop listening.
+   */
+  static void remove(EventSource& source);
 
   /* */
   template <typename ArgT>
@@ -70,5 +88,14 @@ class EventManager {
 template <typename ArgT>
 void EventManager::triggerEvent(EventName event, EventSource& source, ArgT& arg) {
   EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
+}
+
+/*
+ * Implementations for EventSource
+ */
+
+template <typename ArgT>
+void EventSource::trigger(EventName event, ArgT& arg) {
+  EventManager::triggerEvent(event, *this, arg);
 }
 #endif

@@ -22,3 +22,40 @@ void EventManager::unlisten(EventName eventT, EventSource& source, GenericEventL
   }
 }
 
+void EventManager::unlisten(EventSource& source, GenericEventListener& listener) {
+  try {
+    for (auto& event_listeners : sources.at(std::ref(source))) {
+      event_listeners.second.erase(std::ref(listener));
+    }
+  } catch (const std::out_of_range& e) {
+    return;
+  }
+}
+
+void EventManager::unlisten(EventName event, GenericEventListener& listener) {
+  for (auto& source_events : sources) {
+    try {
+      source_events.second.at(event).erase(std::ref(listener));
+    } catch (const std::out_of_range& e) {
+      return;
+    }
+  }
+}
+
+// FIXME very expensive
+void EventManager::unlisten(GenericEventListener& listener) {
+  for (auto& source_events : sources) {
+    for (auto& event_listeners : source_events.second) {
+      try {
+        event_listeners.second.erase(std::ref(listener));
+      } catch (const std::out_of_range& e) {
+        return;
+      }
+    }
+  }
+}
+
+void EventManager::remove(EventSource& source) {
+  sources.erase(std::ref(source));
+}
+
