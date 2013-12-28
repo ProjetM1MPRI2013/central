@@ -138,3 +138,24 @@ int NPC::TextureOffsetY(){
 bool NPC::TextureIsInit(){
   return anim.isInit();
 }
+
+float NPC::potential(Position p) {
+  std::pair<float,float> speedVect = trajectory.getSpeed();
+  float speed = sqrt(pow(speedVect.first,2)+pow(speedVect.second,2));
+  Position pDeltaT = getPosition();
+  pDeltaT.add(deltaT * speedVect.first,deltaT*speedVect.second);
+  float a = 1/2 * (p.distance(getPosition()) + p.distance(pDeltaT));
+  float c = 1/2 * speed * deltaT;
+  float b = sqrt(pow(a,2)-pow(c,2));
+  return V0*exp(-b/lambda);
+}
+
+std::pair<float,float> NPC::gradPot(Position p) {
+  float pot = potential(p);
+  p.add(0.01,0);
+  float potdx = potential(p);
+  p.add(-0.01,0.01);
+  float potdy = potential(p);
+  std::pair<float,float> grad ((potdx-pot)/0.01,(potdy-pot)/0.01);
+  return grad;
+}

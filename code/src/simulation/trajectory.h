@@ -25,10 +25,13 @@ class Trajectory {
   bool hasArrived;
   std::pair<float,float> speed;
   std::pair<float,float> acceleration;
-  float tau = 0.05;
+  float tau = 0.2;
   std::list<Position> posList;
   void explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open);
   void pathfinding(Geography& map);
+  sf::Time timeoutIgnoreTarget;
+  bool ignoreTarget;
+  void updateTimer(Position& oldPos,Position& newPos,float speedNorm,sf::Time dt,Geography& map);
 
  public:
 

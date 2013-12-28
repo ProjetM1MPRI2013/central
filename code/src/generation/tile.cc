@@ -349,3 +349,22 @@ std::list<NPC*> Tile::getNotTooFarNPCs(Geography& map) {
   }
   return notTooFarNPCs;
 }
+
+bool Tile::isAligned(Tile& tile1,Tile& tile2) {
+  Coordinates coord1 = tile1.getCoord();
+  Coordinates coord2 = tile2.getCoord();
+  bool hor = (coord1.getOrd() == coord2.getOrd()) && (coord2.getOrd() == coord.getOrd());
+  bool ver = (coord1.getAbs() == coord2.getAbs()) && (coord2.getAbs() == coord.getAbs());
+  bool dir = false;
+  bool inv = false;
+  if (hor) {
+    dir = (coord1.getAbs()+1 == coord2.getAbs()) && (coord2.getAbs()+1 == coord.getAbs());
+    inv = (coord1.getAbs()-1 == coord2.getAbs()) && (coord2.getAbs()-1 == coord.getAbs());
+  }
+  if (ver) {
+    dir = (coord1.getOrd()+1 == coord2.getOrd()) && (coord2.getOrd()+1 == coord.getOrd());
+    inv = (coord1.getOrd()-1 == coord2.getOrd()) && (coord2.getOrd()-1 == coord.getOrd());
+  }
+  return (dir || inv);
+}
+    

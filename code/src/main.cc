@@ -76,7 +76,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       target = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
     
-    simu.addNPC(start,target,2,&tp1);
+    simu.addNPC(start,target,1,&tp1);
   }
         
   sf::Clock clock;

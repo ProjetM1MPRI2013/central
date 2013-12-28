@@ -295,6 +295,14 @@ class Tile {
      * @return the list of the NPCs around this tile
      */
     std::list<NPC*> getNotTooFarNPCs(Geography& map);
+
+    /**
+     * @brief isAligned
+     * @param tile1: the first Tile
+     * @param tile2: the second Tile
+     * @return true iff the Tile is aligned with the 2 other Tiles in this order (tile1,tile2,tile) and they are neighbours
+     */
+    bool isAligned(Tile& tile1,Tile& tile2); 
 };
 
 

@@ -9,6 +9,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include "graphism/animation.h"
+#include <cmath>
 
 
 /**
@@ -23,6 +24,9 @@ class NPC : public EventSource, public Positionable {
   float speed;
   float hitboxSize;
   Animation anim;
+  float deltaT = 2;
+  float lambda = 1;
+  float V0 = 2;
 
 
  public:
@@ -200,5 +204,19 @@ class NPC : public EventSource, public Positionable {
    * Returns true iff the animation texture has been initialized
    **/
   bool TextureIsInit();
+
+  /**
+   * @brief potential
+   * computes the potential created by the NPC
+   * @param p: the Position where the potential will be evaluated
+   */
+  float potential(Position p);
+
+  /**
+   * @brief gradPotential
+   * computes the gradient of the NPC's potential
+   * @param p: the Position where the gradient will be computed
+   */
+  std::pair<float,float> gradPot(Position p);
 };
 #endif
