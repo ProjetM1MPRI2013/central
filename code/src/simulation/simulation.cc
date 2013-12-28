@@ -133,10 +133,7 @@ void Simulation::addNPC(Position start, Position target, float speed, TexturePac
   //on le met dans sa tile de départ
   start.isInTile(*map).addNPC(npc);
 
-  if (scenario) {
-    scenario->createdNPC(*npc);
-  }
-  trigger("NPC::created",*pnj);
+  trigger("NPC::created",*npc);
   return;
 }
 
@@ -494,8 +491,7 @@ void Simulation::run(sf::Time dt) {
       tileBefore.removeNPC(*it);
       tileAfter.addNPC(*it);
     }
-    //je comprends pas trop ce qu'on fait là
-    //pourquoi pas juste hasArrived ?
+    // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
     if ((*it)->hasArrived() && !wasArrived) {
       (**it).trigger("NPC::arrived");
     }
