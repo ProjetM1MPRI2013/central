@@ -7,6 +7,7 @@
 #include "../generation/tile.h" // SpriteTilePack
 #include "../generation/geography.h"
 #include "../simulation/simulation.h"
+#include "../simulation/position.h"
 #include <unordered_map>
 
 #define OFFSET_Y 1000                     /* Pour toujours avoir des images dans un cadre positif */
@@ -56,6 +57,14 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
    * Runs one computation of the graphical output of the map
    **/
   void run(sf::RenderWindow* window);
+
+  /**
+   * @brief screenToMap
+   * Returns the position on the map of the pixel (x,y)
+   * Can have negative coordinates
+   * Assumes the view fills the window
+   **/
+  Position screenToMap(int x, int y);
 
  private:
   std::vector<TexturePack> texVector;

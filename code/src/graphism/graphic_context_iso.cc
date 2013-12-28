@@ -1,7 +1,6 @@
 #include "graphic_context_iso.h"
 #include "../simulation/npc.h"
 #include <list>
-#include "../simulation/position.h"
 #include <iostream>
 #include <unistd.h>
 
@@ -181,4 +180,18 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   window->draw(*this);
     
   return;
+}
+
+Position GraphicContextIso::screenToMap(int x, int y)
+{
+  sf::Vector2f v = view.getCenter();
+  Position p;
+  float xo = x - (view.getSize().x/2), yo = y - (view.getSize().y/2);
+  float xc = v.x - OFFSET_X, 
+    yc = v.y - OFFSET_Y + (map->getMapWidth()) * RIGHT_TILE(1);
+  p.add((xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
+	+ (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)),
+	(xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
+	- (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)));
+  return p;
 }
