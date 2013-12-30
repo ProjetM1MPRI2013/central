@@ -282,6 +282,10 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   ord1 = MAP_HEIGHT;
   nbRand = randomGen.pseudorand();
   fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
+
+  // We fill all the tiles still NULL (it's possible, cf. doc of the method)
+  nbRand = randomGen.pseudorand();
+  //fillNull(nbRand, nbLine, file);
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
 }
@@ -355,7 +359,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     Coordinates* picture = batiment.getPicture();
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
-	std::cout << i3 << " " << j3 << std::endl;
+	if(DEBUG) {std::cout << i3 << " " << j3 << std::endl;}
 	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, 1, 1);
       }
     }
@@ -386,3 +390,38 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
   if (DEBUG){std::cout << "fillBuildings : end";}
   return;
 }
+
+
+void Generation1::fillNull(int seed, int nbLine, std::string file){
+  int i, j, l;
+  // We visit all the tiles of the map and we check if they are NULL
+  Batiment batiment;
+  int choose, poids;
+  int nbRand = seed;
+  PseudoRandom randomGen (seed);
+  for(i=0; i<MAP_WIDTH; i++){
+    for(j=0; j<MAP_HEIGHT; j++){
+      if(getTile(i,j) == 0){
+	if(DEBUG){std::cout << "NULL " << i << " " << j << std::endl;}
+	// if the tile is NULL, we fill it with a BLANK tile
+	// Firstly, we choose the sprite
+	// We have to create a pseudo-random generator
+	choose = -1;
+	poids = -1;
+	for(l=0; l<nbLine; l++){
+	  batiment = Batiment(file, l);
+	  if(batiment.getType()==BLANK){
+	    nbRand = randomGen.pseudorand();
+	    if (nbRand > poids) {choose = l; poids = nbRand;}
+	  }
+	}
+	// Now, we fill the tile
+	batiment = Batiment(file,choose);
+	map[i][j] = new Tile(i,j,batiment.getType(), false, 0., 0., false, false, false, false, 0., Coordinates(i,j), Coordinates(i,j), NULL, batiment.getFilePictures(), batiment.getPicture(), batiment.getWidth(), batiment.getHeight());
+	if(DEBUG) {std::cout << "fill NULL with type : " << batiment.getType() << std::endl;}
+      }
+    }
+  }
+  // Now, there is not any NULL tile into the map
+}
+

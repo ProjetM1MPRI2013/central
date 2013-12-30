@@ -40,6 +40,16 @@ class Generation1 : public Geography
    * @param file : name of the file with the differents building we can use
    */
   void fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed, int nbLine, std::string file);
+
+  /**
+   * @brief At the end of the generation, it may still exist NULL tiles, so we fill them
+   * Here, we fill them with BLANK tiles and the choices of the sprite are independant one with another
+   * @param seed : random value used to choose the sprite
+   * @param nbLine : number of line of the file with the differents building we can use
+   * @param file : name of the file with the differents building we can use
+   * @comment This method is usefull if the lenght of the sprite of the road is not a divisor of the width or the height of the map
+   */
+  void fillNull(int seed, int nbLine, std::string file);
 };
 
 
