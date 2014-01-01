@@ -31,13 +31,10 @@
       est :
       \forall j,i,j',i' (j' <= j & i' >= i & isDrawn[j][i]) -> isDrawn[j'][i']
       La condition d'arrêt est donc :
-      isDrawn[h-1][w-1]
-      Avec un parcours par couches comme suit, on minimise le nombre 
-      d'itérations dans le pire des cas (#bluff)
-      On peut prouver que l'algorithme termine (par récurrence sur la seed)
+      isDrawn[h-1][0]
     */
     
-    while(not(isDrawn[h-1][w-1]))
+    while(not(isDrawn[h-1][0]))
       {
 	for(int k = 0 ; k < std::min(w,h); k++)
 	  {
@@ -95,6 +92,8 @@
 				    for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
 				      {
 					assert((**ci).TextureIsInit());
+
+					(**ci).nextFrame();
 					
 					sf::Sprite& sfn = (**ci).getSprite();
 					Position& p = (**ci).getPosition();

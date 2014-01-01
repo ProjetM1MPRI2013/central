@@ -108,7 +108,7 @@ Animation NPC::getAnim(){
   return anim;
 }
 
-void NPC::setAnim(const int t){
+void NPC::setAnim(const AnimType t){
   this->anim.setAnim(t);
   return;
 }
@@ -158,4 +158,18 @@ std::pair<float,float> NPC::gradPot(Position p) {
   float potdy = potential(p);
   std::pair<float,float> grad ((potdx-pot)/0.01,(potdy-pot)/0.01);
   return grad;
+}
+
+void NPC::nextFrame()
+{
+  std::pair<float,float> speedVect = trajectory.getSpeed();
+  float sp = sqrt(pow(speedVect.first,2)+pow(speedVect.second,2));
+  if(sp >= 0.01 && anim.getAnim() != RUN)
+    anim.setAnim(RUN);
+  else if(sp < 0.01 && anim.getAnim() == RUN)
+    anim.setAnim(IDLE);
+  else
+    anim.nextFrame();
+
+  return;
 }

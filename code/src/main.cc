@@ -46,7 +46,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   assert(a1.loadFromFile("../../../sprite/Anim.png"));
   TexturePack tp1;
   tp1.texture = a1;
-  tp1.nbAnim = {1,12,16};
+  tp1.nbFrames = {1,12,16};
   tp1.widthSprite = {16,16,32};
   tp1.heightSprite = 32;
   tp1.offsetX = {8,8,8};

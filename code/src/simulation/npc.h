@@ -178,7 +178,7 @@ class NPC : public EventSource, public Positionable {
    * Sets the animation of the NPC
    * @param t: New animation
    **/  
-  void setAnim(const int t);
+  void setAnim(const AnimType t);
 
   /**
    * @brief TextureAnim
@@ -218,5 +218,12 @@ class NPC : public EventSource, public Positionable {
    * @param p: the Position where the gradient will be computed
    */
   std::pair<float,float> gradPot(Position p);
+
+  /**
+   * @brief nextFrame
+   * Changes the state of the animation to the next frame, according to the
+   * different parametters of the NPC.
+   */
+  void nextFrame();
 };
 #endif
