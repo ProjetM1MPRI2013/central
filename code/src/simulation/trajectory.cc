@@ -38,7 +38,7 @@ Trajectory::Trajectory(Position start,Position target,Geography& map) {
   return;
 }
 
-Trajectory::Trajectory(Trajectory& t) {
+/*Trajectory::Trajectory(Trajectory& t) {
   posList = std::list<Position>(t.getPosList());
   hasArrived = t.getHasArrived();
   speed = t.getSpeed();
@@ -46,7 +46,7 @@ Trajectory::Trajectory(Trajectory& t) {
   timeoutIgnoreTarget = sf::seconds(10);
   ignoreTarget = false;
   return;
-  }
+  }*/
 
 
 void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {
@@ -217,7 +217,7 @@ bool Trajectory::getHasArrived() {
   return hasArrived;
 }
 
-void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
+void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
   assert(!posList.empty());//il doit y avoir au moins la position courante  
   if (!hasArrived) {//si on n'est pas arrivé : on avance en ligne droite
     assert(posList.size()>1);//il doit y avoir la position courante et au moins un objectif
@@ -243,6 +243,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
     if (position.getY()<0) {
       position.setY(0.5);
     }
+    //printf("position %f %f\n",position.getX(),position.getY());
 
     //update the speed s(t) -> s(t+dt) = s(t)+dt*a(t)
     speed.first += acceleration.first * dt.asSeconds();
@@ -250,8 +251,8 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
     //speed is capped by speedNorm
     float speedNorm2 = sqrt(pow(speed.first,2)+pow(speed.second,2));
     if (speedNorm2 > speedNorm) {
-      speed.first = speed.first * speedNorm/speedNorm2;
-      speed.second = speed.second * speedNorm/speedNorm2;
+      speed.first = speed.first * (speedNorm/speedNorm2);
+      speed.second = speed.second * (speedNorm/speedNorm2);
     }
     
     //update the acceleration a(t) -> a(t+dt) = 1/tau * (v0(t+dt)-v(t+dt))
@@ -267,8 +268,8 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
         v0X = v0X*speedNorm/norm;
         v0Y = v0Y*speedNorm/norm;
       }
-      acceleration.first = 1/tau * (v0X - speed.first);
-      acceleration.second = 1/tau * (v0Y - speed.second);
+      acceleration.first = (1/tau) * (v0X - speed.first);
+      acceleration.second = (1/tau) * (v0Y - speed.second);
       updateTimer(oldPos,position,speedNorm,dt,map);
     }
     
@@ -277,9 +278,14 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map) {
     while (!neighbours.empty()) {
       NPC* tempNPC = neighbours.front();
       neighbours.pop_front();
-      std::pair<float,float> force = tempNPC->gradPot(position);
-      acceleration.first += force.first;
-      acceleration.second +=force.second;
+      if (npc.getUuid()!=tempNPC->getUuid()) {
+        //only if it is not the NPC to ignore
+        std::pair<float,float> force;
+        force = tempNPC->gradPot(position);
+        acceleration.first -= force.first;
+        acceleration.second -=force.second;
+        //printf("NPC: force %f %f\n",force.first,force.second);
+      }
     }
     
     float dist1 = position.distance(target);

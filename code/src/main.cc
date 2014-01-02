@@ -75,8 +75,9 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
       target = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
-    
     simu.addNPC(start,target,1,&tp1);
+    //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+    //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
   }
         
   sf::Clock clock;
