@@ -11,6 +11,10 @@
 #include "scenario/NewMov.h"
 #include "scenario/ScenarioActionList.h"
 #include "scenario/HScenario.h"
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
+
+#define DEBUG false
 
 Simulation::Simulation(int nbPlayers, int id)
 {
@@ -494,6 +498,18 @@ void Simulation::run(sf::Time dt) {
     // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
     if ((*it)->hasArrived() && !wasArrived) {
       (**it).trigger("NPC::arrived");
+    }
+    if (DEBUG) {
+      std::list<NPC*> neighbours = (*it)->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
+      while (!neighbours.empty()) {
+        NPC* tempNPC = neighbours.front();
+        neighbours.pop_front();
+        if (tempNPC->getUuid()!= (*it)->getUuid()) {
+          const std::string id1 = boost::lexical_cast<std::string>((*it)->getUuid());
+          const std::string id2 = boost::lexical_cast<std::string>(tempNPC->getUuid());
+          printf("NPC %s: neighbour %s\n",id1.c_str(),id2.c_str());
+        }
+      }
     }
   }
 

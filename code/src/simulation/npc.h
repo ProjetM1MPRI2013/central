@@ -24,9 +24,9 @@ class NPC : public EventSource, public Positionable {
   float speed;
   float hitboxSize;
   Animation anim;
-  float deltaT = 2;
-  float lambda = 1;
-  float V0 = 2;
+  float deltaT = 1;
+  float lambda = 0.3;
+  float Vzero = 2;
 
 
  public:
