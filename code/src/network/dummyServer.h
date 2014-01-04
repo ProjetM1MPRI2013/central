@@ -90,7 +90,7 @@ protected :
      */
     virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType, int player =-1) ;
 
-    virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
+    virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
 
     virtual std::vector<int> getConnectedPlayers() ;
 

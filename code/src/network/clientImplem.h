@@ -60,15 +60,8 @@ private :
     ClientImplem operator =(const ClientImplem&) = delete ;
 
 protected :
-    virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) {
-      //TODO missing implementation
-      return ;
-    }
-    virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
-      //TODO missing implementation
-      return *(new std::vector<AbstractMessage *>()) ;
-    }
-
+    virtual void send_message(AbstractMessage& msg, bool reliable, std::string msgType ) ;
+    virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
 public :
     /**
      * @brief HEADER_SIZE : the size of the header used to transfer messages.
@@ -76,14 +69,14 @@ public :
      * 4 bits for message number
      * 1 bit for ack
      */
-    const static int HEADER_SIZE = 13 ;
+    const static unsigned int HEADER_SIZE = 13 ;
 
     /**
      * @brief BUFF_SIZE
      * size of the buffer used for recieve operations.
      * messages should not have a greater size, this may cause problems
      */
-    const static int BUFF_SIZE = 1000;
+    const static unsigned int BUFF_SIZE = 1000;
 
     /**
      * @brief TIME_TO_WAIT
@@ -98,6 +91,12 @@ public :
      * to be unreacheable a NetEvent with type SERV_LOST is generated
      */
     const static int NB_TRY = 10 ;
+
+    /**
+     * @brief last_sent : number attributed to the last sent message
+     */
+    int last_sent ;
+
 
 protected :
 
@@ -129,7 +128,7 @@ protected :
      */
     std::set<int> ack_set ;
 
-    typedef std::map<std::string,std::vector<std::string> > mapType ;
+    typedef std::map<std::string,std::vector<std::string *> > mapType ;
     /**
      * @brief recieved_updates
      * vector used to store the recieved GameUpdates.
@@ -141,14 +140,14 @@ protected :
      * @brief header_buff
      * Used as a buffer to temporarily store the header of received messages
      */
-    std::string *header_buff ;
+    std::vector<char> *header_buff ;
 
     /**
      * @brief buff
      * Used as a buffer to temporarily store the results of
      * recieve operations.
      */
-    std::string *buff ;
+    std::vector<char> *buff ;
 
     /**
     * @brief on_sent
@@ -190,14 +189,14 @@ protected :
      * @brief get_msg_type : gives the type of the message header passed as argument
      * @return : the type of the message
      */
-    std::string get_msg_type(std::string &header) ;
+    std::string get_msg_type(const std::string &header) ;
 
     /**
      * @brief get_msg_nb : gives the id of the message corresponding to the
      * header passed in argument
      * @return the id of the message
      */
-    int get_msg_id(std::string & header) ;
+    int get_msg_id(const std::string & header) ;
 
     /**
      * @brief generate_message : generates a NetEvent message on this
@@ -207,14 +206,21 @@ protected :
      * @param event : the NetEvent to add to the pending events on this side of the
      * communication.
      */
-    void generate_message(NetEvent& event) ;
+    void generate_message(NetEvent event) ;
 
     /**
      * @brief ack_message : whether or not this message awaits an ack.
      * @param header : the header of the message
      * @return : true if this message must be acked (reliable message)
      */
-    bool ack_message(std::string& header) ;
+    bool ack_message(const std::string& header) ;
+
+
+    std::string* create_header(bool reliable, std::string type, int id) ;
+
+    void inline wait_receive() ;
+
+    void check_sent(boost::system::error_code err, int){}
 
 } ;
 

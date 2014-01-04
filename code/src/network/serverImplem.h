@@ -37,7 +37,7 @@ class ServerImplem : public Server {
     //TODO missing implementation
     return ;
   }
-  virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
+  virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
     //TODO missing implementation
     return *(new std::vector<AbstractMessage *>()) ;
   }

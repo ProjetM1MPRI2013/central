@@ -16,7 +16,7 @@ std::string& NetEvent::toString(){
   assert(false) ;
 }
 
-NetEvent* NetEvent::fromString(std::string &msg){
+NetEvent* NetEvent::fromString(const std::string &msg){
   //not implemented yet
   assert(false) ;
 }
