@@ -33,6 +33,7 @@ NPC::NPC(NPC& n) {
   fear = n.getFear();
   hitboxSize = n.getHitboxSize();
   anim = n.getAnim();
+  setUuid(n.getUuid());
   return;
 }
   

@@ -180,7 +180,7 @@ void Trajectory::updateTimer(Position& oldPos,Position& newPos,float speedNorm,s
     timeoutIgnoreTarget -= dt;
     if (timeoutIgnoreTarget <= sf::Time::Zero) {
       ignoreTarget = false;
-      timeoutIgnoreTarget = sf::seconds(5/speedNorm);//le timer avant de faire n'importe quoi est de n fois le temps normalement nécessaire pour parcourir la tile
+      timeoutIgnoreTarget = sf::seconds(3./speedNorm);//le timer avant de faire n'importe quoi est de n fois le temps normalement nécessaire pour parcourir la tile
     }
   } else {
     if (oldPos.isInTile(map).equals(newPos.isInTile(map))) {
@@ -188,11 +188,11 @@ void Trajectory::updateTimer(Position& oldPos,Position& newPos,float speedNorm,s
       if (timeoutIgnoreTarget <= sf::Time::Zero) {
         ignoreTarget = true;
         std::default_random_engine gen (rand());
-        std::uniform_real_distribution<float> timeoutDist (0,2);
+        std::uniform_real_distribution<float> timeoutDist (0,0.5);
         timeoutIgnoreTarget = sf::seconds(timeoutDist(gen));
       }
     } else {
-    timeoutIgnoreTarget = sf::seconds(5/speedNorm);
+    timeoutIgnoreTarget = sf::seconds(3./speedNorm);
     }
   }
   return;
@@ -245,6 +245,9 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     }
     //printf("position %f %f\n",position.getX(),position.getY());
 
+    updateTimer(oldPos,position,speedNorm,dt,map);
+
+
     //update the speed s(t) -> s(t+dt) = s(t)+dt*a(t)
     speed.first += acceleration.first * dt.asSeconds();
     speed.second += acceleration.second * dt.asSeconds();
@@ -259,7 +262,6 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     if (ignoreTarget) {//we ignore the target
       acceleration.first = 0;
       acceleration.second = 0;
-      updateTimer(oldPos,position,speedNorm,dt,map);
     } else {
       float v0X = target.getX()-position.getX();
       float v0Y = target.getY()-position.getY();
@@ -270,7 +272,6 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
       }
       acceleration.first = (1/tau) * (v0X - speed.first);
       acceleration.second = (1/tau) * (v0Y - speed.second);
-      updateTimer(oldPos,position,speedNorm,dt,map);
     }
     
     //add the other NPCs' potentials
@@ -283,7 +284,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
         std::pair<float,float> force;
         force = tempNPC->gradPot(position);
         acceleration.first -= force.first;
-        acceleration.second -=force.second;
+        acceleration.second -= force.second;
         //printf("NPC: force %f %f\n",force.first,force.second);
       }
     }
@@ -293,6 +294,8 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     if (dist1 <= dist/2) {//on est assez proche de l'objectif
       posList.pop_front();
       if (posList.empty()) {//il ne reste plus que la position courante
+        speed.first = 0;
+        speed.second = 0;
         hasArrived = true;
         if (DEBUG) {
           printf("NPC: arrived !\n");

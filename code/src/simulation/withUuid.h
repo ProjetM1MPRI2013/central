@@ -12,6 +12,8 @@ class WithUuid {
   private:
     boost::uuids::uuid uuid;
 
+ protected:
+    void setUuid(boost::uuids::uuid id);
 
   public:
     // Event Manager templated functions use this,
