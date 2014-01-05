@@ -66,6 +66,8 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
    **/
   Position screenToMap(int x, int y);
 
+  TexturePack* getTexturePack(int n);
+
  private:
   std::vector<TexturePack> texVector;
   std::vector<SpriteTilePack> tilepackVector;

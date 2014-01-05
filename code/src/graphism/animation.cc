@@ -22,7 +22,7 @@ Animation::Animation(TexturePack* tex)
 
 void Animation::nextFrame()
 {
-  if(clock.getElapsedTime().asMilliseconds() > 40)
+  if(clock.getElapsedTime().asMilliseconds() > 1000./tex->fps[animT])
     {
       clock.restart();
       if (currentFrame + 1 < tex->nbFrames[animT])

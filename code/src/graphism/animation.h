@@ -15,6 +15,7 @@ struct TexturePack {
   std::vector<int> offsetX;
   std::vector<int> offsetY;
   std::vector<bool> isLoop;
+  std::vector<int> fps;
 };
 
 enum AnimType {IDLE, RUN, DEAD};
