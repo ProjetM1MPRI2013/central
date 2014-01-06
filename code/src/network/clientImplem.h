@@ -140,14 +140,24 @@ protected :
      * @brief header_buff
      * Used as a buffer to temporarily store the header of received messages
      */
-    std::vector<char> *header_buff ;
+    std::string *header_buff ;
 
     /**
      * @brief buff
      * Used as a buffer to temporarily store the results of
      * recieve operations.
      */
-    std::vector<char> *buff ;
+    std::string *buff ;
+
+
+		/**
+		 * @brief sent_ack
+		 * Contains the ack that were sent to the server.
+     * used to prevent duplicates of messages.
+     * Elements in this set remain in it only for a period of time
+     * (basically a few seconds after the message is received).
+   	 */
+		std::set<int> sent_ack ;
 
     /**
     * @brief on_sent

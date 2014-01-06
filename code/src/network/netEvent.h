@@ -101,7 +101,14 @@ public:
      * receiving a message.
      * no data attached
      */
-    RECEIVE_ERR
+    RECEIVE_ERR, 
+		
+		/**
+		 * @brief ACK : sent when a message requires a check that it did arrive
+     * at its destination.
+     * data is the number of the message to ack.
+		 */
+		ACK
 
   } Type ;
 

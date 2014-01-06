@@ -17,8 +17,8 @@ ClientImplem::ClientImplem(ClientInfo c_info) : last_sent(0), server_endpoint(),
     //init fields
     service = new io_service() ;
     sock = new ip::udp::socket(*service) ;
-    buff = new vector<char>(BUFF_SIZE, '\000') ;
-    header_buff = new vector<char>(HEADER_SIZE, '\000') ;
+    buff = new string(BUFF_SIZE, '\000') ;
+    header_buff = new string(HEADER_SIZE, '\000') ;
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
@@ -137,22 +137,41 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
 
 
 void ClientImplem::on_recieve(const boost::system::error_code &error, int){
-  //TODO : send ack to server if necessary
     if(error != 0)
     {
         generate_message(NetEvent(NetEvent::RECEIVE_ERR));
-        vector<mutable_buffer> vec ;
-        vec.push_back(buffer(*header_buff, HEADER_SIZE));
-        vec.push_back(buffer(*buff, BUFF_SIZE));
         wait_receive() ;
         return ;
     }
-    std::string type = get_msg_type(string(header_buff->begin(), header_buff->end())) ;
+	  if(ack_message(*header_buff))
+			{
+				//Handle Ack
+				NetEvent e(NetEvent::ACK) ;
+				int id = get_msg_id(*header) ;
+				e.setData(id) ;
+ 				sendMessage<NetEvent>(e, false);
+				bool b = sent_ack.insert(id).second ;
+
+				if(!b)
+					{
+						//message dupicate
+						return ; 
+					}
+				else
+					{
+						//remove ack from set in the future (3 sec)
+						deadline_timer timer(*service); 
+						timer.expires_from_now(boost::posix_time::seconds(3))
+						(void *after_wait) (const boost::system::error_code) = 
+									boost::bind(&set<int>::erase, sent_ack, id) ;
+						t.async_wait(after_wait) ;
+					}
+			}
+    std::string type = get_msg_type(*header_buff) ;
     if(type.compare(NetEvent::getMsgType()) == 0)
       {
         //Handle NetEvent
-        //TODO : change that without the copy
-        NetEvent *event = NetEvent::fromString(string(buff->begin(), buff->end())) ;
+        NetEvent *event = NetEvent::fromString(*buff) ;
         switch(event->getType())
           {
           case NetEvent::NOT_SET :
@@ -223,14 +242,23 @@ void ClientImplem::on_recieve(const boost::system::error_code &error, int){
               assert(false) ;
               break ;
             }
+          case NetEvent::ACK : 
+						{
+							int id = event->getData() ;
+							
+							ack_set.insert(id) ;
+							delete event ; 
+							return ;
+							break ;
+						}
           }
       }
-    received_messages[type].push_back(new std::string(buff->begin(), buff->end())) ;
+    received_messages[type].push_back(new std::string(buff)) ;
     wait_receive() ;
 }
 
 void ClientImplem::shutdown(){
-  //TODO
+  //TODO : prooper shutdown
 }
 
  void ClientImplem::check_ack(std::vector<std::string*>& msg,
@@ -299,17 +327,31 @@ void ClientImplem::shutdown(){
 
  bool ClientImplem::ack_message(const string &header) {
    assert(header.size() == HEADER_SIZE) ;
-   return (header[HEADER_SIZE -1] != '\000') ;
+   return (header[HEADER_SIZE -1] != '\00') ;
  }
 
 std::string* ClientImplem::create_header(bool reliable, std::string type, int id) {
-  //TODO
-  return new std::string() ;
+  assert(type.size() == 8) ;
+  string * header = new string(HEADER_SIZE, '\00') ;
+  if(reliable)
+		header[HEADER_SIZE -1] = '\001' ;
+	int i ;
+	for(i = 0 ; i < 8; i++)
+	{
+		header[i] = type[i] ;
+	}
+	header[8] = (char) id % 256 ;
+  header[9] = (char) (id/256) % 256 ;
+  header[10] = (char) (id/256/256) % 256 ;
+  header[11] = (char) (id/256/256/256) % 256 ;
+
+  return header ;
 }
 
 void ClientImplem::wait_receive(){
   vector<mutable_buffer> vec ;
-  vec.push_back(buffer(*header_buff, HEADER_SIZE));
-  vec.push_back(buffer(*buff, BUFF_SIZE));
+  //hack : using the underlying c_str of a string as a buffer (in theory, read only).
+  vec.push_back(buffer((char *) header_buff-> c_str(), HEADER_SIZE));
+  vec.push_back(buffer((char *) buff-> c_str(), BUFF_SIZE));
   sock->async_receive(vec, boost::bind(&ClientImplem::on_recieve,this,_1,_2)) ;
 }
