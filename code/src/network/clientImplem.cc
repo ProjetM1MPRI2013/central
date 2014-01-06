@@ -143,30 +143,31 @@ void ClientImplem::on_recieve(const boost::system::error_code &error, int){
         wait_receive() ;
         return ;
     }
-	  if(ack_message(*header_buff))
-			{
-				//Handle Ack
-				NetEvent e(NetEvent::ACK) ;
-				int id = get_msg_id(*header) ;
-				e.setData(id) ;
- 				sendMessage<NetEvent>(e, false);
-				bool b = sent_ack.insert(id).second ;
+    if(ack_message(*header_buff))
+      {
+        //Handle Ack
+        NetEvent e(NetEvent::ACK) ;
+        int id = get_msg_id(*header_buff) ;
+        e.setData(id) ;
+        sendMessage<NetEvent>(e, false);
+        bool b = sent_ack.insert(id).second ;
 
-				if(!b)
-					{
-						//message dupicate
-						return ; 
-					}
-				else
-					{
-						//remove ack from set in the future (3 sec)
-						deadline_timer timer(*service); 
-						timer.expires_from_now(boost::posix_time::seconds(3))
-						(void *after_wait) (const boost::system::error_code) = 
-									boost::bind(&set<int>::erase, sent_ack, id) ;
-						t.async_wait(after_wait) ;
-					}
-			}
+        if(!b)
+          {
+            //message dupicate
+            return ;
+          }
+        else
+          {
+            //remove ack from set in the future (3 sec)
+            deadline_timer timer(*service);
+            timer.expires_from_now(boost::posix_time::seconds(3)) ;
+            //auto after_wait /*const boost::system::error_code*/ =
+            //			boost::bind(&set<int>::erase, sent_ack, id) ;
+            auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
+            timer.async_wait(after_wait) ;
+          }
+      }
     std::string type = get_msg_type(*header_buff) ;
     if(type.compare(NetEvent::getMsgType()) == 0)
       {
@@ -242,18 +243,18 @@ void ClientImplem::on_recieve(const boost::system::error_code &error, int){
               assert(false) ;
               break ;
             }
-          case NetEvent::ACK : 
-						{
-							int id = event->getData() ;
-							
-							ack_set.insert(id) ;
-							delete event ; 
-							return ;
-							break ;
-						}
+          case NetEvent::ACK :
+            {
+              int id = event->getData() ;
+              if(ack_set.find(id) != ack_set.end())
+                ack_set.erase(id) ;
+              delete event ;
+              return ;
+              break ;
+            }
           }
       }
-    received_messages[type].push_back(new std::string(buff)) ;
+    received_messages[type].push_back(new std::string(*buff)) ;
     wait_receive() ;
 }
 

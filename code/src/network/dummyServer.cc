@@ -143,6 +143,11 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
         client->addMessage(new NetEvent(NetEvent::SERV_RESP), NetEvent::getMsgType());
         break ;
       }
+    case NetEvent::ACK : {
+        // No Ack for the dummy implementation
+        assert(false) ;
+        break ;
+      }
     }
   return false ;
 }

@@ -102,6 +102,11 @@ bool DummyClient::handle_netEvent(const NetEvent &event){
         assert(false) ;
         break ;
       }
+    case NetEvent::ACK : {
+        // No Ack for the dummy implementation
+        assert(false) ;
+        break ;
+      }
     }
 
   return false ;
