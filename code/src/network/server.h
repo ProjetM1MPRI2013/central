@@ -23,16 +23,6 @@ class Server {
 public : 
 
   /**
-   * Will send new opdates to all the clients connected to the server.
-   * What will effectively be sent to each client will be evaluated, and only
-   * relevant data will be sent to the network.
-   * There is no guarantee that the data will effectively be delivered (using
-   * UDP protocol for the real implementation).
-   * @deprecated : use the update genarator class instead
-   */
-  //virtual void sendUpdate(GameState &game_state) = 0 ;
-
-  /**
    * @brief broadcastMessage : broadcasts a message of the given type to all the clients
    * @param msg : the message to send
    * @param reliable : whether the server should wait for an ack or not.

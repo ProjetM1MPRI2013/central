@@ -9,22 +9,13 @@ using namespace boost::asio ;
 using namespace std ;
 
 
-ClientImplem::ClientImplem(ClientInfo c_info) : last_sent(0), server_endpoint(), ack_set(),received_messages() {
-
-  //Not implemented yet
-  assert(false) ;
-
-    //init fields
-    service = new io_service() ;
-    sock = new ip::udp::socket(*service) ;
-    buff = new string(BUFF_SIZE, '\000') ;
-    header_buff = new string(HEADER_SIZE, '\000') ;
+ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_endpoint() {
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
     ip::udp::resolver::query query(c_info.serverName, c_info.serverPort) ;
     server_endpoint = *resolver.resolve(query) ;
-    if(c_info.localName.compare(""))
+    if(c_info.localName.compare("") != 0)
     {
         //a local address is provided
         ip::udp::resolver::query query2(c_info.localName,c_info.localPort) ;
@@ -50,12 +41,6 @@ ClientImplem::ClientImplem(ClientInfo c_info) : last_sent(0), server_endpoint(),
 
 
 ClientImplem::~ClientImplem(){
-
-    shutdown() ;
-    delete service ;
-    delete sock ;
-    delete buff ;
-    delete header_buff ;
 }
 
 
@@ -76,6 +61,8 @@ void ClientImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
 }
 
 std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, AbstractMessage *(*f)(string &)){
+  //copy of ServerImplem::receive_messages
+  //Could not be in comunicatorImplem because this method is in the Client/Server interface
   mapType::iterator elts = received_messages.find(msgType) ;
   if(elts == received_messages.end())
     {
@@ -110,33 +97,33 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
         {
           delete tbuff ;
         }
+      return ;
+    }
+
+  //No error
+  if(ack_message(*data[0]))
+    {
+      //ACK needed
+      int id = get_msg_id(*data[0]) ;
+      ack_set.insert(id) ;
+      deadline_timer *t = new deadline_timer(*service) ;
+      t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+      t->async_wait(boost::bind(&ClientImplem::check_ack,this, data, 1,t,_1)) ;
     }
   else
     {
-      //No error
-      if(ack_message(*data[0]))
+      //No ACK : free memory
+      for(std::string* tbuff : data)
         {
-          //ACK needed
-          int id = get_msg_id(*data[0]) ;
-          ack_set.insert(id) ;
-          deadline_timer *t = new deadline_timer(*service) ;
-          t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
-          t->async_wait(boost::bind(&ClientImplem::check_ack,this, data, 1,t,_1)) ;
-        }
-      else
-        {
-          //No ACK : free memory
-          for(std::string* tbuff : data)
-            {
-              delete tbuff ;
-            }
+          delete tbuff ;
         }
     }
+
 }
 
 
 
-void ClientImplem::on_recieve(const boost::system::error_code &error, int){
+void ClientImplem::on_receive(const boost::system::error_code &error, int){
     if(error != 0)
     {
         generate_message(NetEvent(NetEvent::RECEIVE_ERR));
@@ -258,101 +245,57 @@ void ClientImplem::on_recieve(const boost::system::error_code &error, int){
     wait_receive() ;
 }
 
-void ClientImplem::shutdown(){
-  //TODO : prooper shutdown
+
+
+void ClientImplem::check_ack(std::vector<std::string*>& msg,
+                             int nb_times, deadline_timer *t,
+                             const boost::system::error_code &err) {
+  assert(msg.size() >= 2) ;
+  assert(msg[0]->size() == HEADER_SIZE) ;
+  int id = get_msg_id(*msg[0]) ;
+  set<int>::iterator it = ack_set.find(id) ;
+  if(it == ack_set.end())
+    {
+      //ACK received
+      //free memory
+      delete t ;
+      for(string* p : msg)
+        {
+          delete p ;
+        }
+    }
+  else
+    {
+      //No ack
+      if(nb_times >= NB_TRY)
+        {
+          //Cannot reach server
+          generate_message(NetEvent::SERV_LOST);
+          //free memory
+          delete t ;
+          for(string* p : msg)
+              delete p ;
+        }
+      else
+        {
+          //Resend
+          vector<const_buffer> msg_buff ;
+          for(string* p : msg)
+            msg_buff.push_back(buffer(*p));
+
+          sock->async_send(msg_buff, [](boost::system::error_code,int){}) ;
+          t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+          t->async_wait(boost::bind(&ClientImplem::check_ack,this, msg, nb_times +1,t,_1)) ;
+        }
+    }
 }
 
- void ClientImplem::check_ack(std::vector<std::string*>& msg,
-                              int nb_times, deadline_timer *t,
-                              const boost::system::error_code &err) {
-   assert(msg.size() >= 2) ;
-   assert(msg[0]->size() == HEADER_SIZE) ;
-   int id = get_msg_id(*msg[0]) ;
-   set<int>::iterator it = ack_set.find(id) ;
-   if(it == ack_set.end())
-     {
-       //ACK received
-       //free memory
-       delete t ;
-       for(string* p : msg)
-         {
-           delete p ;
-         }
-     }
-   else
-     {
-       //No ack
-       if(nb_times >= NB_TRY)
-         {
-           //Cannot reach server
-           generate_message(NetEvent::SERV_LOST);
-           //free memory
-           delete t ;
-           for(string* p : msg)
-             {
-               delete p ;
-             }
-         }
-       else
-         {
-           //Resend
-           vector<const_buffer> msg_buff ;
-           for(string* p : msg)
-             msg_buff.push_back(buffer(*p));
-           sock->async_send(msg_buff, boost::bind(&ClientImplem::check_sent,this, _1, _2)) ;
-           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
-           t->async_wait(boost::bind(&ClientImplem::check_ack,this, msg, nb_times +1,t,_1)) ;
-         }
-     }
- }
 
- std::string ClientImplem::get_msg_type(const string &header) {
-   assert(header.size() == HEADER_SIZE) ;
-   return header.substr(0, 8) ;
- }
-
- int ClientImplem::get_msg_id(const string &header) {
-   string id_s = header.substr(8,4) ;
-   int res = 0 ;
-   for(int i = 0 ; i < 4 ; i++)
-     {
-       res = 256*res + ((int) id_s.at(i)) ;
-     }
-   return res ;
- }
-
-
- void ClientImplem::generate_message(NetEvent event) {
-   received_messages[NetEvent::getMsgType()].push_back(&event.toString()) ;
- }
-
- bool ClientImplem::ack_message(const string &header) {
-   assert(header.size() == HEADER_SIZE) ;
-   return (header[HEADER_SIZE -1] != '\00') ;
- }
-
-std::string* ClientImplem::create_header(bool reliable, std::string type, int id) {
-  assert(type.size() == 8) ;
-  string * header = new string(HEADER_SIZE, '\00') ;
-  if(reliable)
-		header[HEADER_SIZE -1] = '\001' ;
-	int i ;
-	for(i = 0 ; i < 8; i++)
-	{
-		header[i] = type[i] ;
-	}
-	header[8] = (char) id % 256 ;
-  header[9] = (char) (id/256) % 256 ;
-  header[10] = (char) (id/256/256) % 256 ;
-  header[11] = (char) (id/256/256/256) % 256 ;
-
-  return header ;
-}
 
 void ClientImplem::wait_receive(){
   vector<mutable_buffer> vec ;
   //hack : using the underlying c_str of a string as a buffer (in theory, read only).
   vec.push_back(buffer((char *) header_buff-> c_str(), HEADER_SIZE));
   vec.push_back(buffer((char *) buff-> c_str(), BUFF_SIZE));
-  sock->async_receive(vec, boost::bind(&ClientImplem::on_recieve,this,_1,_2)) ;
+  sock->async_receive(vec, boost::bind(&ClientImplem::on_receive,this,_1,_2)) ;
 }

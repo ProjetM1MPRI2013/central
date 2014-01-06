@@ -11,11 +11,11 @@
 
 
 
-Server* Network::createServer(ServerInfo s_info){
+Server* Network::createServer(ServerInfo &s_info){
   return new ServerImplem(s_info) ;
 }
 
-Client* Network::createClient(ClientInfo c_info){
+Client* Network::createClient(ClientInfo &c_info){
   return new ClientImplem(c_info) ;
 }
 

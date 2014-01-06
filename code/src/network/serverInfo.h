@@ -17,7 +17,7 @@ public :
    * The address the server will be using to listen for connexions.
    */
   std::string hostname ;
-  int port ; 
+  std::string port ;
 
   /**
    * @brief ServerInfo
@@ -25,7 +25,7 @@ public :
    */
   ServerInfo(){
      hostname = "localhost" ;
-     port = 1234 ;
+     port = "1234" ;
   }
 } ;
 
