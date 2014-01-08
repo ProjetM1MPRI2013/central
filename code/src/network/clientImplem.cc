@@ -20,8 +20,8 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
         //a local address is provided
         ip::udp::resolver::query query2(c_info.localName,c_info.localPort) ;
         ip::udp::endpoint local_endpoint = *resolver.resolve(query2) ;
-        sock->bind(local_endpoint) ;
         sock->open(ip::udp::v4()) ;
+        sock->bind(local_endpoint) ;
     }
     else
     {
@@ -34,9 +34,10 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
         os << port ;
         c_info.localPort = os.str() ;
     }
-
+    sock->connect(server_endpoint);
     NetEvent startMsg(NetEvent::SERV_TRY) ;
     this->sendMessage<NetEvent>(startMsg) ;
+    wait_receive();
 }
 
 
@@ -84,6 +85,8 @@ std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, Ab
 
 
 void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& error, int){
+  cout << "INFO : Message sent to server" << endl ;
+  cout << "INFO : Message Type : " << get_msg_type(*data[0]) << endl ;
   //TODO : verify that all the message was transmitted
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
@@ -97,6 +100,7 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
         {
           delete tbuff ;
         }
+      cout << "NetWork ERROR : " << error.message() << endl ;
       return ;
     }
 
@@ -124,14 +128,14 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
 
 
 void ClientImplem::on_receive(const boost::system::error_code &error, int){
-    if(error != 0)
+  wait_receive() ;
+  if(error != 0)
     {
-        generate_message(NetEvent(NetEvent::RECEIVE_ERR));
-        wait_receive() ;
-        return ;
+      generate_message(NetEvent(NetEvent::RECEIVE_ERR));
+      return ;
     }
-    if(ack_message(*header_buff))
-      {
+  if(ack_message(*header_buff))
+    {
         //Handle Ack
         NetEvent e(NetEvent::ACK) ;
         int id = get_msg_id(*header_buff) ;
@@ -154,7 +158,7 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int){
             auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
             timer.async_wait(after_wait) ;
           }
-      }
+    }
     std::string type = get_msg_type(*header_buff) ;
     if(type.compare(NetEvent::getMsgType()) == 0)
       {
@@ -242,7 +246,6 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int){
           }
       }
     received_messages[type].push_back(new std::string(*buff)) ;
-    wait_receive() ;
 }
 
 

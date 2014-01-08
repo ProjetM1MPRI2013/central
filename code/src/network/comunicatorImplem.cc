@@ -9,6 +9,8 @@ ComunicatorImplem::ComunicatorImplem() : last_sent(0), ack_set(), received_messa
   sock = new ip::udp::socket(*service) ;
   buff = new string(BUFF_SIZE, '\000') ;
   header_buff = new string(HEADER_SIZE, '\000') ;
+  work = new io_service::work(*service) ;
+  net_thread = new thread([this](){service->run() ;}) ;
 }
 
 ComunicatorImplem::~ComunicatorImplem(){
@@ -17,11 +19,15 @@ ComunicatorImplem::~ComunicatorImplem(){
   delete sock ;
   delete buff ;
   delete header_buff ;
+  delete net_thread ;
 }
 
 void ComunicatorImplem::shutdown(){
+  delete work ;
+  work = NULL ;
   service->stop();
   sock->shutdown(ip::udp::socket::shutdown_both);
+  net_thread->join() ;
 }
 
 std::string ComunicatorImplem::get_msg_type(const string &header) {
@@ -53,16 +59,16 @@ std::string* ComunicatorImplem::create_header(bool reliable, std::string type, i
   assert(type.size() == 8) ;
   string * header = new string(HEADER_SIZE, '\00') ;
   if(reliable)
-    header[HEADER_SIZE -1] = '\001' ;
+    header->at(HEADER_SIZE -1) = '\001' ;
   int i ;
   for(i = 0 ; i < 8; i++)
     {
-      header[i] = type[i] ;
+      header->at(i) = type[i] ;
     }
-  header[8] = (char) id % 256 ;
-  header[9] = (char) (id/256) % 256 ;
-  header[10] = (char) (id/256/256) % 256 ;
-  header[11] = (char) (id/256/256/256) % 256 ;
+  header->at(8) = (char) id % 256 ;
+  header->at(9) = (char) (id/256) % 256 ;
+  header->at(10) = (char) (id/256/256) % 256 ;
+  header->at(11) = (char) (id/256/256/256) % 256 ;
 
   return header ;
 }

@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = \${ACLOCAL_FLAGS}
 AM_CXXFLAGS = -Wall -std=c++11
 AM_LDFLAGS = -ltgui -lsfml-audio\$(SFML_LIB_SUFFIX) -lsfml-graphics\$(SFML_LIB_SUFFIX) -lsfml-system\$(SFML_LIB_SUFFIX) -lsfml-window\$(SFML_LIB_SUFFIX) -lboost_system\$(BOOS_LIB_SUFFIX) -lpthread -std=c++11
 bin_PROGRAMS = game
-game_LDADD = -ltgui -lsfml-audio\$(SFML_LIB_SUFFIX) -lsfml-graphics\$(SFML_LIB_SUFFIX) -lsfml-system\$(SFML_LIB_SUFFIX) -lsfml-window\$(SFML_LIB_SUFFIX) -lboost_system\$(BOOS_LIB_SUFFIX) -lpthread
+game_LDADD = -ltgui -lsfml-audio\$(SFML_LIB_SUFFIX) -lsfml-graphics\$(SFML_LIB_SUFFIX) -lsfml-system\$(SFML_LIB_SUFFIX) -lsfml-window\$(SFML_LIB_SUFFIX) -lboost_system\$(BOOS_LIB_SUFFIX) -lpthread -lboost_serialization
 game_CFLAGS = -std=c++11
 game_LDFLAGS =
 game_SOURCES = $x $y

@@ -34,6 +34,16 @@ public :
   std::string localPort ;
 
   /**
+   * @brief ClientInfo : default constructors using default parameters
+   */
+  ClientInfo(){
+    serverName = "localhost" ;
+    serverPort = "1234" ;
+    localName = "" ;
+    localPort = -1 ;
+  }
+
+  /**
    * Create a new structure given the address of the server the client
    * will have to connect to.
    */

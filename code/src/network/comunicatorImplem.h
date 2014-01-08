@@ -3,6 +3,7 @@
 
 #include <boost/asio.hpp>
 #include <set>
+#include <thread>
 
 #include "netEvent.h"
 
@@ -51,6 +52,13 @@ public:
    * @brief last_sent : number attributed to the last sent message
    */
   int last_sent ;
+
+  /**
+   * @brief work : used to keep io_service busy. when destroyed, will allow run() method to return.
+   */
+  boost::asio::io_service::work * work ;
+
+  std::thread* net_thread ;
 
 protected :
 

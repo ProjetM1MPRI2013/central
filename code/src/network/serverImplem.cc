@@ -14,8 +14,9 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
   ip::udp::resolver resolver(*service) ;
   ip::udp::resolver::query query(s_info.hostname, s_info.port) ;
   endpoint local_endpoint = *resolver.resolve(query) ;
-  sock->bind(local_endpoint);
   sock->open(ip::udp::v4());
+  sock->bind(local_endpoint);
+  wait_receive();
 }
 
 ServerImplem::~ServerImplem(){
@@ -132,128 +133,130 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
 }
 
 void ServerImplem::on_receive(const boost::system::error_code &error, int){
-    if(error != 0)
+  wait_receive() ;
+  cout << "INFO : Server received message" << endl ;
+  if(error != 0)
     {
-        generate_message(NetEvent(NetEvent::RECEIVE_ERR));
-        wait_receive() ;
-        return ;
+      generate_message(NetEvent(NetEvent::RECEIVE_ERR));
+      return ;
     }
-    if(ack_message(*header_buff))
-      {
-        //Handle Ack
-        NetEvent e(NetEvent::ACK) ;
-        int id = get_msg_id(*header_buff) ;
-        e.setData(id) ;
-        sendMessage<NetEvent>(e, false);
-        bool b = sent_ack.insert(id).second ;
+  if(ack_message(*header_buff))
+    {
+      //Handle Ack
+      NetEvent e(NetEvent::ACK) ;
+      int id = get_msg_id(*header_buff) ;
+      e.setData(id) ;
+      //TODO : bad il faudrait juste l'envoyer pas le broadcaster
+      broadcastMessage<NetEvent>(e, false);
+      bool b = sent_ack.insert(id).second ;
 
-        if(!b)
+      if(!b)
+        {
+          //message dupicate
+          return ;
+        }
+      else
+        {
+          //remove ack from set in the future (3 sec)
+          deadline_timer timer(*service);
+          timer.expires_from_now(boost::posix_time::seconds(3)) ;
+          auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
+          timer.async_wait(after_wait) ;
+        }
+      }
+  std::string type = get_msg_type(*header_buff) ;
+  cout << "INFO : Message Type : " << type << endl ;
+  if(type.compare(NetEvent::getMsgType()) == 0)
+    {
+      //Handle NetEvent
+      NetEvent *event = NetEvent::fromString(*buff) ;
+      switch(event->getType())
+        {
+        case NetEvent::NOT_SET :
           {
-            //message dupicate
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::SERV_LOST :
+          {
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::SERV_TRY :
+          {
+            NetEvent reply(NetEvent::SERV_RESP) ;
+            string *reply_msg = &reply.toString() ;
+            sock->async_send_to(buffer(*reply_msg),sender_endpoint,
+                                [reply_msg](const error_code,int){delete reply_msg;}) ;
+            break ;
+          }
+
+        case NetEvent::SERV_RESP :
+          {
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::CLI_LOST :
+          {
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::CLI_TRY:
+          {
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::CLI_RESP :
+          {
+            break ;
+          }
+
+        case NetEvent::MSG_LOST :
+          {
+            break ;
+          }
+
+        case NetEvent::PLAYER_JOIN :
+          {
+            registered_players[event->getData()] = sender_endpoint ;
+            break ;
+          }
+
+        case NetEvent::PLAYER_QUIT :
+          {
+            if(registered_players.find(event->getData()) != registered_players.end())
+              registered_players.erase(event->getData());
+            break ;
+          }
+
+        case NetEvent::SEND_ERR :
+          {
+            assert(false) ;
+            break ;
+          }
+
+        case NetEvent::RECEIVE_ERR :
+          {
+            assert(false) ;
+            break ;
+          }
+        case NetEvent::ACK :
+          {
+            int id = event->getData() ;
+            if(ack_set.find(id) != ack_set.end())
+              ack_set.erase(id) ;
+            delete event ;
             return ;
+            break ;
           }
-        else
-          {
-            //remove ack from set in the future (3 sec)
-            deadline_timer timer(*service);
-            timer.expires_from_now(boost::posix_time::seconds(3)) ;
-            auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
-            timer.async_wait(after_wait) ;
-          }
-      }
-    std::string type = get_msg_type(*header_buff) ;
-    if(type.compare(NetEvent::getMsgType()) == 0)
-      {
-        //Handle NetEvent
-        NetEvent *event = NetEvent::fromString(*buff) ;
-        switch(event->getType())
-          {
-          case NetEvent::NOT_SET :
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::SERV_LOST :
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::SERV_TRY :
-            {
-              NetEvent reply(NetEvent::SERV_RESP) ;
-              string *reply_msg = &reply.toString() ;
-              sock->async_send_to(buffer(*reply_msg),sender_endpoint,
-                                  [reply_msg](const error_code,int){delete reply_msg;}) ;
-              break ;
-            }
-
-          case NetEvent::SERV_RESP :
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::CLI_LOST :
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::CLI_TRY:
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::CLI_RESP :
-            {
-              break ;
-            }
-
-          case NetEvent::MSG_LOST :
-            {
-              break ;
-            }
-
-          case NetEvent::PLAYER_JOIN :
-            {
-              registered_players[event->getData()] = sender_endpoint ;
-              break ;
-            }
-
-          case NetEvent::PLAYER_QUIT :
-            {
-              if(registered_players.find(event->getData()) != registered_players.end())
-                registered_players.erase(event->getData());
-              break ;
-            }
-
-          case NetEvent::SEND_ERR :
-            {
-              assert(false) ;
-              break ;
-            }
-
-          case NetEvent::RECEIVE_ERR :
-            {
-              assert(false) ;
-              break ;
-            }
-          case NetEvent::ACK :
-            {
-              int id = event->getData() ;
-              if(ack_set.find(id) != ack_set.end())
-                ack_set.erase(id) ;
-              delete event ;
-              return ;
-              break ;
-            }
-          }
-      }
-    received_messages[type].push_back(new std::string(*buff)) ;
-    wait_receive() ;
+        }
+    }
+  received_messages[type].push_back(new std::string(*buff)) ;
 }
 
 

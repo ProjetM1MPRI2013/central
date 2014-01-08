@@ -1,7 +1,12 @@
 #ifndef NETEVENT_H
 #define NETEVENT_H
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+
 #include "abstractMessage.h"
+
 
 /**
  * @brief The NetEvent class
@@ -182,6 +187,19 @@ protected :
    * the field data may contain anything
    */
   int data ;
+
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & type ;
+    ar & data ;
+  }
 
 };
 
