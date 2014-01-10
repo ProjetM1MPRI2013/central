@@ -44,9 +44,9 @@ class Trajectory {
   /**
    * @brief Trajectory
    * creates a new Trajectory with given start and target Positions as references, so that the Trajectory's positions will be the same objects
-   * @param start : the start position as a reference
-   * @param target : the target position as a reference
-   * @param map : the map where the pathfinding will be done
+   * @param start: the start position as a reference
+   * @param target: the target position as a reference
+   * @param map: the map where the pathfinding will be done
    */
   Trajectory(Position start,Position target,Geography& map);
 
@@ -56,7 +56,7 @@ class Trajectory {
    * it is a copy so the new Trajectory's Positions will not be the same objects as the first one's
    * @param t : the Trajectory to copy
    */
-  Trajectory(Trajectory& t);
+  //  Trajectory(Trajectory& t);
 
   /**
    * @brief getPosList
@@ -90,9 +90,10 @@ class Trajectory {
    * updates the Trajectory ie tells it to continue for a short time
    * @param dt : the time for which the Trajectory must continue
    * @param speedNorm: the NPC's speed's norm
-   * @param map : the map on which the Trajectory is located 
+   * @param map : the map on which the Trajectory is located
+   * @param npc: a NPC to ignore in the collisions
    */
-  void update(sf::Time dt,float speedNorm,Geography& map);
+  void update(sf::Time dt,float speedNorm,Geography& map,NPC& npc);
 
   /**
    * @brief getSpeed

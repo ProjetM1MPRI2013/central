@@ -42,17 +42,6 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   simu.setScenario(&scenar);
   simu.setClient(clientPtr);
   GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
-  sf::Texture a1;
-  assert(a1.loadFromFile("../../../sprite/Anim.png"));
-  TexturePack tp1;
-  tp1.texture = a1;
-  tp1.nbAnim = {1,12,16};
-  tp1.widthSprite = {16,16,32};
-  tp1.heightSprite = 32;
-  tp1.offsetX = {8,8,8};
-  tp1.offsetY = {32,32,32};
-  tp1.isLoop = {true, true, false};
-  graContIso.addTexturePack(tp1);
   graContIso.load();
   //TileMap tilemap = TileMap(&simu, &geo);
   //geo.printMatrix();
@@ -75,8 +64,9 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
       target = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
-    
-    simu.addNPC(start,target,1,&tp1);
+    simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
+    //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+    //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
   }
         
   sf::Clock clock;

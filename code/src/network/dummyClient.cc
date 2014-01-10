@@ -39,20 +39,21 @@ void DummyClient::send_message(AbstractMessage& msg, bool , std::string msgType 
   server->addMessage(msg.copy(), msgType, this) ;
 }
 
-std::vector<AbstractMessage *>& DummyClient::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
+std::vector<AbstractMessage *> DummyClient::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {
   lock.lock() ;
   MapType::iterator p = received_messages.find(msgType) ;
   if(p != received_messages.end())
     {
-      std::vector<AbstractMessage *> *temp = p->second ;
+      std::vector<AbstractMessage *> temp(*(p->second)) ;
+      delete p->second ;
       received_messages.erase(p);
       lock.unlock() ;
-      return *temp ;
+      return temp ;
     }
   else
     {
       lock.unlock() ;
-      return *(new std::vector<AbstractMessage *>()) ;
+      return std::vector<AbstractMessage *>() ;
     }
 }
 
@@ -98,6 +99,11 @@ bool DummyClient::handle_netEvent(const NetEvent &event){
       }
     case NetEvent::SERV_TRY : {
         //Case not possible, only the client can send this message
+        assert(false) ;
+        break ;
+      }
+    case NetEvent::ACK : {
+        // No Ack for the dummy implementation
         assert(false) ;
         break ;
       }

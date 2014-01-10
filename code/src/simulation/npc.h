@@ -24,9 +24,9 @@ class NPC : public EventSource, public Positionable {
   float speed;
   float hitboxSize;
   Animation anim;
-  float deltaT = 2;
-  float lambda = 1;
-  float V0 = 2;
+  float deltaT = 1;
+  float lambda = 0.3;
+  float Vzero = 2;
 
 
  public:
@@ -40,7 +40,7 @@ class NPC : public EventSource, public Positionable {
    * @param start : the NPC's start position
    * @param target : the NPC's target position
    * @param map : the map (to do the initial pathfinding)
-   * @param tex: the texture pack of the sprite cheet of the animation
+   * @param tex: the texture pack of the sprite sheet of the animation
    */
   NPC(float s,float f,float h,Position& start,Position& target,Geography& map,TexturePack* tex);
 
@@ -51,7 +51,7 @@ class NPC : public EventSource, public Positionable {
    * @param s : the NPC's speed
    * @param f : the NPC's initial fear level
    * @param h : the NPC's hitbox size
-   * @param tex: the texture pack of the sprite cheet of the animation
+   * @param tex: the texture pack of the sprite sheet of the animation
    * @param uuid: the uuid for the NPC
    */
   NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid);
@@ -178,7 +178,7 @@ class NPC : public EventSource, public Positionable {
    * Sets the animation of the NPC
    * @param t: New animation
    **/  
-  void setAnim(const int t);
+  void setAnim(const AnimType t);
 
   /**
    * @brief TextureAnim
@@ -218,5 +218,12 @@ class NPC : public EventSource, public Positionable {
    * @param p: the Position where the gradient will be computed
    */
   std::pair<float,float> gradPot(Position p);
+
+  /**
+   * @brief nextFrame
+   * Changes the state of the animation to the next frame, according to the
+   * different parametters of the NPC.
+   */
+  void nextFrame();
 };
 #endif

@@ -1,7 +1,6 @@
 #include "graphic_context_iso.h"
 #include "../simulation/npc.h"
 #include <list>
-#include "../simulation/position.h"
 #include <iostream>
 #include <unistd.h>
 
@@ -10,6 +9,83 @@
   {
     this->map = map;
     this->sim = sim;  
+
+    std::fstream file;
+    file.open("../graphism/animations",std::fstream::in);
+    assert(file);
+    std::string line, tmp;
+    while(getline(file,line)){
+      
+      TexturePack t;
+      sf::Texture a;
+      
+      tmp = line.substr(0,line.find(" "));
+      assert(a.loadFromFile(tmp));
+      t.texture = a;
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.nbFrames.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.nbFrames.push_back(atoi(tmp.c_str()));
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.widthSprite.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.widthSprite.push_back(atoi(tmp.c_str()));
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(0,line.find(" "));
+      t.heightSprite = atoi(tmp.c_str());
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.offsetX.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.offsetX.push_back(atoi(tmp.c_str()));
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.offsetY.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.offsetY.push_back(atoi(tmp.c_str()));
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.isLoop.push_back(tmp.substr(0,tmp.find(",")).compare("T")==0);
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.isLoop.push_back(tmp.compare("T")==0);
+
+      line = line.substr(line.find(" ")+1);
+      tmp = line.substr(1,line.find(" "));
+      while(tmp.find(",")!=std::string::npos){
+	t.fps.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
+	tmp = tmp.substr(tmp.find(",")+1);
+      }
+      tmp.pop_back();
+      t.fps.push_back(atoi(tmp.c_str()));
+
+      addTexturePack(t);
+
+    }
+    file.close();
+
   }
   
   
@@ -32,13 +108,10 @@
       est :
       \forall j,i,j',i' (j' <= j & i' >= i & isDrawn[j][i]) -> isDrawn[j'][i']
       La condition d'arrêt est donc :
-      isDrawn[h-1][w-1]
-      Avec un parcours par couches comme suit, on minimise le nombre 
-      d'itérations dans le pire des cas (#bluff)
-      On peut prouver que l'algorithme termine (par récurrence sur la seed)
+      isDrawn[h-1][0]
     */
     
-    while(not(isDrawn[h-1][w-1]))
+    while(not(isDrawn[h-1][0]))
       {
 	for(int k = 0 ; k < std::min(w,h); k++)
 	  {
@@ -96,6 +169,8 @@
 				    for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
 				      {
 					assert((**ci).TextureIsInit());
+
+					(**ci).nextFrame();
 					
 					sf::Sprite& sfn = (**ci).getSprite();
 					Position& p = (**ci).getPosition();
@@ -181,4 +256,23 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   window->draw(*this);
     
   return;
+}
+
+Position GraphicContextIso::screenToMap(int x, int y)
+{
+  sf::Vector2f v = view.getCenter();
+  Position p;
+  float xo = x - (view.getSize().x/2), yo = y - (view.getSize().y/2);
+  float xc = v.x - OFFSET_X, 
+    yc = v.y - OFFSET_Y + (map->getMapWidth()) * RIGHT_TILE(1);
+  p.add((xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
+	+ (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)),
+	(xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
+	- (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)));
+  return p;
+}
+
+TexturePack* GraphicContextIso::getTexturePack(int n)
+{
+  return(&(texVector.at(n)));
 }

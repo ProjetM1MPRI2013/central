@@ -41,6 +41,9 @@ Tile * Geography::getTile(int i,int j){
 }
 
 Tile& Geography::getTileRef(int i,int j){
+  if (!(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT)) {
+    printf("getTileRef error : i=%d, j=%d\n",i,j);
+  }
   assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
   return *(map[i][j]);
 }

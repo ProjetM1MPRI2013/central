@@ -58,18 +58,19 @@ void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyCli
     }
 }*/
 
-vector<AbstractMessage *>& DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &)){
+vector<AbstractMessage *> DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &)){
     MapType::iterator p =  received_messages.find(msgType) ;
     if(p != received_messages.end())
       {
         lock.lock() ;
-        vector<AbstractMessage *>* temp = p->second ;
+        vector<AbstractMessage *>temp(*(p->second)) ;
+        delete p->second ;
         received_messages.erase(p);
         lock.unlock() ;
-        return *temp ;
+        return temp ;
       }
     else
-      return *(new vector<AbstractMessage* >()) ;
+      return vector<AbstractMessage* >() ;
 }
 
 void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, int player ) {
@@ -140,6 +141,11 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
       }
     case NetEvent::SERV_TRY : {
         client->addMessage(new NetEvent(NetEvent::SERV_RESP), NetEvent::getMsgType());
+        break ;
+      }
+    case NetEvent::ACK : {
+        // No Ack for the dummy implementation
+        assert(false) ;
         break ;
       }
     }

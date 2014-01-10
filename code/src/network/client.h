@@ -62,9 +62,16 @@ public :
    * The same remark as sendMessage concerning inheritance holds.
    */
   template<typename MsgType>
-  std::vector<MsgType * > & receiveMessages(){
+  std::vector<MsgType * > receiveMessages(){
     //function pointer casting : not sure it works
-    return (std::vector<MsgType *> &) receive_messages(MsgType::getMsgType(), (AbstractMessage* (*) (std::string &)) &MsgType::fromString) ;
+    std::vector<AbstractMessage*> result1 = receive_messages(MsgType::getMsgType(),
+                                                             (AbstractMessage* (*) (std::string &)) & MsgType::fromString) ;
+    std::vector<MsgType*> result2 ;
+    for(AbstractMessage* p : result1)
+      {
+        result2.push_back((MsgType *)p);
+      }
+    return result2 ;
   }
 
   // The only reason for private members in this interface is that
@@ -86,7 +93,7 @@ protected :
    * @param f : function used for deserialisation.
    * @return All the messages of the given type received from now.
    */
-  virtual std::vector<AbstractMessage *>& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) = 0 ;
+  virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) = 0 ;
 
 } ;
 

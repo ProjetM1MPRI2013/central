@@ -1,7 +1,12 @@
 #ifndef NETEVENT_H
 #define NETEVENT_H
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+
 #include "abstractMessage.h"
+
 
 /**
  * @brief The NetEvent class
@@ -31,77 +36,84 @@ public:
 
     /**
      * @brief SERV_LOST : message generated when the server does not answer for a long time
-     * data is NULL
+     * no data attached
      */
     SERV_LOST = 1,
 
     /**
      * @brief SERV_TRY : send a message to the server to see if it responds
      * The server answers by a SERV_RESP message
-     * data is NULL
+     * no data attached
      */
     SERV_TRY ,
 
     /**
      * @brief SERV_RESP : server answer to SERV_TRY. Must not be sent manually
-     * data is NULL
+     * no data attached
      */
     SERV_RESP ,
 
     /**
      * @brief CLI_LOST : generated when the client does not respond for a long time
-     * data is NULL
+     * no data attached
      */
     CLI_LOST ,
 
     /**
      * @brief CLI_TRY : tries to contact the client. If it receives the message,
      * the client answers with CLI_RESP
-     * data is NULL
+     * no data attached
      */
     CLI_TRY ,
 
     /**
      * @brief CLI_RESP : client's answer to CLI_TRY. Must not be sent manually
-     * data is NULL
+     * no data attached
      */
     CLI_RESP ,
 
     /**
      * @brief MSG_LOST : message generated when a message could not be delivered.
-     * data is of type (int *), the integer will be number associated with the message lost
+     * data is the number associated with the message lost
      */
     MSG_LOST ,
 
     /**
      * @brief PLAYER_JOIN : send this message to notify the server or other players
      * that a player joined the game.
-     * data is of type (int *), the integer is the id of the player that joined the game.
+     * data is the id of the player that joined the game.
      * This message is used by the server to determine wich are the players connected to it.
      */
-    PLAYER_JOIN = 8 ,
+    PLAYER_JOIN ,
 
     /**
      * @brief PLAYER_QUIT : send this message to notify the server or other players
      * that a player left the game
-     * data is of type (int *), the integer is the id of the player that left the game.
+     * data is the id of the player that left the game.
      * This message is used by the server to determine wich are the players connected to it.
      */
-    PLAYER_QUIT = 9 ,
+    PLAYER_QUIT ,
 
     /**
      * @brief SEND_ERROR : generated when an error occured while
      * sending a message
-     * data is of type (int *), the integer is the number associated with the message
+     * data is the number associated with the message
      */
     SEND_ERR ,
 
     /**
      * @brief RECEIVE_ERR : generated when an error occured when
      * receiving a message.
-     * data is null.
+     * no data attached
      */
-    RECEIVE_ERR
+    RECEIVE_ERR, 
+		
+		/**
+		 * @brief ACK : sent when a message requires a check that it did arrive
+     * at its destination.
+     * data is the number of the message to ack.
+		 */
+		ACK
 
   } Type ;
 
@@ -133,11 +145,12 @@ public:
    */
   virtual inline void setType(NetEvent::Type type){this->type = type ;}
 
-  virtual inline void setData(void *data){
+
+  virtual inline void setData(int data){
     this->data = data ;
   }
 
-  virtual inline void * getData() const {
+  virtual inline int getData() const {
     return data ;
   }
 
@@ -154,7 +167,7 @@ public:
   /**
    * @brief fromString : unimplemented yet
    */
-  static NetEvent * fromString(std::string& msg) ;
+  static NetEvent * fromString(const std::string& msg) ;
 
   virtual NetEvent* copy() ;
 
@@ -168,12 +181,25 @@ protected :
 
   /**
    * @brief data : the data that is attached to this message.
-   * Each message type should define what is the type of data
+   * Each message type should define what means the data
    * attached with the message.
-   * It is left to the user to ensure that the correct data type is used for
-   * a given message type
+   * Some message Type do not require a precise data field, in this case,
+   * the field data may contain anything
    */
-  void * data ;
+  int data ;
+
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & type ;
+    ar & data ;
+  }
 
 };
 

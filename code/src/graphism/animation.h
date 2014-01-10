@@ -9,14 +9,16 @@
  **/
 struct TexturePack {
   sf::Texture texture;
-  std::vector<int> nbAnim;
   std::vector<int> nbFrames;
   std::vector<int> widthSprite;
   int heightSprite;
   std::vector<int> offsetX;
   std::vector<int> offsetY;
   std::vector<bool> isLoop;
+  std::vector<int> fps;
 };
+
+enum AnimType {IDLE, RUN, DEAD};
 
 /**
  * @brief The Animation class
@@ -43,7 +45,13 @@ class Animation
    * @brief Changes the animation
    * @param t: New animation
    **/
-  virtual void setAnim(const int t);
+  virtual void setAnim(const AnimType t);
+
+  /**
+   * @brief getAnim
+   * Return the current animation
+   */
+  virtual AnimType getAnim ();
   
   /**
    * @brief Give the sprite of the animation
@@ -81,13 +89,14 @@ class Animation
   /**
    * @brief The current frame of the animation
    **/
-  unsigned int currentFrame;
+  int currentFrame;
 
   /**
    * @brief The current animation
    **/
-  unsigned int animT;
+  AnimType animT;
 
+  sf::Clock clock;
 };
 
 #endif

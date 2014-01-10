@@ -42,7 +42,7 @@ public :
    * the function fromString with the signature :
    * static MsgType * fromString(std::string)
    */
-  static AbstractMessage * fromString(std::string& msg){ assert(false);}
+  static AbstractMessage * fromString(const std::string& msg){ assert(false);}
 
   /**
    * @brief copy : copy the message

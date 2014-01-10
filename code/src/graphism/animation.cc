@@ -12,32 +12,40 @@ Animation::Animation(TexturePack* tex)
     {
 
       this->currentFrame = 0;
-      this->animT = 0;
+      this->animT = IDLE;
       this->tex = tex;
       
       (this->spr).setTexture(tex->texture);
-      (this->spr).setTextureRect(sf::IntRect(0,0,tex->widthSprite[0] - 1,tex->heightSprite - 1));
+      (this->spr).setTextureRect(sf::IntRect(0,0,tex->widthSprite[0],tex->heightSprite));
     }
 }
 
 void Animation::nextFrame()
 {
-  if (currentFrame + 1 < tex->nbFrames[animT])
-    currentFrame++;
-  else if (currentFrame + 1 == tex->nbFrames[animT] && tex->isLoop[animT])
-    currentFrame = 0;
-  
-  spr.setTextureRect(sf::IntRect(currentFrame * tex->widthSprite[animT], animT * tex->heightSprite, (currentFrame + 1) * tex->widthSprite[animT] - 1,  (animT + 1) * tex->heightSprite - 1));
-  
+  if(clock.getElapsedTime().asMilliseconds() > 1000./tex->fps[animT])
+    {
+      clock.restart();
+      if (currentFrame + 1 < tex->nbFrames[animT])
+	currentFrame++;
+      else if (currentFrame + 1 == tex->nbFrames[animT] && tex->isLoop[animT])
+	currentFrame = 0;
+      
+      spr.setTextureRect(sf::IntRect(currentFrame * tex->widthSprite[animT], animT * tex->heightSprite,tex->widthSprite[animT],tex->heightSprite));
+    }
   return;
 }
 
-void Animation::setAnim(const int t)
+void Animation::setAnim(const AnimType t)
 {
   animT = t;
   currentFrame = 0;
-  spr.setTextureRect(sf::IntRect(0,animT * tex->heightSprite ,tex->widthSprite[0] - 1, (animT + 1) * tex->heightSprite - 1 ));
+  spr.setTextureRect(sf::IntRect(0,animT * tex->heightSprite ,tex->widthSprite[0],tex->heightSprite));
   return;
+}
+
+AnimType Animation::getAnim()
+{
+  return animT;
 }
 
 sf::Sprite& Animation::getSprite()

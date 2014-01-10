@@ -27,7 +27,7 @@ public :
      * @param s_info : informations provided to start the server
      * @return a newly created server.
      */
-    static Server* createServer(ServerInfo s_info) ;
+    static Server* createServer(ServerInfo& s_info) ;
 
     /**
      * @brief createClient
@@ -41,7 +41,7 @@ public :
      * @param c_info : informations provided to start the client
      * @return a newly created client
      */
-    static Client* createClient(ClientInfo c_info) ;
+    static Client* createClient(ClientInfo& c_info) ;
 
     /**
      * @brief createDummyServer

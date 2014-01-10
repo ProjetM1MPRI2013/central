@@ -23,16 +23,6 @@ class Server {
 public : 
 
   /**
-   * Will send new opdates to all the clients connected to the server.
-   * What will effectively be sent to each client will be evaluated, and only
-   * relevant data will be sent to the network.
-   * There is no guarantee that the data will effectively be delivered (using
-   * UDP protocol for the real implementation).
-   * @deprecated : use the update genarator class instead
-   */
-  //virtual void sendUpdate(GameState &game_state) = 0 ;
-
-  /**
    * @brief broadcastMessage : broadcasts a message of the given type to all the clients
    * @param msg : the message to send
    * @param reliable : whether the server should wait for an ack or not.
@@ -63,12 +53,17 @@ public :
    * The caller gains ownership of all the messages in the vector.
    */
   template <typename MsgType>
-  std::vector<MsgType *> & receiveMessages(){
+  std::vector<MsgType *> receiveMessages(){
     //function pointer casting ----> not sure it works
-    return (std::vector<MsgType *> &) receive_messages(MsgType::getMsgType(), (AbstractMessage* (*) (std::string &)) &MsgType::fromString) ;
-
+    std::vector<AbstractMessage*> result1 = receive_messages(MsgType::getMsgType(),
+                                                             (AbstractMessage* (*) (std::string &)) & MsgType::fromString) ;
+    std::vector<MsgType*> result2 ;
+    for(AbstractMessage* p : result1)
+      {
+        result2.push_back((MsgType *)p);
+      }
+    return result2 ;
   }
-
   /**
    * @brief Sends a message only to the given player.
    * @param msg : The message to send
@@ -122,7 +117,7 @@ protected :
    * @param f : function used for deserialisation
    * @return : a vector containing all the messages of this type received from now.
    */
-  virtual std::vector<AbstractMessage * >& receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) =0;
+  virtual std::vector<AbstractMessage * > receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) =0;
 
 } ;
 
