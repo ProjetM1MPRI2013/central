@@ -16,6 +16,9 @@
 
 #define DEBUG false
 
+#define DEBUG true
+#include "debug.h"
+
 Simulation::Simulation(int nbPlayers, int id)
 {
 	this->NB_JOUEURS = nbPlayers;

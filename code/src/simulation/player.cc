@@ -4,6 +4,8 @@
 
 #define SPEED_AMPLIFIER 350
 
+#define DEBUG true
+#include "debug.h"
 
 void printDirection(Direction d){
   switch (d){
@@ -84,7 +86,7 @@ void Player::setDirection(Direction newd) {
 
 void Player::addItem(Stuff* s) {
   this->inventory.push_back(s);
-  std::cout << "Add item to player " << this->playerID << " : " << s->name << "\n";
+  DBG << "Add item to player " << this->playerID << " : " << s->name;
   return;
 };
 

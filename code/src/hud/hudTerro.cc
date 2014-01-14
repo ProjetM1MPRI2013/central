@@ -2,7 +2,8 @@
 class Stuff;
 #include "../scenario/Stack.h"
 
-#define DEBUG false
+#define DEBUG true
+#include "debug.h"
 #define THEME_CONFIG_FILE_HUD_TERRO "../widgets/Black.conf"
 #ifdef WINDOWSTEST
 #include <direct.h>
@@ -11,6 +12,7 @@ class Stuff;
 #include <unistd.h>
 #define GetCurrentDir getcwd
 #endif
+
 
 void printcwd() {
 	char cCurrentPath[FILENAME_MAX];
@@ -38,7 +40,7 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
 	this->nextState = BS_INVENT;
-	std::cerr << "created Hudterro" << std::endl;
+  DBG << "created Hudterro";
 	(this->hud).setGlobalFont("../fonts/leadcoat.ttf");
 
 	//tgui::Picture::Ptr picture3(this->hud);
@@ -77,14 +79,14 @@ void HudTerro::init() {
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->i) * 100, this->h - 100);
-				std::cerr << "button placed at " << (50 + (this->i) * 100) << "x" << this->h - 100 << std::endl;
+				DBG << "button placed at " << (50 + (this->i) * 100) << "x" << this->h - 100;
 				button->setText((*it)->name);
 				//button->setCallbackId(this->i + 1);
 				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)), 
                              tgui::Button::LeftMouseClicked);
 				(this->buttonsList).push_back(button);
 				(this->i)++;
-				std::cerr << "adding " << (*it)->name << std::endl;
+				DBG << "adding " << (*it)->name;
 			};
 		};
 	};

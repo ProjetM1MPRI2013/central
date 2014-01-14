@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 
+#define DEBUG true
+#include "debug.h"
 
   GraphicContextIso::GraphicContextIso(Geography* map, Simulation* sim)
   {
@@ -213,7 +215,7 @@ void GraphicContextIso::load()
               catch(...)
 		{
 		  sf::Texture t;
-		  std::cout << "chargement de " << s << std::endl;
+      DBG << "chargement de " << s;
 		  assert(t.loadFromFile(s));
 		  SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(), .originY = tilec->getPictureY()};
 		  tilemap[s] = stp;

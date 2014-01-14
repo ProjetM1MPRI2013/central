@@ -25,7 +25,8 @@
 #include <string>
 #include <random>
 
-#define DEBUG false
+#define DEBUG true
+#include "debug.h"
 
 #ifdef __APPLE__
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::Q) && event.key.system)
@@ -133,6 +134,7 @@ void serverLoop(int id,int nbPlayers, Server* serverPtr,
 }
 
 int main(int argc, char ** argv) {
+
   int sizeFenetre[3], b;
   bool isFullScreen;
   sf::VideoMode video_mode;

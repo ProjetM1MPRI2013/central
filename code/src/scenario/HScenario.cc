@@ -1,7 +1,8 @@
 #include "HScenario.h"
 #include "simulation.h"
 
-#define DEBUG true
+#define DEBUG false
+#include "debug.h"
 
 HScenario::HScenario (Simulation& s) : simulation(s) {
   listen("NPC::created", simulation, &HScenario::createdNPC);
@@ -12,11 +13,11 @@ void HScenario::run(){
 };
 
 void HScenario::createdNPC(Simulation& s, NPC& npc) {
-  if (DEBUG) { std::cout << "NPC was created" << std::endl; }
+  DBG << "NPC was created";
   //std::function<void(EventName, NPC&)> fn = [this](EventName e, NPC& npc) { this->arrivedNPC(npc); } ;
   listen("NPC::arrived", npc, &HScenario::arrivedNPC);
 }
 
 void HScenario::arrivedNPC(NPC& npc) {
-  if (DEBUG) { std::cout << "NPC has arrived" << std::endl; }
+  DBG << "NPC has arrived";
 }
