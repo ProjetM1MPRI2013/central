@@ -21,6 +21,9 @@ class TestA : public AbstractMessage {
 
 public :
 
+  TestA() : data(0){
+  }
+
   TestA(int t){
     data = t ;
   }
@@ -37,7 +40,7 @@ public :
   static AbstractMessage * fromString(std::string& msg){
     stringstream ss(msg) ;
     text_iarchive ar(ss) ;
-    NetEvent* e = new NetEvent() ;
+    TestA* e = new TestA() ;
     ar >> *e ;
     return e ;
   }
@@ -65,6 +68,10 @@ class TestB : public AbstractMessage {
 
 public :
 
+  TestB(): data(0){
+
+  }
+
   TestB(int t){
     data = t ;
   }
@@ -81,7 +88,7 @@ public :
   static AbstractMessage * fromString(std::string& msg){
     stringstream ss(msg) ;
     text_iarchive ar(ss) ;
-    NetEvent* e = new NetEvent() ;
+    TestB* e = new TestB() ;
     ar >> *e ;
     return e ;
   }

@@ -1,9 +1,10 @@
 #include "comunicatorImplem.h"
+#include "debug.h"
 
 using namespace std ;
 using namespace boost::asio ;
 
-ComunicatorImplem::ComunicatorImplem() : last_sent(0), ack_set(), received_messages(), sent_ack(){
+ComunicatorImplem::ComunicatorImplem() : last_sent(0), ack_set(), received_messages(), sent_ack(), lock(){
   //init fields
   service = new io_service() ;
   sock = new ip::udp::socket(*service) ;
@@ -23,6 +24,7 @@ ComunicatorImplem::~ComunicatorImplem(){
 }
 
 void ComunicatorImplem::shutdown(){
+  DBG << "NET: Shutting down communication" ;
   delete work ;
   work = NULL ;
   service->stop();
@@ -56,6 +58,7 @@ bool ComunicatorImplem::ack_message(const string &header) {
 }
 
 std::string* ComunicatorImplem::create_header(bool reliable, std::string type, int id) {
+  //TODO : probablement un problème avec l'encodage des entiers.
   assert(type.size() == 8) ;
   string * header = new string(HEADER_SIZE, '\00') ;
   if(reliable)
@@ -65,10 +68,10 @@ std::string* ComunicatorImplem::create_header(bool reliable, std::string type, i
     {
       header->at(i) = type[i] ;
     }
-  header->at(8) = (char) id % 256 ;
-  header->at(9) = (char) (id/256) % 256 ;
-  header->at(10) = (char) (id/256/256) % 256 ;
-  header->at(11) = (char) (id/256/256/256) % 256 ;
+  header->at(11) = (char) id % 256 ;
+  header->at(10) = (char) (id/256) % 256 ;
+  header->at(9) = (char) (id/256/256) % 256 ;
+  header->at(8) = (char) (id/256/256/256) % 256 ;
 
   return header ;
 }

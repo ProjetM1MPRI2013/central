@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include "clientImplem.h"
+#include "debug.h"
 
 
 
@@ -56,7 +57,9 @@ void ClientImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
   vector<string*> buffers ;
   buffers.push_back(header);
   buffers.push_back(&data);
+  lock.lock() ;
   sock->async_send(msg_buff, boost::bind(&ClientImplem::on_sent, this,buffers, _1,_2)) ;
+  lock.unlock() ;
 
   return ;
 }
@@ -85,8 +88,9 @@ std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, Ab
 
 
 void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& error, int){
-  cout << "INFO : Message sent to server" << endl ;
-  cout << "INFO : Message Type : " << get_msg_type(*data[0]) << endl ;
+  int id = get_msg_id(*data[0]) ;
+  DBG << "CLI: Message sent to server with id " << id  ;
+  DBG << "CLI: Message Type : " << get_msg_type(*data[0]) ;
   //TODO : verify that all the message was transmitted
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
@@ -100,7 +104,7 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
         {
           delete tbuff ;
         }
-      cout << "NetWork ERROR : " << error.message() << endl ;
+      LOG(error) << "CLI: " << error.message() << endl ;
       return ;
     }
 
@@ -108,7 +112,6 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
   if(ack_message(*data[0]))
     {
       //ACK needed
-      int id = get_msg_id(*data[0]) ;
       ack_set.insert(id) ;
       deadline_timer *t = new deadline_timer(*service) ;
       t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
@@ -128,24 +131,27 @@ void ClientImplem::on_sent(std::vector<std::string *>& data, const error_code& e
 
 
 void ClientImplem::on_receive(const boost::system::error_code &error, int){
-  wait_receive() ;
+  int id = get_msg_id(*header_buff) ;
+  DBG << "CLI: Reveived Message with id " << id ;
   if(error != 0)
     {
       generate_message(NetEvent(NetEvent::RECEIVE_ERR));
+      wait_receive() ;
       return ;
     }
   if(ack_message(*header_buff))
     {
         //Handle Ack
         NetEvent e(NetEvent::ACK) ;
-        int id = get_msg_id(*header_buff) ;
         e.setData(id) ;
+        DBG << "CLI: Sending back ack with id " << id ;
         sendMessage<NetEvent>(e, false);
         bool b = sent_ack.insert(id).second ;
 
         if(!b)
           {
             //message dupicate
+            wait_receive() ;
             return ;
           }
         else
@@ -160,10 +166,12 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int){
           }
     }
     std::string type = get_msg_type(*header_buff) ;
+    DBG << "CLI: Message Type " << type ;
     if(type.compare(NetEvent::getMsgType()) == 0)
       {
         //Handle NetEvent
         NetEvent *event = NetEvent::fromString(*buff) ;
+        DBG << *event ;
         switch(event->getType())
           {
           case NetEvent::NOT_SET :
@@ -240,12 +248,14 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int){
               if(ack_set.find(id) != ack_set.end())
                 ack_set.erase(id) ;
               delete event ;
+              wait_receive() ;
               return ;
               break ;
             }
           }
       }
     received_messages[type].push_back(new std::string(*buff)) ;
+    wait_receive() ;
 }
 
 
@@ -272,6 +282,7 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
       //No ack
       if(nb_times >= NB_TRY)
         {
+          LOG(warning) << "CLI: Failed to reach server in time" ;
           //Cannot reach server
           generate_message(NetEvent::SERV_LOST);
           //free memory
@@ -282,11 +293,14 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
       else
         {
           //Resend
+          DBG << "CLI: No ACK received for message " << id << ", re-sending message" ;
           vector<const_buffer> msg_buff ;
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));
 
+          lock.lock() ;
           sock->async_send(msg_buff, [](boost::system::error_code,int){}) ;
+          lock.unlock() ;
           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
           t->async_wait(boost::bind(&ClientImplem::check_ack,this, msg, nb_times +1,t,_1)) ;
         }

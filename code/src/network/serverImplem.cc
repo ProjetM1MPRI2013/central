@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <boost/bind.hpp>
 
+#include "debug.h"
+
 using namespace std ;
 using namespace boost::asio ;
 
@@ -16,6 +18,8 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
   endpoint local_endpoint = *resolver.resolve(query) ;
   sock->open(ip::udp::v4());
   sock->bind(local_endpoint);
+  DBG << "SERVER: Created with address : " << local_endpoint.address().to_string()
+      << ":" << local_endpoint.port() ;
   wait_receive();
 }
 
@@ -38,6 +42,7 @@ bool ServerImplem::isConnected(int player){
 }
 
 void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgType, int player){
+  //TODO : msg_id faux si il y a plusieurs clients (utilisé plusieurs fois)
   last_sent++ ;
   string* header = create_header(reliable, msgType, last_sent) ;
   string* data = &msg.toString() ;
@@ -56,7 +61,9 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
           string_msg.push_back(new string(*header));
           string_msg.push_back(new string(*data));
           auto handler = boost::bind(&ServerImplem::on_sent, this,string_msg,cli_endpoint, _1, _2) ;
+          lock.lock() ;
           sock->async_send_to(buffs, cli_endpoint, handler) ;
+          lock.unlock() ;
         }
       delete header ;
       delete data ;
@@ -68,7 +75,9 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
       string_msg.push_back(data);
       endpoint cli_endpoint = registered_players.at(player) ;
       auto handler = boost::bind(&ServerImplem::on_sent, this,string_msg,cli_endpoint, _1, _2) ;
+      lock.lock() ;
       sock->async_send_to(buffs, cli_endpoint, handler) ;
+      lock.unlock() ;
     }
 }
 
@@ -94,13 +103,16 @@ std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, Ab
 
 }
 
-void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const error_code &error, int){
+void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const error_code &error, int){ 
   //TODO : verify that all the message was transmitted
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
+  int id = get_msg_id(*data[0]) ;
+  DBG << "SERVER: sent message with id : " << id ;
   if(error != 0)
     {
       //Error occured
+      LOG(error) << "SERVER: Send error occured : " << error.message() ;
       NetEvent msg(NetEvent::SEND_ERR) ;
       generate_message(msg) ;
       //free memory
@@ -115,7 +127,7 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
   if(ack_message(*data[0]))
     {
       //ACK needed
-      int id = get_msg_id(*data[0]) ;
+      DBG << "SERVER: sending ACK with id : " << id ;
       ack_set.insert(id) ;
       deadline_timer *t = new deadline_timer(*service) ;
       t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
@@ -133,19 +145,24 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
 }
 
 void ServerImplem::on_receive(const boost::system::error_code &error, int){
-  wait_receive() ;
-  cout << "INFO : Server received message" << endl ;
+  if(client_endpoints.insert(sender_endpoint).second)
+    DBG << "SERVER: Added new Client with address : " <<
+           sender_endpoint.address().to_string() << ":" << sender_endpoint.port();
+  int id = get_msg_id(*header_buff) ;
+  DBG << "SERVER: Received message with id : " << id ;
   if(error != 0)
     {
+      LOG(error) << "SERVER: Error while sending message : " << error.message() ;
       generate_message(NetEvent(NetEvent::RECEIVE_ERR));
+      wait_receive() ;
       return ;
     }
   if(ack_message(*header_buff))
     {
       //Handle Ack
       NetEvent e(NetEvent::ACK) ;
-      int id = get_msg_id(*header_buff) ;
       e.setData(id) ;
+      DBG << "SERVER: sending ACK with id : " << id ;
       //TODO : bad il faudrait juste l'envoyer pas le broadcaster
       broadcastMessage<NetEvent>(e, false);
       bool b = sent_ack.insert(id).second ;
@@ -153,6 +170,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int){
       if(!b)
         {
           //message dupicate
+          wait_receive() ;
           return ;
         }
       else
@@ -165,11 +183,12 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int){
         }
       }
   std::string type = get_msg_type(*header_buff) ;
-  cout << "INFO : Message Type : " << type << endl ;
+  DBG << "SERVER: Message Type : " << type ;
   if(type.compare(NetEvent::getMsgType()) == 0)
     {
       //Handle NetEvent
       NetEvent *event = NetEvent::fromString(*buff) ;
+      DBG << *event ;
       switch(event->getType())
         {
         case NetEvent::NOT_SET :
@@ -188,8 +207,10 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int){
           {
             NetEvent reply(NetEvent::SERV_RESP) ;
             string *reply_msg = &reply.toString() ;
+            lock.lock() ;
             sock->async_send_to(buffer(*reply_msg),sender_endpoint,
                                 [reply_msg](const error_code,int){delete reply_msg;}) ;
+            lock.unlock() ;
             break ;
           }
 
@@ -251,12 +272,14 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int){
             if(ack_set.find(id) != ack_set.end())
               ack_set.erase(id) ;
             delete event ;
+            wait_receive() ;
             return ;
             break ;
           }
         }
     }
   received_messages[type].push_back(new std::string(*buff)) ;
+  wait_receive() ;
 }
 
 
@@ -280,6 +303,7 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
       if(nb_times >= NB_TRY)
         {
           //Cannot reach server
+          LOG(warning) << "SERVER: could not reach client in time" ;
           generate_message(NetEvent(NetEvent::SERV_LOST));
           //free memory
           delete t ;
@@ -289,11 +313,14 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
       else
         {
           //Resend
+          DBG << "SERVER: No ACK, resending message with id : " << id ;
           vector<const_buffer> msg_buff ;
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));
 
+          lock.lock() ;
           sock->async_send_to(msg_buff, cli_endpoint,[](boost::system::error_code,int){}) ;
+          lock.unlock() ;
           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
           t->async_wait(boost::bind(&ServerImplem::check_ack,this, msg, cli_endpoint,nb_times +1,t,_1)) ;
         }
