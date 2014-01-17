@@ -5,6 +5,8 @@
 #include <set>
 #include <thread>
 #include <mutex>
+#include <queue>
+#include <boost/function.hpp>
 
 #include "netEvent.h"
 
@@ -94,7 +96,7 @@ protected :
    */
   std::set<int> ack_set ;
 
-  typedef std::map<std::string,std::vector<std::string *> > mapType ;
+  typedef std::map<std::string,std::vector<std::string> > mapType ;
   /**
    * @brief recieved_messages
    * vector used to store the recieved GameUpdates.
@@ -128,6 +130,17 @@ protected :
    * @brief lock : used to prevent concurrent writings on the socket
    */
   std::mutex lock ;
+
+  /**
+   * @brief pending_writes : stores pending write operations.
+   * Used to prevent concurrent write.
+   */
+  std::queue< boost::function<void(void)> > pending_writes ;
+
+  /**
+   * @brief can_write : true if there is no write operation beeing performed
+   */
+  bool can_write ;
 
   /**
    * @brief shutdown
@@ -173,6 +186,16 @@ protected :
    * @return : a HEADER_SIZE lenght string representing the header of the message.
    */
   std::string* create_header(bool reliable, std::string type, int id) ;
+
+  /**
+   * @brief write_buff : allow write operation in a concurrent way
+   * @param buffers : the buffers to send
+   * @param : the endpoint to send the message to, default to NULL, meaning the socket is already connected
+   * @param hanlder : the handler that will be called when the write op is finished.
+   */
+  void write_buff(std::vector<boost::asio::const_buffer> buffers,
+                  boost::function<void(const error_code&, int)> handler,
+                  endpoint* rec_endpoint = NULL) ;
 
 
 };

@@ -118,12 +118,12 @@ bool DummyServer::handle_netEvent(NetEvent& event, DummyClient *client){
         break ;
       }
     case NetEvent::PLAYER_JOIN : {
-        int player = *((int *) event.getData()) ;
+        int player = event.getData() ;
         players[player] = client;
         break ;
       }
     case NetEvent::PLAYER_QUIT : {
-        int player = *((int *) event.getData()) ;
+        int player = event.getData() ;
         players.erase(player);
         break ;
       }

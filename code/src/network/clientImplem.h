@@ -71,7 +71,7 @@ protected :
     * This function is responsible to call further operations to ensure
     * we received a ACK
     */
-    void on_sent(std::vector<std::string*> &buffer, const error_code &error, int) ;
+    void on_sent(const std::vector<std::string*> &buffer, const error_code &error, int) ;
 
     /**
      * @brief on_recieve
