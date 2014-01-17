@@ -138,15 +138,15 @@ int main(int argc, char ** argv) {
   int sizeFenetre[3], b;
   bool isFullScreen;
   sf::VideoMode video_mode;
-  if (DEBUG) {
+  /*  if (DEBUG) {
     b = 1;
     isFullScreen = true;
     video_mode = sf::VideoMode::getDesktopMode();
-  } else {
+    } else {*/
     b = interface_initiale(sizeFenetre, &isFullScreen);
     video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1],
 			       sizeFenetre[2]);
-  }
+    //}
 
   if (b == 0) {
     return 0;

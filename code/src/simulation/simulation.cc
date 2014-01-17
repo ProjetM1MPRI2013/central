@@ -510,7 +510,7 @@ void Simulation::run(sf::Time dt) {
         if (tempNPC->getUuid()!= (*it)->getUuid()) {
           const std::string id1 = boost::lexical_cast<std::string>((*it)->getUuid());
           const std::string id2 = boost::lexical_cast<std::string>(tempNPC->getUuid());
-          printf("NPC %s: neighbour %s\n",id1.c_str(),id2.c_str());
+          //printf("NPC %s: neighbour %s\n",id1.c_str(),id2.c_str());
         }
       }
     }
