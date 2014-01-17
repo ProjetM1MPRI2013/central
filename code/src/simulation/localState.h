@@ -3,8 +3,9 @@
 
 #include "player.h"
 #include "generation1.h"
+#include "simulation.h"
 class Tile; // forward declaration
-class Simulation; //forward declaration
+//class Simulation; //forward declaration
 class Player;
 
 
@@ -20,15 +21,15 @@ enum Layers {
  * Interface to access the current game state
  */
 
-class LocalState {
+class LocalState : public Simulation{
  public :
-  /**
+    /**
    * @brief LocalState
    * @param _player : a player to which this local state belongs
    * @param _seed : a seed used for map creating
    * Default constructor
    */
-  LocalState(Player& _player, std::string _seed);
+  LocalState(std::string _seed, const Player& _player);
   /**
    * @brief getTile
    * @param p : position of the tile
@@ -73,17 +74,11 @@ class LocalState {
   private :
   sf::Time localtime;
   /**
-   * @brief localtime_ms
-   * local time in milliseconds
-   */
-  float localtime_ms;
-  /**
    * @brief npc_list
    * An npc for which this local state exists
    */
   std::list<NPC> npc_list;
-  Player& owner_player;
-  int view_range;
+  Player owner_player;
 
   Geography *local_map;
 } ;

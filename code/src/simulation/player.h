@@ -2,8 +2,8 @@
 #define PLAYER_H
 
 #include "position.h"
-class Simulation;
-#include "simulation.h"
+//class Simulation;
+//#include "simulation.h"
 //#include "scenario/Stuff.h"
 class Stuff;
 #include "SFML/System.hpp"

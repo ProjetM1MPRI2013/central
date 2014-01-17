@@ -1,9 +1,9 @@
 #include "localState.h"
 
-LocalState::LocalState(Player& _player, std::string _seed):
+LocalState::LocalState(std::string _seed, const Player& _player) : Simulation(_seed, std::vector<Player*>()),
   owner_player(_player){
+  addPlayer(&owner_player);
   local_map = (Geography*) new Generation1(_seed);
-//  view_range = 10;
 }
 
 sf::Time &LocalState::getLocalTime(){
