@@ -1,7 +1,7 @@
 #include "chat_event.h"
 #include "assert.h"
 
-const std::string ChatEvent::MSG_TYPE = "chatevent" ;
+const std::string ChatEvent::MSG_TYPE = "chateven" ;
 
 ChatEvent::ChatEvent() {
 	data = "";
@@ -12,13 +12,13 @@ std::string ChatEvent::getMsgType(){
 }
 
 std::string& ChatEvent::toString(){
-  //not implemented yet
-  assert(false) ;
+  return *(new std::string(data)) ;
 }
 
 ChatEvent* ChatEvent::fromString(std::string &msg){
-  //not implemented yet
-  assert(false) ;
+  ChatEvent* event = new ChatEvent() ;
+  event->setData(msg) ;
+  return event ;
 }
 void ChatEvent::setData(std::string dataString) {
 	this->data = dataString;
