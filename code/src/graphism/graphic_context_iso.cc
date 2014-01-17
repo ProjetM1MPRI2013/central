@@ -2,6 +2,7 @@
 #include "../simulation/npc.h"
 #include <list>
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 
 #define DEBUG true
@@ -10,7 +11,7 @@
   GraphicContextIso::GraphicContextIso(Geography* map, Simulation* sim)
   {
     this->map = map;
-    this->sim = sim;  
+    this->sim = sim;
 
     std::fstream file;
     file.open("../graphism/animations",std::fstream::in);
@@ -217,8 +218,8 @@ void GraphicContextIso::load()
 		  sf::Texture t;
       DBG << "chargement de " << s;
 		  assert(t.loadFromFile(s));
-		  SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(), .originY = tilec->getPictureY()};
-		  tilemap[s] = stp;
+          SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(), .originY = tilec->getPictureY()};
+          tilemap[s] = stp;
 		  tilec->setTexture(&tilemap[s]);
 		}
             }

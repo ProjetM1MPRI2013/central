@@ -1,7 +1,7 @@
 #ifndef NPC_H
 #define NPC_H
 #include "trajectory.h"
-#include "localState.h"
+//#include "simulation.h"
 #include "positionable.h"
 #include "position.h"
 #include "withUuid.h"
