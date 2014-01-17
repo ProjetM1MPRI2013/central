@@ -28,7 +28,7 @@ public:
   void run(sf::RenderWindow* window);
 private:
   //les coordonnées du point en haut à gauche. 0,0 veut dire le bord du haut à gauche de l'écran est le bord du haut à gauche de l'écran
-  int x,y;
+  int x = 0,y = 0;
   int zoom;
   int Tilesbite[10000];
   Simulation* simu;

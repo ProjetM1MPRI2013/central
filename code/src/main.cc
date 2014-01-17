@@ -26,6 +26,7 @@
 #include <random>
 
 #define DEBUG true
+#define TERRO false // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -43,8 +44,12 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   simu.setScenario(&scenar);
   simu.setClient(clientPtr);
   GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
-  graContIso.load();
-  //TileMap tilemap = TileMap(&simu, &geo);
+  TileMap tilemap = TileMap(&simu, &geo);
+  if (TERRO) {
+    graContIso.load();
+  } else { 
+    /* MAYOR */ 
+  }
   //geo.printMatrix();
 
 
@@ -52,22 +57,25 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
   std::uniform_real_distribution<float> npcDistY(0.01,geo.getMapHeight()-0.01);
 
+  if (TERRO) {
+    for (int i=0;i<500;i++) {
+      //[joseph] ceci est un NPC de test
+      //on en génère 500 à la création de la map, puis plus après
+      //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
+      
+      Position start = Position(npcDistX(npcGen),npcDistY(npcGen));
+      Position target = Position(npcDistX(npcGen),npcDistY(npcGen));
+      while (start.isInTile(geo).getSpeed()==0) {
+        start = Position(npcDistX(npcGen),npcDistY(npcGen));
+      }
+      while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
+        target = Position(npcDistX(npcGen),npcDistY(npcGen));
+      }
+      simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
 
-  for (int i=0;i<500;i++) {
-    //[joseph] ceci est un NPC de test
-    //on en génère 500 à la création de la map, puis plus après
-    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-    Position start = Position(npcDistX(npcGen),npcDistY(npcGen));
-    Position target = Position(npcDistX(npcGen),npcDistY(npcGen));
-    while (start.isInTile(geo).getSpeed()==0) {
-      start = Position(npcDistX(npcGen),npcDistY(npcGen));
+      //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+      //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
     }
-    while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
-      target = Position(npcDistX(npcGen),npcDistY(npcGen));
-    }
-    simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
-    //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
-    //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
   }
         
   sf::Clock clock;
@@ -102,10 +110,13 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     }
 
     simu.run(dt);
-    //tilemap.run(window);
-    graContIso.run(window);
-    (*window).setView((*window).getDefaultView());
-    //window.clear();
+    window->clear();
+    if (TERRO) {
+      graContIso.run(window);
+      (*window).setView((*window).getDefaultView());
+    } else { // MAYOR
+      tilemap.run(window);
+    }
     hudTerro.draw();
     (*window).display();
   }

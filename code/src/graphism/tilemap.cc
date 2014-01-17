@@ -3,6 +3,9 @@
 #include "tile.h"
 #include <SFML/Graphics/Transformable.hpp>
 
+#define DEBUG true
+#include "debug.h"
+
 int TileMap::getZoom(){
 	return this->zoom;
 }
@@ -15,8 +18,9 @@ void TileMap::setZoom(int resize){
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 		const int* tiles, unsigned int width, unsigned int height) {
 	// on charge la texture du tileset
-	if (!m_tileset.loadFromFile(tileset))
-		return false;
+  if (!m_tileset.loadFromFile(tileset)) {
+    LOG(error) << "Could not load tileset " << tileset; exit(1);
+  }
 
 	// on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
 	m_vertices.setPrimitiveType(sf::Quads);
@@ -32,7 +36,6 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize,
 			int tu = tileNumber % (m_tileset.getSize().x / 78);
 			int tv = tileNumber / (m_tileset.getSize().x / 78);
 			//std::cout<<" tu= " << tu << " tv= " << tv << std::endl;
-			//sleep(2);
 
 			// on récupère un pointeur vers le quad à définir dans le tableau de vertex
 			sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
@@ -139,17 +142,15 @@ createTiles();
 void TileMap::run(sf::RenderWindow* window){
   this->createTiles();
   //aide au débuggage
-  /*for(int i=0;i<100;i++){
-	  for(int j=0;j<100;j++){
-		std::cout << (Tilesbite[i+j*100]) << "\t";
-	  }
-	  std::cout<<std::endl;
-  };*/
+  //for(int i=0;i<100;i++){
+    //for(int j=0;j<100;j++){
+    //std::cout << (Tilesbite[i+j*100]) << "\t";
+    //}
+    //std::cout<<std::endl;
+  //};
 
-  window->clear();
   //std::cout << "zoom : " << this->zoom << std::endl;
   this->load("../../../sprite/tileset2.png", sf::Vector2u((this->zoom)*100,(this->zoom)*100), Tilesbite , 100, 100);
   createTiles();
   window->draw(*this);
-  window->display();
 }
