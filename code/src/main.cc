@@ -25,6 +25,9 @@
 #include <string>
 #include <random>
 
+#include "localState.h"
+#include "globalState.h"
+
 #define DEBUG true
 #include "debug.h"
 
@@ -35,14 +38,16 @@
 #endif
 
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
-		sf::VideoMode video_mode, Client* clientPtr, std::string seed, sf::RenderWindow* window) {
+                sf::VideoMode video_mode, Client* clientPtr, std::string seed,
+                sf::RenderWindow* window) {
 
   Geography geo = Generation1(seed);
-  Simulation simu = Simulation(&geo,nbPlayers, 1);
-  HScenario scenar = HScenario(simu);
-  simu.setScenario(&scenar);
-  simu.setClient(clientPtr);
-  GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
+
+  LocalState loc = LocalState(&geo,nbPlayers, 1);
+  HScenario scenar = HScenario(loc);
+  loc.setScenario(&scenar);
+  loc.setClient(clientPtr);
+  GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
   graContIso.load();
   //TileMap tilemap = TileMap(&simu, &geo);
   //geo.printMatrix();
@@ -65,14 +70,14 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
       target = Position(npcDistX(npcGen),npcDistY(npcGen));
     }
-    simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
+    loc.addNPC(start,target,1,graContIso.getTexturePack(i%2));
     //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
     //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
   }
         
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
-  HudTerro hudTerro = HudTerro(window, simu);
+  HudTerro hudTerro = HudTerro(window, loc);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
@@ -101,7 +106,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       hudTerro.event(window, event);
     }
 
-    simu.run(dt);
+    loc.run(dt);
     //tilemap.run(window);
     graContIso.run(window);
     (*window).setView((*window).getDefaultView());
@@ -109,27 +114,116 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     hudTerro.draw();
     (*window).display();
   }
+
+  //  Geography geo = Generation1(seed);
+//  Simulation simu = Simulation(&geo,nbPlayers, 1);
+//  HScenario scenar = HScenario(simu);
+//  simu.setScenario(&scenar);
+//  simu.setClient(clientPtr);
+//  GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
+//  graContIso.load();
+//  //TileMap tilemap = TileMap(&simu, &geo);
+//  //geo.printMatrix();
+
+
+//  std::default_random_engine npcGen (42);
+//  std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
+//  std::uniform_real_distribution<float> npcDistY(0.01,geo.getMapHeight()-0.01);
+
+
+//  for (int i=0;i<500;i++) {
+//    //[joseph] ceci est un NPC de test
+//    //on en génère 500 à la création de la map, puis plus après
+//    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
+//    Position start = Position(npcDistX(npcGen),npcDistY(npcGen));
+//    Position target = Position(npcDistX(npcGen),npcDistY(npcGen));
+//    while (start.isInTile(geo).getSpeed()==0) {
+//      start = Position(npcDistX(npcGen),npcDistY(npcGen));
+//    }
+//    while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
+//      target = Position(npcDistX(npcGen),npcDistY(npcGen));
+//    }
+//    simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
+//    //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+//    //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
+//  }
+
+//  sf::Clock clock;
+//  sf::Time dt = sf::Time::Zero;
+//  HudTerro hudTerro = HudTerro(window, simu);
+//  //hudTerro.init();
+//  while ((*window).isOpen()) {
+//    dt = clock.restart();
+//    hudTerro.init();
+//    sf::Event event;
+//    while ((*window).pollEvent(event)) {
+//      if (event.type == sf::Event::Closed) {
+//	(*window).close();
+//      }
+//      if (event.type == sf::Event::KeyPressed) {
+//	if (event.key.code == sf::Keyboard::F11) {
+//	  if (isFullScreen) {
+//	    (*window).create(video_mode, "Game Interface");
+//	    isFullScreen = false;
+//	  } else {
+//	    (*window).create(video_mode, "Game Interface",
+//                             sf::Style::Fullscreen);
+//	    isFullScreen = true;
+//	  }
+//	}
+//	if (CLOSE_KEYS) {
+//	  (*window).close();
+//	}
+
+//      }
+//      hudTerro.event(window, event);
+//    }
+
+//    simu.run(dt);
+//    //tilemap.run(window);
+//    graContIso.run(window);
+//    (*window).setView((*window).getDefaultView());
+//    //window.clear();
+//    hudTerro.draw();
+//    (*window).display();
+//  }
+
   return;
 }
 
 void serverLoop(int id,int nbPlayers, Server* serverPtr,
 		std::string seed, sf::RenderWindow* window) {
-  
-  Geography geo = Generation1(seed);
-  Simulation simu = Simulation(&geo,nbPlayers, id);
-  simu.addPlayer(new Player(1,0,0));
-  simu.getPlayerByID(1)->isServer = 1;
-  simu.setServer(serverPtr);
+
+    Geography geo = Generation1(seed);
+    GlobalState glob = GlobalState(&geo,nbPlayers, id);
+    glob.addPlayer(new Player(1,0,0));
+    glob.getPlayerByID(1)->isServer = 1;
+    glob.setServer(serverPtr);
+
+    sf::Clock clock;
+    sf::Time dt = sf::Time::Zero;
+    while (window->isOpen()) {
+        dt = clock.restart();
+//        sf::Event event;
+        glob.run(dt);
+    }
+
+//  Geography geo = Generation1(seed);
+//  Simulation simu = Simulation(&geo,nbPlayers, id);
+//  simu.addPlayer(new Player(1,0,0));
+//  simu.getPlayerByID(1)->isServer = 1;
+//  simu.setServer(serverPtr);
   
 
-  sf::Clock clock;
-  sf::Time dt = sf::Time::Zero;
-  while (window->isOpen()) {
-    dt = clock.restart();
-    sf::Event event;
-    simu.run(dt);
-  }
-  
+//  sf::Clock clock;
+//  sf::Time dt = sf::Time::Zero;
+//  while (window->isOpen()) {
+//    dt = clock.restart();
+//    sf::Event event;
+//    simu.run(dt);
+//  }
+
+
   return;
 }
 

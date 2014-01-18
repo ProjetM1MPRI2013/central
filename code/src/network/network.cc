@@ -31,7 +31,7 @@ Client* Network::createDummyClient(Server* server){
 }
 
 
-UpdateGenerator *Network::createUpdater(Simulation *globalState, Server *server){
+UpdateGenerator *Network::createUpdater(GlobalState *globalState, Server *server){
   return new UpdateGenerator(globalState, server) ;
 }
 

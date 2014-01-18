@@ -30,6 +30,8 @@ class LocalState : public Simulation{
    * Default constructor
    */
   LocalState(std::string _seed, const Player& _player);
+  LocalState(Geography* map,int nbPlayers,int id);
+
   /**
    * @brief getTile
    * @param p : position of the tile
@@ -39,37 +41,30 @@ class LocalState : public Simulation{
   Tile& getTile(Position p, Layers l);
 
    /**
-   * @brief getPlayerLocalState
+   * @brief getOwner
    * @return a reference to the player to whom belongs this localState
    */
-  Player& getOwnerLocalState();
+  Player& getOwner();
 
   /**
    * @brief getLocalMap
    * @return a reference to a localmap
    */
-  Geography& getLocalMap();
-  /**
-   * @brief LocalState::getRelativePlayerTile
-   * @param x : number of tiles to the right from the players position
-   * @param y : number of tiles to the top from the players position
-   * @return a reference to a Tile if on map, or owner's tile otherwise
-   * getRelativePlayerTile(1, 0) returns a right neighbor tile
-   */
   Tile& getRelativePlayerTile(int x, int y);
 
   /**
-   * @brief addNPC
-   * TODO : implement it later
+   * @brief Set the Client object
    */
-  void addNPC();
+  void setClient(Client*);
+
+  Client* getClient();
 
   sf::Time& getLocalTime();
   /**
-   * @brief update
+   * @brief run
    * Updates all parameters of local state.
    */
-  void update();
+  void run(sf::Time dt);
 
   private :
   sf::Time localtime;
@@ -79,7 +74,5 @@ class LocalState : public Simulation{
    */
   std::list<NPC> npc_list;
   Player owner_player;
-
-  Geography *local_map;
 } ;
 #endif

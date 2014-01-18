@@ -6,8 +6,8 @@
 #include "updateGenerator.h"
 #include "localStateUpdater.h"
 
-class Simulation ;
-class LocalState;
+//class Simulation ;
+//class LocalState;
 
 /**
  * @brief The Network class
@@ -74,7 +74,7 @@ public :
      * @param server : will be used to send the messages
      * @return A new updater in charge of synchronizing the global state.
      */
-    static UpdateGenerator* createUpdater(Simulation* globalState, Server* server) ;
+    static UpdateGenerator* createUpdater(GlobalState* globalState, Server* server) ;
 
     /**
      * @brief createUpdater : creates a new updater in charge of receiving and applying updates received from the
