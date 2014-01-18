@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <set>
 #include <thread>
+#include <mutex>
 
 #include "netEvent.h"
 
@@ -122,6 +123,11 @@ protected :
    * (basically a few seconds after the message is received).
    */
   std::set<int> sent_ack ;
+
+  /**
+   * @brief lock : used to prevent concurrent writings on the socket
+   */
+  std::mutex lock ;
 
   /**
    * @brief shutdown

@@ -57,9 +57,6 @@ protected :
      */
     endpoint sender_endpoint ;
 
-
-
-
     /**
     * @brief on_sent
     * Function called after a send operation has been made.

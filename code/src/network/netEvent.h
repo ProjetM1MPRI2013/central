@@ -203,4 +203,6 @@ private :
 
 };
 
+std::ostream& operator<<(std::ostream& os, const NetEvent& obj) ;
+
 #endif // NETEVENT_H
