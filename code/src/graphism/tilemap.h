@@ -18,7 +18,7 @@
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
-  TileMap(Simulation* glob, Geography* geo);
+  TileMap(Simulation* simul_state, Geography* geo);
   bool load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
   void setZoom(int resize);
   int getZoom();
@@ -33,7 +33,7 @@ private:
   int x = 0,y = 0;
   int zoom;
   int Tilesbite[10000];
-  Simulation* glob;
+  Simulation* simul_state;
   Geography* geo;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   void createTiles();
