@@ -22,7 +22,7 @@ void LocalStateUpdater::update(){
 }
 
 void LocalStateUpdater::applyPlayerUpdate(PlayerUpdate &p_update){
-  localState->getOwnerLocalState().getPosition()->setX(p_update.pos.getX());
-  localState->getOwnerLocalState().getPosition()->setY(p_update.pos.getY());
+  localState->getOwner().getPosition()->setX(p_update.pos.getX());
+  localState->getOwner().getPosition()->setY(p_update.pos.getY());
   return ;
 }

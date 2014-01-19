@@ -30,18 +30,14 @@ class Simulation : public EventSource {
 
  public :
 
-  /**
-   * @brief Set the Server object
-   */
-  virtual void setServer(Server*);
+//  /**
+//   * @brief Set the Server object
+//   */
+//  virtual void setServer(Server*);
 
-  /**
-   * @brief Set the Client object
-   */
-  virtual void setClient(Client*);
-
+//  //TODO {denys} : remade all references
+//  virtual void setClient(Client*);
   virtual Client* getClient();
-
   /**
    * @brief Get a player by is playerID;
    */
@@ -81,7 +77,7 @@ class Simulation : public EventSource {
    * @param dt: short lapse of time
    * Update all the parameters of Simulation
    */
-  virtual void run(sf::Time dt);
+//  virtual void run(sf::Time dt);
 
   /*methode qui agit sur la matrice pour lisser la peur*/
   
@@ -131,6 +127,8 @@ class Simulation : public EventSource {
   std::list<Agent*> agents;
   Client* client;
   Server* server;
+
+
   HScenario* scenario;
   bool isServer;
   int MAP_SIZE;
@@ -138,13 +136,18 @@ class Simulation : public EventSource {
   const int TILE_SIZE_Y = 1;
   int NB_JOUEURS;
   int Id; //0 pour le maire = le serveur, i pour le joueur i
+
+  //-----------------------------------------------------------//
+  /*Question {denys} : For what we use these */
   int* sous; //tableau des sous de tout le monde
   int mesSous;
+  /*-----------------------END--------------------------------*/
+
   float absoluteTime;
   float relativeTime;
   float smallTime;
   Geography* map;
-  Geography* oldMap;
+//  Geography* oldMap;
   std::list<Player*> players;
   std::list<NPC *> NPCs;
   std::list<ScenarioAction *> pendingActions;

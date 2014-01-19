@@ -81,7 +81,7 @@ Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
 
 bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
 void Drop::doAction () {
-	this->simulation->getClient()->sendMessage(*this,true);
+    this->simulation->getClient()->sendMessage(*this,true);
 };
 
 void Drop::addPendingActions(HostSimulation* hs){
@@ -97,7 +97,7 @@ bool Plant::isActionPossible(){
 	  );
 };
 void Plant::doAction () {
-	this->simulation->getClient()->sendMessage(*this,true);
+    this->simulation->getClient()->sendMessage(*this,true);
 };
 
 void Plant::addPendingActions(HostSimulation* hs){

@@ -1,6 +1,7 @@
 #include "ActionsPC.h"
 #include "../simulation/simulation.h"
-
+#include "globalState.h"
+#include "localState.h"
 
 
 bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());}
@@ -31,8 +32,8 @@ AddCam::AddCam(const AddCam& a) : Action("AddCam",a.simulation){
 }
 
 
-void AddCam::doAction() {this->simulation->getClient()->sendMessage(*this,true);};
-void AddCop::doAction() {this->simulation->getClient()->sendMessage(*this,true);};
+void AddCam::doAction() {simulation->getClient()->sendMessage(*this,true);}
+void AddCop::doAction() {simulation->getClient()->sendMessage(*this,true);}
 
 
 //AbstractMessage methods implementation

@@ -25,8 +25,11 @@
 #include <string>
 #include <random>
 
+#include "localState.h"
+#include "globalState.h"
+
 #define DEBUG true
-#define TERRO false // ~TERRO => MAYOR
+#define TERRO true // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -36,22 +39,24 @@
 #endif
 
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
-		sf::VideoMode video_mode, Client* clientPtr, std::string seed, sf::RenderWindow* window) {
+                sf::VideoMode video_mode, Client* clientPtr, std::string seed,
+                sf::RenderWindow* window) {
 
   Geography geo = Generation1(seed);
-  Simulation simu = Simulation(&geo,nbPlayers, 1);
-  HScenario scenar = HScenario(simu);
-  simu.setScenario(&scenar);
-  simu.setClient(clientPtr);
-  GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
-  TileMap tilemap = TileMap(&simu, &geo);
-  if (TERRO) {
-    graContIso.load();
-  } else { 
-    /* MAYOR */ 
-  }
-  //geo.printMatrix();
 
+  LocalState loc = LocalState(&geo,nbPlayers, 1);
+  HScenario scenar = HScenario(loc);
+  loc.setScenario(&scenar);
+  loc.setClient(clientPtr);
+  GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
+  graContIso.load();
+  TileMap tilemap = TileMap(&loc, &geo);
+  //geo.printMatrix();
+  if (TERRO) {
+     graContIso.load();
+   } else {
+     /* MAYOR */
+   }
 
   std::default_random_engine npcGen (42);
   std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
@@ -71,7 +76,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
         target = Position(npcDistX(npcGen),npcDistY(npcGen));
       }
-      simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
+      loc.addNPC(start,target,1,graContIso.getTexturePack(i%2));
 
       //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
       //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
@@ -80,7 +85,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
         
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
-  HudTerro hudTerro = HudTerro(window, simu);
+  HudTerro hudTerro = HudTerro(window, loc);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
@@ -109,7 +114,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       hudTerro.event(window, event);
     }
 
-    simu.run(dt);
+    loc.run(dt);
     window->clear();
     if (TERRO) {
       graContIso.run(window);
@@ -120,27 +125,27 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     hudTerro.draw();
     (*window).display();
   }
+
   return;
 }
 
 void serverLoop(int id,int nbPlayers, Server* serverPtr,
 		std::string seed, sf::RenderWindow* window) {
-  
-  Geography geo = Generation1(seed);
-  Simulation simu = Simulation(&geo,nbPlayers, id);
-  simu.addPlayer(new Player(1,0,0));
-  simu.getPlayerByID(1)->isServer = 1;
-  simu.setServer(serverPtr);
-  
 
-  sf::Clock clock;
-  sf::Time dt = sf::Time::Zero;
-  while (window->isOpen()) {
-    dt = clock.restart();
-    sf::Event event;
-    simu.run(dt);
-  }
-  
+    Geography geo = Generation1(seed);
+    GlobalState glob = GlobalState(&geo,nbPlayers, id);
+    glob.addPlayer(new Player(1,0,0));
+    glob.getPlayerByID(1)->isServer = 1;
+    glob.setServer(serverPtr);
+
+    sf::Clock clock;
+    sf::Time dt = sf::Time::Zero;
+    while (window->isOpen()) {
+        dt = clock.restart();
+//        sf::Event event;
+        glob.run(dt);
+    }
+
   return;
 }
 
@@ -269,4 +274,4 @@ int main(int argc, char ** argv) {
 	//return 0;
 	}*/
 }
-;
+

@@ -131,8 +131,8 @@ int TileMap::getY(){
 	return this->y;
 }
 
-TileMap::TileMap(Simulation* simu, Geography* geo){
-this->simu=simu;
+TileMap::TileMap(Simulation* _glob, Geography* geo){
+glob=_glob;
 this->geo=geo;
 this->zoom = 2;
 this->load("../../../sprite/tileset.png", sf::Vector2u(10,10), Tilesbite , 100, 100);

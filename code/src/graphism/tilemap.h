@@ -13,10 +13,12 @@
 #include "../network/netEvent.h"
 #include <chat_event.h>
 #include "../generation/geography.h"
+#include "simulation.h"
+
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
-  TileMap(Simulation* simu, Geography* geo);
+  TileMap(Simulation* glob, Geography* geo);
   bool load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
   void setZoom(int resize);
   int getZoom();
@@ -31,7 +33,7 @@ private:
   int x = 0,y = 0;
   int zoom;
   int Tilesbite[10000];
-  Simulation* simu;
+  Simulation* glob;
   Geography* geo;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   void createTiles();

@@ -1,10 +1,10 @@
 #include <assert.h>
 
 #include "updateGenerator.h"
-#include "simulation/simulation.h"
+#include "simulation/globalState.h"
 #include "playerUpdate.h"
 
-UpdateGenerator::UpdateGenerator(Simulation* globalState, Server* server) :
+UpdateGenerator::UpdateGenerator(GlobalState *globalState, Server* server) :
   globalState(globalState), server(server)
 {
 }

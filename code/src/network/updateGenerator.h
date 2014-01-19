@@ -2,7 +2,7 @@
 #define UPDATEGENERATOR_H
 #include "server.h"
 #include "gameUpdate.h"
-class Simulation;
+class GlobalState;
 class Player ;
 
 /**
@@ -19,7 +19,7 @@ public:
    * @param globalState : the global state that will be synced over the network
    * @param server : the server used for communication
    */
-  UpdateGenerator(Simulation* globalState, Server* server);
+  UpdateGenerator(GlobalState* globalState, Server* server);
 
   /**
    * @brief update : A call to this method will generate the gameUpdates for all the Clients, and will
@@ -28,7 +28,7 @@ public:
   void update() ;
 
 private :
-  Simulation* globalState ;
+  GlobalState* globalState ;
   Server* server ;
 
   /**

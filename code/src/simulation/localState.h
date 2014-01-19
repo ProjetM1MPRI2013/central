@@ -3,8 +3,9 @@
 
 #include "player.h"
 #include "generation1.h"
+#include "simulation.h"
 class Tile; // forward declaration
-class Simulation; //forward declaration
+//class Simulation; //forward declaration
 class Player;
 
 
@@ -20,15 +21,17 @@ enum Layers {
  * Interface to access the current game state
  */
 
-class LocalState {
+class LocalState : public Simulation{
  public :
-  /**
+    /**
    * @brief LocalState
    * @param _player : a player to which this local state belongs
    * @param _seed : a seed used for map creating
    * Default constructor
    */
-  LocalState(Player& _player, std::string _seed);
+  LocalState(std::string _seed, const Player& _player);
+  LocalState(Geography* map,int nbPlayers,int id);
+
   /**
    * @brief getTile
    * @param p : position of the tile
@@ -38,53 +41,38 @@ class LocalState {
   Tile& getTile(Position p, Layers l);
 
    /**
-   * @brief getPlayerLocalState
+   * @brief getOwner
    * @return a reference to the player to whom belongs this localState
    */
-  Player& getOwnerLocalState();
+  Player& getOwner();
 
   /**
    * @brief getLocalMap
    * @return a reference to a localmap
    */
-  Geography& getLocalMap();
-  /**
-   * @brief LocalState::getRelativePlayerTile
-   * @param x : number of tiles to the right from the players position
-   * @param y : number of tiles to the top from the players position
-   * @return a reference to a Tile if on map, or owner's tile otherwise
-   * getRelativePlayerTile(1, 0) returns a right neighbor tile
-   */
   Tile& getRelativePlayerTile(int x, int y);
 
   /**
-   * @brief addNPC
-   * TODO : implement it later
+   * @brief Set the Client object
    */
-  void addNPC();
+  void setClient(Client*);
+
+  Client* getClient();
 
   sf::Time& getLocalTime();
   /**
-   * @brief update
+   * @brief run
    * Updates all parameters of local state.
    */
-  void update();
+  void run(sf::Time dt);
 
   private :
   sf::Time localtime;
-  /**
-   * @brief localtime_ms
-   * local time in milliseconds
-   */
-  float localtime_ms;
   /**
    * @brief npc_list
    * An npc for which this local state exists
    */
   std::list<NPC> npc_list;
-  Player& owner_player;
-  int view_range;
-
-  Geography *local_map;
+  Player owner_player;
 } ;
 #endif

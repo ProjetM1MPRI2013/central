@@ -1,7 +1,9 @@
 #include "npc.h"
-#include "localState.h"
-#include "simulation.h"
-#include "trajectory.h"
+//#include "localState.h"
+//#include "simulation.h"
+
+/*it's included in npc.h*/
+//#include "trajectory.h"
 
 #define DEBUG false
 
