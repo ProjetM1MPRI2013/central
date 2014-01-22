@@ -29,13 +29,3 @@ Client* Network::createDummyClient(Server* server){
   assert(ser != NULL) ;
   return new DummyClient(ser) ;
 }
-
-/*
-UpdateGenerator *Network::createUpdater(Simulation *globalState, Server *server){
->>>>>>> Stashed changes
-  return new UpdateGenerator(globalState, server) ;
-}
-
-LocalStateUpdater* createUpdater(LocalState* localState, Client* client) {
-  return new LocalStateUpdater(localState, client) ;
-}*/

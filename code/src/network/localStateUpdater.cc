@@ -1,7 +1,6 @@
 #include "localStateUpdater.h"
 #include "simulation/simulation.h"
 
-#define DEBUG true
 #include "debug.h"
 
 LocalStateUpdater::LocalStateUpdater(Simulation* state, Client* client) :
@@ -41,6 +40,5 @@ void LocalStateUpdater::applyPlayerUpdate(PlayerUpdate &p_update){
 }
 
 void LocalStateUpdater::applyNpcUpdate(NpcUpdate &npc_update){
-  localState->getMap()->get
 
 }
