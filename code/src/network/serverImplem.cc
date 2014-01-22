@@ -18,6 +18,7 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
   endpoint local_endpoint = *resolver.resolve(query) ;
   sock->open(ip::udp::v4());
   sock->bind(local_endpoint);
+  updateGen = NULL ;
   DBG << "SERVER: Created with address : " << local_endpoint.address().to_string()
       << ":" << local_endpoint.port() ;
   wait_receive();
@@ -336,4 +337,17 @@ void ServerImplem::wait_receive(){
   vec.push_back(buffer((char *) header_buff-> c_str(), HEADER_SIZE));
   vec.push_back(buffer((char *) buff-> c_str(), BUFF_SIZE));
   sock->async_receive_from(vec, sender_endpoint, boost::bind(&ServerImplem::on_receive,this,_1,_2)) ;
+}
+
+void ServerImplem::setSimulation(GlobalState *simu) {
+  if(updateGen != NULL)
+    LOG(error) << "SERVER: Simulation already set" ;
+  updateGen = new UpdateGenerator(simu, this) ;
+}
+
+void ServerImplem::update(sf::Time dt) {
+  if(updateGen == NULL)
+    LOG(warning) << "SERVER: Cannot update, no Simulation attached" ;
+  else
+    updateGen->update(dt);
 }

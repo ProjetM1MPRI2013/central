@@ -4,8 +4,12 @@
 
 #include <vector>
 #include <string>
+#include <SFML/System/Clock.hpp>
+
 #include "clientInfo.h"
 #include "abstractMessage.h"
+
+class LocalState ;
 
 /**
  * @brief The Client class
@@ -30,21 +34,20 @@ public :
    * call 'sendMessage<MsgType>(message)' to send a message of type
    * MsgType over the network.
    *
-   * The class MsgType should extend the AbstractMessage insterface.
+   * The class MsgType should extend the AbstractMessage interface.
    * In particular, the getMsgType function will be used to determine the
    * type of a recieved message. Thus, two different classes should not
    * return the same value (except if they are serializable compatible).
    *
-   * Warning : inheritance is not supported. ie :
+   * Warning : with inheritance :
    *    AbstractMessage
    *           |
    *      MessageBase
    *           |
    *      MessageChild
    *
-   * Then you should not try to send messages of the
-   * MessageChild class. If you need to, tell me, some changes might be required
-   * in the AbstractMessage interface.
+   * Calling receiveMessage<MessageBase>() will only return messages sent using
+   * sendMessage<MessagesBase>(), and not instances of MessageChild.
    */
   template<typename MsgType>
   void sendMessage(MsgType& msg, bool reliable = true){
@@ -74,10 +77,26 @@ public :
     return result2 ;
   }
 
-  // The only reason for private members in this interface is that
-  // templates cannot be declared virtual.
+  /**
+   * @brief setLocalState : sets the simulation associated with this server instance.
+   * @param simu (for now of type Simulation)
+   * This method should be called before any call to update().
+   * Will generate an error Log if it is called more than once on the same client.
+   */
+  virtual void setLocalState(LocalState * simu) = 0 ;
+
+  /**
+   * @brief update : sends updates of the localState object associated to this client.
+   * Should not be called when the simulation has not already been set. Will generate
+   * a warning log otherwise.
+   */
+  virtual void update(sf::Time dt) = 0 ;
 
   virtual ~Client(){}
+
+
+  // The only reason for private members in this interface is that
+  // templates cannot be declared virtual.
 protected :
   /**
    * @brief send_message : (Internal do not use) Sends a message with the type given as a parameter.

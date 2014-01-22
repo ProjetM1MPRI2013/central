@@ -2,8 +2,9 @@
 #define LOCALSTATEUPDATER_H
 #include "client.h"
 #include "playerUpdate.h"
+#include "npcUpdate.h"
 
-class LocalState;
+class Simulation;
 
 /**
  * @brief The LocalStateUpdater class : class used to handle and apply updates received by the server
@@ -17,7 +18,7 @@ public:
    * @param state : the local state this updater is attached to
    * @param client : the client used to receive the updates
    */
-  LocalStateUpdater(LocalState* state, Client* client);
+  LocalStateUpdater(Simulation* state, Client* client);
 
   /**
    * @brief update : updates the local state according to the updates received from the server.
@@ -25,13 +26,15 @@ public:
    *  -> call receiveMessages<GameUpdate>() on the client
    *  -> apply the received updates to the local state.
    */
-  void update() ;
+  void update(sf::Time dt) ;
 
 private :
-  LocalState * localState ;
+  Simulation * localState ;
   Client * client ;
 
   void applyPlayerUpdate(PlayerUpdate &p_update) ;
+  void applyNpcUpdate(NpcUpdate & npc_update) ;
+
 };
 
 #endif // LOCALSTATEUPDATER_H

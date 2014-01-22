@@ -3,6 +3,7 @@
 
 #include "clientImplem.h"
 #include "debug.h"
+#include "simulation/localState.h"
 
 
 
@@ -10,7 +11,8 @@ using namespace boost::asio ;
 using namespace std ;
 
 
-ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_endpoint() {
+ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_endpoint(),
+  locStateUpdater(NULL){
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
@@ -307,4 +309,20 @@ void ClientImplem::wait_receive(){
   vec.push_back(buffer((char *) header_buff-> c_str(), HEADER_SIZE));
   vec.push_back(buffer((char *) buff-> c_str(), BUFF_SIZE));
   sock->async_receive(vec, boost::bind(&ClientImplem::on_receive,this,_1,_2)) ;
+}
+
+void ClientImplem::setLocalState(LocalState *simu) {
+  if(locStateUpdater != NULL)
+    LOG(error) << "CLIENT: LocalState already set" ;
+  locStateUpdater = new LocalStateUpdater(simu, this) ;
+  NetEvent coevent(NetEvent::PLAYER_JOIN) ;
+  coevent.setData(simu->getPlayer()->getID());
+  sendMessage<NetEvent>(coevent) ;
+}
+
+void ClientImplem::update(sf::Time dt) {
+  if(locStateUpdater == NULL)
+    LOG(warning) << "CLIENT: Cannot update, no Local State attached" ;
+  else
+    locStateUpdater->update(dt);
 }

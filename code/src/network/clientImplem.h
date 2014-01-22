@@ -9,6 +9,7 @@
 #include "client.h"
 #include "netEvent.h"
 #include "comunicatorImplem.h"
+#include "localStateUpdater.h"
 
 
 
@@ -47,6 +48,10 @@ public :
     ClientImplem(ClientInfo& c_info) ;
     virtual~ClientImplem() ;
 
+    virtual void setLocalState(LocalState * simu) ;
+
+    virtual void update(sf::Time dt) ;
+
 private :
     //Prevent copy
     ClientImplem(ClientImplem&) = delete ;
@@ -63,6 +68,11 @@ protected :
      * Address of the server
      */
     endpoint server_endpoint ;
+
+    /**
+     * @brief locStateUpdater : used when update is called
+     */
+    LocalStateUpdater* locStateUpdater ;
 
 
    /**

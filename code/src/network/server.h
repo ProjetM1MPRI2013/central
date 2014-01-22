@@ -3,8 +3,12 @@
 
 #include <vector>
 #include <string>
+#include <SFML/System/Clock.hpp>
+
 #include "serverInfo.h"
 #include "abstractMessage.h"
+
+class GlobalState ;
 
 
 /**
@@ -94,6 +98,24 @@ public :
    * @return true if the player is connected, false otherwise.
    */
   virtual bool isConnected(int player) = 0 ;
+
+
+  /**
+   * @brief setSimulation : sets the simulation associated with this server instance.
+   * @param simu
+   * This method should be called before any call to update().
+   * Will generate an error Log if it is called more than once on the same server.
+   */
+  virtual void setSimulation(GlobalState * simu) = 0 ;
+
+  /**
+   * @brief update : sends updates of the simulation object associated to this server.
+   * Should not be called when the simulation has not already been set. Will generate
+   * a warning log otherwise.
+   */
+  virtual void update(sf::Time dt) = 0 ;
+
+
 
   virtual ~Server() {}
 

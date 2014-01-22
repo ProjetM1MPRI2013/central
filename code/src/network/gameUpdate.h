@@ -43,7 +43,6 @@ public:
      * @brief setPlayerUpdate
      * @param playerUpdate
      * Sets the player update associated to this GameUpdate
-     * The GameUpdate gain ownership of the PlayerUpdate.
      */
     void setPlayerUpdate(const PlayerUpdate& playerUpdate) ;
 
@@ -56,7 +55,6 @@ public:
     /**
      * @brief addNpcUpdate : adds a NPC Update to this update.
      * @param npcUpdate : the NpcUpdate to add.
-     * The gameUpdate take ownership of the npcUpdate.
      */
     void addNpcUpdate(const NpcUpdate& npcUpdate) ;
 

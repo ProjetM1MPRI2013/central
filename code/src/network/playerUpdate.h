@@ -19,6 +19,7 @@ public:
    */
   PlayerUpdate(Player &player);
 
+  int player_id ;
   Position pos ;
 };
 

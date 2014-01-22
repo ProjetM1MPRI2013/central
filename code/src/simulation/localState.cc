@@ -9,7 +9,6 @@
 
 #define DEBUG false
 
-#define DEBUG true
 #include "debug.h"
 
 
@@ -151,6 +150,8 @@ void LocalState::run(sf::Time dt){
           }
       }
   }
+
+  client->update(dt);
   return;
 }
 
@@ -159,14 +160,8 @@ void LocalState::run(sf::Time dt){
 //}
 
 void LocalState::setClient(Client* c) {
-  isServer = false; //TODO {denys} : remove this
   client = c;
-
-  //Ceci ne marche pas, il faudrait que setData prenne un data en entré, et non pas un data*
-  //NetEvent e ;
-  //e.setType(NetEvent::PLAYER_JOIN);
-  //e.setData(&this->getPlayer()->getID());
-  //cli->sendMessage(e);
+  c->setLocalState(this);
   return;
 }
 

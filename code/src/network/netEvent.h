@@ -18,9 +18,9 @@
  * NetEvent will be handled in a particular way both by the client and the server.
  * The particular behaviours are the following :
  *  - SERV_TRY(resp CLI_TRY) will not be passed to the user when they are received. A
- *  SERV_RESP(resp CLI_RESP) message will be directly answered, the message is then discarded
- *
+ *  - SERV_RESP(resp CLI_RESP) message will be directly answered, the message is then discarded
  *  - PLAYER_JOIN : the content of the message will be used to identify the Player in the future.
+ *  - ACK messages are only used internally and shoud not be sent. They are always discarded.
  */
 
 class NetEvent : public AbstractMessage{

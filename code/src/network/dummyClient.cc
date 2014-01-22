@@ -1,8 +1,12 @@
 #include <assert.h>
+
+#include "debug.h"
 #include "dummyClient.h"
 #include "netEvent.h"
+#include "simulation/localState.h"
 
-DummyClient::DummyClient(DummyServer* server) : received_messages(){
+DummyClient::DummyClient(DummyServer* server) : received_messages(),
+  locStateUpdater(NULL){
   this->server = server ;
   this->server->addClient(*this);
   this->addMessage(new NetEvent(NetEvent::SERV_RESP),NetEvent::getMsgType());
@@ -110,5 +114,22 @@ bool DummyClient::handle_netEvent(const NetEvent &event){
     }
 
   return false ;
+}
+
+
+void DummyClient::setLocalState(LocalState *simu) {
+  if(locStateUpdater != NULL)
+    LOG(error) << "CLIENT: LocalState already set" ;
+  locStateUpdater = new LocalStateUpdater(simu, this) ;
+  NetEvent coevent(NetEvent::PLAYER_JOIN) ;
+  coevent.setData(simu->getPlayer()->getID());
+  sendMessage<NetEvent>(coevent) ;
+}
+
+void DummyClient::update(sf::Time dt) {
+  if(locStateUpdater == NULL)
+    LOG(warning) << "CLIENT: Cannot update, no Local State attached" ;
+  else
+    locStateUpdater->update(dt);
 }
 

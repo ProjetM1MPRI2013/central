@@ -7,6 +7,7 @@
 #include "server.h"
 #include "comunicatorImplem.h"
 #include "netEvent.h"
+#include "updateGenerator.h"
 
 /**
  * @brief The ServerImplem class
@@ -26,6 +27,10 @@ public :
     virtual std::vector<int> getConnectedPlayers() ;
 
     virtual bool isConnected(int player) ;
+
+    virtual void setSimulation(GlobalState *simu) ;
+
+    virtual void update(sf::Time dt) ;
 
 private :
     //Prevent copy
@@ -56,6 +61,8 @@ protected :
      * of the sender of received message
      */
     endpoint sender_endpoint ;
+
+    UpdateGenerator* updateGen ;
 
     /**
     * @brief on_sent

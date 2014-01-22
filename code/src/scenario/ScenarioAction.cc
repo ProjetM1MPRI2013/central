@@ -1,5 +1,7 @@
 #include "ScenarioAction.h"
 
+#include <sstream>
+
 ScenarioAction::ScenarioAction (std::string n, Simulation* s){
   simulation = s;
   name = n;
@@ -24,12 +26,20 @@ std::string ScenarioAction::getMsgType(){
 }
 
 std::string & ScenarioAction::toString(){
-  std::string s ("TODO");
-  return s;
+  std::stringstream ss ;
+  boost::archive::text_oarchive ar(ss) ;
+  ar << *this ;
+  return *(new std::string(ss.str())) ;
 }
 
+ScenarioAction::ScenarioAction() : date(0), name(){}
+
 AbstractMessage* ScenarioAction::fromString(std::string& msg){
-  return ((AbstractMessage*)new ScenarioAction("TODO", NULL));
+  std::stringstream ss(msg) ;
+  boost::archive::text_iarchive ar(ss) ;
+  ScenarioAction* e = new ScenarioAction() ;
+  ar >> *e ;
+  return e ;
 }
 
 AbstractMessage* ScenarioAction::copy(){

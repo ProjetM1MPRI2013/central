@@ -10,8 +10,7 @@
 //class LocalState;
 
 /**
- * @brief The Network class
- * class used to creates instances of the Client and Server.
+ * @brief The Network class : class used to creates instances of the Client and Server.
  */
 
 class Network {
@@ -74,7 +73,9 @@ public :
      * @param server : will be used to send the messages
      * @return A new updater in charge of synchronizing the global state.
      */
-    static UpdateGenerator* createUpdater(GlobalState* globalState, Server* server) ;
+
+//deprecated    static UpdateGenerator* createUpdater(Simulation* globalState, Server* server) ;
+
 
     /**
      * @brief createUpdater : creates a new updater in charge of receiving and applying updates received from the
@@ -83,7 +84,7 @@ public :
      * @param client : the object used for communication
      * @return A new updater in charge of synchronizing the local state through the network.
      */
-    static LocalStateUpdater* createUpdater(LocalState* localState, Client* client) ;
+//deprecated    static LocalStateUpdater* createUpdater(LocalState* localState, Client* client) ;
 
 };
 

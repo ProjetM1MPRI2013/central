@@ -7,6 +7,7 @@
 
 #include "server.h"
 #include "netEvent.h"
+#include "updateGenerator.h"
 
 class DummyClient ;
 
@@ -74,6 +75,11 @@ private :
      */
     std::mutex lock ;
 
+    /**
+     * @brief updateGen : generates updates for the clients
+     */
+    UpdateGenerator* updateGen ;
+
 protected :
 
     /**
@@ -92,14 +98,15 @@ protected :
 
     virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
 
+public :
+
     virtual std::vector<int> getConnectedPlayers() ;
 
     virtual bool isConnected(int player) ;
 
-public :
+    virtual void setSimulation(GlobalState * simu) ;
 
-    // deprecated
-    //virtual void sendUpdate(GameState &game_state) ;
+    virtual void update(sf::Time dt) ;
 
 };
 

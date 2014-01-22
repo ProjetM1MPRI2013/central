@@ -9,9 +9,9 @@
 #include "test_net.h"
 #include "network/network.h"
 #include "network/netEvent.h"
-#include "simulation/localState.h"
 #include "network/dummyClient.h"
 #include "network/dummyServer.h"
+
 
 
 
@@ -334,6 +334,7 @@ int test_net_real(){
   ServerInfo serv_info ;
   Server * ser = Network::createServer(serv_info) ;
   Client * cli = Network::createClient(cli_info) ;
+
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Real Test ........ FINISHED"  ;
   return i ;

@@ -8,7 +8,6 @@
 
 #define DEBUG false
 
-#define DEBUG true
 #include "debug.h"
 
 
@@ -25,6 +24,7 @@ GlobalState::GlobalState(Geography* map,int nbPlayers,int id) :
 
 void GlobalState::setServer(Server *_server){
     server = _server;
+    server->setSimulation(this);
 }
 
 void GlobalState::run(sf::Time dt){
@@ -135,5 +135,6 @@ void GlobalState::run(sf::Time dt){
         }
       }
   }
+  server->update(dt);
   return;
 }

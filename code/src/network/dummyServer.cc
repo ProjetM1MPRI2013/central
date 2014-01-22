@@ -1,10 +1,12 @@
+#include "debug.h"
 #include "dummyServer.h"
 #include "dummyClient.h"
 #include "gameUpdate.h"
 
 using namespace std ;
 
-DummyServer::DummyServer() : clients(), players(), received_messages(){
+DummyServer::DummyServer() : clients(), players(), received_messages(),
+  updateGen(NULL){
 }
 
 DummyServer::~DummyServer(){
@@ -47,16 +49,6 @@ void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyCli
   lock.unlock() ;
 }
 
-/*void DummyServer::sendUpdate(GameState &game_state){
-    list<DummyClient*>::iterator cli ;
-    for(cli = clients.begin(); cli != clients.end() ; cli++)
-    {
-        //Create gameUpdate from gameState
-        //Missing code here
-        //Deprecated this part will be moved to UpdateGenerator
-        (*cli)->addMessage(NULL, GameUpdate::getMsgType()) ;
-    }
-}*/
 
 vector<AbstractMessage *> DummyServer::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &)){
     MapType::iterator p =  received_messages.find(msgType) ;
@@ -78,9 +70,7 @@ void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, 
     {
       //Broadcast message
       for(DummyClient * client : clients)
-        {
           client->addMessage(msg.copy(),msgType);
-        }
     }
   else
     {
@@ -88,7 +78,7 @@ void DummyServer::send_message(AbstractMessage& msg, bool, std::string msgType, 
       std::map<int, DummyClient*>::iterator it = players.find(player) ;
       if(it == players.end())
         {
-          //TODO : display error message
+          LOG(warning) << "Server : Could not find the specified player : " << player;
           return ;
         }
       it->second->addMessage(msg.copy(), msgType);
@@ -163,6 +153,19 @@ vector<int> DummyServer::getConnectedPlayers(){
 
 bool DummyServer::isConnected(int player){
   return players.find(player) != players.end() ;
+}
+
+void DummyServer::setSimulation(GlobalState *simu) {
+  if(updateGen != NULL)
+    LOG(error) << "SERVER: Simulation already set" ;
+  updateGen = new UpdateGenerator(simu, this) ;
+}
+
+void DummyServer::update(sf::Time dt) {
+  if(updateGen == NULL)
+    LOG(warning) << "SERVER: Cannot update, no Simulation attached" ;
+  else
+    updateGen->update(dt);
 }
 
 

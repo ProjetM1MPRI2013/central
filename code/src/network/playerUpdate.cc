@@ -2,9 +2,9 @@
 
 #include "simulation/player.h"
 
-PlayerUpdate::PlayerUpdate(): pos(0,0){
+PlayerUpdate::PlayerUpdate(): player_id(0), pos(0,0){
 }
 
-PlayerUpdate::PlayerUpdate(Player &player) : pos(*player.getPosition())
+PlayerUpdate::PlayerUpdate(Player &player) : player_id(player.getID()), pos(*player.getPosition())
 {
 }

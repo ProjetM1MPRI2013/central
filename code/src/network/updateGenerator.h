@@ -25,11 +25,15 @@ public:
    * @brief update : A call to this method will generate the gameUpdates for all the Clients, and will
    * send them over the network
    */
-  void update() ;
+  void update(sf::Time dt) ;
 
 private :
   GlobalState* globalState ;
   Server* server ;
+  /**
+   * @brief last_sent : last time the server broadcasted an update
+   */
+  sf::Time last_sent ;
 
   /**
    * @brief generateUpdate : generates the update to be sent to the given player

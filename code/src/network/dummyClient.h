@@ -6,6 +6,7 @@
 #include "client.h"
 #include "dummyServer.h"
 #include "netEvent.h"
+#include "localStateUpdater.h"
 
 /**
  * @brief The DummyClient class
@@ -70,6 +71,9 @@ protected :
    * @param event
    * @return true if the event must not be passed to the user. false otherwise
    */
+
+  LocalStateUpdater* locStateUpdater;
+
   virtual bool handle_netEvent(const NetEvent& event) ;
 
     /*
@@ -78,6 +82,10 @@ protected :
   virtual void send_message(AbstractMessage &msg, bool reliable, std::string msgType ) ;
 
   virtual std::vector<AbstractMessage *> receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) ;
+
+  virtual void setLocalState(LocalState *simu);
+
+  virtual void update(sf::Time dt);
 
 
 };

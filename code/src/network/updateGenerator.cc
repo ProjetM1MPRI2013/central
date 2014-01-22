@@ -1,49 +1,45 @@
 #include <assert.h>
 
+#include "debug.h"
 #include "updateGenerator.h"
 #include "simulation/globalState.h"
 #include "playerUpdate.h"
 
 UpdateGenerator::UpdateGenerator(GlobalState *globalState, Server* server) :
-  globalState(globalState), server(server)
+  globalState(globalState), server(server), last_sent()
 {
 }
 
 
-void UpdateGenerator::update(){
-  for(int playerId : server->getConnectedPlayers())
+void UpdateGenerator::update(sf::Time dt){
+  last_sent += dt ;
+  if(last_sent.asMilliseconds() > 1000.)
     {
-      GameUpdate update = generateUpdate(*globalState->getPlayerByID(playerId)) ;
-      server->sendMessage<GameUpdate>(update, playerId, false) ;
+      DBG << "Update Generator : sending update" ;
+      last_sent = sf::Time::Zero ;
+      for(int playerId : server->getConnectedPlayers())
+        {
+          GameUpdate update = generateUpdate(*globalState->getPlayerByID(playerId)) ;
+          server->sendMessage<GameUpdate>(update, playerId, false) ;
+        }
     }
 }
 
 GameUpdate UpdateGenerator::generateUpdate(Player &player) {
+  DBG << "Generates an update for Player " << player.getID() ;
   GameUpdate update ;
   PlayerUpdate p_update(player);
   update.setPlayerUpdate(p_update);
   std::pair<int,int> tilePos = player.getPosition()->isInTile() ;
-  assert(tilePos.first >=0 && tilePos.first < globalState->getMap()->getMapWidth()) ;
-  assert(tilePos.second >=0 && tilePos.second < globalState->getMap()->getMapWidth()) ;
-  if(tilePos.first != globalState->getMap()->getMapWidth() -1)
+  if(!(tilePos.first >=0 && tilePos.first < globalState->getMap()->getMapWidth()))
+    DBG << "Player Outside the map" ;
+  if(!(tilePos.second >=0 && tilePos.second < globalState->getMap()->getMapWidth()))
+    DBG << "Player Outside the map" ;
+
+  for(int i = 0 ; i <  globalState->getMap()->getMapWidth() ; i++ )
     {
-      //Add Right Tile
-      addAllNpcs(update, globalState->getMap()->getTileRef(tilePos.first+1, tilePos.second));
-    }
-  if(tilePos.first != 0)
-    {
-      //Add Left Tile
-      addAllNpcs(update, globalState->getMap()->getTileRef(tilePos.first-1, tilePos.second));
-    }
-  if(tilePos.second != globalState->getMap()->getMapHeight() -1)
-    {
-      //Add Up Tile
-      addAllNpcs(update, globalState->getMap()->getTileRef(tilePos.first, tilePos.second+1));
-    }
-  if(tilePos.second != 0)
-    {
-      //Add Down Tile
-      addAllNpcs(update, globalState->getMap()->getTileRef(tilePos.first, tilePos.second-1));
+      for(int j = 0 ; j <  globalState->getMap()->getMapHeight() ; j++ )
+        addAllNpcs(update, globalState->getMap()->getTileRef(i,j));
     }
 
   return update ;
@@ -52,8 +48,6 @@ GameUpdate UpdateGenerator::generateUpdate(Player &player) {
 void UpdateGenerator::addAllNpcs(GameUpdate &update, Tile &tile){
   std::list<NPC*> npcs = tile.getNPCs() ;
   for(NPC* npc : npcs)
-    {
       update.addNpcUpdate(NpcUpdate(*npc));
-    }
   return ;
 }
