@@ -13,6 +13,7 @@
 #include "network/dummyServer.h"
 
 
+namespace test {
 
 
 using namespace std;
@@ -317,6 +318,7 @@ int test_cli_ser(Server* ser, Client* cli){
 }
 
 int test_net_dummy(){
+int net_dummy(){
   LOG(info) << "TEST : " << "Dummy Test ......... BEGIN"  ;
   Server *ser = Network::createDummyServer() ;
   Client *cli = Network::createDummyClient(ser) ;
@@ -326,6 +328,7 @@ int test_net_dummy(){
 }
 
 int test_net_real(){
+int net_real(){
   LOG(info) << "TEST : " << "Real Test ......... BEGIN"  ;
   test_serialization() ;
   ClientInfo cli_info ;
@@ -336,4 +339,5 @@ int test_net_real(){
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Real Test ........ FINISHED"  ;
   return i ;
+}
 }

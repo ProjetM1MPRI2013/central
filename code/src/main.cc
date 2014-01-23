@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "main.h"
 #include "test/test.h"
 #include <boost/asio.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -11,7 +12,6 @@
 #include "network/netEvent.h"
 #include "network/dummyServer.h"
 #include "network/dummyClient.h"
-#include "simulation/simulation.h"
 #include <time.h>
 #include <thread>
 #include "graphism/tilemap.h"
@@ -37,7 +37,6 @@
 #else
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::F4) && event.key.alt)
 #endif
-
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
                 sf::VideoMode video_mode, Client* clientPtr, std::string seed,
                 sf::RenderWindow* window) {
@@ -59,28 +58,12 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
    }
 
   std::default_random_engine npcGen (42);
-  std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
-  std::uniform_real_distribution<float> npcDistY(0.01,geo.getMapHeight()-0.01);
 
   if (TERRO) {
-    for (int i=0;i<500;i++) {
       //[joseph] ceci est un NPC de test
       //on en génère 500 à la création de la map, puis plus après
       //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-      
-      Position start = Position(npcDistX(npcGen),npcDistY(npcGen));
-      Position target = Position(npcDistX(npcGen),npcDistY(npcGen));
-      while (start.isInTile(geo).getSpeed()==0) {
-        start = Position(npcDistX(npcGen),npcDistY(npcGen));
-      }
-      while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
-        target = Position(npcDistX(npcGen),npcDistY(npcGen));
-      }
-      loc.addNPC(start,target,1,graContIso.getTexturePack(i%2));
-
-      //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
-      //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
-    }
+    dummy::createNPCs(500, simu, graContIso, geo, npcGen);
   }
         
   sf::Clock clock;
@@ -150,6 +133,11 @@ void serverLoop(int id,int nbPlayers, Server* serverPtr,
 }
 
 int main(int argc, char ** argv) {
+  
+  if (argc > 2 && (std::string)argv[1] == "test") {
+    test::run(argv[2]);
+    exit(0);
+  }
 
   int sizeFenetre[3], b;
   bool isFullScreen;
@@ -174,13 +162,13 @@ int main(int argc, char ** argv) {
       window.create(video_mode, "Game Interface");
     window.setKeyRepeatEnabled(false);
     int nbPlayers = 1;
-    std::string* seed;
+    std::string seed;
     std::cout << argc << std::endl;
     if (argc <= 1) {
-      seed = new std::string("424242");
+      seed = "424242";
     }
     else {
-      seed = new std::string (argv[1]);
+      seed = argv[1];
     }
 
     //geo.printMatrix();
@@ -189,10 +177,10 @@ int main(int argc, char ** argv) {
     Client* clientPtr = Network::createDummyClient(serverPtr);
 
     std::thread serverThread { std::bind(serverLoop, 0,
-					 nbPlayers, serverPtr, *seed ,&window) };
+					 nbPlayers, serverPtr, seed ,&window) };
 
     clientLoop(1, nbPlayers, isFullScreen, video_mode,
-	       clientPtr, *seed, &window);
+	       clientPtr, seed, &window);
     serverThread.join();
 
     return 1;
@@ -274,4 +262,24 @@ int main(int argc, char ** argv) {
 	//return 0;
 	}*/
 }
+;
 
+namespace dummy {
+  void createNPCs(int number, Simulation& simu, GraphicContextIso& graContIso, Geography& geo, std::default_random_engine npcGen) {
+
+    std::uniform_real_distribution<float> npcDistX(0.01,geo.getMapWidth()-0.01);
+    std::uniform_real_distribution<float> npcDistY(0.01,geo.getMapHeight()-0.01);
+    for (int i=0;i<number;i++) {
+      }
+      while (target.isInTile(geo).getSpeed()==0||target.isInTile(geo).equals(start.isInTile(geo))) {
+        target = Position(npcDistX(npcGen),npcDistY(npcGen));
+      }
+      simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
+
+      }
+
+      //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+      //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
+    }
+  }
+}

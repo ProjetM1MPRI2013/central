@@ -14,8 +14,6 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#define DEBUG false
-
 #define DEBUG true
 #include "debug.h"
 
@@ -128,12 +126,11 @@ void Simulation::addNPC(Position start, Position target, float speed, TexturePac
   //on l'ajoute à la liste
   NPCs.push_front(npc);
   //on le met dans sa tile de départ
-  start.isInTile(*map).addNPC(npc);
+  npc->getPosition().isInTile(*map).addNPC(npc);
 
   trigger("NPC::created",*npc);
   return;
 }
-
 
 void Simulation::supprimerNPC(NPC * npc) {
   //on le retire de sa tile

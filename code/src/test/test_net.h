@@ -1,3 +1,8 @@
-int test_net_dummy() ;
+#ifndef TEST_NET
+#define TEST_NET
+namespace test {
+  int net_dummy() ;
 
-int test_net_real() ;
+  int net_real() ;
+}
+#endif

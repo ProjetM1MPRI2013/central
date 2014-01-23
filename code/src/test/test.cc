@@ -1,6 +1,33 @@
 #include <SFML/Graphics.hpp>
-int test()
+#include "main.h"
+#include "test.h"
+#define DEBUG false
+#include "debug.h"
+
+namespace test {
+int run() {
+  LOG(error) << "Not implemented yet. This should run all tests.";
+  return 1;
+}
+
+int run(std::string which)
 {
+  if (which == "sfml") {
+    return sfml();
+  } else if (which == "net") {
+    return net_dummy();
+    return net_real();
+  } else if (which == "interface_init") {
+    return interface_init();
+  } else if (which == "pathfinding") {
+    return pathfinding();
+  } else {
+    LOG(error) << "Unknown test : " << which;
+  }
+  return 1;
+}
+
+int sfml() {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Red);
@@ -20,4 +47,5 @@ int test()
     }
 
     return 0;
+}
 }
