@@ -46,6 +46,7 @@ class Coordinates {
    * @param ord : the ordinate
    */
 
+  Coordinates();
   Coordinates(int abs, int ord);
   Coordinates(const Coordinates& a);
 
@@ -144,7 +145,7 @@ class Tile {
   /**
    * the position of the sprite of the building of the tile in the file
    */
-  Coordinates* picture;
+  Coordinates picture;
 
   /**
    * @brief List of the NPC currently in the tile
@@ -184,7 +185,7 @@ class Tile {
    * @param height0 : the height of the building of the tile
    * The batOrigin and the boroughOrigin argument are copied during the construction, they can be deleted after the call to the constructo
    */
-  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool gou, bool god, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO);
+  Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool gou, bool god, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates pictureO, int widthO, int heightO);
 
     /**
      * @brief gives the type of the tile, it's a generalist type

@@ -7,6 +7,11 @@
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
+Coordinates::Coordinates() {
+  this->abs = 0;
+  this->ord = 0;
+}
+
 Coordinates::Coordinates(const Coordinates& a){
   this->abs = a.abs;
   this->ord = a.ord;
@@ -36,7 +41,7 @@ void Coordinates::setOrd(int ordO) {
 
 
 
-Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gouO, bool godO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates* pictureO, int widthO, int heightO) :
+Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gouO, bool godO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates pictureO, int widthO, int heightO) :
   batOrigin(batOriginO),
   coord(abs,ord),
   coordBorough(boroughOrigin),
@@ -277,11 +282,11 @@ std::string Tile::getFilePictures() {
 }
 
 int Tile::getPictureX() {
-  return(picture->getAbs());
+  return(picture.getAbs());
 }
 
 int Tile::getPictureY() {
-  return(picture->getOrd());
+  return(picture.getOrd());
 }
 
 bool Tile::isBatOrigin() {

@@ -39,7 +39,7 @@ class Batiment {
   /**
    * the position of the sprite of the building in the file
    */
-  Coordinates* picture;
+  Coordinates picture;
 
  public:
   /**
@@ -53,7 +53,6 @@ class Batiment {
    * @brief create a NULL Batiment
    */
   Batiment();
-
 
   /**
    * @brief gives the type of the building
@@ -84,7 +83,7 @@ class Batiment {
   * @brief gives the position of the sprite of the building in the file
   * @return the position of the sprite of the building in the file
   */
-  Coordinates* getPicture();
+  Coordinates getPicture();
   
   
 

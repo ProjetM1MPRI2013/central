@@ -77,7 +77,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   widthInter = intersection.getWidth();
   std::string fileInter = intersection.getFilePictures();
   if (DEBUG) {std::cout << fileInter << std::endl;}
-  Coordinates* pictureInter = intersection.getPicture();
+  Coordinates pictureInter = intersection.getPicture();
   floatMatrix speedInter = intersection.getSpeed();
   if (DEBUG) {std::cout << "heightInter " << heightInter << std::endl;};
   if (DEBUG) {std::cout << "widthInter " << widthInter << std::endl;};
@@ -97,7 +97,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   heightRoadH = roadh.getHeight();
   std::string fileRoadH = roadh.getFilePictures();
   if (DEBUG) {std::cout << fileRoadH << std::endl;}
-  Coordinates* pictureRoadH = roadh.getPicture();
+  Coordinates pictureRoadH = roadh.getPicture();
   floatMatrix speedRoadH = roadh.getSpeed();
   // On choisit une sprite de route verticale avec la bonne longueur
   choose = 0;
@@ -116,7 +116,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   std::string fileRoadV = roadv.getFilePictures();
   if (DEBUG) {std::cout << roadv.getType() << std::endl;}
   if (DEBUG) {std::cout << fileRoadV << std::endl;}
-  Coordinates* pictureRoadV = roadv.getPicture();
+  Coordinates pictureRoadV = roadv.getPicture();
   floatMatrix speedRoadV = roadv.getSpeed();
 
   // On choisit les abscisses et les ordonnées des intersections
@@ -356,7 +356,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     if (DEBUG) {std::cout << "choix BLANK, ligne du bat : " << choose << std::endl;}
     batiment = Batiment(file, choose);
     std::string filePicture = batiment.getFilePictures();
-    Coordinates* picture = batiment.getPicture();
+    Coordinates picture = batiment.getPicture();
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	if(DEBUG) {std::cout << i3 << " " << j3 << std::endl;}
@@ -370,7 +370,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     int width = batiment.getWidth();
     int height = batiment.getHeight();
     std::string filePicture = batiment.getFilePictures();
-    Coordinates* picture = batiment.getPicture();
+    Coordinates picture = batiment.getPicture();
     floatMatrix speedBat = batiment.getSpeed();
     if (DEBUG){std::cout << "abs0: " << abs0 << std::endl;}
     if (DEBUG){std::cout << "ord0: " << ord0 << std::endl;}

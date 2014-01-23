@@ -102,7 +102,7 @@ Batiment::Batiment(std::string file, int line){
   //TODO
   //A priori cela ne va pas du tout, parce que picture ne sera jamais supprimé [Adrien K.]
   // j 'ai transformé nombre1 en nombre, j'espere que c'etait ce qui etait voulue
-  this->picture = new Coordinates(atoi(nombre.c_str()), atoi(nombre2.c_str()));
+  this->picture = Coordinates(atoi(nombre.c_str()), atoi(nombre2.c_str()));
 
 
   if (DEBUG) {std::cout << "Batiment : end \n";}
@@ -117,7 +117,7 @@ Batiment::Batiment() {
   //this->speed[1][1] = 0;
   this ->speed = std::vector<std::vector<float>>(1,std::vector<float>(1,0));
   this->filePictures = "";
-  this->picture = new Coordinates(0,0);
+  this->picture = Coordinates(0,0);
 }
 
 TileType Batiment::getType() {
@@ -140,7 +140,7 @@ std::string Batiment::getFilePictures() {
   return(this->filePictures);
 }
 
-Coordinates* Batiment::getPicture() {
+Coordinates Batiment::getPicture() {
   return(this->picture);
 }
 
