@@ -46,7 +46,7 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
   //TODO : msg_id faux si il y a plusieurs clients (utilisé plusieurs fois)
   last_sent++ ;
   string* header = create_header(reliable, msgType, last_sent) ;
-  string* data = &msg.toString() ;
+  string* data = new string(msg.toString()) ;
 
   if(player == -1)
     {
@@ -204,7 +204,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
           {
             //Not using sendMessage, because don't know player id to send to...
             NetEvent reply(NetEvent::SERV_RESP) ;
-            string *msg_body = &reply.toString() ;
+            string *msg_body = new string(reply.toString()) ;
             last_sent ++ ;
             string *msg_header = create_header(false, NetEvent::getMsgType(), last_sent) ;
             vector<const_buffer> buffers ;

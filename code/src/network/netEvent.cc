@@ -16,11 +16,11 @@ string NetEvent::getMsgType(){
   return MSG_TYPE ;
 }
 
-string& NetEvent::toString(){
+string NetEvent::toString(){
   stringstream ss ;
   text_oarchive ar(ss) ;
   ar << *this ;
-  return *(new string(ss.str())) ;
+  return ss.str() ;
 }
 
 NetEvent* NetEvent::fromString(const string &msg){

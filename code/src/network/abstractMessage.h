@@ -32,7 +32,7 @@ public :
    * @brief toString : serialize the object.
    * @return The string representation of this message
    */
-  virtual std::string & toString() =0 ;
+  virtual std::string toString() =0 ;
 
   /**
    * @brief fromString : function used for deserialisation

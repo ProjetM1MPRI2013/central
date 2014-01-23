@@ -51,14 +51,14 @@ ClientImplem::~ClientImplem(){
 void ClientImplem::send_message(AbstractMessage &msg, bool reliable, string msgType){
   last_sent ++ ;
   string* header = create_header(reliable, msgType, last_sent) ;
-  string& data = msg.toString() ;
+  string* data = new string(msg.toString()) ;
   vector<const_buffer> msg_buff ;
   msg_buff.push_back(buffer(*header));
-  msg_buff.push_back(buffer(data));
+  msg_buff.push_back(buffer(*data));
 
   vector<string*> buffers ;
   buffers.push_back(header);
-  buffers.push_back(&data);
+  buffers.push_back(data);
 
   write_buff(msg_buff, [this, buffers](const error_code& e, int i){on_sent(buffers, e,i) ;}) ;
 

@@ -50,9 +50,8 @@ int ComunicatorImplem::get_msg_id(const string &header) {
 
 
 void ComunicatorImplem::generate_message(NetEvent event) {
-  string * msg = &event.toString() ;
-  received_messages[NetEvent::getMsgType()].push_back(*msg) ;
-  delete msg ;
+  string msg = event.toString() ;
+  received_messages[NetEvent::getMsgType()].push_back(msg) ;
 }
 
 bool ComunicatorImplem::ack_message(const string &header) {

@@ -15,7 +15,7 @@ class NewMovNetwork : public AbstractMessage {
 
   //AbstractMessage functions
   static std::string getMsgType();
-  virtual std::string & toString();
+  virtual std::string toString();
   static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 };

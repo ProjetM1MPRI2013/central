@@ -45,7 +45,7 @@ std::string NewMovNetwork::getMsgType(){
   return s;
 }
 
-std::string & NewMovNetwork::toString(){
+std::string NewMovNetwork::toString(){
   std::string s = "TODO";
   return s;
 }

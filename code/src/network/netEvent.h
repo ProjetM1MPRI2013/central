@@ -163,7 +163,7 @@ public:
   /**
    * @brief toString : unimplemented yet
    */
-  virtual std::string & toString() ;
+  virtual std::string toString() ;
   /**
    * @brief fromString : unimplemented yet
    */

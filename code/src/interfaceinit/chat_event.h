@@ -13,7 +13,7 @@ public:
 	  /**
 	   * @brief toString : unimplemented yet
 	   */
-	virtual std::string & toString() ;
+	virtual std::string toString() ;
 	  /*
 	   * Methods inherited from the AbstractMessage interface
 	   */

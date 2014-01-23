@@ -31,11 +31,11 @@ public :
 
   static std::string getMsgType() { return "TypeA000" ;}
 
-  virtual std::string & toString() {
+  virtual std::string toString() {
     stringstream ss ;
     text_oarchive ar(ss) ;
     ar << *this ;
-    return *(new string(ss.str())) ;
+    return ss.str() ;
   }
 
   static AbstractMessage * fromString(std::string& msg){
@@ -79,11 +79,11 @@ public :
 
   static std::string getMsgType() { return "TypeB000" ;}
 
-  virtual std::string & toString() {
+  virtual std::string toString() {
     stringstream ss ;
     text_oarchive ar(ss) ;
     ar << *this ;
-    return *(new string(ss.str())) ;
+    return ss.str() ;
   }
 
   static AbstractMessage * fromString(std::string& msg){
@@ -115,9 +115,8 @@ private :
 
 void test_serialization(){
   TestA msg(1) ;
-  string * s = &msg.toString() ;
-  TestA* msg2 = (TestA*) TestA::fromString(*s) ;
-  delete s ;
+  string s = msg.toString() ;
+  TestA* msg2 = (TestA*) TestA::fromString(s) ;
   LOG(info) << "TEST : class TestA before serialisation : data = " << msg.data << ", after : data = " << msg2->data ;
   if(msg2->data != msg.data)
     LOG(info) << "TEST : .........FAIL" ;
@@ -126,9 +125,8 @@ void test_serialization(){
   delete msg2 ;
 
   TestB msg3(20) ;
-  s = &msg3.toString() ;
-  TestB* msg4 = (TestB*) TestB::fromString(*s) ;
-  delete s ;
+  s = msg3.toString() ;
+  TestB* msg4 = (TestB*) TestB::fromString(s) ;
   LOG(info) << "TEST : class TestB before serialisation : data = " << msg3.data << ", after : data = " << msg4->data ;
   if(msg4->data != msg3.data)
     LOG(info) << "TEST : .........FAIL" ;

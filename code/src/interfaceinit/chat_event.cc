@@ -11,8 +11,8 @@ std::string ChatEvent::getMsgType(){
   return MSG_TYPE ;
 }
 
-std::string& ChatEvent::toString(){
-  return *(new std::string(data)) ;
+std::string ChatEvent::toString(){
+  return data ;
 }
 
 ChatEvent* ChatEvent::fromString(std::string &msg){

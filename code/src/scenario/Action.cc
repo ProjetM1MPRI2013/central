@@ -34,7 +34,7 @@ std::string Action::getMsgType(){
   return s;
 }
 
-std::string & Action::toString(){
+std::string Action::toString(){
   std::string s = "TODO";
   return s;
 }

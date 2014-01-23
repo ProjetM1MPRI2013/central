@@ -25,11 +25,11 @@ std::string ScenarioAction::getMsgType(){
   return s;
 }
 
-std::string & ScenarioAction::toString(){
+std::string ScenarioAction::toString(){
   std::stringstream ss ;
   boost::archive::text_oarchive ar(ss) ;
   ar << *this ;
-  return *(new std::string(ss.str())) ;
+  return ss.str() ;
 }
 
 ScenarioAction::ScenarioAction() : date(0), name(){}
