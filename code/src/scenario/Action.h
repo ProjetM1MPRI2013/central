@@ -5,6 +5,8 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 class Player;
 class Simulation;
 #include "../simulation/simulation.h"
@@ -67,6 +69,19 @@ class Action : public AbstractMessage {
   
  private:
   int playerID;
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & name ;
+    ar & date ;
+    ar & delay ;
+  }
 };
 
 #endif

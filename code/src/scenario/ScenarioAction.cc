@@ -21,8 +21,7 @@ void ScenarioAction::run(){
 
 //AbstractMessage function implementations
 std::string ScenarioAction::getMsgType(){
-  std::string s ("H_SACTIO");
-  return s;
+  return "H_SACTIO";
 }
 
 std::string ScenarioAction::toString(){

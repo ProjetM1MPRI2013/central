@@ -44,6 +44,18 @@ class Drop : public Action{
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & stu ;
+    ar & playerID ;
+  }
 };
 
 class Attack : public Action {
@@ -72,6 +84,17 @@ class Attack : public Action {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Action>(*this);
+  }
 };
 
 
@@ -102,6 +125,17 @@ class Plant : public Action {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Action>(*this);
+  }
 };
 
 
@@ -131,6 +165,20 @@ class Reload : public Action {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Action>(*this);
+    ar & name ;
+    ar & date ;
+    ar & delay ;
+  }
 };
 
 

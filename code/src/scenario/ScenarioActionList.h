@@ -31,6 +31,19 @@ class ChangeDirection: public ScenarioAction {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+    ar & playerID ;
+    ar & newMovement ;
+  }
+
 };
 
 class AddCops: public ScenarioAction {
@@ -47,6 +60,20 @@ class AddCops: public ScenarioAction {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+    ar & number ;
+    ar & x ;
+    ar & y ;
+  }
 };
 
 
@@ -65,6 +92,21 @@ class AddCams: public ScenarioAction {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+    ar & number ;
+    ar & x ;
+    ar & y ;
+  }
+
 };
 
 /**
@@ -91,6 +133,18 @@ class Explosion: public ScenarioAction {
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+    ar & power ;
+  }
 };
 
 
@@ -113,6 +167,17 @@ public:
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+  }
 };
 
 class DropItem : public ScenarioAction{
@@ -133,6 +198,18 @@ class DropItem : public ScenarioAction{
   //virtual std::string & toString();
   //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<ScenarioAction>(*this);
+    ar & playerID ;
+  }
 };
 
 #endif

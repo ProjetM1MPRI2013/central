@@ -1,6 +1,6 @@
 #include "NewMov.h"
 #include <iostream>
-
+#include <sstream>
 
 void printNewMov(NewMov nm){
   switch (nm){
@@ -46,15 +46,22 @@ std::string NewMovNetwork::getMsgType(){
 }
 
 std::string NewMovNetwork::toString(){
-  std::string s = "TODO";
-  return s;
+  std::stringstream ss ;
+  boost::archive::text_oarchive ar(ss) ;
+  ar << *this ;
+  return ss.str() ;
 }
 
-AbstractMessage* NewMovNetwork::fromString(std::string& msg){
-  //TODO
-  return ((AbstractMessage*) new NewMovNetwork(P_RIGHT, 42));
+NewMovNetwork *NewMovNetwork::fromString(std::string& msg){
+  std::stringstream ss(msg) ;
+  boost::archive::text_iarchive ar(ss) ;
+  NewMovNetwork* movnet = new NewMovNetwork() ;
+  ar >> *movnet ;
+  return movnet ;
 }
 
 AbstractMessage* NewMovNetwork::copy(){
   return ((AbstractMessage*) new NewMovNetwork(this->movement, this->playerID));
 }
+
+NewMovNetwork::NewMovNetwork() : movement(P_RIGHT), playerID(0) {}

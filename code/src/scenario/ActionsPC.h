@@ -28,6 +28,21 @@ class AddCop : public Action {
   int number;
   float x;
   float y;
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Action>(*this);
+    ar & number ;
+    ar & x ;
+    ar & y ;
+  }
+
 };
 
 class AddCam : public Action {
@@ -47,6 +62,20 @@ class AddCam : public Action {
   int number;
   float x;
   float y;
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Action>(*this);
+    ar & number ;
+    ar & x ;
+    ar & y ;
+  }
   
 };
 
