@@ -3,6 +3,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
+
 /**
  * @brief The WithUuid class
  * It only contains a uuid,
@@ -14,6 +15,7 @@ class WithUuid {
 
  protected:
     void setUuid(boost::uuids::uuid id);
+    static boost::uuids::random_generator generator;
 
   public:
     // Event Manager templated functions use this,
@@ -22,7 +24,7 @@ class WithUuid {
      * @brief WithUuid
      * Creates a new WithUuid object, the uuid is generated randomly by boost
      */
-    WithUuid(): uuid(boost::uuids::random_generator()()) {}
+    WithUuid(): uuid(generator()) {}
 
     /**
      * @brief WithUuid
