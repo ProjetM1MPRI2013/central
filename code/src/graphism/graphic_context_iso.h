@@ -16,28 +16,26 @@
 #define DOWN_TILE(x) ((x==0) ? 20 : 10)   /* Distance à la tile du bas */
 
 /**
-  * @brief GraphicContextIso
-  * This class contains all the textures of the isometric view
-  * It is initially loaded at the beginning of the main loop, and should not be destructed
-  * draw is called to draw the map on a sf::RenderTarget such as the main window
+  * @brief This class contains all the textures of the isometric view.
+  * It is initially loaded at the beginning of the main loop, and should not be destructed.
+  * draw is called to draw the map on a sf::RenderTarget such as the main window.
   **/
 
 class GraphicContextIso : public sf::Drawable, public sf::Transformable {
 
  public: 
   /**
-    * @brief Constructor of the GraphicContextIso class
-    * @param map: the map that should be drawn
-    * @param sim: the simulation
-    * This function loads all the textures and keeps a pointer to the map for a further rendition
+    * @brief Constructor of the GraphicContextIso class.
+    * @param map: the map that should be drawn;
+    * @param sim: the simulation.
+    * This function loads all the textures and keeps a pointer to the map for a further rendition.
     **/
   GraphicContextIso(Geography* map, Simulation* sim); 
   
   /**
-    * @brief draw
-    * Draws the map
-    * @param target: the target where the map have to be drawn at
-    * @param states: transformations applied to the map
+    * @brief Draws the map.
+    * @param target: the target where the map have to be drawn at;
+    * @param states: transformations applied to the map.
     **/
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   
@@ -46,27 +44,25 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   void addSpriteTilePack(SpriteTilePack stp);
 
   /**
-   * @brief load
-   * Loads the textures on the objects of the map
+   * @brief Loads the textures on the objects of the map.
    **/
   void load();
   
-  
   /**
-   * @brief run
-   * Runs one computation of the graphical output of the map
+   * @brief Runs one computation of the graphical output of the map.
    **/
   void run(sf::RenderWindow* window);
 
   /**
-   * @brief screenToMap
-   * Returns the position on the map of the pixel (x,y)
-   * Can have negative coordinates
-   * Assumes the view fills the window
+   * @brief Returns the position on the map of the pixel (x,y).
+   * Can have negative coordinates.
+   * Assumes the view fills the window.
    **/
   Position screenToMap(int x, int y);
 
   TexturePack* getTexturePack(int n);
+
+  float zoom(float f);
 
  private:
   std::vector<TexturePack> texVector;
@@ -75,7 +71,19 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   Geography* map;
   Simulation* sim;
   sf::View view; // todo : des operations sur la view (zoom, etc...)
-   
+  float zoomfactor;
+  float zoommax;
+  float zoommin;
+  sf::Sprite fog;
+  
+  // A ajouter : 
+  // Une tile de base (pour la transparence);
+  // Une tile pour le brouillard;
+  // Deux ensembles d'éléments pour enlever le brouillard ou activer la
+  // transparence, avec des pointeurs vers des positions, et de quoi checker
+  // s'il y a changement de tile.
+
+ 
 };
 
 #endif

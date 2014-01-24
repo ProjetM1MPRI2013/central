@@ -161,6 +161,8 @@ class Tile {
   // sf::Sprite& getTSprite(TileType type);
 
   TileWrapper* wrapper;
+  bool alpha;
+  bool fog;
   
   public:
   /**
@@ -304,6 +306,28 @@ class Tile {
      * @return true iff the Tile is aligned with the 2 other Tiles in this order (tile1,tile2,tile) and they are neighbours
      */
     bool isAligned(Tile& tile1,Tile& tile2); 
+
+    /**
+     * @brief Tells if the tile is walkable or not.
+     * @return true iff the player can walk on the tile.
+     **/
+    bool isWalkable();
+
+    /**
+     * @brief Tells if the tile is in the fog or not.
+     **/
+    bool isInFog();
+
+    /**
+     * @brief Changes the transparency of the building.
+     **/
+    void setAlpha(bool a);
+    
+    /**
+     * @brief Changes the fog state of the tile.
+     * @param nbFog: the number of hidden tiles of the building
+     **/
+    void setFog(int nbFog);
 };
 
 

@@ -71,6 +71,9 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   this->destructionLevel = 0.;
   wrapper = NULL;
   this->filePictures = filePicturesO;
+  alpha = false;
+  //fog = true;
+  fog = false; //temporaire
   if (DEBUG){std::cout << "Tile : end\n";}
 }
 void Tile::nobodyTile(){
@@ -290,7 +293,7 @@ int Tile::getPictureY() {
 }
 
 bool Tile::isBatOrigin() {
-  return((coord.getAbs() == batOrigin.getAbs()) && (coord.getOrd() == batOrigin.getOrd() + widthBat - 1));
+  return((coord.getAbs() == batOrigin.getAbs() + widthBat - 1) && (coord.getOrd() == batOrigin.getOrd()));
 }
 
 void Tile::printTileType(){
@@ -373,3 +376,39 @@ bool Tile::isAligned(Tile& tile1,Tile& tile2) {
   return (dir || inv);
 }
     
+bool Tile::isWalkable()
+{
+  return speed > 0.01;
+}
+
+bool Tile::isInFog()
+{
+  return fog;
+}
+
+void Tile::setAlpha(bool a)
+{
+  if(alpha != a && isWalkable())
+    {
+      if(a)
+	sprite.setColor(sf::Color(255,255,255,128));
+      else
+	sprite.setColor(sf::Color(255,255,255));
+    }
+  alpha = a;
+  return;
+}
+
+void Tile::setFog(int nbFog)
+{
+  bool w = (2*nbFog <= widthBat*heightBat);
+  if((fog != w) && !(isWalkable()))
+    {
+      if(w)
+	sprite.setColor(sf::Color(128,128,128));
+      else
+	sprite.setColor(sf::Color(255,255,255));
+    }
+  fog = w;
+  return;
+}

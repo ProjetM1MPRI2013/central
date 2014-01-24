@@ -285,7 +285,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
 
   // We fill all the tiles still NULL (it's possible, cf. doc of the method)
   nbRand = randomGen.pseudorand();
-  //fillNull(nbRand, nbLine, file);
+  fillNull(nbRand, nbLine, file);
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
 }
@@ -360,7 +360,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	if(DEBUG) {std::cout << i3 << " " << j3 << std::endl;}
-	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, 1, 1);
+	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(i3, j3), Coordinates(0,0), NULL, filePicture, picture, 1, 1); // MrKulu : Pose problème quand les tiles blank ne sont pas de taille 1. TODO
       }
     }
   }

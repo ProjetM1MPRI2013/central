@@ -11,7 +11,10 @@
   GraphicContextIso::GraphicContextIso(Geography* map, Simulation* sim)
   {
     this->map = map;
-    this->sim = sim;
+    this->sim = sim;  
+    zoomfactor = 1;
+    zoommax = 3;
+    zoommin = 0.3;
 
     std::fstream file;
     file.open("../graphism/animations",std::fstream::in);
@@ -95,13 +98,34 @@
   void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) const
   {
     int w = map->getMapWidth(), h = map->getMapHeight();
-    bool isDrawn[h][w];
+    bool isDrawn[w][h];
     states.transform *= getTransform();
+
+    /* 
+       Dans un premier temps, on peut afficher toutes les tiles walkable, qui
+       sont supposées plates. Cela permet d'éviter des problèmes éventuels 
+       lorsque les sprites des objets comme les npc sont trop larges. On va
+       aussi afficher des tiles de base en dessous des batiments.
+    */
+    for(int j = 0; j < h; j++){
+      for(int i = 0; i < w; i++){
+	Tile* tilec = map->getTile(i,j);
+	if(tilec->isWalkable() && tilec->isBatOrigin())
+	  {
+	    sf::Sprite& sp = tilec->getSprite();
+	    sp.setPosition(sf::Vector2f( (i + 1)  * RIGHT_TILE(0) + j * DOWN_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X - 2,  (i + 1) * RIGHT_TILE(1) + j * DOWN_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) - 1));
+	    target.draw(sp, states);
+	  }
+	//else TODO
+      }
+    }
+
+
 
     for(int j = 0; j < h; j++)
       {
 	for(int i = 0; i < w; i++)
-	  isDrawn[j][i] = false;
+	  isDrawn[i][j] = false;
       }
     
     /*
@@ -109,85 +133,73 @@
       Pour un affichage correct, il faut que tous les éléments au dessus d'une
       case aient été affichés avant elle-même. Ainsi, l'invariant à conserver
       est :
-      \forall j,i,j',i' (j' <= j & i' >= i & isDrawn[j][i]) -> isDrawn[j'][i']
+      \forall i,j,i',j' (j' <= j & i' >= i & isDrawn[i][j]) -> isDrawn[i'][j']
       La condition d'arrêt est donc :
-      isDrawn[h-1][0]
+      isDrawn[0][h-1]
     */
-    
-    while(not(isDrawn[h-1][0]))
+    bool be = true;
+    while(not(isDrawn[0][h-1]) && be)
       {
-	for(int k = 0 ; k < std::min(w,h); k++)
+	be = false;
+	for(int i = 0 ; i < w ; i++)
 	  {
-	    for(int l = 0 ; l < std::max(w,h) - k; l++)
+	    for(int j = 0 ; j < h ; j++)
 	      {
-		for(int b = 0 ; b < 2; b++)
+		
+		Tile* tilec = map->getTile(i,j);
+		
+		assert(tilec);
+		assert(tilec->TextureIsInit());
+		
+		if(tilec->isBatOrigin() && not(isDrawn[i][j]))
 		  {
-		    int i,j;
-		    if(b)
-		      {
-			i = w - k - 1;
-			j = k + l;
-		      }
+		    int wb = tilec->getWidthBat(), hb = tilec->getHeightBat();
+		    bool c1, c2;
+		    if(j==0)
+		      c1 = true;
 		    else
-		      {
-			i = w - k - l - 1;
-			j = k;
-		      }
-		    if(i < 0 || j >= h)
-		      break;
-		    Tile* tilec = map->getTile(j,i);
+		      c1 = isDrawn[i+1-wb][j-1];
 		    
-		    assert(tilec);
-		    assert(tilec->TextureIsInit());
+		    if(i==w-1)
+		      c2 = true;
+		    else
+		      c2 = isDrawn[i+1][j-1+hb];
 		    
-		    if(tilec->isBatOrigin())
+		    if(c1 && c2)
 		      {
-			int wb = tilec->getWidthBat(), hb = tilec->getHeightBat();
-			bool c1, c2;
-			if(j==0)
-			  c1 = true;
-			else
-			  c1 = isDrawn[j-1][i+1-wb];
+			sf::Sprite& sp = tilec->getSprite();
+			sp.setPosition(sf::Vector2f( (i + 1)  * RIGHT_TILE(0) + j * DOWN_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X - 2,  (i + 1) * RIGHT_TILE(1) + j * DOWN_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) - 1));
+			target.draw(sp, states);
 			
-			if(i==w-1)
-			  c2 = true;
-
-			else
-			  c2 = isDrawn[j-1+hb][i+1];
 			
-			if(c1 && c2)
+			for(int ib = 0; ib < wb; ib++)
 			  {
-			    sf::Sprite& sp = tilec->getSprite();
-			    sp.setPosition(sf::Vector2f( (i + 1)  * RIGHT_TILE(0) + j * DOWN_TILE(0) - tilec->getOriginSpriteX() + OFFSET_X - 2,  (i + 1) * RIGHT_TILE(1) + j * DOWN_TILE(1) - tilec->getOriginSpriteY() + OFFSET_Y - w * RIGHT_TILE(1) - 1));
-			    target.draw(sp, states);
-			    
-
-			    for(int ib = 0; ib < wb; ib++)
-			      {
-				for(int jb = 0; jb < hb; jb++)
-				  {				    
-				    Tile* tilecc = map->getTile(j+jb,i-ib);
-
-				    std::list<NPC *> lnpc = tilecc->getNPCs();
-				    for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
-				      {
-					assert((**ci).TextureIsInit());
-
-					(**ci).nextFrame();
-					
-					sf::Sprite& sfn = (**ci).getSprite();
-					Position& p = (**ci).getPosition();
-					sfn.setPosition(sf::Vector2f( floor(p.getY() * RIGHT_TILE(0) + p.getX() * DOWN_TILE(0) + OFFSET_X - (**ci).TextureOffsetX()), floor(p.getY() * RIGHT_TILE(1) + p.getX() * DOWN_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY())));
-					target.draw(sfn,states);
-				      }
-				    isDrawn[j+jb][i-ib] = true;
+			    for(int jb = 0; jb < hb; jb++)
+			      {				    
+				Tile* tilecc = map->getTile(i-ib,j+jb);
+				
+				std::list<NPC *> lnpc = tilecc->getNPCs();
+				for(std::list<NPC*>::const_iterator ci = lnpc.begin(); ci != lnpc.end(); ++ci)
+				  {
+				    if(!(tilecc->isInFog())){
+				      assert((**ci).TextureIsInit());
+				      
+				      (**ci).nextFrame();
+				      
+				      sf::Sprite& sfn = (**ci).getSprite();
+				      Position& p = (**ci).getPosition();
+				      sfn.setPosition(sf::Vector2f( p.getX() * RIGHT_TILE(0) + p.getY() * DOWN_TILE(0) + OFFSET_X - (**ci).TextureOffsetX(), p.getX() * RIGHT_TILE(1) + p.getY() * DOWN_TILE(1) + OFFSET_Y - w * RIGHT_TILE(1) - (**ci).TextureOffsetY()));
+				      target.draw(sfn,states);
+				    }
 				  }
+				be = true;
+				isDrawn[i-ib][j+jb] = true;
 			      }
-
 			  }
+			
 		      }
-		  }	
-	      }
+		  }
+	      }	
 	  }
       }
     return;
@@ -201,7 +213,7 @@ void GraphicContextIso::load()
     {
       for(int j = 0; j < h; j++)
         {
-          Tile* tilec = map->getTile(j,i);
+          Tile* tilec = map->getTile(i,j);
 
           assert(tilec != NULL);
           
@@ -278,4 +290,15 @@ Position GraphicContextIso::screenToMap(int x, int y)
 TexturePack* GraphicContextIso::getTexturePack(int n)
 {
   return(&(texVector.at(n)));
+}
+
+float GraphicContextIso::zoom(float f)
+{
+  float z = zoomfactor*f;
+  z = std::min(z,zoommax);
+  z = std::max(z,zoommin);
+  float g = zoomfactor / z;
+  view.zoom(g);
+  zoomfactor = z;
+  return zoomfactor;
 }
