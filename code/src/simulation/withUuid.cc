@@ -13,7 +13,7 @@
 boost::mt19937 seed;
 boost::uuids::random_generator WithUuid::generator = boost::uuids::random_generator(seed);
 
-boost::uuids::uuid WithUuid::getUuid() {
+boost::uuids::uuid WithUuid::getUuid() const {
   return uuid;
 }
 

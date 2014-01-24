@@ -62,13 +62,13 @@ class NPC : public EventSource, public Positionable {
    * creates a new NPC by copying an existing one
    * @param n: the NPC to copy
    */
-  NPC(NPC& n);
+  NPC(const NPC& n);
 
   /**
    * @brief getFeat
    * @return the NPC's fear level
    */
-  float getFear();
+  float getFear() const;
 
   /**
    * @brief setFear
@@ -81,7 +81,7 @@ class NPC : public EventSource, public Positionable {
    * @brief isShocked
    * @return : true if the NPC is shocked, false otherwise
    */
-  bool isShocked();
+  bool isShocked() const;
 
   /**
    * @brief setShocked
@@ -94,13 +94,14 @@ class NPC : public EventSource, public Positionable {
    * @brief getSpeed
    * @return the NPC's speed
    */
-  float getSpeed();
+  float getSpeed() const;
 
   /**
    * @brief getTrajectory
    * @return the NPC's Trajectory as a reference
    */
   Trajectory& getTrajectory();
+
 
   /**
    * @brief setTrajectory
@@ -153,7 +154,7 @@ class NPC : public EventSource, public Positionable {
    * @brief getHitboxSize
    * @return the NPC's hitbox size
    */
-  float getHitboxSize();
+  float getHitboxSize() const;
 
   /**
    * @brief hasArrived
@@ -171,7 +172,7 @@ class NPC : public EventSource, public Positionable {
    * @brief getAnim
    * @return the NPC's Animation
    **/
-  Animation getAnim();
+  Animation getAnim() const;
 
   /**
    * @brief setAnim

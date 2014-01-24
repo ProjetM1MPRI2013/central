@@ -39,7 +39,7 @@ class WithUuid {
      * @brief getUuid
      * @return the uuid
      */
-    boost::uuids::uuid getUuid();
+    boost::uuids::uuid getUuid() const;
 };
 
 

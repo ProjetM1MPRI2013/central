@@ -28,8 +28,8 @@ NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Eve
 }
 
 
-NPC::NPC(NPC& n) {
-  trajectory = Trajectory(n.getTrajectory());
+NPC::NPC(const NPC& n) {
+  trajectory = Trajectory(n.trajectory);
   shocked = n.isShocked();
   speed = n.getSpeed();
   fear = n.getFear();
@@ -40,7 +40,7 @@ NPC::NPC(NPC& n) {
 }
   
 
-float NPC::getFear() {
+float NPC::getFear() const {
   return fear;
 }
 
@@ -51,7 +51,7 @@ void NPC::setFear(float f) {
 }
 
 
-bool NPC::isShocked() {
+bool NPC::isShocked() const {
   return shocked;
 }
 
@@ -62,7 +62,7 @@ void NPC::setShocked(bool s) {
 }
 
 
-float NPC::getSpeed() {
+float NPC::getSpeed() const {
   return speed;
 }
 
@@ -88,7 +88,7 @@ void NPC::updatePosition(sf::Time dt,Geography& map) {
   return;
 }
 
-float NPC::getHitboxSize() {
+float NPC::getHitboxSize() const {
   return hitboxSize;
 }
 
@@ -107,7 +107,7 @@ sf::Sprite& NPC::getSprite(){
   return this->anim.getSprite();
 }
 
-Animation NPC::getAnim(){
+Animation NPC::getAnim() const {
   return anim;
 }
 
