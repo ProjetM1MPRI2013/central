@@ -47,8 +47,16 @@ Client* Simulation::getClient(){
 //  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
 }
 
-Simulation::Simulation(Geography* map, int nbPlayers, int id)
-    : Simulation(nbPlayers, id) {
+Simulation::~Simulation() {
+  // FIXME 
+  // This fixes a memory leak but is dangerous: everybody who did 
+  // getPlayerByID() may have a big problem now.  
+  // Could we pass players by value instead of reference? Or wrap them
+  // in a shared_ptr?
+  while(!players.empty()) delete players.front(), players.pop_front();
+}
+
+Simulation::Simulation(Geography* map, int nbPlayers, int id) : Simulation(nbPlayers, id) {
   this->setGeography(map);
 }
 

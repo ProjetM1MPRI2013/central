@@ -71,6 +71,7 @@ class Simulation : public EventSource {
   Simulation(int nbPlayers,int id);
   Simulation(Geography* map,int nbPlayers,int id);
   Simulation(std::string seed, std::vector<Player*> players) ;
+  ~Simulation();
   
   /**
    * @brief run
