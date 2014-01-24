@@ -317,7 +317,6 @@ int test_cli_ser(Server* ser, Client* cli){
   return 0 ;
 }
 
-int test_net_dummy(){
 int net_dummy(){
   LOG(info) << "TEST : " << "Dummy Test ......... BEGIN"  ;
   Server *ser = Network::createDummyServer() ;
@@ -327,7 +326,6 @@ int net_dummy(){
   return i ;
 }
 
-int test_net_real(){
 int net_real(){
   LOG(info) << "TEST : " << "Real Test ......... BEGIN"  ;
   test_serialization() ;

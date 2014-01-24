@@ -2,7 +2,7 @@
 #include "main.h"
 #include "test.h"
 #include "HScenario.h"
-#include "simulation.h"
+#include "localState.h"
 #include "geography.h"
 #include "tilemap.h"
 #define DEBUG false
@@ -14,15 +14,15 @@ namespace test {
     std::string seed = "424242";
     auto nbPlayers = 1;
     Geography geo = Generation1(seed);
-    Simulation simu = Simulation(&geo,nbPlayers, 1);
-    HScenario scenar = HScenario(simu);
-    simu.setScenario(&scenar);
+    LocalState loc = LocalState(&geo,nbPlayers, 1);
+    HScenario scenar = HScenario(loc);
+    loc.setScenario(&scenar);
     //simu.setClient(clientPtr);
-    GraphicContextIso graContIso = GraphicContextIso(&geo, &simu);
-    TileMap tilemap = TileMap(&simu, &geo);
+    GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
+    TileMap tilemap = TileMap(&loc, &geo);
     graContIso.load();
     std::default_random_engine npcGen (42);
-    dummy::createNPCs(1, simu, graContIso, geo, npcGen);
+    dummy::createNPCs(1, loc, graContIso, geo, npcGen);
     LOG(info) << "Finished test NPCs creation and pathfinding";
     return 0;
   }
