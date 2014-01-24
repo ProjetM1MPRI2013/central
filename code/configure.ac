@@ -2,7 +2,7 @@
 AC_INIT([Chaos simulator], [0.5], [matthieu.journault@free.fr],
         [main_cc], [])
 AC_PREREQ([2.59])
-AM_INIT_AUTOMAKE([1.10 -Wall no-define])
+AM_INIT_AUTOMAKE([1.10 -Wall no-define silent-rules])
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 if test -z "$DOXYGEN";
    then AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
