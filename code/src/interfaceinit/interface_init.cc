@@ -224,6 +224,8 @@ std::string getKeyName(const sf::Keyboard::Key key) {
 		return "F15";
 	case sf::Keyboard::Pause:
 		return "Pause";
+  default:
+    return "Undefined";
 	}
 }
 /*loadNick : Give the NickName stored in ../../conf/nick.conf */
@@ -827,9 +829,11 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 	interfaceMusic.setVolume(audioVol);
 	interfaceMusic.play();
 	interfaceMusic.setLoop(true);
+  /* Not used
 	Network network;
 	Client* gameClient;
 	Server* gameServer;
+  */
 	//End Initialization of the volume
 	while (window.isOpen()) {
 		wim = wima;

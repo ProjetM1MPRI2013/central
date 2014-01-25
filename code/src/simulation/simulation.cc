@@ -171,7 +171,7 @@ void Simulation::peopleGeneration() {
 //Nivelle la peur via une sorte de norme 2
 void Simulation::lisserMatrice() {
   float anxiety;
-  float population;
+  //float population;
   //Adrien K. : Heuuuuu, ..... je trouve cette ligne bizarre ...
   Generation1 *oldMap = (Generation1*) map;
   //interieur de la map

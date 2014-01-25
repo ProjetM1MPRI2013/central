@@ -11,8 +11,7 @@
 namespace test {
   int generation() {
     std::string seed = "424242";
-    auto nbPlayers = 1;
-    Geography geo = Generation1(seed);
+    Generation1{seed};
     return 0;
   }
 }

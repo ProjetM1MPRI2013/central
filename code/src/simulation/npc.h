@@ -64,6 +64,8 @@ class NPC : public EventSource, public Positionable {
    */
   NPC(const NPC& n);
 
+  virtual ~NPC() = default;
+
   /**
    * @brief getFeat
    * @return the NPC's fear level
