@@ -10,11 +10,12 @@
 
 #include "debug.h"
 
-
+/* Never used
 GlobalState::GlobalState(std::string _seed, std::vector<Player*> _players)
     : Simulation(_seed, _players){
     isServer = true;
 }
+*/
 
 GlobalState::GlobalState(Geography* map,int nbPlayers,int id) :
     Simulation(map, nbPlayers, id){
@@ -87,11 +88,7 @@ void GlobalState::run(sf::Time dt){
         }*/
 
       /* We update the position of all the players */
-  //TODO {denys} : add foreach loop
-    for (std::list<Player*>::iterator it = players.begin(); it != players.end();
-           ++it) {
-        (*it)->updatePosition(dt);
-      }
+      for (Player& player : players) { player.updatePosition(dt); }
 
     /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {

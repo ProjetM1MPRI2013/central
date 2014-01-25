@@ -98,13 +98,13 @@ ChangeDirection::ChangeDirection(const ChangeDirection& a) : ScenarioAction("Cha
 }
 
 void ChangeDirection::run(){
-  Direction a = simulation->getPlayerByID(playerID)->getDirection();
+  Direction a = simulation->getPlayerByID(playerID).getDirection();
   Couple* b = directionToInt(a);
   Couple* c = newMovToInt(this->newMovement);
   Couple* newDir = new Couple(b->x + c->x, b->y + c->y);
   Direction d = intToDirection(newDir);
   if (d != Direction::ERROR){
-    simulation->getPlayerByID(playerID)->setDirection(d);
+    simulation->getPlayerByID(playerID).setDirection(d);
   }
   delete b;
   delete c;
@@ -247,19 +247,19 @@ void AddCams::run(){
  * DropItem *
  ************/
 
-DropItem::DropItem(Stuff* stuffO, int id, Simulation* s) : ScenarioAction("DropItem",s){
-  this->stuff = stuffO;
+DropItem::DropItem(int stuffID, int id, Simulation* s) : ScenarioAction("DropItem",s){
+  this->stuffID = stuffID;
   this->simulation = s;
   this->playerID = id;
 }
 
 DropItem::DropItem(const DropItem& a) : ScenarioAction("DropItem",a.simulation){
-  this->stuff = a.stuff;
+  this->stuffID = a.stuffID;
   this->playerID = a.playerID;
 }
 
 void DropItem::run (){
-  this->simulation->getPlayerByID(this->playerID)->removeItem(stuff);
+  this->simulation->getPlayerByID(this->playerID).removeItem(stuffID);
 }
 
 

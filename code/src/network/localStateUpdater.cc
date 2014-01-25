@@ -25,7 +25,7 @@ void LocalStateUpdater::update(sf::Time dt){
 void LocalStateUpdater::applyPlayerUpdate(PlayerUpdate &p_update){
 
   DBG << "Local Updater : updated position of player " << p_update.player_id ;
-  Position * pos = localState->getPlayerByID(p_update.player_id)->getPosition() ;
+  Position * pos = localState->getPlayerByID(p_update.player_id).getPosition() ;
   if(pos->getX() < localState->getMap()->getMapWidth()
      && pos->getX() >= 0
      && pos->getY() < localState->getMap()->getMapHeight()

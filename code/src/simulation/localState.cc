@@ -11,18 +11,19 @@
 
 #include "debug.h"
 
-
-LocalState::LocalState(std::string _seed, const Player& _player)
+/* Never used
+LocalState::LocalState(std::string _seed, Player& _player)
     : Simulation(_seed, std::vector<Player*>()),
   owner_player(_player){
   addPlayer(&owner_player);
   isServer = false;
   map = (Geography*) new Generation1(_seed);
 }
+*/
 
 LocalState::LocalState(Geography* map,int nbPlayers,int id) :
     Simulation(map, nbPlayers, id),
-    owner_player(*getPlayerByID(id)){
+    owner_player(getPlayerByID(id)){
     isServer = false;
 }
 
@@ -106,9 +107,7 @@ void LocalState::run(sf::Time dt){
    *        }*/
 
   /* We update the position of all the players */
-  for (std::list<Player*>::iterator it = players.begin(); it != players.end();
-       ++it) {(*it)->updatePosition(dt);
-  }
+  for (Player& player : players) { player.updatePosition(dt); }
 
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {

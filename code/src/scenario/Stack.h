@@ -9,10 +9,11 @@
 #include "tile.h"
 //#include "ActionCreator.h"
 
+//???
 Tile* getTyle(Simulation* s);
 
 
-Action* create (ActionType* a,Stuff* b,std::list<NPC*> npcs,std::list<Stuff*> stuffs,Simulation* sim);
+Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,Simulation* sim);
 
 
 
@@ -34,7 +35,7 @@ public:
 	 * @param a A name of an action
 	 * @param sf The basic stuff (the player clicked on it to do the action)
 	 */
-	void newAction(ActionType* a, Stuff* sf);
+	void newAction(ActionType* a, int stuffID);
 	/**
 	 * @brief Used when the player click on a Npc
 	 * @param n The Npc
@@ -44,7 +45,7 @@ public:
 	 * @brief Used when the player click on a Stuff
 	 * @param s The stuff.
 	 */
-	void sendStuff(Stuff* s);
+	void sendStuff(int stuffID);
 	Action* ActionOfStack(ActionType* a);
 
 private:
@@ -53,15 +54,15 @@ private:
 	 * else ask to the hub an NPC or a Stuff.
 	 */
 	void sendAction();
-	Stuff* getStuff();
+	//Stuff* getStuff();
 	NPC* getNpc ();
 	Simulation* sim;
 	PreHud* hud;
 	ActionType* actionType;
-	Stuff* basicStuff;
+	int stuffID;
 	std::list<SoN> SoNList;
 	std::list<NPC*> NpcList;
-	std::list<Stuff*> StuffList;
+	std::list<int> StuffList;
 };
 
 

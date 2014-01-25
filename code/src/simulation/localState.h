@@ -29,7 +29,9 @@ class LocalState : public Simulation{
    * @param _seed : a seed used for map creating
    * Default constructor
    */
-  LocalState(std::string _seed, const Player& _player);
+  /* Never used
+  LocalState(std::string _seed, Player& _player);
+  */
   LocalState(Geography* map,int nbPlayers,int id);
 
   /**
@@ -73,6 +75,6 @@ class LocalState : public Simulation{
    * An npc for which this local state exists
    */
   std::list<NPC> npc_list;
-  Player owner_player;
+  Player& owner_player;
 } ;
 #endif

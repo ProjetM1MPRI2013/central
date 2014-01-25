@@ -1,14 +1,7 @@
 #include "Stuff.h"
-#include "Action.h"
 #include "ActionsTerro.h"
 
-
-
-
-
-
 int Stuff::counter = 0;
-
 
 std::list<ActionType*> Stuff::getActionTypePossible () {return ActionTypePossible;};
 

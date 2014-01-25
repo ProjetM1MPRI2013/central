@@ -44,13 +44,13 @@ private:
 	bool bleft;
 	bool bright;
 	tgui::Gui hud;
-	std::list<Stuff*> inventory;
+	std::vector<int> inventory;
 	std::list<ActionType*> actionTypeList;
 	std::list<tgui::Button::Ptr> buttonsList;
 	WaitFor waitFor;
 	ButtonState currentState;
 	ButtonState nextState;
-	Stuff* currentStuff;
+	int currentStuffID;
 
 };
 

@@ -3,7 +3,7 @@
 #include <list>
 #include "network/client.h"
 #define DEBUG false
-#define LOG true
+#include "debug.h"
 
 bool isPlantable (Tile* t) {
 	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};
@@ -26,73 +26,69 @@ float distance(Simulation* s, NPC* npc) {
 
 
 
-bool isInThePack(Simulation* s, Stuff* stuff) {
-  std::list<Stuff*> inventory = s->getPlayer()->getInventory();
-  for (std::list<Stuff*>::iterator it = inventory.begin(); it != inventory.end(); ++it){
-    if ((*it)->stuffID == stuff->stuffID){return true;};
-  };
-  return false;
+bool isInThePack(Simulation* s, int stuffID) {
+  return s->getPlayer()->hasItemByID(stuffID);
 };
 
 
 
-Drop :: Drop (Stuff* s, Simulation* sim) : Action ("Drop",sim) {
-  stu = s;
+Drop :: Drop (int stuffID, Simulation* sim) : Action ("Drop",sim) {
+  this->stuffID = stuffID;
   this->playerID = this->simulation->getPlayer()->getID();
 };
 
 Drop::Drop(const Drop& d) : Action ("Drop",d.simulation){
-  this->stu = d.stu;
+  this->stuffID = d.stuffID;
   this->playerID = d.playerID;
 }
 
-Attack :: Attack (Weapon* weapon,NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
+Attack :: Attack (int weaponID, NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
   vict = victim;
-  weap = weapon;
+  this->weaponID = weaponID;
 };
 
 Attack::Attack(const Attack& a) : Action("Attack", a.simulation){
-  this->weap = a.weap;
+  this->weaponID = a.weaponID;
   this->vict = a.vict;
 }
 
 
-Plant :: Plant (Bomb* bomb,Tile* zone, Simulation* sim)  : Action ("Plant",sim) {
-  bo = bomb;
+Plant :: Plant (int bombID, Tile* zone, Simulation* sim)  : Action ("Plant",sim) {
+  this->bombID = bombID;
   z = zone;
 };
 
 Plant::Plant (const Plant& p) : Action ("Plant", p.simulation){
-  this->bo = p.bo;
+  this->bombID = p.bombID;
   this->z = p.z;
 }
 
 
-Reload :: Reload (Gun* gun, Ammunition* ammunition, Simulation* sim) : Action ("Reload",sim) {
-  g = gun;
-  ammu = ammunition;
+Reload :: Reload (int gunID, int ammunitionID, Simulation* sim) : Action ("Reload",sim) {
+  this->gunID = gunID;
+  this->ammunitionID = ammunitionID;
 };
 
 Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
-  this->g = r.g;
-  this->ammu = r.ammu;
+  this->gunID = r.gunID;
+  this->ammunitionID = r.ammunitionID;
 };
 
 
-bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stu);};
+bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stuffID);};
 void Drop::doAction () {
     this->simulation->getClient()->sendMessage(*this,true);
 };
 
 void Drop::addPendingActions(HostSimulation* hs){
-  hs->addAction(new DropItem(this->stu,this->playerID, (Simulation*) hs));
+  hs->addAction(new DropItem(this->stuffID,this->playerID, (Simulation*) hs));
   hs->deleteAction(this);
 }
 
 
 bool Plant::isActionPossible(){
   return (
-	  (isInThePack(this->simulation,this->bo)) 
+	  (isInThePack(this->simulation,this->bombID)) 
 	  && (isPlantable (this->z))
 	  );
 };
@@ -102,14 +98,16 @@ void Plant::doAction () {
 
 void Plant::addPendingActions(HostSimulation* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
-  hs->addAction(new Explosion(this->z,this->bo->getPower(),(Simulation*)hs));
-  hs->deleteAction(this);
+
+    Bomb bomb = hs->getItemByID<Bomb>(bombID);
+    hs->addAction(new Explosion(this->z,bomb.getPower(),(Simulation*)hs));
+    hs->deleteAction(this);
 }
 
 
 bool Reload::isActionPossible(){
-  return ((isInThePack(this->simulation,this->g))
-	  && (isInThePack(this->simulation,this->ammu))
+  return ((isInThePack(this->simulation,this->gunID))
+	  && (isInThePack(this->simulation,this->ammunitionID))
 	  );
 };
 void Reload::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
@@ -122,9 +120,9 @@ void Reload::addPendingActions(HostSimulation* hs){
 
 
 bool Attack::isActionPossible(){
-  return ((isInThePack(this->simulation,this-> weap))
-	  && ( (this->weap)->getRange() <= distance (this->simulation,this->vict) )
-	  );
+
+  return ((isInThePack(this->simulation,this->weaponID))
+	  && ( this->simulation->getItemByID<Weapon>(weaponID)).getRange() <= distance (this->simulation,this->vict) ) ;
 };
 void Attack::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 

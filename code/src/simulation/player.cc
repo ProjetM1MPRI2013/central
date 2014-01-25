@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "player.h"
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
@@ -6,6 +7,8 @@
 
 #define DEBUG true
 #include "debug.h"
+
+StuffNotFound::StuffNotFound() : std::runtime_error("Could not find Stuff in an inventory") {}
 
 void printDirection(Direction d){
   switch (d){
@@ -48,10 +51,10 @@ Player::Player (int pid, float xx, float yy) : p(xx,yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
-  this->addItem((Stuff *) (new Knife()));
-  this->addItem((Stuff *) (new Bomb(2)));
-  this->addItem((Stuff *) (new Gun(5,2,4)));
-  this->addItem((Stuff *) (new Ammunition(10)));
+  this->addItem(Knife());
+  this->addItem(Bomb(2));
+  this->addItem(Gun(5,2,4));
+  this->addItem(Ammunition(10));
 };
 
 int Player::getID(){
@@ -66,8 +69,11 @@ Direction Player::getDirection () {
   return this->d;
 };
 
-std::list<Stuff*> Player::getInventory () {
-  return this->inventory;
+std::vector<int> Player::getInventory () {
+  std::vector<int> ids;
+  ids.resize(inventory.size());
+  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Stuff>& stuff) { return stuff->stuffID; });
+  return ids;
 };
 
 void Player::setDirection(Direction newd) {
@@ -84,15 +90,19 @@ void Player::setDirection(Direction newd) {
   return;
 };
 
-void Player::addItem(Stuff* s) {
-  this->inventory.push_back(s);
-  DBG << "Add item to player " << this->playerID << " : " << s->name;
+void Player::addItem(Stuff&& stuff) {
+  this->inventory.push_back(std::unique_ptr<Stuff>(new Stuff(stuff)));
+  DBG << "Add item to player " << this->playerID << " : " << stuff.name;
   return;
 };
 
-void Player::removeItem(Stuff* s) {
-  this->inventory.remove(s);
-  delete s;
+void Player::removeItem(int stuffID) {
+  for (auto& stuffPtr : inventory) {
+    if (stuffPtr->stuffID == stuffID) {
+      inventory.remove(stuffPtr);
+      break;
+    }
+  }
   return;
 };
 
@@ -134,3 +144,14 @@ void Player::updatePosition(sf::Time dt) {
   
   return;
 };
+
+
+bool Player::hasItemByID(int stuffID) {
+  try {
+
+    getItemByID<Stuff>(stuffID);
+    return true;
+  } catch (const StuffNotFound& err) {
+    return false;
+  }
+}

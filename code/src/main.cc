@@ -117,8 +117,8 @@ void serverLoop(int id,int nbPlayers, Server* serverPtr,
 
     Geography geo = Generation1(seed);
     GlobalState glob = GlobalState(&geo,nbPlayers, id);
-    glob.addPlayer(new Player(1,0,0));
-    glob.getPlayerByID(1)->isServer = 1;
+    glob.addPlayer(Player(1,0,0));
+    glob.getPlayerByID(1).isServer = 1;
     glob.setServer(serverPtr);
 
     sf::Clock clock;

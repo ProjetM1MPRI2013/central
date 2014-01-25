@@ -4,7 +4,6 @@
 #include "simulation/npc.h"
 #include "generation/tile.h"
 #include "ScenarioAction.h"
-#include "simulation/player.h"
 #include "scenario/ActionsTerro.h"
 #include "NewMov.h"
 #include <iostream>
@@ -182,14 +181,14 @@ private :
 
 class DropItem : public ScenarioAction{
  public :
-  Stuff* stuff;
+  int stuffID;
   int playerID;
 
   /**
    *@param stuffO : item to drop
    *@param id : id of the player
    */
-  DropItem(Stuff* stuffO,int id, Simulation* s);
+  DropItem(int stuffID, int id, Simulation* s);
   DropItem (const DropItem&);
   
   virtual void run ();

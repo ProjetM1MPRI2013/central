@@ -19,13 +19,13 @@ void UpdateGenerator::update(sf::Time dt){
       last_sent = sf::Time::Zero ;
       for(int playerId : server->getConnectedPlayers())
         {
-          GameUpdate update = generateUpdate(*globalState->getPlayerByID(playerId)) ;
+          GameUpdate update = generateUpdate(globalState->getPlayerByID(playerId)) ;
           server->sendMessage<GameUpdate>(update, playerId, false) ;
         }
     }
 }
 
-GameUpdate UpdateGenerator::generateUpdate(Player &player) {
+GameUpdate UpdateGenerator::generateUpdate(Player& player) {
   DBG << "Generates an update for Player " << player.getID() ;
   GameUpdate update ;
   PlayerUpdate p_update(player);

@@ -35,7 +35,7 @@ Simulation::Simulation(int nbPlayers, int id)
 	this->absoluteTime = 0;
 	this->smallTime = 0;
 	
-	this->players.push_back(new Player(id,0,0));
+  this->addPlayer(Player(id,0,0));
 
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
@@ -47,25 +47,18 @@ Client* Simulation::getClient(){
 //  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
 }
 
-Simulation::~Simulation() {
-  // FIXME 
-  // This fixes a memory leak but is dangerous: everybody who did 
-  // getPlayerByID() may have a big problem now.  
-  // Could we pass players by value instead of reference? Or wrap them
-  // in a shared_ptr?
-  while(!players.empty()) delete players.front(), players.pop_front();
-}
-
 Simulation::Simulation(Geography* map, int nbPlayers, int id) : Simulation(nbPlayers, id) {
   this->setGeography(map);
 }
 
+/* Never used
 Simulation::Simulation(std::string seed, std::vector<Player *> p_vect)
     : Simulation(p_vect.size(),0) {
   this->setGeography(new Generation1(seed));
   for(Player* p : p_vect)
     this->players.push_back(p);
 }
+*/
 
 //void Simulation::setServer(Server* s) {
 //    assert(false);
@@ -78,8 +71,8 @@ bool Simulation::simIsServer(){
   return isServer;
 }
 
-void Simulation::addPlayer(Player* p){
-  players.push_back(p);
+void Simulation::addPlayer(Player&& p){
+  players.push_back(std::move(p));
   return;
 }
 
@@ -87,23 +80,16 @@ void Simulation::addAction(ScenarioAction * action) {
   this->pendingActions.push_back(action);
 }
 
-Player* Simulation::getPlayerByID(int pid) {
-  Player* result = 0;
-  for (std::list<Player*>::iterator it = players.begin(); it != players.end();
-       ++it) {
-    if ((*it)->getID() == pid) {
-      result = *it;
-    };
-  };
-  if (result == 0) {
-    std::cerr << "getPlayerByID error : Unknown playerID " << pid << std::endl;
-  };
-  return result;
+Player& Simulation::getPlayerByID(int pid) {
+  for (Player& player : players) {
+    if (player.getID() == pid) { return player; }
+  }
+  throw "getPlayerByID error : Unknown playerID ";
 }
 
 
 Player* Simulation::getPlayer() {
-  return this->getPlayerByID(this->Id);
+  return &(this->getPlayerByID(this->Id));
 }
 
 

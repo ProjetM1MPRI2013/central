@@ -3,10 +3,7 @@
 
 #include <list>
 #include <string>
-#include "Clickable.h"
-#include "Action.h"
 #include "Actions.h"
-
 
 class Stuff {
  public :

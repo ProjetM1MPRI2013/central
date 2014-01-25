@@ -20,7 +20,10 @@ class GlobalState : public Simulation{
    * @param _seed : a seed used for map creating
    * Default constructor
    */
+  
+  /* Never used
   GlobalState(std::string _seed, std::vector<Player *> _players);
+  */
 
   GlobalState(Geography* map,int nbPlayers,int id);
 

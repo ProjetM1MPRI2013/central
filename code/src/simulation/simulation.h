@@ -41,7 +41,7 @@ class Simulation : public EventSource {
   /**
    * @brief Get a player by is playerID;
    */
-  virtual Player* getPlayerByID (int playerID);
+  virtual Player& getPlayerByID (int playerID);
 
   /**
    * @brief Get the player of this simulation
@@ -52,7 +52,7 @@ class Simulation : public EventSource {
   /**
    * @brief Add a player to the player list
    */
-  virtual void addPlayer(Player* p);
+  virtual void addPlayer(Player&& p);
 
   /**
    * @brief addNPC
@@ -70,8 +70,9 @@ class Simulation : public EventSource {
   
   Simulation(int nbPlayers,int id);
   Simulation(Geography* map,int nbPlayers,int id);
+  /* Never used
   Simulation(std::string seed, std::vector<Player*> players) ;
-  ~Simulation();
+  */
   
   /**
    * @brief run
@@ -83,6 +84,9 @@ class Simulation : public EventSource {
   /*methode qui agit sur la matrice pour lisser la peur*/
   
   virtual void lisserMatrice();
+
+  template <class T>
+  T getItemByID(int id);
     
   /**
    * @brief setGeography
@@ -149,7 +153,7 @@ class Simulation : public EventSource {
   float smallTime;
   Geography* map;
 //  Geography* oldMap;
-  std::list<Player*> players;
+  std::list<Player> players;
   std::list<NPC *> NPCs;
   std::list<ScenarioAction *> pendingActions;
   //liste des actions déjà traité
@@ -157,5 +161,15 @@ class Simulation : public EventSource {
 
 };
 //#include "eventListener.h"
+template <class T>
+T Simulation::getItemByID(int stuffID) {
+  for (auto& player : players) {
+    try {
+      return player.getItemByID<T>(stuffID);
+    } catch (const StuffNotFound& err) {}
+  }
+  throw StuffNotFound();
+}
+
 
 #endif // SIMULATION_H

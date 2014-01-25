@@ -8,7 +8,7 @@
 #define LOG false
 
 // découper ici
-Tile* getTile(Simulation* s) {
+Tile getTile(Simulation* s) {
 	if (DEBUG) {std::cout << "getTile" << std::endl ;};
 	Player* p = s->getPlayer();
 	if (DEBUG) {std::cout << "getTile 1" << std::endl ;};
@@ -20,22 +20,22 @@ Tile* getTile(Simulation* s) {
 	if (DEBUG) {std::cout << "getTile 3" << std::endl ;};
 	if (DEBUG) {std::cout << map->getMapHeight() << std::endl ;};
 	if (DEBUG) {std::cout << "getTile 3.2" << std::endl ;};
-	Tile t = pos->isInTile(*map);
+	Tile& t = pos->isInTile(*map);
 	if (DEBUG) {std::cout << "getTile 4" << std::endl ;};
-	return &(t
+	return t;
 		/*s->getPlayer()->getPosition()->isInTile(
 				*(s->getMap())
 				)
 				*/
-
-		)
 ;};
 
-Stuff* getStuff(std::list<Stuff*> l) {
-	Stuff* s = l.front();
-	l.pop_front();
-	return s;
-};
+// Deprecated. Update it to not use pointers
+// if you uncomment it.
+//Stuff* getStuff(std::list<Stuff*> l) {
+	//Stuff* s = l.front();
+	//l.pop_front();
+	//return s;
+//};
 
 
 NPC* getNpc(std::list<NPC*> l) {
@@ -46,7 +46,7 @@ NPC* getNpc(std::list<NPC*> l) {
 
 // TODO ARRETER ICI
 
-Action* create (ActionType* a,Stuff* b,std::list<NPC*> npcs,std::list<Stuff*> stuffs,Simulation* sim) {
+Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,Simulation* sim) {
 /*if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
 switch (a)
 {
@@ -84,7 +84,7 @@ switch (a)
 
 Stack::Stack (Simulation* s, PreHud* h){
   actionType = 	NULL;
-  basicStuff = 0;
+  stuffID = -1; // -1 must be an invalid stuff id.
   hud = h;
   sim = s;
 };
@@ -96,13 +96,13 @@ void Stack::cancel () {
 	this->SoNList.clear ();
 	this->NpcList.clear ();
 	this->StuffList.clear ();
-	this->basicStuff = 0;
+	this->stuffID = -1;
 	//this->actionsName = Actions::NONE;
 };
 
 
 Action* Stack::ActionOfStack(ActionType* a) {
-	return create (a,this->basicStuff,this->NpcList,this->StuffList,this->sim);
+	return create (a,this->stuffID,this->NpcList,this->StuffList,this->sim);
   };
 
 void Stack::sendAction () {
@@ -143,11 +143,11 @@ void Stack::sendAction () {
 
 };
 
-void Stack::newAction(ActionType* a, Stuff* sf) {
+void Stack::newAction(ActionType* a, int stuffID) {
 	if (DEBUG) {std::cout << "nobody newAction" << std::endl ;};
   this->SoNList = a->SoNlist;
   this->actionType =a ;
-  this->basicStuff = sf;
+  this->stuffID = stuffID;
   this->sendAction();
 };
 
@@ -164,10 +164,10 @@ void Stack::sendNpc(NPC* n) {
 		/*todo : envoyer message d'erreur*/
 	};
 };
-void Stack::sendStuff(Stuff* s) {
+void Stack::sendStuff(int stuffID) {
 	if ((this->SoNList).front() == SON_STUFF)
 	{
-		(this->StuffList).push_front(s);
+		(this->StuffList).push_front(stuffID);
 		(this->SoNList).pop_front();
 		this->sendAction();
 	}

@@ -12,7 +12,6 @@
 #include "NewMov.h"
 #include "tile.h"
 #include "position.h"
-#include "player.h"
 #include "npc.h"
 
 
@@ -28,12 +27,12 @@ class Drop : public Action{
    * @brief Create a way to drop one stuff
    * @param stuff the stuff to drop
    */
-  Drop  (Stuff* stuff, Simulation* s);
+  Drop  (int stuffID, Simulation* s);
   Drop(const Drop& d);
    /**
    * @brief the stuff to drop
    */
-  Stuff* stu;
+  int stuffID;
   int playerID;
 
   bool isActionPossible ();
@@ -53,7 +52,7 @@ private :
   template <class Archive>
   void serialize(Archive & ar, const unsigned int version)
   {
-    ar & stu ;
+    ar & stuffID ;
     ar & playerID ;
   }
 };
@@ -65,12 +64,12 @@ class Attack : public Action {
    * @param weapon the weapon used
    * @param victim the victim
    */
-  Attack (Weapon* weapon, NPC* victim, Simulation* s);
+  Attack (int weaponID, NPC* victim, Simulation* s);
   Attack (const Attack& a);
    /**
    * @brief the weapon
    */
-  Weapon* weap;
+  int weaponID;
    /**
    * @brief the victim
    */
@@ -106,12 +105,12 @@ class Plant : public Action {
    * @param bomb the bomb used
    * @param zone the zone where the bomb will be planted 
    */
-  Plant (Bomb* bomb ,Tile* zone, Simulation* s);
+  Plant (int bombID ,Tile* zone, Simulation* s);
   Plant (const Plant&);
    /**
    * @brief the bomb
    */
-  Bomb* bo;
+  int bombID;
    /**
    * @brief the zone
    */
@@ -146,16 +145,16 @@ class Reload : public Action {
    * @param gun the gun to reload
    * @param Ammunition the pack of ammunition used
    */
-  Reload (Gun* gun,Ammunition* ammunition, Simulation* s);
+  Reload (int gunID, int ammunitionID, Simulation* s);
   Reload(const Reload&);
    /**
    * @brief the gun
    */
-  Gun* g;
+  int gunID;
    /**
    * @brief the pack of ammunition
    */
-  Ammunition* ammu;
+  int ammunitionID;
  
   bool isActionPossible ();
   void doAction ();

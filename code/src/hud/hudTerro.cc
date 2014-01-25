@@ -58,37 +58,43 @@ void HudTerro::init() {
   //if ((this-> currentState) == BS_ACTIONS) {std::cerr << "BS_ACTIONS" << std::endl;};
 	if (this->currentState == BS_INVENT) {
 		// if the inventory must be updated
-		if ((this->inventory) != (simulation.getPlayer()->getInventory())) {
-			// Delete the old buttons
-			for (std::list<tgui::Button::Ptr>::iterator it =
-					(this->buttonsList).begin();
-					it != (this->buttonsList).end(); ++it) {
-        hud.remove(*it);
-			};
-			(this->buttonsList).clear();
 
-			// Updtate the inventory
-			(this->inventory).clear();
-			this->inventory = (simulation.getPlayer()->getInventory());
+
+     //FIXME We don't check that inventory has changed for now (temporary)
+    if ((this->inventory) != (simulation.getPlayer()->getInventory())) {
+       //Delete the old buttons
+      for (std::list<tgui::Button::Ptr>::iterator it =
+          (this->buttonsList).begin();
+          it != (this->buttonsList).end(); ++it) {
+        hud.remove(*it);
+      };
+      (this->buttonsList).clear();
+
+       //Updtate the inventory
+      (this->inventory).clear();
+      this->inventory = (simulation.getPlayer()->getInventory());
 
 			// Create the new buttons
 			this->i = 0;
-			for (std::list<Stuff*>::iterator it = (this->inventory).begin();
-					it != (this->inventory).end(); ++it) {
+      for (int stuffID : inventory) {
+
+
+        Stuff stuff = (simulation.getPlayer())->getItemByID<Stuff>(stuffID);
+
 				tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->i) * 100, this->h - 100);
 				DBG << "button placed at " << (50 + (this->i) * 100) << "x" << this->h - 100;
-				button->setText((*it)->name);
+				button->setText(stuff.name);
 				//button->setCallbackId(this->i + 1);
 				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)), 
                              tgui::Button::LeftMouseClicked);
 				(this->buttonsList).push_back(button);
 				(this->i)++;
-				DBG << "adding " << (*it)->name;
+				DBG << "adding " << stuff.name;
 			};
-		};
+    };
 	};
 }
 ;
@@ -182,14 +188,11 @@ void HudTerro::callback(unsigned int callback_id) {
     	if ((this->currentState) == BS_INVENT) {
 			if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 				// Save the selected item
-				std::list<Stuff*>::iterator it = (this->inventory).begin();
-				for (unsigned int i = 1; i < callback_id; i++) {
-					++it;
-				};
-				this->currentStuff = (*it);
+				this->currentStuffID = inventory[(int)callback_id]; // horrible
 
 				// Get the possible actions for the item
-				this->actionTypeList = (this->currentStuff)->getActionTypePossible();
+
+				this->actionTypeList = (simulation.getPlayer())->getItemByID<Stuff>(currentStuffID).getActionTypePossible();
 
 				// Delete the old buttons
 				for (std::list<tgui::Button::Ptr>::iterator it =
@@ -249,7 +252,7 @@ void HudTerro::callback(unsigned int callback_id) {
 				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};
-				stack->newAction((*it), this->currentStuff);
+				stack->newAction((*it), this->currentStuffID);
 			};
 		};
 }
