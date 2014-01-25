@@ -21,6 +21,16 @@ int run(std::string which)
     return interface_init();
   } else if (which == "pathfinding") {
     return pathfinding();
+  } else if (which == "generation") {
+    return generation();
+  } else if (which == "scenario") {
+    return scenario();
+  } else if (which == "localstate") {
+    return localstate();
+  } else if (which == "terroview") {
+    return terroview();
+  } else if (which == "mayorview") {
+    return mayorview();
   } else {
     LOG(error) << "Unknown test : " << which;
   }
