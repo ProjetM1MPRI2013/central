@@ -16,7 +16,6 @@ namespace test {
     HScenario scenar = HScenario(loc);
     loc.setScenario(&scenar);
     GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
-    graContIso.load();
     return 0;
   }
 }

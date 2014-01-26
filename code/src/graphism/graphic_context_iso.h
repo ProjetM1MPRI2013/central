@@ -1,3 +1,6 @@
+/**
+ * @author MrKuluW
+ */
 #ifndef GRAPHICCONTEXT
 #define GRAPHICCONTEXT
 
@@ -44,11 +47,6 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   void addSpriteTilePack(SpriteTilePack stp);
 
   /**
-   * @brief Loads the textures on the objects of the map.
-   **/
-  void load();
-  
-  /**
    * @brief Runs one computation of the graphical output of the map.
    **/
   void run(sf::RenderWindow* window);
@@ -70,15 +68,20 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
   Geography* map;
   Simulation* sim;
-  sf::View view; // todo : des operations sur la view (zoom, etc...)
+  sf::View view;
   float zoomfactor;
   float zoommax;
   float zoommin;
-  sf::Sprite fog;
-  
+  sf::Texture fogT;
+  sf::Texture baseT;
+  std::list<Tile*> drawList;
+  sf::Clock spf;
+  sf::Font dafont;
+
+
+  // std::vector<Positionnable>
+
   // A ajouter : 
-  // Une tile de base (pour la transparence);
-  // Une tile pour le brouillard;
   // Deux ensembles d'éléments pour enlever le brouillard ou activer la
   // transparence, avec des pointeurs vers des positions, et de quoi checker
   // s'il y a changement de tile.

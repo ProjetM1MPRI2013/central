@@ -9,6 +9,7 @@
 #include <cerrno>
 #include <exception>
 #include <list>
+#include <stdexcept>
 
 enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP, ERROR};
 
@@ -54,8 +55,8 @@ public:
    *   Player& p = simulation->getPlayerByID(someID);
    *
    */
-   Player(const Player& other) = delete;
-   Player(Player&& other) = default;
+  Player(const Player& other) = delete;
+  Player(Player&& other) = default;
 
 
 private:

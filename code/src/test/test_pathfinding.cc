@@ -19,7 +19,6 @@ namespace test {
     //simu.setClient(clientPtr);
     GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
     //TileMap tilemap = TileMap(&loc, &geo);
-    graContIso.load();
     std::default_random_engine npcGen (42);
     dummy::createNPCs(1, loc, graContIso, geo, npcGen);
     LOG(info) << "Finished test NPCs creation and pathfinding";

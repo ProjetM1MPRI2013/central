@@ -72,8 +72,10 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   wrapper = NULL;
   this->filePictures = filePicturesO;
   alpha = false;
-  //fog = true;
+  // fog = true;
+  // sprite.setColor(sf::Color(128,128,128));
   fog = false; //temporaire
+  
   if (DEBUG){std::cout << "Tile : end\n";}
 }
 void Tile::nobodyTile(){
@@ -388,7 +390,7 @@ bool Tile::isInFog()
 
 void Tile::setAlpha(bool a)
 {
-  if(alpha != a && isWalkable())
+  if(alpha != a && !(isWalkable()))
     {
       if(a)
 	sprite.setColor(sf::Color(255,255,255,128));

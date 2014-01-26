@@ -48,11 +48,10 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   loc.setScenario(&scenar);
   loc.setClient(clientPtr);
   GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
-  graContIso.load();
   TileMap tilemap = TileMap(&loc, &geo);
   //geo.printMatrix();
   if (TERRO) {
-     graContIso.load();
+    // graContIso.load();
    } else {
      /* MAYOR */
    }
@@ -234,7 +233,6 @@ int main(int argc, char ** argv) {
 	gci.addTexturePack(tp1);
 	gci.addSpriteTilePack(stp1);
 	gci.addSpriteTilePack(stp2);
-	gci.load(); // Charge les textures de base de la map
 
 	//inputState s = { true, window };
 
@@ -280,6 +278,7 @@ namespace dummy {
       simu.addNPC(start,target,1,graContIso.getTexturePack(i%2));
 
       //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+
       //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
     }
   }

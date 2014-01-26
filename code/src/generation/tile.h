@@ -320,14 +320,17 @@ class Tile {
 
     /**
      * @brief Changes the transparency of the building.
+     * Apply changes only to unwalkable buildings.
      **/
     void setAlpha(bool a);
     
     /**
      * @brief Changes the fog state of the tile.
-     * @param nbFog: the number of hidden tiles of the building
+     * @param nbFog: the number of hidden tiles of the building.
+     * This parameter is relevant only if the tile is not walkable.
      **/
     void setFog(int nbFog);
+
 };
 
 
