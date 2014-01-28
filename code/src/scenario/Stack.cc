@@ -12,15 +12,15 @@ Tile getTile(Simulation* s) {
 	if (DEBUG) {std::cout << "getTile" << std::endl ;};
 	Player* p = s->getPlayer();
 	if (DEBUG) {std::cout << "getTile 1" << std::endl ;};
-	Position* pos = p->getPosition();
-	 if (DEBUG) {std::cout << pos->getX() << "," << pos->getY()  << std::endl ;};
-	if (DEBUG) {std::cout << pos->getX() << std::endl ;};
+	Position& pos = p->getPosition();
+	 if (DEBUG) {std::cout << pos.getX() << "," << pos.getY()  << std::endl ;};
+	if (DEBUG) {std::cout << pos.getX() << std::endl ;};
 	if (DEBUG) {std::cout << "getTile 2" << std::endl ;};
 	Geography* map = s->getMap();
 	if (DEBUG) {std::cout << "getTile 3" << std::endl ;};
 	if (DEBUG) {std::cout << map->getMapHeight() << std::endl ;};
 	if (DEBUG) {std::cout << "getTile 3.2" << std::endl ;};
-	Tile& t = pos->isInTile(*map);
+	Tile& t = pos.isInTile(*map);
 	if (DEBUG) {std::cout << "getTile 4" << std::endl ;};
 	return t;
 		/*s->getPlayer()->getPosition()->isInTile(

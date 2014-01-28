@@ -310,7 +310,7 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   fpstext.setString(std::to_string(fps));
   fpstext.setCharacterSize(16);
   fpstext.setColor(sf::Color::Red);
-  Position p = *sim->getPlayer()->getPosition();
+  Position& p = sim->getPlayer()->getPosition();
   this->view.setSize(sf::Vector2f(window->getSize().x,window->getSize().y));
   this->view.setCenter(sf::Vector2f(p.getX() + OFFSET_X,
 				    p.getY() + OFFSET_Y - (map->getMapWidth()) * RIGHT_TILE(1) ));

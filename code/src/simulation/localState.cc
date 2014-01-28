@@ -38,8 +38,8 @@ sf::Time &LocalState::getLocalTime(){
  * @return a reference to a Tile if on map, or owner's tile otherwise
  */
 Tile& LocalState::getRelativePlayerTile(int x, int y){
-  int absciss = owner_player.getPosition()->isInTile(*map).getCoord().getAbs();
-  int ordinate = owner_player.getPosition()->isInTile(*map).getCoord().getOrd();
+  int absciss = owner_player.getPosition().isInTile(*map).getCoord().getAbs();
+  int ordinate = owner_player.getPosition().isInTile(*map).getCoord().getOrd();
   absciss += x;
   ordinate += y;
   if ((absciss < map->getMapWidth()) && (absciss >= 0)
@@ -48,7 +48,7 @@ Tile& LocalState::getRelativePlayerTile(int x, int y){
     }
   //TODO {Denys} : think about returning meaning
   else {
-      return owner_player.getPosition()->isInTile(*map);
+      return owner_player.getPosition().isInTile(*map);
     }
 }
 

@@ -10,6 +10,7 @@
 #include <exception>
 #include <list>
 #include <stdexcept>
+#include "positionable.h"
 
 enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP, ERROR};
 
@@ -19,14 +20,13 @@ class StuffNotFound : public std::runtime_error
   explicit StuffNotFound();
 };
 
-class Player {
+class Player : public Positionable {
 public:
 
   //Pour débugue
   int isServer = 0;
 
   int getID();
-  Position* getPosition();
 
   Direction getDirection();
   void setDirection(Direction d);
@@ -66,7 +66,6 @@ private:
    */
   int playerID;
   float speed;
-  Position p;
   Direction d;
   /**
    * @brief The inventory is polymorphic so it holds pointers

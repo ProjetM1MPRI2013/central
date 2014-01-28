@@ -8,7 +8,7 @@
  * it only contains a Position and methods to get and set it
  */
 class Positionable {
- private:
+ protected:
   Position position;
 
 

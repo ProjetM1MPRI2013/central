@@ -47,7 +47,8 @@ void printDirection(Direction d){
 }
 
 
-Player::Player (int pid, float xx, float yy) : p(xx,yy) {
+Player::Player (int pid, float xx, float yy) {
+  position = Position(xx,yy);
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
@@ -59,10 +60,6 @@ Player::Player (int pid, float xx, float yy) : p(xx,yy) {
 
 int Player::getID(){
   return this->playerID;
-};
-
-Position* Player::getPosition() {
-  return &(this->p);
 };
 
 Direction Player::getDirection () {
@@ -111,28 +108,28 @@ void Player::updatePosition(sf::Time dt) {
   float sqrttwo = 1.414213562;
   switch (this->d){
   case UP : 
-    this->p.add(0,-dep);
+    position.add(0,-dep);
     break;
   case UPRIGHT :
-    this->p.add(dep / sqrttwo, -dep / sqrttwo);
+    position.add(dep / sqrttwo, -dep / sqrttwo);
     break;
   case RIGHT:
-    this->p.add(dep,0);
+    position.add(dep,0);
     break;
   case RIGHTDOWN :
-    this->p.add(dep/sqrttwo,dep/sqrttwo);
+    position.add(dep/sqrttwo,dep/sqrttwo);
     break;
   case DOWN :
-    this->p.add(0,dep);
+    position.add(0,dep);
     break;
   case DOWNLEFT :
-    this->p.add(-dep/sqrttwo,dep/sqrttwo);
+    position.add(-dep/sqrttwo,dep/sqrttwo);
     break;
   case LEFT :
-    this->p.add(-dep,0);
+    position.add(-dep,0);
     break;
   case LEFTUP :
-    this->p.add(-dep/sqrttwo,-dep/sqrttwo);
+    position.add(-dep/sqrttwo,-dep/sqrttwo);
     break;
   case STOP :
     break;

@@ -25,14 +25,14 @@ void LocalStateUpdater::update(sf::Time dt){
 void LocalStateUpdater::applyPlayerUpdate(PlayerUpdate &p_update){
 
   DBG << "Local Updater : updated position of player " << p_update.player_id ;
-  Position * pos = localState->getPlayerByID(p_update.player_id).getPosition() ;
-  if(pos->getX() < localState->getMap()->getMapWidth()
-     && pos->getX() >= 0
-     && pos->getY() < localState->getMap()->getMapHeight()
-     && pos->getY() >= 0)
+  Position& pos = localState->getPlayerByID(p_update.player_id).getPosition() ;
+  if(pos.getX() < localState->getMap()->getMapWidth()
+     && pos.getX() >= 0
+     && pos.getY() < localState->getMap()->getMapHeight()
+     && pos.getY() >= 0)
     {
-      pos->setX(p_update.pos.getX());
-      pos->setY(p_update.pos.getY());
+      pos.setX(p_update.pos.getX());
+      pos.setY(p_update.pos.getY());
     }
   else
     LOG(warning) << "Local Updater : position of player outside the map" ;
