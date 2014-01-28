@@ -8,7 +8,6 @@
 #include <memory>
 #include <cerrno>
 #include <exception>
-#include <stdexcept>
 #include <list>
 #include <stdexcept>
 
