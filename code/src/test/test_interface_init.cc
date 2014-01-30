@@ -12,7 +12,9 @@ namespace test {
     int sizeFenetre[3];
     bool isFullScreen;
     sf::VideoMode video_mode;
-    interface_initiale(sizeFenetre, &isFullScreen);
+    Server* serverPtr = Network::createDummyServer();
+    Client* clientPtr = Network::createDummyClient(serverPtr);
+    interface_initiale(sizeFenetre, &isFullScreen,serverPtr,clientPtr);
     return 0;
   }
 }
