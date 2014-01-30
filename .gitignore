@@ -12,6 +12,7 @@ code/configure
 code/game
 code/install-sh
 code/missing
+code/html/
 
 # Temp files
 *~
