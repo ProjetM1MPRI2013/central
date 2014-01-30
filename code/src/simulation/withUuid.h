@@ -1,3 +1,6 @@
+/**
+ * @author: Adrien H.
+ */
 #ifndef WITH_UUID_H
 #define WITH_UUID_H
 #include <boost/uuid/uuid.hpp>

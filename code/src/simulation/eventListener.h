@@ -1,3 +1,6 @@
+/**
+ * @author: Adrien H.
+ */
 #ifndef EVENT_LISTENER_H
 #define EVENT_LISTENER_H
 
