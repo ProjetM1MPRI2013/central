@@ -78,6 +78,13 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   
   if (DEBUG){std::cout << "Tile : end\n";}
 }
+
+Tile::Tile() :
+  batOrigin(Coordinates()),
+  coord(0,0),
+  coordBorough(Coordinates()),
+  picture(Coordinates()) {}
+
 void Tile::nobodyTile(){
 	std::cout << "tile : " << this->getCoord().abs << "," << this->getCoord().ord << std::endl;
 };

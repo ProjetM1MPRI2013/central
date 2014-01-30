@@ -219,8 +219,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longV; k++) {
 	for(i2=0; i2<widthRoadV; i2++){
 	  for(j2=0; j2<heightInter; j2++){
-	    //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
-	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	    //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
 	  }
 	}
       }
@@ -229,16 +229,16 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longH; k++) {
 	for(i2=0; i2<widthInter; i2++){
 	  for(j2=0; j2<heightRoadH; j2++){
-	    //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
-	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.),(ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+	    //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.),(ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
 	  }
 	}
       }
       // On met l'intersection
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightInter; j2++){
-	  //this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, speedInter[i2][j2], Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
-	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs1 + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
+	  //this->map[abs1 + i2][ord1 + j2] = Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, speedInter[i2][j2], Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
+	  this->map[abs1 + i2][ord1 + j2] = Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs1 + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
 	}
       }
       ord0 = ord1 + heightInter;
@@ -251,8 +251,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(k=0; k<longH; k++) {
       for(i2=0; i2<widthInter; i2++){
 	for(j2=0; j2<heightRoadH; j2++){
-	  //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
-	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), (ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+	  //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), (ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
 	}
       }
     }
@@ -272,8 +272,8 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     for(k=0; k<longV; k++) {
       for(i2=0; i2<widthRoadV; i2++){
 	for(j2=0; j2<heightInter; j2++){
-	  //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
-	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), j2<(heightInter-1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	  //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), j2<(heightInter-1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
 	}
       }
     }
@@ -360,7 +360,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	if(DEBUG) {std::cout << i3 << " " << j3 << std::endl;}
-	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(i3, j3), Coordinates(0,0), NULL, filePicture, picture, 1, 1); // MrKulu : Pose problème quand les tiles blank ne sont pas de taille 1. TODO
+	this->map[i3][j3] = Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(i3, j3), Coordinates(0,0), NULL, filePicture, picture, 1, 1); // MrKulu : Pose problème quand les tiles blank ne sont pas de taille 1. TODO
       }
     }
   }
@@ -378,8 +378,8 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     if (DEBUG){std::cout << "height: " << height << std::endl;}
     for(i3=abs0; i3<abs0 + width ; i3++){
       for(j3=ord0; j3<ord0 + height; j3++){
-	//this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, speedBat[i3][j3], Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
-	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
+	//this->map[i3][j3] = Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, speedBat[i3][j3], Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
+	this->map[i3][j3] = Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
       }
     }
     
@@ -417,7 +417,7 @@ void Generation1::fillNull(int seed, int nbLine, std::string file){
 	}
 	// Now, we fill the tile
 	batiment = Batiment(file,choose);
-	map[i][j] = new Tile(i,j,batiment.getType(), false, 0., 0., false, false, false, false, 0., Coordinates(i,j), Coordinates(i,j), NULL, batiment.getFilePictures(), batiment.getPicture(), batiment.getWidth(), batiment.getHeight());
+	map[i][j] = Tile(i,j,batiment.getType(), false, 0., 0., false, false, false, false, 0., Coordinates(i,j), Coordinates(i,j), NULL, batiment.getFilePictures(), batiment.getPicture(), batiment.getWidth(), batiment.getHeight());
 	if(DEBUG) {std::cout << "fill NULL with type : " << batiment.getType() << std::endl;}
       }
     }

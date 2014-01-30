@@ -189,6 +189,8 @@ class Tile {
    */
   Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool gou, bool god, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates pictureO, int widthO, int heightO);
 
+  Tile();
+
     /**
      * @brief gives the type of the tile, it's a generalist type
      * @return the type of the tile, which is in a enum
