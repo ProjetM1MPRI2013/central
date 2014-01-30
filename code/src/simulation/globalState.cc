@@ -35,7 +35,7 @@ void GlobalState::run(sf::Time dt){
   //int chance;
   //Adrien K. normalement ça devrait être bon.
   //If their is no enough money, remove an agent and a camera
-  if (sous[0] < 0) {
+  if (sous != 0) {
       if (!this->agents.empty()){
         this->agents.pop_back();}
       if (!this->cameras.empty()){
