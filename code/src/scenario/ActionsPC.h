@@ -6,6 +6,9 @@
 #ifndef ACTIONPC_H
 #define ACTIONPC_H
 
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/access.hpp>
+
 #include "../simulation/position.h"
 #include "Clickable.h"
 #include "Action.h"
@@ -36,7 +39,7 @@ class AddCop : public Action {
 
 private :
   //Serialization
-
+  AddCop(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -70,7 +73,7 @@ class AddCam : public Action {
 
 private :
   //Serialization
-
+  AddCam(){}
   friend class boost::serialization::access ;
 
   template <class Archive>

@@ -1,7 +1,13 @@
+#include <boost/serialization/export.hpp>
+
 #include "ActionsPC.h"
 #include "../simulation/simulation.h"
 #include "globalState.h"
 #include "localState.h"
+
+
+BOOST_CLASS_EXPORT(AddCop)
+BOOST_CLASS_EXPORT(AddCam)
 
 
 bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());}

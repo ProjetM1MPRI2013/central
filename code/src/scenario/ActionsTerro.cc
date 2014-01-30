@@ -1,9 +1,18 @@
 #include "ActionsTerro.h"
 #include <iostream>
 #include <list>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/export.hpp>
+
 #include "network/client.h"
 #define DEBUG false
 #include "debug.h"
+
+BOOST_CLASS_EXPORT(Drop)
+BOOST_CLASS_EXPORT(Attack)
+BOOST_CLASS_EXPORT(Plant)
+BOOST_CLASS_EXPORT(Reload)
 
 bool isPlantable (Tile* t) {
 	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};

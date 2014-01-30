@@ -40,6 +40,7 @@ private :
 
   friend class boost::serialization::access ;
 
+  ChangeDirection() {}
   template <class Archive>
   void serialize(Archive & ar, const unsigned int version)
   {
@@ -67,7 +68,7 @@ class AddCops: public ScenarioAction {
 
 private :
   //Serialization
-
+  AddCops(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -99,7 +100,7 @@ class AddCams: public ScenarioAction {
 
 private :
   //Serialization
-
+  AddCams(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -140,7 +141,7 @@ class Explosion: public ScenarioAction {
 
 private :
   //Serialization
-
+  Explosion(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -174,7 +175,7 @@ public:
 
 private :
   //Serialization
-
+  KillNPC(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -205,7 +206,7 @@ class DropItem : public ScenarioAction{
 
 private :
   //Serialization
-
+  DropItem(){}
   friend class boost::serialization::access ;
 
   template <class Archive>

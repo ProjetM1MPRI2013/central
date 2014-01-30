@@ -1,6 +1,11 @@
 #include "ScenarioAction.h"
 
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/export.hpp>
 #include <sstream>
+
+BOOST_CLASS_EXPORT(ScenarioAction)
 
 ScenarioAction::ScenarioAction (std::string n, Simulation* s){
   simulation = s;

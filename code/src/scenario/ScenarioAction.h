@@ -8,8 +8,8 @@
 
 class Simulation; // Forward declaration
 #include <string>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #include "network/abstractMessage.h"
 
 /**
@@ -47,16 +47,18 @@ class ScenarioAction : public AbstractMessage {
   static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
-private :
+protected :
   //Serialization
-
   ScenarioAction() ;
+
+private :
 
   friend class boost::serialization::access ;
 
   template <class Archive>
   void serialize(Archive & ar, const unsigned int version)
   {
+    ar & boost::serialization::base_object<AbstractMessage>(*this);
     ar & date ;
     ar & name ;
   }

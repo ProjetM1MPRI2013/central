@@ -2,6 +2,8 @@
 
 #include <assert.h>
 #include <boost/bind.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 #include "debug.h"
 
@@ -105,7 +107,7 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
   int id = get_msg_id(*data[0]) ;
-  DBG << "SERVER: sent message with id : " << id ;
+  DBG << "SERVER: sent message with id : " << id << " and type " << get_msg_type(*data[0]);
   if(error != 0)
     {
       //Error occured
@@ -145,7 +147,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
     DBG << "SERVER: Added new Client with address : "
            << sender_endpoint.address().to_string() << ":" << sender_endpoint.port();
   int id = get_msg_id(*header_buff) ;
-  DBG << "SERVER: Received message with id : " << id ;
+  DBG << "SERVER: Received message with id : " << id << " and type " << get_msg_type(*header_buff) ;
   if(error != 0)
     {
       LOG(error) << "SERVER: Error while sending message : " << error.message() ;
@@ -158,7 +160,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
       //Handle Ack
       NetEvent e(NetEvent::ACK) ;
       e.setData(id) ;
-      DBG << "SERVER: sending ACK with id : " << id ;
+      DBG << "SERVER: sending ACK with id : " << id << " for message " << e.getData();
       //TODO : bad il faudrait juste l'envoyer pas le broadcaster
       broadcastMessage<NetEvent>(e, false);
       bool b = sent_ack.insert(id).second ;
@@ -180,12 +182,11 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
         }
       }
   std::string type = get_msg_type(*header_buff) ;
-  DBG << "SERVER: Message Type : " << type ;
   if(type.compare(NetEvent::getMsgType()) == 0)
     {
-      //Handle NetEvent
-      NetEvent *event = NetEvent::fromString(buff->substr(0,size - HEADER_SIZE)) ;
-      DBG << *event ;
+      NetEvent *event = (NetEvent *) AbstractMessage::fromString(buff->substr(0,size - HEADER_SIZE)) ;
+
+      DBG << "SERVER: NetEvent received : " << *event ;
       switch(event->getType())
         {
         case NetEvent::NOT_SET :
@@ -273,9 +274,10 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
           }
         case NetEvent::ACK :
           {
-            int id = event->getData() ;
-            if(ack_set.find(id) != ack_set.end())
-              ack_set.erase(id) ;
+            int idrec = event->getData() ;
+            DBG << "SERVER: received ACK for message " << idrec ;
+            if(ack_set.find(idrec) != ack_set.end())
+              ack_set.erase(idrec) ;
             delete event ;
             wait_receive() ;
             return ;
@@ -318,7 +320,7 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
       else
         {
           //Resend
-          DBG << "SERVER: No ACK, resending message with id : " << id ;
+          DBG << "SERVER: No ACK, resending message with id : " << id << "and type " << get_msg_type(*msg[0]);
           vector<const_buffer> msg_buff ;
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));

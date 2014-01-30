@@ -1,5 +1,8 @@
 #include <boost/bind.hpp>
 #include <assert.h>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <sstream>
 
 #include "clientImplem.h"
 #include "debug.h"
@@ -77,7 +80,7 @@ std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, Ab
     {
       vector<AbstractMessage *> result ;
       for(string& msg : elts->second)
-          result.push_back(f(msg));
+        result.push_back(f(msg));
       received_messages.erase(elts);
       return result ;
     }
@@ -87,8 +90,7 @@ std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, Ab
 
 void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::system::error_code& error, int){
   int id = get_msg_id(*data[0]) ;
-  DBG << "CLI: Message sent to server with id " << id  ;
-  DBG << "CLI: Message Type : " << get_msg_type(*data[0]) ;
+  DBG << "CLI: Message sent to server with id " << id << "and type " << get_msg_type(*data[0]) ;
   //TODO : verify that all the message was transmitted
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
@@ -130,7 +132,7 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
 
 void ClientImplem::on_receive(const boost::system::error_code &error, int size){
   int id = get_msg_id(*header_buff) ;
-  DBG << "CLI: Received Message with id " << id ;
+  DBG << "CLI: Received Message with id " << id << " and type " << get_msg_type(*header_buff);
   if(error != 0)
     {
       generate_message(NetEvent(NetEvent::RECEIVE_ERR));
@@ -142,7 +144,7 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
         //Handle Ack
         NetEvent e(NetEvent::ACK) ;
         e.setData(id) ;
-        DBG << "CLI: Sending back ack with id " << id ;
+        DBG << "CLI: Sending back ACK with id " << id << " for message " << e.getData();
         sendMessage<NetEvent>(e, false);
         bool b = sent_ack.insert(id).second ;
 
@@ -162,12 +164,10 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
           }
     }
     std::string type = get_msg_type(*header_buff) ;
-    DBG << "CLI: Message Type " << type ;
     if(type.compare(NetEvent::getMsgType()) == 0)
       {
-        //Handle NetEvent
-        NetEvent *event = NetEvent::fromString(buff->substr(0,size - HEADER_SIZE)) ;
-        DBG << *event ;
+        NetEvent *event = (NetEvent *) AbstractMessage::fromString(buff->substr(0,size - HEADER_SIZE)) ;
+        DBG << "CLI: NetEvent received :" << *event ;
         switch(event->getType())
           {
           case NetEvent::NOT_SET :
@@ -240,9 +240,10 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
             }
           case NetEvent::ACK :
             {
-              int id = event->getData() ;
-              if(ack_set.find(id) != ack_set.end())
-                ack_set.erase(id) ;
+              int idrec = event->getData() ;
+              DBG << "CLI: received ACK for message " << idrec ;
+              if(ack_set.find(idrec) != ack_set.end())
+                ack_set.erase(idrec) ;
               delete event ;
               wait_receive() ;
               return ;
@@ -289,7 +290,7 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
       else
         {
           //Resend
-          DBG << "CLI: No ACK received for message " << id << ", re-sending message" ;
+          DBG << "CLI: No ACK received for message " << id  << " and type " << get_msg_type(*msg[0]) << ", re-sending message" ;
           vector<const_buffer> msg_buff ;
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));

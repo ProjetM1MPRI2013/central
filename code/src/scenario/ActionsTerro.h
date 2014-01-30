@@ -6,6 +6,9 @@
 #ifndef ACTIONTERRO_H
 #define ACTIONTERRO_H
 
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/access.hpp>
+
 #include "Clickable.h"
 #include "Action.h"
 #include "Stuff.h"
@@ -51,7 +54,7 @@ class Drop : public Action{
 
 private :
   //Serialization
-
+  Drop() {}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -91,7 +94,7 @@ class Attack : public Action {
 
 private :
   //Serialization
-
+  Attack() {}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -132,7 +135,7 @@ class Plant : public Action {
 
 private :
   //Serialization
-
+  Plant(){}
   friend class boost::serialization::access ;
 
   template <class Archive>
@@ -173,6 +176,7 @@ class Reload : public Action {
 private :
   //Serialization
 
+  Reload() {}
   friend class boost::serialization::access ;
 
   template <class Archive>

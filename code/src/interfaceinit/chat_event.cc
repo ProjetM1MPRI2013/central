@@ -1,5 +1,11 @@
 #include "chat_event.h"
 #include "assert.h"
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <sstream>
+
+BOOST_CLASS_EXPORT(ChatEvent)
 
 const std::string ChatEvent::MSG_TYPE = "chateven" ;
 
@@ -14,12 +20,17 @@ std::string ChatEvent::getMsgType(){
 }
 
 std::string ChatEvent::toString(){
-  return data;
+  std::stringstream ss ;
+  boost::archive::text_oarchive ar(ss) ;
+  ar << this ;
+  return ss.str() ;
 }
 
 ChatEvent* ChatEvent::fromString(std::string &msg){
-  ChatEvent* event = new ChatEvent() ;
-  event->setData(msg) ;
+  std::stringstream ss(msg) ;
+  boost::archive::text_iarchive ar(ss) ;
+  ChatEvent* event = NULL ;
+  ar >> event ;
   return event ;
 }
 void ChatEvent::setData(std::string dataString) {

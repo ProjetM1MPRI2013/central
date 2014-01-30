@@ -1,6 +1,11 @@
 #include "NewMov.h"
 #include <iostream>
 #include <sstream>
+#include <boost/serialization/export.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
+BOOST_CLASS_EXPORT(NewMovNetwork)
 
 void printNewMov(NewMov nm){
   switch (nm){

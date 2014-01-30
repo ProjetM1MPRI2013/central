@@ -10,8 +10,8 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/access.hpp>
 class Player;
 class Simulation;
 #include "../simulation/simulation.h"
@@ -75,17 +75,25 @@ class Action : public AbstractMessage {
  private:
   int playerID;
 
-private :
+public :
   //Serialization
 
+  /**
+   * @brief Action : used for serialization
+   */
+  Action() ;
+
+private :
   friend class boost::serialization::access ;
 
   template <class Archive>
   void serialize(Archive & ar, const unsigned int version)
   {
+    ar & boost::serialization::base_object<AbstractMessage>(*this);
     ar & name ;
     ar & date ;
     ar & delay ;
+    ar & playerID ;
   }
 };
 

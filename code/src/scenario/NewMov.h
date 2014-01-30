@@ -6,8 +6,7 @@
 #ifndef NEWMOV_H
 #define NEWMOV_H
 
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/access.hpp>
 
 #include "network/abstractMessage.h"
 
@@ -37,6 +36,7 @@ private :
   template <class Archive>
   void serialize(Archive & ar, const unsigned int version)
   {
+    ar & boost::serialization::base_object<AbstractMessage>(*this);
     ar & movement ;
     ar & playerID ;
   }
