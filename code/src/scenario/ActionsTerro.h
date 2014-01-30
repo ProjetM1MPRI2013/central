@@ -1,3 +1,8 @@
+/**
+   @author: Remy, Adrien K.
+ */
+
+
 #ifndef ACTIONTERRO_H
 #define ACTIONTERRO_H
 

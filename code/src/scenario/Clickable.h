@@ -1,3 +1,8 @@
+/**
+   @author: Adrien K.
+ */
+
+
 #ifndef CLICKABLE_H
 #define CLICKABLE_H
 

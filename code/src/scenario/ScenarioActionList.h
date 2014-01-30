@@ -1,3 +1,8 @@
+/**
+   @author: Adrien K.
+ */
+
+
 #ifndef SCENARIOACTIONLIST_H
 #define SCENARIOACTIONLIST_H
 

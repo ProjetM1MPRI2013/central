@@ -1,3 +1,8 @@
+/**
+   @author: Adrien K.
+ */
+
+
 #ifndef SCENARIOACTION_H
 #define SCENARIOACTION_H
 

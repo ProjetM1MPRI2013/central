@@ -1,3 +1,8 @@
+/**
+   @author: Adrien K.
+ */
+
+
 #ifndef HSCENARIO_H
 #define HSCENARIO_H
 
