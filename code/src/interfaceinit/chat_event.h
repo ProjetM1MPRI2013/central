@@ -10,6 +10,7 @@ public:
 	   * The Data is set to a empty string by Default
 	   */
 	ChatEvent();
+	ChatEvent(const ChatEvent&);
 	  /**
 	   * @brief toString : unimplemented yet
 	   */

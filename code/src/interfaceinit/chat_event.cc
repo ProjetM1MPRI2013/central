@@ -6,13 +6,15 @@ const std::string ChatEvent::MSG_TYPE = "chateven" ;
 ChatEvent::ChatEvent() {
 	data = "";
 }
-
+ChatEvent::ChatEvent(const ChatEvent& tobecopied) {
+  this->data = std::string(tobecopied.data);
+}
 std::string ChatEvent::getMsgType(){
   return MSG_TYPE ;
 }
 
 std::string ChatEvent::toString(){
-  return data ;
+  return data;
 }
 
 ChatEvent* ChatEvent::fromString(std::string &msg){

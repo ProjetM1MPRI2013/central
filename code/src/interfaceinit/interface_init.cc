@@ -1,3 +1,6 @@
+/*
+ * @Author : Matthieu
+ */
 #include <TGUI/TGUI.hpp>
 #include <iostream>
 // #include <string.hpp>
@@ -9,7 +12,8 @@
 #include <../network/network.h>
 #include <../network/netEvent.h>
 #include <chat_event.h>
-
+#define DEBUG true
+#include <debug.h>
 using namespace std;
 int usl = chdir("./src/interfaceinit");
 #define THEME_CONFIG_FILE "../widgets/Black.conf"
@@ -320,7 +324,7 @@ void reloadKeyMapping(tgui::ListBox::Ptr lc) {
 		cerr << "Erreur à l'ouverture !" << endl;
 
 }
-int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
+int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam,Server* serverPtr,Client* clientPtr) {
 	//Definition of sounds
 	//Definition of menu changement sound
 	sf::SoundBuffer changementMenuBuffer;
@@ -930,14 +934,26 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 						sf::String newchatString = chatinsert->getText();
 						chatinsert->setText("");
 						std::string newchatStdString =
-								newchatString.toAnsiString();
+						newchatString.toAnsiString();
+
 						if (newchatStdString.compare("") != 0) {
 							//TODO Envoyer un message aux autres personnes dont le contenu est : newchatStdString
 							ChatEvent toSend;
 							toSend.setData(nickName + (std::string) " : " + newchatStdString);
+							clientPtr->sendMessage<ChatEvent>(toSend);
+							//Réponse du Server
+							std::vector<ChatEvent *> tabMessages = serverPtr->receiveMessages<ChatEvent>();
+							for (int i = 0 ; i < (int) tabMessages.size() ; i++) {
+							  serverPtr->broadcastMessage(*(tabMessages[i]),false);
+							};
+							std::vector<ChatEvent *> tabMessagesClient = clientPtr->receiveMessages<ChatEvent>();
 
+							DBG << "Taille du tableau de message des serveurs : " << tabMessages.size();
 							chatbox->addLine(nickName + (std::string) " : "
 									+ newchatStdString, sf::Color(0, 0, 0));
+							for (int i = 0 ; i < (int) tabMessagesClient.size() ; i++) {
+							  chatbox->addLine(tabMessagesClient[i]->toString(),sf::Color(0,0,0));
+							}
 						}
 					}
 				}
@@ -950,15 +966,15 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 		while ((*todo).pollCallback(callback)) {
 			if (wim == 0) { //Main menu
 				if (callback.id == 1) {
-					//wima = 7; //go to create game menu
-					//changementMenu.play();
+					wima = 7; //go to create game menu
+					changementMenu.play();
 					//ServerInfo servInfo = ServerInfo();
 					//(*gameServer) = network.createServer(servInfo);
-					return 0;
+					//return 0;
 
 				}
 				if (callback.id == 2) {
-					//wima = 6;//go to join game menu
+					//wima = 5;//go to join game menu
 					//changementMenu.play();
 					return 1;
 				}
@@ -1119,6 +1135,7 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam) {
 			if (wim == 5) { //join game m menu
 				if (callback.id == 1) { //Return to main menu button pushed
 					wima = 0; // main menu
+
 					changementMenu.play();
 
 				}

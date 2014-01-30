@@ -146,7 +146,9 @@ int main(int argc, char ** argv) {
     isFullScreen = true;
     video_mode = sf::VideoMode::getDesktopMode();
     } else {*/
-    b = interface_initiale(sizeFenetre, &isFullScreen);
+  Server* serverPtr = Network::createDummyServer();
+  Client* clientPtr = Network::createDummyClient(serverPtr);
+    b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
     video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1],
 			       sizeFenetre[2]);
     //}
@@ -172,8 +174,6 @@ int main(int argc, char ** argv) {
 
     //geo.printMatrix();
 
-    Server* serverPtr = Network::createDummyServer();
-    Client* clientPtr = Network::createDummyClient(serverPtr);
 
     std::thread serverThread { std::bind(serverLoop, 0,
 					 nbPlayers, serverPtr, seed ,&window) };
