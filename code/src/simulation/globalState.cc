@@ -1,3 +1,6 @@
+/**
+  *@author Denys KANUNIKOV,
+  */
 #include "globalState.h"
 #include "network/netEvent.h"
 #include "scenario/NewMov.h"
@@ -41,29 +44,25 @@ void GlobalState::run(sf::Time dt){
 
     //The server retrieve all the new messages from the network (of type Action), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
   std::vector<Action *> actionFromNetwork = server->receiveMessages<Action>();
-  //TODO {denys} : add foreach loop
-  for (std::vector<Action *>::iterator it = actionFromNetwork.begin(); it !=  actionFromNetwork.end(); ++it){
-      (*it)->addPendingActions((HostSimulation*) this);
-      std::cout << "Host : new Action from network of type " << (*it)->name << "\n";
+
+  for (Action * action : actionFromNetwork){
+      action->addPendingActions((HostSimulation*) this);
+      std::cout << "Host : new Action from network of type " << action->name << "\n";
     }
   actionFromNetwork.clear();
 
   //The server retrieve all the new messages from the network (of type NewMovNetwork), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
   std::vector<NewMovNetwork *> movFromNetwork = server->receiveMessages<NewMovNetwork>();
-  //TODO {denys} : add foreach loop
-  for (std::vector<NewMovNetwork *>::iterator it = movFromNetwork.begin(); it !=  movFromNetwork.end(); ++it){
-       this->addAction((ScenarioAction *) new ChangeDirection((*it)->playerID,(*it)->movement,this));
-       std::cout << "Host : New Movement from player : " << (*it)->playerID << " ";
-       printNewMov((*it)->movement);
+
+  for (NewMovNetwork * newMove : movFromNetwork){
+       this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->movement,this));
+       std::cout << "Host : New Movement from player : " << newMove->playerID << " ";
+       printNewMov(newMove->movement);
        std::cout << std::endl;
      }
   movFromNetwork.clear();
 
-
-  //TODO {denys} : add foreach loop
-  for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
-        it != pendingActions.end(); ++it) {
-      ScenarioAction* action = (*it);
+    for (ScenarioAction* action : pendingActions) {
       //The server sends the ScenarioAction to the client, so they can do them.
       //Adrien K. je ne suis pas sur que toutes les ScenarioAction doivent être envoyé chez le client.
       std::cout << "Host : applying pending Scenario Action of type " << action->name << "\n";
@@ -92,40 +91,37 @@ void GlobalState::run(sf::Time dt){
 
     /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
-    //TODO {denys} : add foreach loop
-    for (std::list<Agent*>::iterator it = agents.begin();
-         it != agents.end(); ++it) {
-      sous[0] = sous[0] - (*it)->getEntretien();
+    for (Agent* agent : agents) {
+      sous[0] = sous[0] - agent->getEntretien();
     }
-    //TODO {denys} : add foreach loop
-    for (std::list<Camera*>::iterator it = cameras.begin();
-       it != cameras.end(); ++it) {
-     sous[0] = sous[0] - (*it)->getEntretien();
+
+    for (auto camera : cameras) {
+     sous[0] = sous[0] - camera->getEntretien();
       }
   }
 
   //Deplacement de tous les NPCs.
-  //TODO {denys} : add foreach loop
-  for (std::list<NPC *>::iterator it = NPCs.begin(); it != NPCs.end(); ++it) {
-      bool wasArrived = (*it)->hasArrived();
-      Tile& tileBefore = (*it)->getPosition().isInTile(*map);
-      (*it)->updatePosition(dt, *map);
-      Tile& tileAfter = (*it)->getPosition().isInTile(*map);
+
+  for (NPC* npc : NPCs) {
+      bool wasArrived = npc->hasArrived();
+      Tile& tileBefore = npc->getPosition().isInTile(*map);
+      npc->updatePosition(dt, *map);
+      Tile& tileAfter = npc->getPosition().isInTile(*map);
       if (!tileBefore.equals(tileAfter)) {
-        tileBefore.removeNPC(*it);
-        tileAfter.addNPC(*it);
+        tileBefore.removeNPC(npc);
+        tileAfter.addNPC(npc);
       }
       // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
-      if ((*it)->hasArrived() && !wasArrived) {
-        (**it).trigger("NPC::arrived");
+      if (npc->hasArrived() && !wasArrived) {
+        (*npc).trigger("NPC::arrived");
       }
       if (DEBUG) {
-        std::list<NPC*> neighbours = (*it)->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
+        std::list<NPC*> neighbours = (npc)->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
         while (!neighbours.empty()) {
           NPC* tempNPC = neighbours.front();
           neighbours.pop_front();
-          if (tempNPC->getUuid()!= (*it)->getUuid()) {
-            const std::string id1 = boost::lexical_cast<std::string>((*it)->getUuid());
+          if (tempNPC->getUuid()!= (npc)->getUuid()) {
+            const std::string id1 = boost::lexical_cast<std::string>(npc->getUuid());
             const std::string id2 = boost::lexical_cast<std::string>(tempNPC->getUuid());
             printf("NPC %s: neighbour %s\n",id1.c_str(),id2.c_str());
           }

@@ -1,3 +1,6 @@
+/**
+  *@author Denys KANUNIKOV,
+  */
 #include "localState.h"
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
@@ -46,7 +49,6 @@ Tile& LocalState::getRelativePlayerTile(int x, int y){
        && (ordinate < map->getMapHeight()) && (ordinate >= 0)){
       return map->getTileRef(absciss, ordinate);
     }
-  //TODO {Denys} : think about returning meaning
   else {
       return owner_player.getPosition().isInTile(*map);
     }
@@ -77,15 +79,13 @@ void LocalState::run(sf::Time dt){
 
    //The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
   std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
-  for (std::vector<ScenarioAction *>::iterator it = scenarioActionFromNetwork.begin(); it !=  scenarioActionFromNetwork.end(); ++it){
-      std::cout << "Client : add a ScenarioAction from network of type " << (*it)->name << "\n";
-      (*it)->simulation = this;
-      this->addAction(*it);
+  for (ScenarioAction* action: scenarioActionFromNetwork){
+      std::cout << "Client : add a ScenarioAction from network of type " << action->name << "\n";
+      action->simulation = this;
+      this->addAction(action);
   }
 
-  for (std::list<ScenarioAction*>::iterator it = pendingActions.begin();
-       it != pendingActions.end(); ++it) {
-      ScenarioAction* action = (*it);
+  for (ScenarioAction* action: pendingActions) {
       if (DEBUG) std::cout << "Client : applying pending Scenario Action of type " << action->name << "\n";
       action->run();
   }
@@ -101,48 +101,41 @@ void LocalState::run(sf::Time dt){
   int secondes = floor(smallTime);
   smallTime = smallTime - secondes;
 
-  /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
-  /*  for (int i = 1; i < secondes; i++) {
-   *        this->lisserMatrice();
-   *        }*/
-
   /* We update the position of all the players */
   for (Player& player : players) { player.updatePosition(dt); }
 
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
-      for (std::list<Agent*>::iterator it = agents.begin();
-           it != agents.end(); ++it) {
-          sous[0] = sous[0] - (*it)->getEntretien();
+      for (Agent* agent: agents) {
+          sous[0] = sous[0] - agent->getEntretien();
       }
 
-      for (std::list<Camera*>::iterator it = cameras.begin();
-           it != cameras.end(); ++it) {
-          sous[0] = sous[0] - (*it)->getEntretien();
+      for (Camera* camera: cameras) {
+          sous[0] = sous[0] - camera->getEntretien();
         }
       }
 
   //Deplacement de tous les NPCs.
-  for (std::list<NPC *>::iterator it = NPCs.begin(); it != NPCs.end(); ++it) {
-      bool wasArrived = (*it)->hasArrived();
-      Tile& tileBefore = (*it)->getPosition().isInTile(*map);
-      (*it)->updatePosition(dt, *map);
-      Tile& tileAfter = (*it)->getPosition().isInTile(*map);
+  for (NPC *npc : NPCs) {
+      bool wasArrived = npc->hasArrived();
+      Tile& tileBefore = npc->getPosition().isInTile(*map);
+      npc->updatePosition(dt, *map);
+      Tile& tileAfter = npc->getPosition().isInTile(*map);
       if (!tileBefore.equals(tileAfter)) {
-          tileBefore.removeNPC(*it);
-          tileAfter.addNPC(*it);
+          tileBefore.removeNPC(npc);
+          tileAfter.addNPC(npc);
       }
       // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir_
-      if ((*it)->hasArrived() && !wasArrived) {
-          (**it).trigger("NPC::arrived");
+      if (npc->hasArrived() && !wasArrived) {
+          (*npc).trigger("NPC::arrived");
       }
       if (DEBUG) {
-          std::list<NPC*> neighbours = (*it)->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
+          std::list<NPC*> neighbours = npc->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
           while (!neighbours.empty()) {
               NPC* tempNPC = neighbours.front();
               neighbours.pop_front();
-              if (tempNPC->getUuid()!= (*it)->getUuid()) {
-                  const std::string id1 = boost::lexical_cast<std::string>((*it)->getUuid());
+              if (tempNPC->getUuid()!= npc->getUuid()) {
+                  const std::string id1 = boost::lexical_cast<std::string>(npc->getUuid());
                   const std::string id2 = boost::lexical_cast<std::string>(tempNPC->getUuid());
                   printf("NPC %s: neighbour %s\n",id1.c_str(),id2.c_str());
               }
@@ -153,10 +146,6 @@ void LocalState::run(sf::Time dt){
   client->update(dt);
   return;
 }
-
-//Geography& LocalState::getLocalMap(){
-//  return *map;
-//}
 
 void LocalState::setClient(Client* c) {
   client = c;

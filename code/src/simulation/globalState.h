@@ -1,3 +1,6 @@
+/**
+  *@author Denys KANUNIKOV,
+  */
 #ifndef GLOBAL_STATE_H
 #define GLOBAL_STATE_H
 

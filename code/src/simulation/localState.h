@@ -1,3 +1,8 @@
+/**
+  *@author Denys KANUNIKOV,
+  */
+
+
 #ifndef LOCAL_STATE_H
 #define LOCAL_STATE_H
 
