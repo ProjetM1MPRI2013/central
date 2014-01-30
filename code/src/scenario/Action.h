@@ -10,11 +10,9 @@
 #include <time.h>
 #include <cerrno>
 #include <iostream>
-#include <boost/serialization/base_object.hpp>
-#include <boost/serialization/access.hpp>
 class Player;
 class Simulation;
-#include "../simulation/simulation.h"
+#include "simulation/simulation.h"
 #include "network/abstractMessage.h"
 
 typedef Simulation HostSimulation;
@@ -61,11 +59,7 @@ class Action : public AbstractMessage {
    */
   virtual void addPendingActions(HostSimulation* hs);
   
-
-  //AbstractMessage functions
-  static std::string getMsgType();
-  virtual std::string toString();
-  static AbstractMessage* fromString(std::string& msg);
+  // AbstractMessage function
   virtual AbstractMessage* copy();
 
 
@@ -75,26 +69,18 @@ class Action : public AbstractMessage {
  private:
   int playerID;
 
-public :
+protected :
   //Serialization
 
   /**
-   * @brief Action : used for serialization
+   * @brief Action : Default constructor used for serialization
    */
   Action() ;
 
-private :
-  friend class boost::serialization::access ;
+  SIMPLE_MESSAGE(Action, AbstractMessage)
 
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<AbstractMessage>(*this);
-    ar & name ;
-    ar & date ;
-    ar & delay ;
-    ar & playerID ;
-  }
 };
+
+BOOST_CLASS_EXPORT_KEY(Action)
 
 #endif

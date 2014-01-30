@@ -8,14 +8,6 @@
 #include "ActionsTerro.h"
 #include "geography.h"
 
-BOOST_CLASS_EXPORT(ChangeDirection)
-BOOST_CLASS_EXPORT(KillNPC)
-BOOST_CLASS_EXPORT(Explosion)
-BOOST_CLASS_EXPORT(AddCams)
-BOOST_CLASS_EXPORT(AddCops)
-BOOST_CLASS_EXPORT(DropItem)
-
-
 /*****************
  *ChangeDirection*
  *****************/

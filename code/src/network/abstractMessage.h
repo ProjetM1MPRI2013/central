@@ -88,12 +88,12 @@ void __serialize_variables(Archive& ar, T& var, Types&... rest) {
     void serialize(Archive & ar, const unsigned int version)  \
     {                                                         \
       ar & boost::serialization::base_object<BaseClass>(*this); \
-      __serialize_variables(ar, vars) ;   \
+      __serialize_variables(ar, ## vars) ;   \
     }              \
 
 #define SIMPLE_MESSAGE(ClassName, BaseClass, vars...) \
   public : \
   static std::string getMsgType() { std::string s = std::string(#ClassName) ; s.resize(8) ; return s ;} \
-  SIMPLE_SERILAIZATION(BaseClass, vars) \
+  SIMPLE_SERILAIZATION(BaseClass, ## vars) \
 
 #endif // ABSTRACTMESSAGE_H

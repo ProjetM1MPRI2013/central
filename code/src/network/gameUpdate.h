@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <boost/serialization/base_object.hpp>
+
 #include "abstractMessage.h"
 #include "npcUpdate.h"
 #include "playerUpdate.h"
@@ -16,15 +16,7 @@
 
 class GameUpdate : public AbstractMessage{
 public:
-    static std::string getMsgType(){
-      return "GamUpdte" ;
-    }
 
-    static GameUpdate& fromString(std::string& data) ;
-
-    std::string toString() {
-      return "" ;
-    }
     GameUpdate * copy() ;
 
     /**
@@ -69,16 +61,9 @@ private :
     PlayerUpdate p_update ;
     std::vector<NpcUpdate> npc_updates ;
 
-private :
-  //Serialization
-
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<AbstractMessage>(*this);
-  }
+    SIMPLE_MESSAGE(GameUpdate, AbstractMessage)
 };
+
+BOOST_CLASS_EXPORT_KEY(GameUpdate)
 
 #endif // GAMEUPDATE_H

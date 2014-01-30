@@ -47,23 +47,16 @@ class Drop : public Action{
   void doAction ();
   void addPendingActions(HostSimulation* hs);
 
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
-private :
+protected :
   //Serialization
   Drop() {}
-  friend class boost::serialization::access ;
 
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & stuffID ;
-    ar & playerID ;
-  }
+  SIMPLE_MESSAGE(DROP, Action, stuffID, playerID)
 };
+
+BOOST_CLASS_EXPORT_KEY(Drop)
 
 class Attack : public Action {
  public : 
@@ -87,23 +80,16 @@ class Attack : public Action {
   void doAction ();
   void addPendingActions(HostSimulation* hs);
 
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
 private :
   //Serialization
   Attack() {}
-  friend class boost::serialization::access ;
 
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<Action>(*this);
-  }
+  SIMPLE_MESSAGE(Attack, Action, weaponID)
 };
 
+BOOST_CLASS_EXPORT_KEY(Attack)
 
 
 class Plant : public Action {
@@ -128,23 +114,16 @@ class Plant : public Action {
   void doAction ();
   void addPendingActions(HostSimulation* hs);
 
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
 private :
   //Serialization
   Plant(){}
-  friend class boost::serialization::access ;
 
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<Action>(*this);
-  }
+  SIMPLE_MESSAGE(Plant, Action, bombID)
 };
 
+BOOST_CLASS_EXPORT_KEY(Plant)
 
 class Reload : public Action {
  public : 
@@ -168,26 +147,16 @@ class Reload : public Action {
   void doAction ();
   void addPendingActions(HostSimulation* hs);
 
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
 private :
   //Serialization
 
   Reload() {}
-  friend class boost::serialization::access ;
 
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<Action>(*this);
-    ar & name ;
-    ar & date ;
-    ar & delay ;
-  }
+  SIMPLE_MESSAGE(Reload, Action, gunID, ammunitionID)
 };
 
+BOOST_CLASS_EXPORT_KEY(Reload)
 
 #endif

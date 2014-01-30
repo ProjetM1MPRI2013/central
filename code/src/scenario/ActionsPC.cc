@@ -6,10 +6,6 @@
 #include "localState.h"
 
 
-BOOST_CLASS_EXPORT(AddCop)
-BOOST_CLASS_EXPORT(AddCam)
-
-
 bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());}
 bool :: AddCam::IsActionPossible() {return (COST_CAM2 <= (this->simulation)->getSous());}
 

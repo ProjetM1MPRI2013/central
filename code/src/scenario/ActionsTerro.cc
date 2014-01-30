@@ -9,11 +9,6 @@
 #define DEBUG false
 #include "debug.h"
 
-BOOST_CLASS_EXPORT(Drop)
-BOOST_CLASS_EXPORT(Attack)
-BOOST_CLASS_EXPORT(Plant)
-BOOST_CLASS_EXPORT(Reload)
-
 bool isPlantable (Tile* t) {
 	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};
 switch(t->getType())

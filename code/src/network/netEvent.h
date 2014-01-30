@@ -1,10 +1,6 @@
 #ifndef NETEVENT_H
 #define NETEVENT_H
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/base_object.hpp>
-
-
 #include "abstractMessage.h"
 
 
@@ -189,20 +185,6 @@ protected :
    * the field data may contain anything
    */
   int data ;
-
-/*
-private :
-  //Serialization
-
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<AbstractMessage>(*this);
-    ar & type ;
-    ar & data ;
-  }*/
 
   SIMPLE_MESSAGE(NetEvent, AbstractMessage, type, data)
 

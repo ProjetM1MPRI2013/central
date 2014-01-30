@@ -6,11 +6,35 @@
 #include "debug.h"
 #include "netEvent.h"
 #include "test/test_net.h"
+#include "gameUpdate.h"
+#include "scenario/Action.h"
+#include "scenario/ActionsPC.h"
+#include "scenario/ActionsTerro.h"
+#include "scenario/NewMov.h"
+#include "scenario/ScenarioAction.h"
+#include "scenario/ScenarioActionList.h"
 
+//Registers the classes used for serialization
 BOOST_CLASS_EXPORT_IMPLEMENT(AbstractMessage)
 BOOST_CLASS_EXPORT_IMPLEMENT(NetEvent)
 BOOST_CLASS_EXPORT_IMPLEMENT(test::TestA)
 BOOST_CLASS_EXPORT_IMPLEMENT(test::TestB)
+BOOST_CLASS_EXPORT_IMPLEMENT(GameUpdate)
+BOOST_CLASS_EXPORT_IMPLEMENT(Action)
+BOOST_CLASS_EXPORT_IMPLEMENT(AddCop)
+BOOST_CLASS_EXPORT_IMPLEMENT(AddCam)
+BOOST_CLASS_EXPORT_IMPLEMENT(Drop)
+BOOST_CLASS_EXPORT_IMPLEMENT(Attack)
+BOOST_CLASS_EXPORT_IMPLEMENT(Plant)
+BOOST_CLASS_EXPORT_IMPLEMENT(Reload)
+BOOST_CLASS_EXPORT_IMPLEMENT(NewMovNetwork)
+BOOST_CLASS_EXPORT_IMPLEMENT(ScenarioAction)
+BOOST_CLASS_EXPORT_IMPLEMENT(ChangeDirection)
+BOOST_CLASS_EXPORT_IMPLEMENT(KillNPC)
+BOOST_CLASS_EXPORT_IMPLEMENT(Explosion)
+BOOST_CLASS_EXPORT_IMPLEMENT(AddCams)
+BOOST_CLASS_EXPORT_IMPLEMENT(AddCops)
+BOOST_CLASS_EXPORT_IMPLEMENT(DropItem)
 
 using namespace std ;
 using namespace boost::archive ;

@@ -42,27 +42,16 @@ class ScenarioAction : public AbstractMessage {
   Simulation* simulation;
 
   //AbstractMessage functions
-  static std::string getMsgType();
-  virtual std::string toString();
-  static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
 protected :
   //Serialization
   ScenarioAction() ;
 
-private :
-
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<AbstractMessage>(*this);
-    ar & date ;
-    ar & name ;
-  }
+  SIMPLE_MESSAGE(ScenarioAction, AbstractMessage, date, name)
 };
+
+BOOST_CLASS_EXPORT_KEY(ScenarioAction)
 
 
 #endif

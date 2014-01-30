@@ -6,8 +6,6 @@
 #ifndef NEWMOV_H
 #define NEWMOV_H
 
-#include <boost/serialization/access.hpp>
-
 #include "network/abstractMessage.h"
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
@@ -20,26 +18,15 @@ class NewMovNetwork : public AbstractMessage {
   int playerID;
   NewMovNetwork(NewMov m, int pid);
 
-  //AbstractMessage functions
-  static std::string getMsgType();
-  virtual std::string toString();
-  static NewMovNetwork* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
-private :
+protected :
   //Serialization
 
   NewMovNetwork() ;
 
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<AbstractMessage>(*this);
-    ar & movement ;
-    ar & playerID ;
-  }
+  SIMPLE_MESSAGE(NewMovNetwork, AbstractMessage, movement, playerID)
 };
 
+BOOST_CLASS_EXPORT_KEY(NewMovNetwork)
 #endif

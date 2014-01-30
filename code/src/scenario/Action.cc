@@ -2,16 +2,8 @@
 #include "debug.h"
 
 #include "Action.h"
-
-#include <sstream>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
-
-BOOST_CLASS_EXPORT(Action)
 
 Action::Action(std::string n, Simulation* s) {
   name = n;
@@ -43,34 +35,7 @@ void Action::addPendingActions(HostSimulation* hs){
 
 Action::Action() : name(""), date(0), delay(0), simulation(NULL), playerID(0){}
 
-
-//AbstractMessage function implementations
-std::string Action::getMsgType(){
-  return "Sce:C_ACTION";
-}
-
-std::string Action::toString(){
-  std::stringstream ss ;
-  boost::archive::text_oarchive ar(ss) ;
-  ar << *this ;
-  return ss.str();
-}
-
-AbstractMessage* Action::fromString(std::string& msg){
-  Action a ;
-  std::stringstream ss(msg) ;
-  boost::archive::text_iarchive ar(ss) ;
-  DBG << ss.str() ;
-  ar >> a ;
-  DBG << ss.str() ;
-  if(a.name.compare("AddCam") == 0)
-    {
-      //AddCam* event = new AddCam() ;
-      //DBG << ss.str() ;
-    }
-  return NULL ;
-}
-
+// AbstractMessage function
 AbstractMessage* Action::copy(){
   return ((AbstractMessage*)new Action(*this));
 }
