@@ -6,6 +6,10 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 
+/*
+ * Test functions for the network part.
+ * @author mheinric
+ */
 
 namespace test {
   int net_dummy() ;
@@ -19,6 +23,7 @@ namespace test {
     int data = 0 ;
     //Virtual method so that class is considered base
     virtual void nill() {}
+    virtual ~TestC(){}
 
   private :
     //Serialization

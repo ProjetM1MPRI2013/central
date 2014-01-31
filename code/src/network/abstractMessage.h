@@ -17,6 +17,7 @@
  * interface can be used to call receiveMessages<MsgType>() and
  * sendMessage<MsgType>(message).
  *
+ * @author mheinric
  */
 class AbstractMessage {
 public :

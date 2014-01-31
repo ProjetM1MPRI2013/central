@@ -14,6 +14,7 @@
  * Network implementation of the Server interface.
  * It uses a custom protocol on top of udp to send messages.
  * @see ClientImplem
+ * @author mheinric
  */
 class ServerImplem : virtual public Server, public ComunicatorImplem {
 public :

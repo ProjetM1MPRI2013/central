@@ -14,6 +14,10 @@
 #include "scenario/ScenarioActionList.h"
 #include "interfaceinit/chat_event.h"
 
+/*
+ * @author mheinric
+ */
+
 //Registers the classes used for serialization
 BOOST_CLASS_EXPORT_IMPLEMENT(AbstractMessage)
 BOOST_CLASS_EXPORT_IMPLEMENT(NetEvent)

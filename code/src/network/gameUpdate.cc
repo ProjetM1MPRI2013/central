@@ -1,6 +1,10 @@
 #include "gameUpdate.h"
 #include <boost/serialization/export.hpp>
 
+/*
+ * @author mheinric
+ */
+
 GameUpdate::GameUpdate() : p_update(), npc_updates(){}
 
 GameUpdate::~GameUpdate(){}

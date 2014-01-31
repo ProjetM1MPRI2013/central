@@ -1,6 +1,10 @@
 #include "comunicatorImplem.h"
 #include "debug.h"
 
+/*
+ * @author mheinric
+ */
+
 using namespace std ;
 using namespace boost::asio ;
 
@@ -62,6 +66,8 @@ bool ComunicatorImplem::ack_message(const string &header) {
 
 std::string* ComunicatorImplem::create_header(bool reliable, std::string type, int id) {
   assert(type.size() == 8) ;
+
+  //asynchronous send necessite buffers to be saved on the heap
   string * header = new string(HEADER_SIZE, '\00') ;
   if(reliable)
     header->at(HEADER_SIZE -1) = '\001' ;

@@ -19,6 +19,7 @@
  *  - SERV_RESP(resp CLI_RESP) message will be directly answered, the message is then discarded
  *  - PLAYER_JOIN : the content of the message will be used to identify the Player in the future.
  *  - ACK messages are only used internally and shoud not be sent. They are always discarded.
+ * @author mheinric
  */
 
 class NetEvent : public AbstractMessage{

@@ -3,6 +3,10 @@
 
 #include "debug.h"
 
+/*
+ * @author mheinric
+ */
+
 LocalStateUpdater::LocalStateUpdater(Simulation* state, Client* client) :
   localState(state), client(client)
 {

@@ -12,6 +12,10 @@
 #include "network/dummyClient.h"
 #include "network/dummyServer.h"
 
+/*
+ * @author mheinric
+ */
+
 BOOST_CLASS_EXPORT(test::TestC)
 BOOST_CLASS_EXPORT(test::TestD)
 
@@ -40,6 +44,8 @@ int net_serialization(){
     LOG(info) << "TEST : .........FAIL" ;
   else
     LOG(info) << "TEST : ...........OK" ;
+  delete testcMsg ;
+  delete testcp ;
 
 
   LOG(info) << "Simple serialization with inheritance" ;
@@ -61,6 +67,8 @@ int net_serialization(){
     }
   else
     LOG(info) << "TEST : ...........OK" ;
+  delete derived ;
+  delete result ;
 
   TestA msg(1) ;
   msg.data2 = 10 ;
@@ -129,6 +137,11 @@ int test_cli_ser(Server* ser, Client* cli){
   else
     LOG(info) << "TEST : " << ".....FAIL"  ;
 
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
+
 
 
   //Test from server to client.
@@ -156,6 +169,11 @@ int test_cli_ser(Server* ser, Client* cli){
     LOG(info) << "TEST : " << ".....OK"  ;
   else
     LOG(info) << "TEST : " << ".....FAIL"  ;
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
+
 
   //Test with several messages Client -> Server
 
@@ -186,6 +204,11 @@ int test_cli_ser(Server* ser, Client* cli){
   else
     LOG(info) << "TEST : " << ".....FAIL"  ;
 
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
+
 
   //Test with several messages Server -> Client
 
@@ -214,6 +237,11 @@ int test_cli_ser(Server* ser, Client* cli){
     LOG(info) << "TEST : " << ".....OK"  ;
   else
     LOG(info) << "TEST : " << ".....FAIL"  ;
+
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
 
 
   //Test with several types at the same time Client -> Server
@@ -245,6 +273,11 @@ int test_cli_ser(Server* ser, Client* cli){
   else
     LOG(info) << "TEST : " << ".....FAIL" ;
 
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
+
 
   //Test with several types at the same time Server -> Client
 
@@ -274,6 +307,11 @@ int test_cli_ser(Server* ser, Client* cli){
   else
     LOG(info) << "TEST : " << ".....FAIL" ;
 
+  for(TestA* p : va)
+    delete p ;
+  for(TestB* p : vb)
+    delete p ;
+
   return 0 ;
 }
 
@@ -283,6 +321,8 @@ int net_dummy(){
   Client *cli = Network::createDummyClient(ser) ;
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Dummy Test ........ FINISHED"  ;
+  delete ser ;
+  delete cli ;
   return i ;
 }
 
@@ -295,6 +335,8 @@ int net_real(){
 
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Real Test ........ FINISHED"  ;
+  delete ser ;
+  delete cli ;
   return i ;
 }
 }

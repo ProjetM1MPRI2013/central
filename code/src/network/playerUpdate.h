@@ -5,6 +5,11 @@
 
 class Player ;
 
+/**
+ * @brief The PlayerUpdate class
+ * Used to generate and apply updates of the state of the player
+ * @author mheinric
+ */
 class PlayerUpdate
 {
 public:

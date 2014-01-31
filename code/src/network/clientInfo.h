@@ -6,11 +6,15 @@
 /**
  *
  * This class is used to discribe informations on the client used for the
- * connection with the server. Some field such as the local address, or
+ * connection with the server.
+ *
+ * Some field such as the local address, or
  * the local port of the connection will be filled automatically when connecting
  * to the server if they are not provided by the user.
  * Some other field may be added in the future such as the game version (to
  * ensure compatibity, player name ...)
+ *
+ * @author mheinric
  */
 
 class ClientInfo {

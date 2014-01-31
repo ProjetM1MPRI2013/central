@@ -2,6 +2,10 @@
 
 #include "simulation/player.h"
 
+/*
+ * @author mheinric
+ */
+
 PlayerUpdate::PlayerUpdate(): player_id(0), pos(0,0){
 }
 

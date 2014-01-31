@@ -21,6 +21,7 @@ class GlobalState ;
  * If a client fails to ack a message sent with the reliable option set to true, this client is removed
  * from the list of connected clients, and a CLI_LOST NetEvent is generated on the Server side
  * and broadcasted to all the other clients.
+ * @author mheinric
  */
 class Server {
 

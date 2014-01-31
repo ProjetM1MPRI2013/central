@@ -17,6 +17,7 @@
  * @brief The ClientImplem class
  *  Class implementing the Client interface. It is used for communication
  *  between the server and the Client.
+ *
  *  This class relies on UDP protocol for communication. A custom protocol is
  *  added on top of UDP to ensure packet delivery when it is necessary (basically,
  *  when the client sends an event to the server).
@@ -35,6 +36,7 @@
  *  we use a datagram oriented protocol. For this protocol to work, it is important that
  *  messages can be sent in only one datagram (and it should be checked that it is
  *  effectively the case).
+ * @author mheinric
  */
 
 class ClientImplem : public Client, public ComunicatorImplem {

@@ -3,6 +3,10 @@
 #include "dummyClient.h"
 #include "gameUpdate.h"
 
+/*
+ * @author mheinric
+ */
+
 using namespace std ;
 
 DummyServer::DummyServer() : clients(), players(), received_messages(),
@@ -10,21 +14,25 @@ DummyServer::DummyServer() : clients(), players(), received_messages(),
 }
 
 DummyServer::~DummyServer(){
-    list<DummyClient *>::iterator it ;
-    for(it = clients.begin(); it != clients.end() ; it++)
+    for(DummyClient* cli : clients)
     {
-        delete *it ;
+        cli->isShutDown = true ;
     }
     MapType::iterator it2  ;
     for(it2 = received_messages.begin();it2 != received_messages.end(); it2++)
       {
-        delete it2->second ;
+        for(AbstractMessage* p : it2->second)
+          delete p ;
       }
     received_messages.clear();
 }
 
-void DummyServer::addClient(DummyClient &cli){
-    clients.push_back(&cli) ;
+void DummyServer::addClient(DummyClient *cli){
+    clients.insert(cli) ;
+}
+
+void DummyServer::removeClient(DummyClient * cli){
+  clients.erase(cli);
 }
 
 void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyClient *cli){
@@ -38,14 +46,8 @@ void DummyServer::addMessage(AbstractMessage *msg, std::string msgType, DummyCli
           return ;
         }
     }
-
-  MapType::iterator p = received_messages.find(msgType) ;
-  if(p == received_messages.end())
-    {
-      p = received_messages.insert(MapType::value_type(msgType, new vector<AbstractMessage *>()) ).first ;
-    }
   lock.lock() ;
-  p->second->push_back(msg) ;
+  received_messages[msgType].push_back(msg) ;
   lock.unlock() ;
 }
 
@@ -55,8 +57,7 @@ vector<AbstractMessage *> DummyServer::receive_messages(std::string msgType, Abs
     if(p != received_messages.end())
       {
         lock.lock() ;
-        vector<AbstractMessage *>temp(*(p->second)) ;
-        delete p->second ;
+        vector<AbstractMessage *>temp(p->second) ;
         received_messages.erase(p);
         lock.unlock() ;
         return temp ;

@@ -9,7 +9,9 @@
 #include "simulation/localState.h"
 #include "simulation/simulation.h"
 
-
+/*
+ * @author mheinric
+ */
 
 Server* Network::createServer(ServerInfo &s_info){
   return new ServerImplem(s_info) ;

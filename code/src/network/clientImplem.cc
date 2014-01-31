@@ -8,7 +8,9 @@
 #include "debug.h"
 #include "simulation/localState.h"
 
-
+/*
+ * @author mheinric
+ */
 
 using namespace boost::asio ;
 using namespace std ;
@@ -48,11 +50,16 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
 
 
 ClientImplem::~ClientImplem(){
+  if(locStateUpdater != NULL)
+    delete locStateUpdater ;
 }
 
 
 void ClientImplem::send_message(AbstractMessage &msg, bool reliable, string msgType){
   last_sent ++ ;
+  //asynchronous send requires buffers to be saved on the heap as their
+  //content may be used after sock->async_send() returns.
+  //they are deleted when the callback on_sent is called
   string* header = create_header(reliable, msgType, last_sent) ;
   string* data = new string(msg.toString()) ;
   vector<const_buffer> msg_buff ;
@@ -202,7 +209,7 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
           case NetEvent::CLI_TRY:
             {
               NetEvent e(NetEvent::CLI_RESP) ;
-              this->sendMessage<NetEvent>(e) ;
+              this->sendMessage<NetEvent>(e, false) ;
               break ;
             }
 
@@ -250,6 +257,7 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
               break ;
             }
           }
+        delete event ;
       }
     received_messages[type].push_back(buff->substr(0,size - HEADER_SIZE)) ;
     wait_receive() ;

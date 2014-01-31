@@ -9,6 +9,7 @@
  * be used to create the server, and during the connexions of the clients.
  * Other fields can be added in the future such as the game version, the name of
  * the server ...
+ * @author mheinric
  */
 
 class ServerInfo {

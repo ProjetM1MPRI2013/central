@@ -10,6 +10,7 @@ class NPC ;
 
 /**
  * @brief The NpcUpdate class : Container for informations that will be passed as an update through the network.
+ * @author mheinric
  */
 class NpcUpdate
 {

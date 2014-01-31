@@ -13,7 +13,9 @@
 /**
  * @brief The ComunicatorImplem class
  * Base class for the Network implementation of the client and the server.
+ *
  * This class contains utility functions that are used on both sides.
+ * @author mheinric
  */
 class ComunicatorImplem
 {

@@ -22,6 +22,7 @@ class LocalState ;
  *
  * @see NetEvent for details.
  * @see Network::createClient to get an instance of this class.
+ * @author mheinric
  */
 class Client {
 public :

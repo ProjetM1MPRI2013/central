@@ -8,6 +8,7 @@ class Simulation;
 
 /**
  * @brief The LocalStateUpdater class : class used to handle and apply updates received by the server
+ * @author mheinric
  */
 class LocalStateUpdater
 {

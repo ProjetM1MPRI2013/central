@@ -5,6 +5,10 @@
 #include "simulation/globalState.h"
 #include "playerUpdate.h"
 
+/*
+ * @author mheinric
+ */
+
 UpdateGenerator::UpdateGenerator(GlobalState *globalState, Server* server) :
   globalState(globalState), server(server), last_sent()
 {

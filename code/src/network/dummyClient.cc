@@ -5,20 +5,27 @@
 #include "netEvent.h"
 #include "simulation/localState.h"
 
+/*
+ * @author mheinric
+ */
+
 DummyClient::DummyClient(DummyServer* server) : received_messages(),
   locStateUpdater(NULL){
   this->server = server ;
-  this->server->addClient(*this);
+  this->server->addClient(this);
   this->addMessage(new NetEvent(NetEvent::SERV_RESP),NetEvent::getMsgType());
 }
 
 DummyClient::~DummyClient(){
   MapType::iterator it ;
+  lock.lock() ;
   for(it = received_messages.begin(); it != received_messages.end(); it++)
     {
-      delete it->second ;
+      for(AbstractMessage* p : it->second)
+        delete p ;
     }
   received_messages.clear();
+  lock.unlock() ;
 }
 
 void DummyClient::addMessage(AbstractMessage *msg, std::string msgType){
@@ -32,10 +39,7 @@ void DummyClient::addMessage(AbstractMessage *msg, std::string msgType){
         }
     }
   lock.lock() ;
-  if(received_messages[msgType] == NULL)
-      received_messages[msgType] = new std::vector<AbstractMessage *>() ;
-
-  received_messages[msgType]->push_back(msg) ;
+  received_messages[msgType].push_back(msg) ;
   lock.unlock() ;
 }
 
@@ -48,8 +52,7 @@ std::vector<AbstractMessage *> DummyClient::receive_messages(std::string msgType
   MapType::iterator p = received_messages.find(msgType) ;
   if(p != received_messages.end())
     {
-      std::vector<AbstractMessage *> temp(*(p->second)) ;
-      delete p->second ;
+      std::vector<AbstractMessage *> temp(p->second) ;
       received_messages.erase(p);
       lock.unlock() ;
       return temp ;

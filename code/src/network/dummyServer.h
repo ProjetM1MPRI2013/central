@@ -2,7 +2,7 @@
 #define DUMMYSERVER_H
 
 #include <map>
-#include <list>
+#include <set>
 #include <mutex>
 
 #include "server.h"
@@ -14,11 +14,12 @@ class DummyClient ;
 
 /**
  * @brief The DummyServer class
- *
  * Implements the Server interface trivially.
+ *
  * Won't use the network, nor any serialization.
  * Is used with the DummyClient class.
  * @see DummyClient
+ * @author mheinric
  */
 
 class DummyServer : public Server {
@@ -40,7 +41,9 @@ public:
      * updates to this client as well.
      * @param cli : the Client to add
      */
-    void addClient(DummyClient& cli) ;
+    void addClient(DummyClient* cli) ;
+
+    void removeClient(DummyClient *cli) ;
 
     /**
      * @brief addMessage : adds a received message to the server with the given type
@@ -55,14 +58,14 @@ private :
      * @brief clients : all the clients connected to
      * this server
      */
-    std::list<DummyClient*> clients ;
+    std::set<DummyClient*> clients ;
 
     /**
      * @brief players : associates to each player ID the client it is associated to.
      */
     std::map<int, DummyClient *> players ;
 
-    typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
+    typedef std::map<std::string, std::vector<AbstractMessage*> > MapType ;
     /**
      * @brief received_messages : used to store all the messages received from now.
      * Associates to each type of message a vector containing all the messages

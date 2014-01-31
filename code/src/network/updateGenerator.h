@@ -8,6 +8,7 @@ class Player ;
 /**
  * @brief The UpdateGenerator class : class used to generate updates on the Server side.
  * Call the update() method to send updates to all the clients.
+ * @author mheinric
  */
 class UpdateGenerator
 {

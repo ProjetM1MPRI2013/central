@@ -12,6 +12,7 @@
  * @brief The GameUpdate class
  * Will contain informations to transmit to the clients
  * Will be created from the GameState.
+ * @author mheinric
  */
 
 class GameUpdate : public AbstractMessage{

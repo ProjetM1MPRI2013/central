@@ -7,6 +7,10 @@
 
 #include "debug.h"
 
+/*
+ * @author mheinric
+ */
+
 using namespace std ;
 using namespace boost::asio ;
 
@@ -27,7 +31,8 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
 }
 
 ServerImplem::~ServerImplem(){
-
+  if(updateGen != NULL)
+    delete updateGen ;
 }
 
 vector<int> ServerImplem::getConnectedPlayers(){
@@ -47,6 +52,8 @@ bool ServerImplem::isConnected(int player){
 void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgType, int player){
   //TODO : msg_id faux si il y a plusieurs clients (utilisé plusieurs fois)
   last_sent++ ;
+  //asynchronous send requires that buffers are stored on the heap.
+  //they are freed when the callback on_sent is called
   string* header = create_header(reliable, msgType, last_sent) ;
   string* data = new string(msg.toString()) ;
 
@@ -65,6 +72,8 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
           auto handler = boost::bind(&ServerImplem::on_sent, this,string_msg,cli_endpoint, _1, _2) ;
           write_buff(buffs, handler, &cli_endpoint) ;
         }
+      //new objects were used at each turn of the loop.
+      //the orignal ones can be deleted
       delete header ;
       delete data ;
     }
@@ -284,6 +293,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
             break ;
           }
         }
+        delete event ;
     }
   received_messages[type].push_back(buff->substr(0,size - HEADER_SIZE)) ;
   wait_receive() ;

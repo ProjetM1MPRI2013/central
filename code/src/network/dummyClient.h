@@ -13,6 +13,8 @@
  * Class used for debug. Provides an implementation of the
  * Client interface. Will just copy the events, and not use
  * the network, nor carry out any serialization
+ *
+ * @author mheinric
  */
 
 class DummyClient : public Client{
@@ -38,6 +40,8 @@ public:
    */
   void addMessage(AbstractMessage *msg, std::string msgType) ;
 
+  bool isShutDown = false;
+
 protected :
   /**
    * protected destructor : the client will be
@@ -46,7 +50,7 @@ protected :
    */
   virtual ~DummyClient() ;
 
-  typedef std::map<std::string, std::vector<AbstractMessage*>* > MapType ;
+  typedef std::map<std::string, std::vector<AbstractMessage*> > MapType ;
 
   /**
    * @brief recieved_updates

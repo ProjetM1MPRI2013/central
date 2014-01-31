@@ -11,6 +11,7 @@
 
 /**
  * @brief The Network class : class used to creates instances of the Client and Server.
+ * @author mheinric
  */
 
 class Network {
