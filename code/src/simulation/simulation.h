@@ -1,3 +1,7 @@
+/**
+  *@author Denys Kanunikov, others...
+  */
+
 #ifndef SIMULATION_H
 #define SIMULATION_H
 class Action;

@@ -1,3 +1,6 @@
+/**
+  *@author Denys Kanunikov, others...
+  */
 #include "simulation.h"
 #include "../generation/geography.h"
 #include "../generation/tile.h"
