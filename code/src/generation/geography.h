@@ -7,6 +7,8 @@
 #include <iostream>
 #include <cerrno>
 
+class Position;
+
 class Tile;
 
 /**
@@ -84,6 +86,8 @@ class Geography {
    * @param j : ordinate of the tile
    * @return a pointer to the tile
    */
+  Tile* getWalkableTile();
+
   Tile* getTile(int i,int j);
   /**
    * @brief gives a tile of the map caracterized by these coordinates

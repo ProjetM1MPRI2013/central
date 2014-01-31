@@ -1,7 +1,7 @@
 #include "geography.h"
 #include "tile.h"
 #include <assert.h>
-
+#include "position.h"
 #define DEBUG false
 
 
@@ -48,6 +48,21 @@ float Geography::getAnxiety(int i, int j){
 	return ((this->map[i][j])->getAnxiety());
 }
 
+Tile* Geography::getWalkableTile() {
+  bool found = false;
+  int i = 0 ; int j = 0 ;
+  while (!found) {
+    found = (getTile(i,j))->isWalkable();
+    if (i+1 >99) {
+      j++;
+      i=0;
+    }
+    else {
+      i++;
+    }
+  }
+  return (getTile(i,j));
+}
 
 void Geography::setAnxiety(int i, int j, float anxiety){
 	map[i][j]->setAnxiety(anxiety);
