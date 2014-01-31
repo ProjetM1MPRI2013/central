@@ -3,7 +3,6 @@
 #include <boost/archive/text_oarchive.hpp>
 
 #include "abstractMessage.h"
-#include "debug.h"
 #include "netEvent.h"
 #include "test/test_net.h"
 #include "gameUpdate.h"
@@ -13,6 +12,7 @@
 #include "scenario/NewMov.h"
 #include "scenario/ScenarioAction.h"
 #include "scenario/ScenarioActionList.h"
+#include "interfaceinit/chat_event.h"
 
 //Registers the classes used for serialization
 BOOST_CLASS_EXPORT_IMPLEMENT(AbstractMessage)
@@ -35,6 +35,9 @@ BOOST_CLASS_EXPORT_IMPLEMENT(Explosion)
 BOOST_CLASS_EXPORT_IMPLEMENT(AddCams)
 BOOST_CLASS_EXPORT_IMPLEMENT(AddCops)
 BOOST_CLASS_EXPORT_IMPLEMENT(DropItem)
+BOOST_CLASS_EXPORT_IMPLEMENT(ChatEvent)
+
+#include "debug.h"
 
 using namespace std ;
 using namespace boost::archive ;
