@@ -362,8 +362,9 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   sf::Sprite playerSprite;
   int fps = 1000 / spf.getElapsedTime().asMilliseconds();
   spf.restart();
+  fpstext.setFont(dafont);
   fpstext.setString(std::to_string(fps));
-  fpstext.setCharacterSize(16);
+  fpstext.setCharacterSize(24);
   fpstext.setColor(sf::Color::Red);
   Position& p = sim->getPlayer()->getPosition();
   this->view.setSize(sf::Vector2f(window->getSize().x,window->getSize().y));
