@@ -54,7 +54,8 @@ string AbstractMessage::toString() {
   stringstream ss ;
   {
     text_oarchive ar(ss) ;
-    ar << this ;
+    AbstractMessage * this2 = this;
+    ar << this2 ;
   }
   DBG << "Serialize to : " << ss.str() ;
   return ss.str() ;

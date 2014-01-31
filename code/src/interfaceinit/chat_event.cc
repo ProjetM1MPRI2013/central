@@ -22,7 +22,8 @@ std::string ChatEvent::getMsgType(){
 std::string ChatEvent::toString(){
   std::stringstream ss ;
   boost::archive::text_oarchive ar(ss) ;
-  ar << this ;
+  ChatEvent * this2 = this;
+  ar << this2 ;
   return ss.str() ;
 }
 
