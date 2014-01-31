@@ -49,15 +49,20 @@ Simulation::~Simulation() {
   for (auto& e : NPCs) {
     delete e;
   }
+  NPCs.clear();
   for (auto& e : pendingActions) {
     delete e;
   }
+  pendingActions.clear();
   for (auto& e : cameras) {
     delete e;
   }
+  cameras.clear();
   for (auto& e : agents) {
     delete e;
   }
+  agents.clear();
+  sous.clear();
 }
 
 
