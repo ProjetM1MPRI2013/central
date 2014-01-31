@@ -2,8 +2,7 @@
 #include "player.h"
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
-
-#define SPEED_AMPLIFIER 350
+#define SPEED_AMPLIFIER 50
 
 #define DEBUG true
 #include "debug.h"
@@ -103,33 +102,83 @@ void Player::removeItem(int stuffID) {
   return;
 };
 
-void Player::updatePosition(sf::Time dt) {
+void Player::updatePosition(sf::Time dt,Geography& map) {
   float dep = (this->speed) * (dt.asSeconds()) * SPEED_AMPLIFIER;
   float sqrttwo = 1.414213562;
+  //float x = position.getX();
+  //float y = position.getY();
   switch (this->d){
   case UP : 
     position.add(0,-dep);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(0,dep);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(0,dep);
+    //}
     break;
   case UPRIGHT :
     position.add(dep / sqrttwo, -dep / sqrttwo);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(-dep / sqrttwo, dep / sqrttwo);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(-dep / sqrttwo, dep / sqrttwo);
+    //}
     break;
   case RIGHT:
     position.add(dep,0);
+    ///if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(-dep,0);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(-dep,0);
+    //}
     break;
   case RIGHTDOWN :
     position.add(dep/sqrttwo,dep/sqrttwo);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(-dep/sqrttwo,-dep/sqrttwo);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(-dep/sqrttwo,-dep/sqrttwo);
+    //}
     break;
   case DOWN :
     position.add(0,dep);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(0,-dep);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(0,-dep);
+    //}
     break;
   case DOWNLEFT :
     position.add(-dep/sqrttwo,dep/sqrttwo);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+     // position.add(dep/sqrttwo,-dep/sqrttwo);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(dep/sqrttwo,-dep/sqrttwo);
+    //}
     break;
   case LEFT :
     position.add(-dep,0);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(dep,0);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(dep,0);
+    //}
     break;
   case LEFTUP :
     position.add(-dep/sqrttwo,-dep/sqrttwo);
+    //if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    //  position.add(dep/sqrttwo,dep/sqrttwo);
+    //}
+    //if (!((position.isInTile(map)).isWalkable())) {
+    //  position.add(dep/sqrttwo,dep/sqrttwo);
+    //}
     break;
   case STOP :
     break;
@@ -138,7 +187,9 @@ void Player::updatePosition(sf::Time dt) {
     std::cerr << "Player::updatePosition : Direction not correct " << (int) (this->d) << "\n";
     break;
   };
-  
+  //if (!(x == position.getX() && y == position.getY())) {
+  //  DBG << position.getX() <<  " + " << position.getY();
+  //}
   return;
 };
 

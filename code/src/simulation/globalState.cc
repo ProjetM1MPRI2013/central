@@ -87,7 +87,7 @@ void GlobalState::run(sf::Time dt){
         }*/
 
       /* We update the position of all the players */
-      for (Player& player : players) { player.updatePosition(dt); }
+      for (Player& player : players) { player.updatePosition(dt,*map); }
 
     /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
