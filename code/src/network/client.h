@@ -51,7 +51,7 @@ public :
    */
   template<typename MsgType>
   void sendMessage(MsgType& msg, bool reliable = true){
-    send_message(msg,reliable, MsgType::getMsgType());
+    send_message(msg,reliable, msg.getMsgType());
   }
 
   /**
@@ -68,7 +68,7 @@ public :
   std::vector<MsgType * > receiveMessages(){
     //function pointer casting : not sure it works
     std::vector<AbstractMessage*> result1 = receive_messages(MsgType::getMsgType(),
-                                                             (AbstractMessage* (*) (std::string &)) & MsgType::fromString) ;
+                                                             (AbstractMessage* (*) (std::string &)) &AbstractMessage::fromString) ;
     std::vector<MsgType*> result2 ;
     for(AbstractMessage* p : result1)
       {

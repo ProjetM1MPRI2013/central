@@ -15,8 +15,7 @@ int run(std::string which)
   if (which == "sfml") {
     return sfml();
   } else if (which == "net") {
-    return net_dummy();
-    return net_real();
+    return net_serialization() || net_dummy() || net_real() ;
   } else if (which == "interface_init") {
     return interface_init();
   } else if (which == "pathfinding") {

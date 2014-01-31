@@ -1,6 +1,9 @@
 #ifndef CHATEVENT_H
 #define CHATEVENT_H
-#include "../network/abstractMessage.h"
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
+
+#include "network/abstractMessage.h"
 
 class ChatEvent : public AbstractMessage{
 public:
@@ -43,6 +46,18 @@ protected :
 	 * @bried data : the data that is attached to the message.
 	 */
 	  std::string data ;
+
+private :
+  //Serialization
+
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<AbstractMessage>(*this);
+    ar & data ;
+  }
 };
 
 #endif // NETEVENT_H

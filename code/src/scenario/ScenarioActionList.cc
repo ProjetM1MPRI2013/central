@@ -1,9 +1,12 @@
+#include <boost/serialization/export.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 #include "ScenarioActionList.h"
 #include "simulation.h"
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
 #include "geography.h"
-
 
 /*****************
  *ChangeDirection*

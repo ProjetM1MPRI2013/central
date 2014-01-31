@@ -1,6 +1,9 @@
 #ifndef ABSTRACTMESSAGE_H
 #define ABSTRACTMESSAGE_H
 
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #include <string>
 #include <assert.h>
 
@@ -26,13 +29,13 @@ public :
    * The returned string must be exactly 8 characters long.
    * (it will be sent over the network, so a fixed size is required).
    */
-  static std::string getMsgType() { assert(false) ;}
+  static std::string getMsgType() { return "AbstrMsg" ; }
 
   /**
    * @brief toString : serialize the object.
    * @return The string representation of this message
    */
-  virtual std::string toString() =0 ;
+  virtual std::string toString() ;
 
   /**
    * @brief fromString : function used for deserialisation
@@ -42,7 +45,7 @@ public :
    * the function fromString with the signature :
    * static MsgType * fromString(std::string)
    */
-  static AbstractMessage * fromString(const std::string& msg){ assert(false);}
+  static AbstractMessage * fromString(const std::string& msg) ;
 
   /**
    * @brief copy : copy the message
@@ -52,6 +55,45 @@ public :
 
   virtual ~AbstractMessage(){ }
 
+private :
+  //Serialization
+  friend class boost::serialization::access ;
+
+  template <class Archive>
+  void serialize(Archive & ar, const unsigned int version){}
+
 };
+
+BOOST_CLASS_EXPORT_KEY(AbstractMessage)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(AbstractMessage)
+
+/*******************************************
+ *Templates used for a simple serialization*
+ *******************************************/
+
+template<class Archive>
+void __serialize_variables(Archive& ar) {
+}
+
+template<class Archive, typename T, typename... Types >
+void __serialize_variables(Archive& ar, T& var, Types&... rest) {
+  ar & var ;
+  __serialize_variables(ar, rest...) ;
+}
+
+#define SIMPLE_SERILAIZATION(BaseClass, vars...) \
+  private :                    \
+    friend class boost::serialization::access ;  \
+    template <class Archive>                    \
+    void serialize(Archive & ar, const unsigned int version)  \
+    {                                                         \
+      ar & boost::serialization::base_object<BaseClass>(*this); \
+      __serialize_variables(ar, ## vars) ;   \
+    }              \
+
+#define SIMPLE_MESSAGE(ClassName, BaseClass, vars...) \
+  public : \
+  static std::string getMsgType() { std::string s = std::string(#ClassName) ; s.resize(8) ; return s ;} \
+  SIMPLE_SERILAIZATION(BaseClass, ## vars) \
 
 #endif // ABSTRACTMESSAGE_H

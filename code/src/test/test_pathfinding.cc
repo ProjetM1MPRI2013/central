@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "main.h"
-#include "test.h"
+//#include "test.h"
 #include "HScenario.h"
 #include "localState.h"
 #include "geography.h"

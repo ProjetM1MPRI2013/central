@@ -6,6 +6,7 @@
 #ifndef ACTIONPC_H
 #define ACTIONPC_H
 
+
 #include "../simulation/position.h"
 #include "Clickable.h"
 #include "Action.h"
@@ -23,9 +24,6 @@ class AddCop : public Action {
   AddCop (int number, float x, float y, Simulation* s);
   AddCop(const AddCop&);
 
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
 
 
@@ -36,19 +34,13 @@ class AddCop : public Action {
 
 private :
   //Serialization
+  AddCop(){}
 
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<Action>(*this);
-    ar & number ;
-    ar & x ;
-    ar & y ;
-  }
+  SIMPLE_MESSAGE(AddCop, Action, number, x, y)
 
 };
+BOOST_CLASS_EXPORT_KEY(AddCop)
+
 
 class AddCam : public Action {
  public:
@@ -57,9 +49,6 @@ class AddCam : public Action {
   AddCam (int number,float x, float y, Simulation* s);
   AddCam(const AddCam&);
   
-  //AbstractMessage functions
-  //virtual std::string & toString();
-  //static AbstractMessage* fromString(std::string& msg);
   virtual AbstractMessage* copy();
   
   
@@ -70,29 +59,11 @@ class AddCam : public Action {
 
 private :
   //Serialization
+  AddCam(){}
 
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & boost::serialization::base_object<Action>(*this);
-    ar & number ;
-    ar & x ;
-    ar & y ;
-  }
-  
+  SIMPLE_MESSAGE(AddCam, Action, number, x, y)
 };
 
-
-
-
-
-
-
-
-
-
-
+BOOST_CLASS_EXPORT_KEY(AddCam)
 
 #endif

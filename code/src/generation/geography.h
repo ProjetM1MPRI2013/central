@@ -28,7 +28,7 @@ class Geography {
   /**
    * The map, which is a matrix of tiles
    */
-  Tile map[MAP_HEIGHT][MAP_WIDTH];
+  Tile* map[MAP_HEIGHT][MAP_WIDTH];
   /**
    * @brief transform the seed in int to be used in the generation algorithm
    * @param seed : a string given a player, to create a random map
@@ -61,6 +61,8 @@ class Geography {
    */
   Geography(std::string seed);
   Geography();
+  Geography(const Geography&);
+  ~Geography();
 
   /**
    * @brief Sets the anxiety in a particular tile

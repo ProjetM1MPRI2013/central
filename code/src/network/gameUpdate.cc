@@ -1,12 +1,9 @@
 #include "gameUpdate.h"
+#include <boost/serialization/export.hpp>
 
 GameUpdate::GameUpdate() : p_update(), npc_updates(){}
 
 GameUpdate::~GameUpdate(){}
-
-GameUpdate& GameUpdate::fromString(std::string &data){
-    return *(new GameUpdate()) ;
-}
 
 void GameUpdate::setPlayerUpdate(const PlayerUpdate &playerUpdate) {
   p_update = playerUpdate ;

@@ -1,6 +1,10 @@
 #include "ActionsTerro.h"
 #include <iostream>
 #include <list>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/export.hpp>
+
 #include "network/client.h"
 #define DEBUG false
 #include "debug.h"

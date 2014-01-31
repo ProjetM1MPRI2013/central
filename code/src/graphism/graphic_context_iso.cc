@@ -202,7 +202,6 @@
     // End drawList
   }
   
-  
 void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   int w = map->getMapWidth(), h = map->getMapHeight();

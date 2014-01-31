@@ -1,3 +1,5 @@
+#include <boost/serialization/export.hpp>
+
 #include "ActionsPC.h"
 #include "../simulation/simulation.h"
 #include "globalState.h"

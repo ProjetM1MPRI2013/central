@@ -2,35 +2,48 @@
 #include "assert.h"
 
 #include "netEvent.h"
+#include <boost/serialization/export.hpp>
+
+#include "debug.h"
 
 using namespace std ;
 using namespace boost::archive ;
 
-const string NetEvent::MSG_TYPE = "netEvent" ;
+const string NetEvent::MSG_TYPE = "NetEvent" ;
 
 NetEvent::NetEvent() :  type(NetEvent::NOT_SET), data(0) {}
 
 NetEvent::NetEvent(Type type) : type(type), data(0) {}
 
+/*
 string NetEvent::getMsgType(){
   return MSG_TYPE ;
 }
-
+*/
+/*
 string NetEvent::toString(){
   stringstream ss ;
-  text_oarchive ar(ss) ;
-  ar << *this ;
+  {
+    NetEvent* nete = copy() ;
+    text_oarchive ar(ss) ;
+    ar << nete ;
+    delete nete ;
+  }
+  DBG << "NetEvent serialize to : " << ss.str() ;
+  DBG << "Initial message : " << *this ;
   return ss.str() ;
 }
 
 NetEvent* NetEvent::fromString(const string &msg){
+  DBG << "NetEvent deserialize from : " << msg ;
   stringstream ss(msg) ;
   text_iarchive ar(ss) ;
-  NetEvent* e = new NetEvent() ;
-  ar >> *e ;
+  NetEvent* e = NULL ;
+  ar >> e ;
+  DBG << *e ;
   return e ;
 }
-
+*/
 NetEvent * NetEvent::copy(){
   NetEvent * event = new NetEvent() ;
   event->setType(this->getType());

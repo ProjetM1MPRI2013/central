@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+
 #include "abstractMessage.h"
 #include "npcUpdate.h"
 #include "playerUpdate.h"
@@ -15,15 +16,7 @@
 
 class GameUpdate : public AbstractMessage{
 public:
-    static std::string getMsgType(){
-      return "GameUpdt" ;
-    }
 
-    static GameUpdate& fromString(std::string& data) ;
-
-    std::string toString() {
-      return "" ;
-    }
     GameUpdate * copy() ;
 
     /**
@@ -67,6 +60,10 @@ public:
 private :
     PlayerUpdate p_update ;
     std::vector<NpcUpdate> npc_updates ;
+
+    SIMPLE_MESSAGE(GameUpdate, AbstractMessage)
 };
+
+BOOST_CLASS_EXPORT_KEY(GameUpdate)
 
 #endif // GAMEUPDATE_H

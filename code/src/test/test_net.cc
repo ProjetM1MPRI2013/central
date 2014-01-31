@@ -12,6 +12,9 @@
 #include "network/dummyClient.h"
 #include "network/dummyServer.h"
 
+BOOST_CLASS_EXPORT(test::TestC)
+BOOST_CLASS_EXPORT(test::TestD)
+
 
 namespace test {
 
@@ -19,106 +22,52 @@ namespace test {
 using namespace std;
 using namespace boost::archive ;
 
-class TestA : public AbstractMessage {
-
-public :
-
-  TestA() : data(0){
-  }
-
-  TestA(int t){
-    data = t ;
-  }
-
-  static std::string getMsgType() { return "TypeA000" ;}
-
-  virtual std::string toString() {
-    stringstream ss ;
-    text_oarchive ar(ss) ;
-    ar << *this ;
-    return ss.str() ;
-  }
-
-  static AbstractMessage * fromString(std::string& msg){
-    stringstream ss(msg) ;
-    text_iarchive ar(ss) ;
-    TestA* e = new TestA() ;
-    ar >> *e ;
-    return e ;
-  }
-
-  virtual AbstractMessage* copy() {
-    return new TestA(*this) ;
-  }
-
-  int data ;
-
-private :
-  //Serialization
-
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
+int net_serialization(){
+  LOG(info) << "" ;
+  LOG(info) << "Simple serialization" ;
+  TestC* testcMsg = new TestC() ;
+  testcMsg->data = 100 ;
+  TestC * testcp = NULL ;
+  stringstream ssc ;
   {
-    ar & data ;
+    text_oarchive oarch(ssc) ;
+    oarch << testcMsg ;
   }
-
-};
-
-class TestB : public AbstractMessage {
-
-public :
-
-  TestB(): data(0){
-
-  }
-
-  TestB(int t){
-    data = t ;
-  }
-
-  static std::string getMsgType() { return "TypeB000" ;}
-
-  virtual std::string toString() {
-    stringstream ss ;
-    text_oarchive ar(ss) ;
-    ar << *this ;
-    return ss.str() ;
-  }
-
-  static AbstractMessage * fromString(std::string& msg){
-    stringstream ss(msg) ;
-    text_iarchive ar(ss) ;
-    TestB* e = new TestB() ;
-    ar >> *e ;
-    return e ;
-  }
-
-  virtual AbstractMessage* copy() {
-    return new TestB(*this) ;
-  }
-
-  int data ;
-
-private :
-  //Serialization
-
-  friend class boost::serialization::access ;
-
-  template <class Archive>
-  void serialize(Archive & ar, const unsigned int version)
-  {
-    ar & data ;
-  }
-};
+  text_iarchive iarch(ssc) ;
+  iarch >> testcp ;
+  assert(testcp != NULL) ;
+  if(testcp->data != testcMsg->data)
+    LOG(info) << "TEST : .........FAIL" ;
+  else
+    LOG(info) << "TEST : ...........OK" ;
 
 
-void test_serialization(){
+  LOG(info) << "Simple serialization with inheritance" ;
+  TestD* derived = new TestD() ;
+  derived->data = 10 ;
+  derived->data2 = 20 ;
+  TestC* base = derived ;
+  TestC* result = NULL ;
+  stringstream ssc2 ;
+  text_oarchive oarch2(ssc2) ;
+  oarch2 << base ;
+  text_iarchive iarch2(ssc2) ;
+  iarch2 >> result ;
+  assert(result != NULL) ;
+  if(result->data != derived->data || ((TestD *) result)->data2 != derived->data2 )
+    {
+      LOG(info) << "data : " << result->data << " data2 : " << ((TestD *) result)->data2 ;
+      LOG(info) << "TEST : .........FAIL" ;
+    }
+  else
+    LOG(info) << "TEST : ...........OK" ;
+
   TestA msg(1) ;
+  msg.data2 = 10 ;
   string s = msg.toString() ;
   TestA* msg2 = (TestA*) TestA::fromString(s) ;
   LOG(info) << "TEST : class TestA before serialisation : data = " << msg.data << ", after : data = " << msg2->data ;
+  LOG(info) << msg.data2 << "-------" << msg2->data2 ;
   if(msg2->data != msg.data)
     LOG(info) << "TEST : .........FAIL" ;
   else
@@ -134,7 +83,18 @@ void test_serialization(){
   else
     LOG(info) << "TEST : ...........OK" ;
   delete msg4 ;
+/*
+  AddCam event ;
+  event.date = 100 ;
+  string s2 = event.toString() ;
+  Action* rec = (Action*) Action::fromString(s2) ;
 
+  if(event.date != rec ->date)
+    LOG(info) << "TEST : .........FAIL" ;
+  else
+    LOG(info) << "TEST : ...........OK" ;
+*/
+  return 0 ;
 }
 
 
@@ -328,7 +288,6 @@ int net_dummy(){
 
 int net_real(){
   LOG(info) << "TEST : " << "Real Test ......... BEGIN"  ;
-  test_serialization() ;
   ClientInfo cli_info ;
   ServerInfo serv_info ;
   Server * ser = Network::createServer(serv_info) ;
@@ -339,3 +298,4 @@ int net_real(){
   return i ;
 }
 }
+

@@ -1,10 +1,15 @@
+#define DEBUG true
+#include "debug.h"
+
 #include "Action.h"
+#include "ActionsPC.h"
+#include "ActionsTerro.h"
 
 Action::Action(std::string n, Simulation* s) {
   name = n;
   simulation = s;
   this->playerID = this->simulation->getPlayer()->getID ();
-};
+}
 
 Action::Action(const Action& a){
   this->name = a.name;
@@ -15,12 +20,12 @@ Action::Action(const Action& a){
 bool Action::isActionPossible(){
   std::cerr << "isActionPossible called but not implemented for the Action type :" << name << "\n";
   return 0;
-};
+}
 
 void Action::doAction(){
   std::cerr << "doAction called but not implemented for the Action type :" << name << "\n";
   return;
-};
+}
 
 void Action::addPendingActions(HostSimulation* hs){
   std::cerr << "addPendingActions called but not implemented for the Action type :" << name << "\n";
@@ -28,21 +33,9 @@ void Action::addPendingActions(HostSimulation* hs){
 }
 
 
-//AbstractMessage function implementations
-std::string Action::getMsgType(){
-  std::string s = "C_ACTION";
-  return s;
-}
+Action::Action() : name(""), date(0), delay(0), simulation(NULL), playerID(0){}
 
-std::string Action::toString(){
-  std::string s = "TODO";
-  return s;
-}
-
-AbstractMessage* Action::fromString(std::string& msg){
-  return ((AbstractMessage*)new Action("TODO", NULL));
-}
-
+// AbstractMessage function
 AbstractMessage* Action::copy(){
   return ((AbstractMessage*)new Action(*this));
 }
