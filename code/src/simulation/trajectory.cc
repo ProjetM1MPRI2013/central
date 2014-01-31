@@ -221,7 +221,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
   assert(!posList.empty());//il doit y avoir au moins la position courante  
   if (!hasArrived) {//si on n'est pas arrivé : on avance en ligne droite
     assert(posList.size()>1);//il doit y avoir la position courante et au moins un objectif
-    float dist = dt.asSeconds()*speedNorm;//distance parcourue en dt à la vitesse normSpeed
+    //float dist = dt.asSeconds()*speedNorm;//distance parcourue en dt à la vitesse normSpeed
     Position position = posList.front();
     Position oldPos = posList.front();
     posList.pop_front();
@@ -243,6 +243,11 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     if (position.getY()<0) {
       position.setY(0.5);
     }
+
+    if (!position.isInTile(map).isWalkable()) {
+      position = oldPos;
+    }
+
     //printf("position %f %f\n",position.getX(),position.getY());
 
     updateTimer(oldPos,position,speedNorm,dt,map);
@@ -291,7 +296,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     
     float dist1 = position.distance(target);
     
-    if (dist1 <= dist/2) {//on est assez proche de l'objectif
+    if (dist1 <= 0.1) {//on est assez proche de l'objectif
       posList.pop_front();
       if (posList.empty()) {//il ne reste plus que la position courante
         speed.first = 0;
