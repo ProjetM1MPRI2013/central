@@ -85,6 +85,7 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   // transparence, avec des pointeurs vers des positions, et de quoi checker
   // s'il y a changement de tile.
 
+  sf::Texture playerT;
  
 };
 

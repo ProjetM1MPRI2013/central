@@ -27,6 +27,7 @@
     assert(fogT.loadFromFile("../../../sprite/fogtile.png"));
     assert(baseT.loadFromFile("../../../sprite/basetile.png"));
     assert(dafont.loadFromFile("../fonts/DejaVuSans.ttf"));
+    assert(playerT.loadFromFile("../../../sprite/Anim_idle.png"));
 
     // End fog and base
 
@@ -358,6 +359,7 @@ void GraphicContextIso::run(sf::RenderWindow* window)
 {
   window->clear();
   sf::Text fpstext;
+  sf::Sprite playerSprite;
   int fps = 1000 / spf.getElapsedTime().asMilliseconds();
   spf.restart();
   fpstext.setString(std::to_string(fps));
@@ -367,8 +369,15 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   this->view.setSize(sf::Vector2f(window->getSize().x,window->getSize().y));
   this->view.setCenter(sf::Vector2f(p.getX() * RIGHT_TILE(0) + p.getY() * DOWN_TILE(0) + OFFSET_X, 
 				    p.getX() * RIGHT_TILE(1) + p.getY() * DOWN_TILE(1) + OFFSET_Y - map->getMapWidth() * RIGHT_TILE(1)));
+  
+
+  playerSprite.setTexture(playerT);
+  playerSprite.setPosition(sf::Vector2f(p.getX() * RIGHT_TILE(0) + p.getY() * DOWN_TILE(0) + OFFSET_X - 8, 
+				       p.getX() * RIGHT_TILE(1) + p.getY() * DOWN_TILE(1) + OFFSET_Y - map->getMapWidth() * RIGHT_TILE(1) - 32));
+  
   window->setView(this->view);
   window->draw(*this);
+  window->draw(playerSprite);
   window->setView(window->getDefaultView());
   window->draw(fpstext);
 

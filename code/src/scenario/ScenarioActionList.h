@@ -37,7 +37,7 @@ protected :
   //Serialization
   ChangeDirection() {}
 
-  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, newMovement)
+  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newMovement)
 
 };
 
