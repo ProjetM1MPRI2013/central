@@ -1,3 +1,7 @@
+/**
+ * @author: MrKuluW
+ */
+
 #include "animation.h"
 
 Animation::Animation() { }

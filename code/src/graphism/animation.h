@@ -1,3 +1,7 @@
+/**
+ * @author: MrKuluW
+ */
+
 #ifndef ANIMATION
 #define ANIMATION
 

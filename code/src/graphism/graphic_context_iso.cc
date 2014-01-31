@@ -19,6 +19,10 @@
     zoommax = 3;
     zoommin = 0.3;
 
+    unfogVector.push_front(sim->getPlayer());
+    sim->getPlayer()->setActive(true);
+    sim->getPlayer()->setRadius(24);
+
 
     assert(fogT.loadFromFile("../../../sprite/fogtile.png"));
     assert(baseT.loadFromFile("../../../sprite/basetile.png"));
@@ -211,6 +215,56 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   fog.setTexture(fogT);
   fog.setColor(sf::Color(0,0,0,128));
   base.setTexture(baseT);
+
+  /* Mise à jour pas subtile du brouillard de guerre */
+  /* Remise à zéro */
+  for(int j = 0; j < h; j++){
+    for(int i = 0; i < w; i++){
+      map->getTile(i,j)->setFog(true);
+    }
+  }
+
+  /* Eclairage */
+  for(std::list<Positionable*>::const_iterator ci = unfogVector.begin();
+      ci != unfogVector.end(); ++ci){
+    Position p = (**ci).getPosition();
+    int r = (**ci).getRadius(), x = floor(p.getX()), y = floor(p.getY());
+    for(int k = 0; k <= r; k++){
+      for(int l = 0; l <= r; l++){
+  	int ii = x + k - l;
+  	int jj = y - r + k + l;
+  	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
+  	  map->getTile(ii,jj)->setFog(false);
+      }
+    }
+    for(int k = 0; k < r; k++){
+      for(int l = 0; l < r; l++){
+  	int ii = x + k - l;
+  	int jj = y - r + 1 + k + l;
+  	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
+  	  map->getTile(ii,jj)->setFog(false);
+      }
+    }
+  }
+
+  /* Mise à jour des bâtiments */
+  for(int i = 0; i < w; i++){
+    for(int j = 0; j < h; j++){
+      Tile* tilec = map->getTile(i,j);
+      if(tilec->isBatOrigin()){
+  	int compt = 0;
+  	for(int ii = 0; ii < tilec->getWidthBat(); ii++){
+  	  for(int jj = 0; jj < tilec->getHeightBat(); jj++){
+  	    if(map->getTile(i-ii,j+jj)->isInFog())
+  	      compt++;
+  	  }
+  	}
+  	tilec->setBuildFog(compt);
+      }
+    }
+  }
+
+
   
   /* 
      Dans un premier temps, on peut afficher toutes les tiles walkable, qui
@@ -311,8 +365,8 @@ void GraphicContextIso::run(sf::RenderWindow* window)
   fpstext.setColor(sf::Color::Red);
   Position& p = sim->getPlayer()->getPosition();
   this->view.setSize(sf::Vector2f(window->getSize().x,window->getSize().y));
-  this->view.setCenter(sf::Vector2f(p.getX() + OFFSET_X,
-				    p.getY() + OFFSET_Y - (map->getMapWidth()) * RIGHT_TILE(1) ));
+  this->view.setCenter(sf::Vector2f(p.getX() * RIGHT_TILE(0) + p.getY() * DOWN_TILE(0) + OFFSET_X, 
+				    p.getX() * RIGHT_TILE(1) + p.getY() * DOWN_TILE(1) + OFFSET_Y - map->getMapWidth() * RIGHT_TILE(1)));
   window->setView(this->view);
   window->draw(*this);
   window->setView(window->getDefaultView());

@@ -1,5 +1,5 @@
 /**
- * @author MrKuluW
+ * @author: MrKuluW
  */
 #ifndef GRAPHICCONTEXT
 #define GRAPHICCONTEXT
@@ -11,6 +11,7 @@
 #include "../generation/geography.h"
 #include "../simulation/simulation.h"
 #include "../simulation/position.h"
+#include "../simulation/positionable.h"
 #include <unordered_map>
 
 #define OFFSET_Y 1000                     /* Pour toujours avoir des images dans un cadre positif */
@@ -77,9 +78,7 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable {
   std::list<Tile*> drawList;
   sf::Clock spf;
   sf::Font dafont;
-
-
-  // std::vector<Positionnable>
+  std::list<Positionable*> unfogVector;
 
   // A ajouter : 
   // Deux ensembles d'éléments pour enlever le brouillard ou activer la

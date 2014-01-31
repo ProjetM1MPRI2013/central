@@ -72,10 +72,9 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   wrapper = NULL;
   this->filePictures = filePicturesO;
   alpha = false;
-  // fog = true;
-  // sprite.setColor(sf::Color(128,128,128));
-  fog = false; //temporaire
-  
+  fog = false;
+  buildfog = false;
+
   if (DEBUG){std::cout << "Tile : end\n";}
 }
 
@@ -213,7 +212,7 @@ std::list<NPC*>& Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
     Position ap = a->getPosition();
     Position bp = b->getPosition();
-    return ap.getX() - ap.getY() < bp.getX() - bp.getY();
+    return ap.getY() - ap.getX() < bp.getY() - bp.getX();
     });
   return listNPC;
 };
@@ -495,16 +494,21 @@ void Tile::setAlpha(bool a)
   return;
 }
 
-void Tile::setFog(int nbFog)
+void Tile::setBuildFog(int nbFog)
 {
-  bool w = (2*nbFog <= widthBat*heightBat);
-  if((fog != w) && !(isWalkable()))
+  bool w = (2*nbFog > widthBat*heightBat);
+  if((buildfog != w) && !(isWalkable()))
     {
       if(w)
 	sprite.setColor(sf::Color(128,128,128));
       else
 	sprite.setColor(sf::Color(255,255,255));
     }
-  fog = w;
+  buildfog = w;
+  return;
+}
+
+void Tile::setFog(bool infog){
+  fog = infog;
   return;
 }

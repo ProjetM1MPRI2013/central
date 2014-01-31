@@ -1,13 +1,13 @@
 #ifndef POSITIONABLE_H
 #define POSITIONABLE_H
 #include "position.h"
-
+#include "graphism/fogDisabler.h"
 
 /**
  * @brief The Positionable class
  * it only contains a Position and methods to get and set it
  */
-class Positionable {
+class Positionable : public FogDisabler {
  protected:
   Position position;
 

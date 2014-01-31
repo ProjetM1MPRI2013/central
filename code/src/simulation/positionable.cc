@@ -1,17 +1,17 @@
 #include "positionable.h"
 #include "position.h"
 
-Positionable::Positionable() {
+Positionable::Positionable() : FogDisabler() {
   position = Position();
   return;
 }
 
-Positionable::Positionable(float x,float y) {
+Positionable::Positionable(float x,float y) : FogDisabler() {
   position = Position(x,y);
   return;
 }
 
-Positionable::Positionable(Position& p) {
+Positionable::Positionable(Position& p) : FogDisabler() {
   position = Position(p);
   return;
 }

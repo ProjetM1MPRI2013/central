@@ -2,7 +2,9 @@
 #include "player.h"
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
-#define SPEED_AMPLIFIER 50
+
+
+#define SPEED_AMPLIFIER 8
 
 #define DEBUG true
 #include "debug.h"

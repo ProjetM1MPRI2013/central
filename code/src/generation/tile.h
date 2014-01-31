@@ -164,7 +164,8 @@ class Tile {
   TileWrapper* wrapper;
   bool alpha;
   bool fog;
-  
+  bool buildfog;
+
   public:
   /**
    * @brief create a tile
@@ -332,11 +333,16 @@ class Tile {
     void setAlpha(bool a);
     
     /**
-     * @brief Changes the fog state of the tile.
+     * @brief Changes the fog state of the building.
      * @param nbFog: the number of hidden tiles of the building.
-     * This parameter is relevant only if the tile is not walkable.
+     * This method is usefull only if the tile is not walkable.
      **/
-    void setFog(int nbFog);
+    void setBuildFog(int nbFog);
+
+    /**
+     * @brief Changes the fog state of the tile.
+     **/
+    void setFog(bool infog);
 
 };
 

@@ -24,7 +24,7 @@ class StuffNotFound : public std::runtime_error
   explicit StuffNotFound();
 };
 
-class Player : public Positionable {
+class Player : public Positionable{
 public:
 
   //Pour débugue
