@@ -7,36 +7,56 @@
 
 Geography::Geography(std::string seed) {
   //new Generation1(seed); ?? Generation1 inherits from Geography
-  /*for (int i=0;i<MAP_WIDTH;i++) {
+  for (int i=0;i<MAP_WIDTH;i++) {
     for (int j=0;j<MAP_HEIGHT;j++) {
       map[i][j] = NULL;
     }
-    }*/
+    }
   return;
 }
 
 Geography::Geography(){
-  /*for (int i=0;i<MAP_WIDTH;i++) {
+  for (int i=0;i<MAP_WIDTH;i++) {
     for (int j=0;j<MAP_HEIGHT;j++) {
       map[i][j] = NULL;
     }
-    }*/
+    }
+  return;
+}
+
+Geography::Geography(const Geography& mapToBeCopied){
+  for (int i=0;i<MAP_WIDTH;i++) {
+    for (int j=0;j<MAP_HEIGHT;j++) {
+      if (mapToBeCopied.map[i][j] != NULL)
+	map[i][j] = new Tile(*mapToBeCopied.map[i][j]);
+    }
+  }
+}
+
+Geography::~Geography() {
+
+  for (int i=0;i<MAP_WIDTH;i++) {
+    for (int j=0;j<MAP_HEIGHT;j++) {
+      delete map[i][j];
+    }
+    }
+
   return;
 }
 
 float Geography::getAnxiety(int i, int j){
-	return ((this->map[i][j]).getAnxiety());
+	return ((this->map[i][j])->getAnxiety());
 }
 
 
 void Geography::setAnxiety(int i, int j, float anxiety){
-	map[i][j].setAnxiety(anxiety);
+	map[i][j]->setAnxiety(anxiety);
 	return;
 }
 
-Tile * Geography::getTile(int i,int j){
+Tile* Geography::getTile(int i,int j){
   assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
-  return &(map[i][j]);
+  return (map[i][j]);
 }
 
 Tile& Geography::getTileRef(int i,int j){
@@ -44,7 +64,7 @@ Tile& Geography::getTileRef(int i,int j){
     printf("getTileRef error : i=%d, j=%d\n",i,j);
   }
   assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
-  return (map[i][j]);
+  return *(map[i][j]);
 }
 
 

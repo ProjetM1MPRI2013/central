@@ -58,6 +58,10 @@ Player::Player (int pid, float xx, float yy) {
   this->addItem(Ammunition(10));
 };
 
+Player::Player(const Player& other) {
+  LOG(error) << "The copy constructor of Player should never be called.";
+};
+
 int Player::getID(){
   return this->playerID;
 };

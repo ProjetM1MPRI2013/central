@@ -70,6 +70,8 @@ class Simulation : public EventSource {
   
   Simulation(int nbPlayers,int id);
   Simulation(Geography* map,int nbPlayers,int id);
+ ~Simulation();
+
   /* Never used
   Simulation(std::string seed, std::vector<Player*> players) ;
   */
@@ -144,7 +146,7 @@ class Simulation : public EventSource {
 
   //-----------------------------------------------------------//
   /*Question {denys} : For what we use these */
-  int* sous; //tableau des sous de tout le monde
+  std::vector<int> sous; //tableau des sous de tout le monde
   int mesSous;
   /*-----------------------END--------------------------------*/
 
@@ -160,6 +162,7 @@ class Simulation : public EventSource {
   std::list<Action*> toDelete;
 
 };
+
 //#include "eventListener.h"
 template <class T>
 T Simulation::getItemByID(int stuffID) {

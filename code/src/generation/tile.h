@@ -14,8 +14,9 @@ class NPC;
 class TileWrapper;
 class Geography;
 
-struct SpriteTilePack
+class SpriteTilePack
 {
+ public:
   sf::Texture texture;
   // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
   int originX;
@@ -190,6 +191,10 @@ class Tile {
   Tile(int abs, int ord, TileType type, bool destructible, float anxiety, float populationDensity, bool gou, bool god, bool gor, bool gol, float speed, Coordinates batOrigin, Coordinates boroughOrigin, SpriteTilePack* stp, std::string filePicturesO, Coordinates pictureO, int widthO, int heightO);
 
   Tile();
+
+  Tile(const Tile&);
+  Tile& operator=(const Tile&);
+
 
     /**
      * @brief gives the type of the tile, it's a generalist type

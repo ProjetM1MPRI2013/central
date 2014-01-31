@@ -1,4 +1,3 @@
-#include <math.h>
 #include "simulation.h"
 #include "../generation/geography.h"
 #include "../generation/tile.h"
@@ -30,10 +29,8 @@ Simulation::Simulation(int nbPlayers, int id)
 //		t[i] = 0;
 //	}
 	this->mesSous = 0;
-    this->sous = new int[NB_JOUEURS];
-    for (int i = 0; i < NB_JOUEURS; i++) {
-        sous[i] = 0;
-    }
+	//
+	this->sous = std::vector<int>(NB_JOUEURS,0);
     this->relativeTime = 0;
 	this->absoluteTime = 0;
 	this->smallTime = 0;
@@ -43,6 +40,23 @@ Simulation::Simulation(int nbPlayers, int id)
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
 }
+
+Simulation::~Simulation() {
+
+  for (auto& e : NPCs) {
+    delete e;
+  }
+  for (auto& e : pendingActions) {
+    delete e;
+  }
+  for (auto& e : cameras) {
+    delete e;
+  }
+  for (auto& e : agents) {
+    delete e;
+  }
+}
+
 
 Client* Simulation::getClient(){
   assert(client);

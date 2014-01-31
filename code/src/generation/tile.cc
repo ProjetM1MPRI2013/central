@@ -83,7 +83,94 @@ Tile::Tile() :
   batOrigin(Coordinates()),
   coord(0,0),
   coordBorough(Coordinates()),
-  picture(Coordinates()) {}
+  picture(Coordinates()) {
+  wrapper = nullptr;
+}
+
+Tile::Tile(const Tile& t) :
+  batOrigin(t.batOrigin),
+  coord(t.coord),
+  coordBorough(t.coordBorough),
+  picture(t.picture){
+  type = t.type;
+  destructible = t.destructible;
+  anxiety = t.anxiety;
+  populationDensity = t.populationDensity;
+  gou = t.gou;
+  god = t.god;
+  gol = t.gol;
+  gor = t.gor;
+  speed = t.speed;
+  widthBat = t.widthBat;
+  heightBat = t.heightBat;
+  if(t.stp)
+    {
+      stp = new SpriteTilePack(*t.stp);
+      sprite.setTexture(t.stp->texture);
+      // this->sprite.setTextureRect(sf::IntRect(this->stp->X1,this->stp->Y1,this->stp->X2,this->stp->Y2));
+    }
+  else
+    {
+      stp = nullptr;
+    }
+  destructionLevel = t.destructionLevel;
+  if (t.wrapper){
+    wrapper = new TileWrapper(*t.wrapper);
+  }
+  else
+    {
+      wrapper = nullptr;
+    }
+  filePictures = t.filePictures;
+  alpha = t.alpha;
+  // fog = true;
+  // sprite.setColor(sf::Color(128,128,128));
+  fog = t.fog; //temporaire
+}
+
+
+Tile& Tile::operator=(const Tile& t){
+  if (this != &t){
+    batOrigin = t.batOrigin;
+    coord = t.coord;
+    coordBorough = t.coordBorough;
+    picture = t.picture;
+    type = t.type;
+    destructible = t.destructible;
+    anxiety = t.anxiety;
+    populationDensity = t.populationDensity;
+    gou = t.gou;
+    god = t.god;
+    gol = t.gol;
+    gor = t.gor;
+    speed = t.speed;
+    widthBat = t.widthBat;
+    heightBat = t.heightBat;
+
+
+    SpriteTilePack* temp_stp;
+    if (t.stp){ temp_stp = new SpriteTilePack(*t.stp); }
+    else { temp_stp = nullptr; }
+    
+    TileWrapper* temp_wrapper;
+    if (t.wrapper) { temp_wrapper = new TileWrapper(*t.wrapper); }
+    else { temp_wrapper = nullptr; }
+    
+    delete stp;
+    delete wrapper;
+
+    stp = temp_stp;
+    wrapper = temp_wrapper;
+    
+    destructionLevel = t.destructionLevel;    
+    filePictures = t.filePictures;
+    alpha = t.alpha;
+    // fog = true;
+    // sprite.setColor(sf::Color(128,128,128));
+    fog = t.fog; //temporaire
+  }
+  return *this;
+}
 
 void Tile::nobodyTile(){
 	std::cout << "tile : " << this->getCoord().abs << "," << this->getCoord().ord << std::endl;
