@@ -1,3 +1,6 @@
+/* 
+ * @Author: Anthony
+ */
 #include "hudTerro.h"
 class Stuff;
 #include "../scenario/Stack.h"
