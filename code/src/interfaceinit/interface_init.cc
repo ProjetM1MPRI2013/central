@@ -942,17 +942,21 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam,Server* se
 							toSend.setData(nickName + (std::string) " : " + newchatStdString);
 							clientPtr->sendMessage<ChatEvent>(toSend);
 							//Réponse du Server
-							std::vector<ChatEvent *> tabMessages = serverPtr->receiveMessages<ChatEvent>();
-							for (int i = 0 ; i < (int) tabMessages.size() ; i++) {
-							  serverPtr->broadcastMessage(*(tabMessages[i]),false);
-							};
+							std::vector<ChatEvent *> tabMessages ;
+							if(serverPtr != NULL)
+							  {
+							     tabMessages = serverPtr->receiveMessages<ChatEvent>();
+							    for (int i = 0 ; i < (int) tabMessages.size() ; i++) {
+								serverPtr->broadcastMessage(*(tabMessages[i]),false);
+							      };
+							  }
 							std::vector<ChatEvent *> tabMessagesClient = clientPtr->receiveMessages<ChatEvent>();
 
 							DBG << "Taille du tableau de message des serveurs : " << tabMessages.size();
 							chatbox->addLine(nickName + (std::string) " : "
 									+ newchatStdString, sf::Color(0, 0, 0));
 							for (int i = 0 ; i < (int) tabMessagesClient.size() ; i++) {
-							  chatbox->addLine(tabMessagesClient[i]->toString(),sf::Color(0,0,0));
+							    chatbox->addLine(tabMessagesClient[i]->getData(),sf::Color(0,0,0));
 							}
 						}
 					}
@@ -975,7 +979,7 @@ int interface_initiale (int sizeFenetre[3] , bool * isFullScreenParam,Server* se
 				}
 				if (callback.id == 2) {
 					//wima = 5;//go to join game menu
-					//changementMenu.play();
+					changementMenu.play();
 					return 1;
 				}
 				if (callback.id == 3) {

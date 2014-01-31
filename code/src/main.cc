@@ -147,8 +147,12 @@ int main(int argc, char ** argv) {
     isFullScreen = true;
     video_mode = sf::VideoMode::getDesktopMode();
     } else {*/
-  Server* serverPtr = Network::createDummyServer();
-  Client* clientPtr = Network::createDummyClient(serverPtr);
+  ServerInfo s_info ;
+  ClientInfo c_info ;
+  Server* serverPtr = NULL ;
+  if(argc < 2 || (std::string) argv[1] != "client")
+     serverPtr = Network::createServer(s_info);
+  Client* clientPtr = Network::createClient(c_info);
     b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
     video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1],
 			       sizeFenetre[2]);
