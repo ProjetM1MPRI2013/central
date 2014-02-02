@@ -82,9 +82,9 @@ void GlobalState::run(sf::Time dt){
     smallTime = smallTime - secondes;
 
       /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
-      /*  for (int i = 1; i < secondes; i++) {
+      for (int i = 0; i < secondes; i++) {
         this->lisserMatrice();
-        }*/
+        }
 
       /* We update the position of all the players */
       for (Player& player : players) { player.updatePosition(dt,*map); }

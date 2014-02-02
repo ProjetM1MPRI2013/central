@@ -104,6 +104,11 @@ void LocalState::run(sf::Time dt){
   /* We update the position of all the players */
   for (Player& player : players) { player.updatePosition(dt,*map); }
 
+  /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
+        for (int i = 0; i < secondes; i++) {
+          this->lisserMatrice();
+        }
+
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
       for (Agent* agent: agents) {

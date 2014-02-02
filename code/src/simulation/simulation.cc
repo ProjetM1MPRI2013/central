@@ -202,9 +202,9 @@ void Simulation::lisserMatrice() {
   *oldMap = *map;
   //interieur de la map
   for (int i = 1; i < MAP_SIZE - 2; i++) {
-    for (int j = 1; i < MAP_SIZE - 2; j++) {
+    for (int j = 1; j < MAP_SIZE - 2; j++) {
       //calcul
-      anxiety =
+      /*anxiety =
         sqrt2(
               (1 / 8)
               * (2 * pow2(oldMap->getAnxiety(i, j), 2)
@@ -242,10 +242,13 @@ void Simulation::lisserMatrice() {
                                               j
                                               - 1),
                            2))));
+      */
       //set
+      anxiety=((5*oldMap->getAnxiety(i,j))+oldMap->getAnxiety(i-1,j)+oldMap->getAnxiety(i+1,j)+oldMap->getAnxiety(i,j-1)+oldMap->getAnxiety(i,j+1))/9;
       map->setAnxiety(i, j, anxiety);
     }
   }
+  std::cout << "Simulation :fin du centre" << std::endl;
 
   //bande en bas (i=0)
   for (int j = 1; j < MAP_SIZE - 2; j++) {
@@ -285,6 +288,7 @@ void Simulation::lisserMatrice() {
     //set
     map->setAnxiety(i, 0, anxiety);
   }
+  std::cout << "Simulation :fin de la bande gauche" << std::endl;
 
   //bande à droite (j=MAP_SIZE -1)
   for (int i = 1; i < MAP_SIZE - 2; i++) {
@@ -321,7 +325,7 @@ void Simulation::lisserMatrice() {
     //set
     map->setAnxiety(i, MAP_SIZE - 1, anxiety);
   }
-
+  std::cout << "Simulation :fin de la bande droite" << std::endl;
   //bande en haut (i=MAP_SIZE -1)
   for (int j = 1; j < MAP_SIZE - 2; j++) {
     //calcul
@@ -344,6 +348,7 @@ void Simulation::lisserMatrice() {
     //set
     map->setAnxiety(MAP_SIZE - 1, j, anxiety);
   }
+  std::cout << "Simulation :fin de la bande en haut" << std::endl;
 
   //coin en haut à gauche
   anxiety = sqrt2(
@@ -395,7 +400,9 @@ void Simulation::lisserMatrice() {
                              2))));
   map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
-  delete(oldMap);
+  std::cout << "fin de tout" << std::endl;
+  //delete(oldMap);
+  std::cout << "fin du dl" << std::endl;
   return;
 }
 
