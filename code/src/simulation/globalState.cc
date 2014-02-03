@@ -81,6 +81,7 @@ void GlobalState::run(sf::Time dt){
     int secondes = floor(smallTime);
     smallTime = smallTime - secondes;
 
+    std::cout << "on lisse la matrice " << std::endl;
       /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
       for (int i = 0; i < secondes; i++) {
         this->lisserMatrice();
@@ -101,7 +102,7 @@ void GlobalState::run(sf::Time dt){
   }
 
   //Deplacement de tous les NPCs.
-
+  std::cout << "on commence à bouger les npcs" << std::endl;
   for (NPC* npc : NPCs) {
       bool wasArrived = npc->hasArrived();
       Tile& tileBefore = npc->getPosition().isInTile(*map);
@@ -112,8 +113,11 @@ void GlobalState::run(sf::Time dt){
         tileAfter.addNPC(npc);
       }
       // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
-      if (npc->hasArrived() && !wasArrived) {
+      if (npc->hasArrived() or !wasArrived) {
         (*npc).trigger("NPC::arrived");
+        std::cout << "suppression d'un NPC" << std::endl;
+        this->supprimerNPC(npc);
+
       }
       if (DEBUG) {
         std::list<NPC*> neighbours = (npc)->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
