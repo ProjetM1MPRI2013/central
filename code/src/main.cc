@@ -29,7 +29,7 @@
 #include "globalState.h"
 
 #define DEBUG true
-#define TERRO true // ~TERRO => MAYOR
+#define TERRO false // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -80,6 +80,15 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       if (event.type == sf::Event::KeyPressed) {
 	if (event.key.code == sf::Keyboard::F11) {
 	  if (isFullScreen) {
+
+		  /*permet uniquement de tester la vue, à supprimer plus tard pour bind sur une autre touche que f11
+		   * */
+		  if (!TERRO){
+			  tilemap.changeView();
+		  }
+		   /*  fin du à supprimer
+		   */
+
 	    (*window).create(video_mode, "Game Interface");
 	    isFullScreen = false;
 	  } else {
@@ -102,7 +111,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       graContIso.run(window);
       (*window).setView((*window).getDefaultView());
     } else { // MAYOR
-      tilemap.run(window);
+    	tilemap.run(window);
     }
     hudTerro.draw();
     (*window).display();
