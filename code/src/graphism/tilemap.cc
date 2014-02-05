@@ -226,7 +226,7 @@ TileMap::TileMap(Simulation* _simul, Geography* geo) {
 	simul_state = _simul;
 	this->geo = geo;
 	this->zoom = 1;
-	this->load("../../../sprite/tileset.png", "../../../sprite/tilesetPop.png",
+	this->load("../../../sprite/tileset.png", "../../../sprite/tileset2Pop.png",
 			sf::Vector2u(10, 10), Tilesbite, 100, 100);
 	createTiles();
 }
