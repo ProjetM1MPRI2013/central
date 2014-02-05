@@ -6,7 +6,7 @@
 
 
 #define INITIAL_ANXIETY 80.
-#define INITIAL_POPULATION 50.
+#define INITIAL_POPULATION 10.
 #define DEBUG false
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
@@ -289,6 +289,30 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
    fillNull(nbRand, nbLine, file);
 
    if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+
+   //std::cout << "lololol" << std::endl;
+
+   for (int i=0; i < 30; i++){
+ 	  for (int j = 0; j< 30 ; j++) {
+ 		 //std::cout << "on up la population" << std::endl;
+ 		 this->map[i][j]->setPopulationDensity(80);
+ 	  }
+   }
+
+   for (int i=30;i<45;i++){
+	   for(int j=0;j<45;j++){
+		  // std::cout << "on up la population" << std::endl;
+		   this->map[i][j]->setPopulationDensity(35);
+	   }
+   }
+
+   for (int i=0;i<45;i++){
+   	   for(int j=30;j<45;j++){
+   		  // std::cout << "on up la population" << std::endl;
+   		   this->map[i][j]->setPopulationDensity(35);
+   	   }
+      }
+
  }
 
 

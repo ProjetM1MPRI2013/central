@@ -134,11 +134,15 @@ class Simulation : public EventSource {
   virtual bool simIsServer();
   void setScenario(HScenario* s);
  protected :
+
+  void copyTmp();
+
   std::list<Camera*> cameras;
   std::list<Agent*> agents;
   Client* client;
   Server* server;
 
+  int tmp[100][100];
 
   HScenario* scenario;
   bool isServer;
