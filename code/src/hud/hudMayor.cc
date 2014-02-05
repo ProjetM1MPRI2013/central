@@ -41,8 +41,9 @@ void HudMayor::init()
 			b_cam->setSize(80, 40);
 			b_cam->setPosition(150, this->h - 100);
 			b_cam->setText("Add Cameras");
-			b_cam->bindCallback(tgui::Button::LeftMouseClicked);
-			b_cam->setCallbackId(2);
+			b_cam->bindCallback(std::bind(&HudMayor::callback, this, 2), 
+                          tgui::Button::LeftMouseClicked);
+			//b_cam->setCallbackId(2);
 			(this->buttonsList).push_back(b_cam);
 
       // Create the "Add Cops" button
@@ -51,8 +52,9 @@ void HudMayor::init()
 			b_cop->setSize(80, 40);
 			b_cop->setPosition(50, this->h - 100);
 			b_cop->setText("Add Cops");
-			b_cop->bindCallback(tgui::Button::LeftMouseClicked);
-			b_cop->setCallbackId(1);
+			b_cop->bindCallback(std::bind(&HudMayor::callback, this, 1), 
+                          tgui::Button::LeftMouseClicked);
+			//b_cop->setCallbackId(1);
 			(this->buttonsList).push_back(b_cop);
     }
     else 
@@ -65,18 +67,21 @@ void HudMayor::init()
 			  button->setSize(40, 40);
 			  button->setPosition(50 + k*50, this->h - 100);
 			  button->setText(std::to_string(k));
-			  button->bindCallback(tgui::Button::LeftMouseClicked);
-			  button->setCallbackId(k);
+			  button->bindCallback(std::bind(&HudMayor::callback, this, k), 
+                            tgui::Button::LeftMouseClicked);
+			  //button->setCallbackId(k);
 			  (this->buttonsList).push_back(button);
       };
+
       // Create the "Back" button
       tgui::Button::Ptr b_back(this->hud);
 	    b_back->load("../widgets∕Black.conf");
 	    b_back->setSize(80, 40);
 	    b_back->setPosition(this->w - 100, this->h - 100);
 	    b_back->setText("Back");
-	    b_back->bindCallback(tgui::Button::LeftMouseClicked);
-	    b_back->setCallbackId(0);
+	    b_back->bindCallback(std::bind(&HudMayor::callback, this, 0), 
+                          tgui::Button::LeftMouseClicked);
+	    //b_back->setCallbackId(0);
 	    (this->buttonsList).push_back(b_back);
  
     };
@@ -149,19 +154,19 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 }
 ;
 
-void HudMayor::callback(tgui::Callback callback) 
+void HudMayor::callback(unsigned int callback_id) 
 {
-  while ((this->hud).pollCallback(callback)) 
-  {
+  //while ((this->hud).pollCallback(callback)) 
+  //{
     // an action is clicked. 
     if ((this->currentState) == MAYOR_ACTIONS) 
     {
-      if (callback.id == 1) 
+      if (callback_id == 1) 
       {
         this->currentAction = CA_COP; 
         this->nextState = MAYOR_NUMBERS; 
       };
-      if (callback.id == 2) 
+      if (callback_id == 2) 
       {
         this->currentAction = CA_CAM; 
         this->nextState = MAYOR_NUMBERS; 
@@ -171,16 +176,16 @@ void HudMayor::callback(tgui::Callback callback)
     if ((this->currentState) == MAYOR_NUMBERS)
     {
       // a number is clicked.
-      if (callback.id > 0 && callback.id < 11) 
+      if (callback_id > 0 && callback_id < 11) 
       {
-        this->currentNumber = callback.id; 
+        this->currentNumber = callback_id; 
         setwf(WF_CLICK); 
       }
       // The "Back" button is clicked. 
-      if (callback.id == 0)
+      if (callback_id == 0)
         this->nextState = MAYOR_ACTIONS; 
     }
-  }; 
+  //}; 
 }
 ;
 
