@@ -259,8 +259,7 @@ void Simulation::lisserMatrice() {
 			//set
 			//Pour l'instant ça pour tester
 			anxiety = ((5 * tmp[i][j]) + tmp[i - 1][j] + tmp[i + 1][j]
-					+ tmp[i][j - 1] + tmp[i][j + 1]
-			) / 9;
+					+ tmp[i][j - 1] + tmp[i][j + 1]) / 9;
 			map->setAnxiety(i, j, anxiety);
 		}
 	}
@@ -321,15 +320,12 @@ void Simulation::lisserMatrice() {
 				(1 / 6)
 						* (2 * pow2(tmp[MAP_SIZE - 1][j], 2)
 								+ pow2(tmp[MAP_SIZE - 2][j], 2)
-								+ pow2(tmp[MAP_SIZE - 1][j-1],
-										2)
-								+ pow2(tmp[MAP_SIZE - 1][j + 1],
-										2)
+								+ pow2(tmp[MAP_SIZE - 1][j - 1], 2)
+								+ pow2(tmp[MAP_SIZE - 1][j + 1], 2)
 								+ (1 / 2)
-										* (pow2(
-												tmp[MAP_SIZE - 2][j+1], 2)
-												+ pow2(
-														tmp[MAP_SIZE - 2][j-1], 2))));
+										* (pow2(tmp[MAP_SIZE - 2][j + 1], 2)
+												+ pow2(tmp[MAP_SIZE - 2][j - 1],
+														2))));
 		//set
 		map->setAnxiety(MAP_SIZE - 1, j, anxiety);
 	}
@@ -338,36 +334,32 @@ void Simulation::lisserMatrice() {
 	//coin en haut à gauche
 	anxiety = sqrt2(
 			(1 / 4.5)
-					* (2 * pow2(tmp[0][MAP_SIZE -1], 2)
-							+ pow2(tmp[0][MAP_SIZE -2], 2)
-							+ pow2(tmp[1][MAP_SIZE -1], 2)
-							+ (1 / 2)
-									* pow2(tmp[1][MAP_SIZE -2],
-											2)));
+					* (2 * pow2(tmp[0][MAP_SIZE - 1], 2)
+							+ pow2(tmp[0][MAP_SIZE - 2], 2)
+							+ pow2(tmp[1][MAP_SIZE - 1], 2)
+							+ (1 / 2) * pow2(tmp[1][MAP_SIZE - 2], 2)));
 	map->setAnxiety(0, MAP_SIZE - 1, anxiety);
 
 	//coin en haut à droite
-	anxiety = sqrt2(
-			(1 / 4.5)
-					* (2
-							* pow2(
-									tmp[MAP_SIZE -1][MAP_SIZE -1], 2)
-							+ pow2(
-									tmp[MAP_SIZE -1][MAP_SIZE -2], 2)
-							+ pow2(
-									tmp[MAP_SIZE -2][MAP_SIZE -1], 2)
-							+ (1 / 2)
-									* (pow2(
-											tmp[MAP_SIZE -2][MAP_SIZE -2], 2))));
+	anxiety =
+			sqrt2(
+					(1 / 4.5)
+							* (2 * pow2(tmp[MAP_SIZE - 1][MAP_SIZE - 1], 2)
+									+ pow2(tmp[MAP_SIZE - 1][MAP_SIZE - 2], 2)
+									+ pow2(tmp[MAP_SIZE - 2][MAP_SIZE - 1], 2)
+									+ (1 / 2)
+											* (pow2(
+													tmp[MAP_SIZE - 2][MAP_SIZE
+															- 2], 2))));
 	map->setAnxiety(MAP_SIZE - 1, MAP_SIZE - 1, anxiety);
 
 	//coin en bas à gauche
-	anxiety = sqrt2(
-			(1 / 4.5)
-					* (2 * pow2(tmp[0][0], 2)
-							+ pow2(tmp[0][1], 2)
-							+ pow2(tmp[1][0], 2)
-							+ (1 / 2) * pow2(tmp[1][1], 2)));
+	anxiety =
+			sqrt2(
+					(1 / 4.5)
+							* (2 * pow2(tmp[0][0], 2) + pow2(tmp[0][1], 2)
+									+ pow2(tmp[1][0], 2)
+									+ (1 / 2) * pow2(tmp[1][1], 2)));
 	map->setAnxiety(0, 0, anxiety);
 
 	//coin en bas à droite
@@ -376,9 +368,7 @@ void Simulation::lisserMatrice() {
 					* (2 * pow2(tmp[MAP_SIZE - 1][0], 2)
 							+ pow2(tmp[MAP_SIZE - 1][1], 2)
 							+ pow2(tmp[MAP_SIZE - 2][0], 2)
-							+ (1 / 2)
-									* (pow2(tmp[MAP_SIZE - 2][1],
-											2))));
+							+ (1 / 2) * (pow2(tmp[MAP_SIZE - 2][1], 2))));
 	map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
 	std::cout << "fin de tout" << std::endl;
