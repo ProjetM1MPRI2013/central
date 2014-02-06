@@ -111,6 +111,22 @@ void GlobalState::run(sf::Time dt){
       npc->updatePosition(dt, *map);
       Tile& tileAfter = npc->getPosition().isInTile(*map);
       if (!tileBefore.equals(tileAfter)) {
+
+        /*
+         * To listen with class C, derive EventListener<C> and then:
+         *
+         *   listen("NPC::changedTile",someNPC,&C::someMethod);
+         *
+         *   with someNPC a reference to the actual stored NPC
+         *   and someMethod(std::pair<Tile,Tile> tilePair)
+         *   tilePair.first will be tileBefore
+         *   tilePair.second will be tileAfter
+         *
+         * To stop listening later:
+         *
+         *   unlisten("NPC::changedTile",someNPC);
+         */
+        npc->trigger("NPC::changedTile",std::pair<Tile,Tile>(tileBefore,tileAfter));
         tileBefore.removeNPC(npc);
         tileAfter.addNPC(npc);
       }
