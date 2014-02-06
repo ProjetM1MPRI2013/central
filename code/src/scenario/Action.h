@@ -11,11 +11,11 @@
 #include <cerrno>
 #include <iostream>
 class Player;
-class Simulation;
+class LocalState;
+class GlobalState;
 #include "simulation/simulation.h"
 #include "network/abstractMessage.h"
 
-typedef Simulation HostSimulation;
 
 class Action : public AbstractMessage {
  public:
@@ -35,7 +35,7 @@ class Action : public AbstractMessage {
    */
   long delay;
 
-  Action (std::string n, Simulation* s);
+  Action (std::string n, LocalState* s);
   Action (const Action&);
 
   /**
@@ -57,14 +57,14 @@ class Action : public AbstractMessage {
    * @brief Add pending actions
    * This method convert theaction to a list of ScenarioAction and add the to the host simulation scenario action pending list.
    */
-  virtual void addPendingActions(HostSimulation* hs);
+  virtual void addPendingActions(GlobalState* hs);
   
   // AbstractMessage function
   virtual AbstractMessage* copy();
 
 
  protected:
-  Simulation* simulation;
+  LocalState* simulation;
   
  private:
   int playerID;

@@ -17,12 +17,12 @@ enum ButtonState {
 
 //enum WaitFor {WF_NONE, WF_CLICK};
 
-class Simulation;
+class LocalState;
 
 void printcwd ();
 class HudTerro: public PreHud {
 public:
-	HudTerro(sf::RenderWindow* window, Simulation& simulation);
+	HudTerro(sf::RenderWindow* window, LocalState& simulation);
 	void init();
 	void event(sf::RenderWindow* window, sf::Event e);
 	void callback(unsigned int callback_id);
@@ -41,7 +41,7 @@ private:
 	unsigned int w;
 	unsigned int h;
 	int i;
-	Simulation& simulation;
+	LocalState& simulation;
 	bool bup;
 	bool bdown;
 	bool bleft;

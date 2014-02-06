@@ -2,6 +2,9 @@
 #include <iostream>
 #include <list>
 
+#include "localState.h"
+#include "globalState.h"
+
 #include "network/client.h"
 #define DEBUG false
 #include "debug.h"
@@ -21,21 +24,21 @@ switch(t->getType())
  return false;
 };
 
-float distance(Simulation* s, NPC* npc) {
-	return s->getPlayer()->getPosition().distance(npc->getPosition());
+float distance(LocalState* s, NPC* npc) {
+  return s->getOwner().getPosition().distance(npc->getPosition());
 };
 
 
 
-bool isInThePack(Simulation* s, int stuffID) {
-  return s->getPlayer()->hasItemByID(stuffID);
+bool isInThePack(LocalState* s, int stuffID) {
+  return s->getOwner().hasItemByID(stuffID);
 };
 
 
 
-Drop :: Drop (int stuffID, Simulation* sim) : Action ("Drop",sim) {
+Drop :: Drop (int stuffID, LocalState* sim) : Action ("Drop",sim) {
   this->stuffID = stuffID;
-  this->playerID = this->simulation->getPlayer()->getID();
+  this->playerID = this->simulation->getOwner().getID();
 };
 
 Drop::Drop(const Drop& d) : Action ("Drop",d.simulation){
@@ -43,7 +46,7 @@ Drop::Drop(const Drop& d) : Action ("Drop",d.simulation){
   this->playerID = d.playerID;
 }
 
-Attack :: Attack (int weaponID, NPC* victim, Simulation* sim)  : Action ("Attack",sim) {
+Attack :: Attack (int weaponID, NPC* victim, LocalState* sim)  : Action ("Attack",sim) {
   vict = victim;
   this->weaponID = weaponID;
 };
@@ -54,7 +57,7 @@ Attack::Attack(const Attack& a) : Action("Attack", a.simulation){
 }
 
 
-Plant :: Plant (int bombID, Tile* zone, Simulation* sim)  : Action ("Plant",sim) {
+Plant :: Plant (int bombID, Tile* zone, LocalState* sim)  : Action ("Plant",sim) {
   this->bombID = bombID;
   z = zone;
 };
@@ -65,7 +68,7 @@ Plant::Plant (const Plant& p) : Action ("Plant", p.simulation){
 }
 
 
-Reload :: Reload (int gunID, int ammunitionID, Simulation* sim) : Action ("Reload",sim) {
+Reload :: Reload (int gunID, int ammunitionID, LocalState* sim) : Action ("Reload",sim) {
   this->gunID = gunID;
   this->ammunitionID = ammunitionID;
 };
@@ -81,7 +84,7 @@ void Drop::doAction () {
     this->simulation->getClient()->sendMessage(*this,true);
 };
 
-void Drop::addPendingActions(HostSimulation* hs){
+void Drop::addPendingActions(GlobalState* hs){
   hs->addAction(new DropItem(this->stuffID,this->playerID, (Simulation*) hs));
   hs->deleteAction(this);
 }
@@ -97,7 +100,7 @@ void Plant::doAction () {
     this->simulation->getClient()->sendMessage(*this,true);
 };
 
-void Plant::addPendingActions(HostSimulation* hs){
+void Plant::addPendingActions(GlobalState* hs){
   //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
 
     Bomb bomb = hs->getItemByID<Bomb>(bombID);
@@ -113,7 +116,7 @@ bool Reload::isActionPossible(){
 };
 void Reload::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
-void Reload::addPendingActions(HostSimulation* hs){
+void Reload::addPendingActions(GlobalState* hs){
   //TODO
   hs->deleteAction(this);
 }
@@ -127,7 +130,7 @@ bool Attack::isActionPossible(){
 };
 void Attack::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
-void Attack::addPendingActions(HostSimulation* hs){
+void Attack::addPendingActions(GlobalState* hs){
   hs->addAction(new KillNPC(this->vict, (Simulation*)hs));
   hs->deleteAction(this);
 }

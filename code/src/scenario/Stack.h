@@ -10,10 +10,10 @@
 //#include "ActionCreator.h"
 
 //???
-Tile* getTyle(Simulation* s);
+Tile* getTyle(LocalState* s);
 
 
-Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,Simulation* sim);
+Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,LocalState* sim);
 
 
 
@@ -25,7 +25,7 @@ public:
 	/**
 	 * @brief Create a Stack
 	 */
-	Stack(Simulation* s,PreHud* h );
+	Stack(LocalState* s,PreHud* h );
 	/**
 	 *@brief Cancel an action which was waiting to be send
 	 */
@@ -56,7 +56,7 @@ private:
 	void sendAction();
 	//Stuff* getStuff();
 	NPC* getNpc ();
-	Simulation* sim;
+	LocalState* sim;
 	PreHud* hud;
 	ActionType* actionType;
 	int stuffID;
