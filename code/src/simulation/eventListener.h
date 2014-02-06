@@ -43,8 +43,10 @@ public :
      * @param source: object the event is about
      * @param callback: a method of the instance inheriting from EventListener 
     */
+    //template <typename SourceT, typename ArgT>
+    //void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT&));
     template <typename SourceT, typename ArgT>
-    void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT&));
+    void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT));
     template <typename SourceT>
     void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&));
 
@@ -66,16 +68,36 @@ public :
  * Implementations for EventListener
  */
 
+//template <class Child>
+//template <typename SourceT, typename ArgT>
+//void EventListener<Child>::listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT&)) {
+
+  //auto run_callback = [this,callback,event,&source](boost::any arg) { 
+    //if (arg.empty()) {
+      //std::cerr << "Event trigger typing error: the event was triggered without an argument yet the callback expects one.";
+    //} else {
+      //try {
+        //auto closure = std::bind(callback, static_cast<Child*>(this) ,std::ref(source), boost::any_cast<reference<ArgT>>(arg));
+        //(static_cast<Child*>(this))->trigger(event, closure);
+      //} catch (boost::bad_any_cast& e) {
+        //std::cerr << "Event trigger typing error: the event argument type and one of the callback types are incompatible" << std::endl;
+      //}
+    //}
+  //};
+
+  //EventManager::listen(event, source, *this, run_callback);
+//};
+
 template <class Child>
 template <typename SourceT, typename ArgT>
-void EventListener<Child>::listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT&)) {
+void EventListener<Child>::listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT)) {
 
   auto run_callback = [this,callback,event,&source](boost::any arg) { 
     if (arg.empty()) {
       std::cerr << "Event trigger typing error: the event was triggered without an argument yet the callback expects one.";
     } else {
       try {
-        auto closure = std::bind(callback, static_cast<Child*>(this) ,std::ref(source), boost::any_cast<reference<ArgT>>(arg));
+        auto closure = std::bind(callback, static_cast<Child*>(this) ,std::ref(source), boost::any_cast<ArgT>(arg));
         (static_cast<Child*>(this))->trigger(event, closure);
       } catch (boost::bad_any_cast& e) {
         std::cerr << "Event trigger typing error: the event argument type and one of the callback types are incompatible" << std::endl;
