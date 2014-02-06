@@ -55,7 +55,7 @@ int C_UltraM::getdamage () {return this->damage;};
 ** Knife**
 *********************************************************/
 C_Knife::C_Knife (): C_Weapon () {
-((Clickable*)this)->name =  "N_Knife";
+((Clickable*)this)->name =  "Knife";
 this->range = (float)(1.);
 this->damage = (int)(1);
 };
