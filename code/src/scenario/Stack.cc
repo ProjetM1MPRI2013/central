@@ -1,4 +1,5 @@
 #include "Stack.h"
+#include "localState.h"
 #include "../hud/hudTerro.h"
 #include <iostream>
 #include <string>
@@ -8,9 +9,9 @@
 #define LOG false
 
 // découper ici
-Tile getTile(Simulation* s) {
+Tile getTile(LocalState* s) {
 	if (DEBUG) {std::cout << "getTile" << std::endl ;};
-	Player* p = s->getPlayer();
+	Player* p = ((Simulation *)s)->getPlayer();
 	if (DEBUG) {std::cout << "getTile 1" << std::endl ;};
 	Position& pos = p->getPosition();
 	 if (DEBUG) {std::cout << pos.getX() << "," << pos.getY()  << std::endl ;};
@@ -46,7 +47,7 @@ NPC* getNpc(std::list<NPC*> l) {
 
 // TODO ARRETER ICI
 
-Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,Simulation* sim) {
+Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,LocalState* sim) {
 /*if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
 switch (a)
 {
@@ -82,7 +83,7 @@ switch (a)
 	return new Action("lolol error", sim);
 };
 
-Stack::Stack (Simulation* s, PreHud* h){
+Stack::Stack (LocalState* s, PreHud* h){
   actionType = 	NULL;
   stuffID = -1; // -1 must be an invalid stuff id.
   hud = h;

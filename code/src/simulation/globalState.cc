@@ -46,7 +46,7 @@ void GlobalState::run(sf::Time dt){
   std::vector<Action *> actionFromNetwork = server->receiveMessages<Action>();
 
   for (Action * action : actionFromNetwork){
-      action->addPendingActions((HostSimulation*) this);
+      action->addPendingActions(this);
       std::cout << "Host : new Action from network of type " << action->name << "\n";
     }
   actionFromNetwork.clear();

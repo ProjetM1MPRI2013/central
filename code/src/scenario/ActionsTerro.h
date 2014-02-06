@@ -24,8 +24,6 @@
 
 
 
-typedef Simulation HostSimulation;
-
 void newMovement (NewMov n, Simulation* s);
 
 
@@ -35,7 +33,7 @@ class Drop : public Action{
    * @brief Create a way to drop one stuff
    * @param stuff the stuff to drop
    */
-  Drop  (int stuffID, Simulation* s);
+  Drop  (int stuffID, LocalState* s);
   Drop(const Drop& d);
    /**
    * @brief the stuff to drop
@@ -45,7 +43,7 @@ class Drop : public Action{
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
 
   virtual AbstractMessage* copy();
 
@@ -65,7 +63,7 @@ class Attack : public Action {
    * @param weapon the weapon used
    * @param victim the victim
    */
-  Attack (int weaponID, NPC* victim, Simulation* s);
+  Attack (int weaponID, NPC* victim, LocalState* s);
   Attack (const Attack& a);
    /**
    * @brief the weapon
@@ -78,7 +76,7 @@ class Attack : public Action {
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
 
   virtual AbstractMessage* copy();
 
@@ -99,7 +97,7 @@ class Plant : public Action {
    * @param bomb the bomb used
    * @param zone the zone where the bomb will be planted 
    */
-  Plant (int bombID ,Tile* zone, Simulation* s);
+  Plant (int bombID ,Tile* zone, LocalState* s);
   Plant (const Plant&);
    /**
    * @brief the bomb
@@ -112,7 +110,7 @@ class Plant : public Action {
 
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
 
   virtual AbstractMessage* copy();
 
@@ -132,7 +130,7 @@ class Reload : public Action {
    * @param gun the gun to reload
    * @param Ammunition the pack of ammunition used
    */
-  Reload (int gunID, int ammunitionID, Simulation* s);
+  Reload (int gunID, int ammunitionID, LocalState* s);
   Reload(const Reload&);
    /**
    * @brief the gun
@@ -145,7 +143,7 @@ class Reload : public Action {
  
   bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
 
   virtual AbstractMessage* copy();
 
