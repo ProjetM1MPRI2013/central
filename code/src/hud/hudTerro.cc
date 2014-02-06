@@ -5,7 +5,7 @@
 class Stuff;
 #include "../scenario/Stack.h"
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 #define THEME_CONFIG_FILE_HUD_TERRO "../widgets/Black.conf"
 #ifdef WINDOWSTEST

@@ -80,13 +80,13 @@ void LocalState::run(sf::Time dt){
    //The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
   std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
   for (ScenarioAction* action: scenarioActionFromNetwork){
-      std::cout << "Client : add a ScenarioAction from network of type " << action->name << "\n";
+      DBG << "Client : add a ScenarioAction from network of type " << action->name ;
       action->simulation = this;
       this->addAction(action);
   }
 
   for (ScenarioAction* action: pendingActions) {
-      if (DEBUG) std::cout << "Client : applying pending Scenario Action of type " << action->name << "\n";
+      DBG << "Client : applying pending Scenario Action of type " << action->name ;
       action->run();
   }
   this->pendingActions.clear();

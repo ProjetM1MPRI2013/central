@@ -12,7 +12,7 @@
 #include <../network/network.h>
 #include <../network/netEvent.h>
 #include <chat_event.h>
-#define DEBUG true
+#define DEBUG false
 #include <debug.h>
 using namespace std;
 int usl = chdir("./src/interfaceinit");

@@ -16,7 +16,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 Simulation::Simulation(int nbPlayers, int id) {
@@ -263,7 +263,7 @@ void Simulation::lisserMatrice() {
 			map->setAnxiety(i, j, anxiety);
 		}
 	}
-	std::cout << "Simulation :fin du centre" << std::endl;
+	DBG << "Simulation :fin du centre" ;
 
 	//bande en bas (i=0)
 	for (int j = 1; j < MAP_SIZE - 2; j++) {
@@ -293,7 +293,7 @@ void Simulation::lisserMatrice() {
 		//set
 		map->setAnxiety(i, 0, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande gauche" << std::endl;
+	DBG << "Simulation :fin de la bande gauche";
 
 	//bande à droite (j=MAP_SIZE -1)
 	for (int i = 1; i < MAP_SIZE - 2; i++) {
@@ -312,7 +312,7 @@ void Simulation::lisserMatrice() {
 		//set
 		map->setAnxiety(i, MAP_SIZE - 1, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande droite" << std::endl;
+	DBG << "Simulation :fin de la bande droite";
 	//bande en haut (i=MAP_SIZE -1)
 	for (int j = 1; j < MAP_SIZE - 2; j++) {
 		//calcul
@@ -329,7 +329,7 @@ void Simulation::lisserMatrice() {
 		//set
 		map->setAnxiety(MAP_SIZE - 1, j, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande en haut" << std::endl;
+	DBG << "Simulation :fin de la bande en haut";
 
 	//coin en haut à gauche
 	anxiety = sqrt2(
@@ -371,9 +371,9 @@ void Simulation::lisserMatrice() {
 							+ (1 / 2) * (pow2(tmp[MAP_SIZE - 2][1], 2))));
 	map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
-	std::cout << "fin de tout" << std::endl;
+	DBG << "fin de tout" ;
 	//delete(oldMap);
-	std::cout << "fin du dl" << std::endl;
+	DBG << "fin du dl" ;
 	return;
 }
 

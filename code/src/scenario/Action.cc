@@ -1,4 +1,4 @@
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 #include "Action.h"

@@ -3,7 +3,7 @@
 #include "tile.h"
 #include <SFML/Graphics/Transformable.hpp>
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 int TileMap::getZoom() {
@@ -239,12 +239,12 @@ void TileMap::changeView() {
 void TileMap::run(sf::RenderWindow* window) {
 	this->createTiles();
 	//aide au débuggage
-	for (int i = 0; i < 100; i++) {
-		for (int j = 0; j < 100; j++) {
-			std::cout << (Tilesbite[i + j * 100]) << "\t";
-		}
-		std::cout << std::endl;
-	};
+	//for (int i = 0; i < 100; i++) {
+	//	for (int j = 0; j < 100; j++) {
+	//		std::cout << (Tilesbite[i + j * 100]) << "\t";
+	//	}
+	//	std::cout << std::endl;
+	//};
 
 	//std::cout << "zoom : " << this->zoom << std::endl;
 	this->load("../../../sprite/tileset2.png",

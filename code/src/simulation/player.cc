@@ -6,7 +6,7 @@
 
 #define SPEED_AMPLIFIER 8
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 StuffNotFound::StuffNotFound() : std::runtime_error("Could not find Stuff in an inventory") {}
