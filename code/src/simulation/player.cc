@@ -53,6 +53,7 @@ Player::Player(int pid, float xx, float yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
+  lastTimeStamp = -1;
   //this->addItem(Knife());
   //this->addItem(Bomb(2));
   //this->addItem(Gun(5, 2, 4));
