@@ -9,7 +9,7 @@
 bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());}
 bool :: AddCam::IsActionPossible() {return (COST_CAM2 <= (this->simulation)->getSous());}
 
-AddCop :: AddCop(int n,float xx, float yy, Simulation* s) : Action("AddCop",s) {
+AddCop :: AddCop(int n,float xx, float yy, LocalState* s) : Action("AddCop",s) {
 this->number = n;
 this->x = xx;
 this->y = yy;
@@ -21,7 +21,7 @@ AddCop::AddCop(const AddCop& a) : Action("AddCop",a.simulation){
   this->y = a.y;
 }
 
-AddCam :: AddCam(int n, float xx,float yy, Simulation* s) : Action("AddCam",s) {
+AddCam :: AddCam(int n, float xx,float yy, LocalState* s) : Action("AddCam",s) {
 	this->number = n;
 	this->x  = xx;
 	this->y = yy;

@@ -5,7 +5,9 @@
 class Clickable;
 #include "../scenario/Stack.h"
 
-#define DEBUG true
+#include "localState.h"
+
+#define DEBUG false
 #include "debug.h"
 #define THEME_CONFIG_FILE_HUD_TERRO "../widgets/Black.conf"
 #ifdef WINDOWSTEST
@@ -28,7 +30,7 @@ void printcwd() {
 
 ;
 
-HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
+HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation) :
 		simulation(simulation) {
 	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
@@ -38,7 +40,7 @@ HudTerro::HudTerro(sf::RenderWindow* window, Simulation& simulation) :
 	this->bleft = false;
 	this->bright = false;
 	this->hud = tgui::Gui((*window));
-	this->inventory = simulation.getPlayer()->getInventory();
+	this->inventory = simulation.getOwner().getInventory();
 	(this->inventory).clear();
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
@@ -64,7 +66,7 @@ void HudTerro::init() {
 
 
      //FIXME We don't check that inventory has changed for now (temporary)
-    if ((this->inventory) != (simulation.getPlayer()->getInventory())) {
+	  if ((this->inventory) != (simulation.getOwner().getInventory())) {
        //Delete the old buttons
       for (std::list<tgui::Button::Ptr>::iterator it =
           (this->buttonsList).begin();
@@ -75,16 +77,15 @@ void HudTerro::init() {
 
        //Updtate the inventory
       (this->inventory).clear();
-      this->inventory = (simulation.getPlayer()->getInventory());
+      this->inventory = (simulation.getOwner().getInventory());
 
 			// Create the new buttons
 			this->i = 0;
       for (int stuffID : inventory) {
 
 
-        Clickable stuff = (simulation.getPlayer())->getItemByID<Clickable>(stuffID);
-
-				tgui::Button::Ptr button(this->hud);
+        Clickable stuff = simulation.getOwner().getItemByID<Clickable>(stuffID);
+			tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
 				button->setPosition(50 + (this->i) * 100, this->h - 100);
@@ -195,7 +196,9 @@ void HudTerro::callback(unsigned int callback_id) {
 
 				// Get the possible actions for the item
 
-				this->actionTypeList = (simulation.getPlayer())->getItemByID<Clickable>(currentStuffID).getActionTypePossible();
+
+				this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
+
 				// Delete the old buttons
 				for (std::list<tgui::Button::Ptr>::iterator it =
 						(this->buttonsList).begin();

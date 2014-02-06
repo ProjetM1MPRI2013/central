@@ -39,6 +39,10 @@ class ScenarioAction : public AbstractMessage {
    */
   virtual void run ();
 
+
+  /**
+   * @brief A ScenarioAction can be called by the Client and the Host.
+   */
   Simulation* simulation;
 
   //AbstractMessage functions

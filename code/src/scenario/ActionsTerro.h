@@ -20,8 +20,6 @@
 
 
 
-typedef Simulation HostSimulation;
-
 void newMovement (NewMov n, Simulation* s);
 
 /*********************************************************
@@ -33,7 +31,7 @@ void newMovement (NewMov n, Simulation* s);
 *********************************************************/
 class A_Attack: public Action {
 public:
-A_Attack  (int weapon, int victim, Simulation* );
+A_Attack  (int weapon, int victim, LocalState* s);
 A_Attack(const A_Attack&);
 public:
 int weapon;
@@ -42,7 +40,7 @@ int victim;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
@@ -55,7 +53,7 @@ private :
 *********************************************************/
 class A_Reload: public Action {
 public:
-A_Reload  (int gun, int ammunition, Simulation* );
+A_Reload  (int gun, int ammunition, LocalState* s);
 A_Reload(const A_Reload&);
 public:
 int gun;
@@ -64,7 +62,7 @@ int ammunition;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
@@ -77,7 +75,7 @@ private :
 *********************************************************/
 class A_Plant: public Action {
 public:
-A_Plant  (int bomb, int zone, Simulation* );
+A_Plant  (int bomb, int zone, LocalState* s);
 A_Plant(const A_Plant&);
 public:
 int bomb;
@@ -86,7 +84,7 @@ int zone;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
@@ -99,7 +97,7 @@ private :
 *********************************************************/
 class A_Drop: public Action {
 public:
-A_Drop  (int stuff, Simulation* );
+A_Drop  (int stuff, LocalState* s);
 A_Drop(const A_Drop&);
 public:
 int stuff;
@@ -112,7 +110,7 @@ int playerID;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(HostSimulation* hs);
+  void addPendingActions(GlobalState* hs);
   virtual AbstractMessage* copy();
 private :
 //Serialization

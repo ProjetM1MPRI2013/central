@@ -2,6 +2,9 @@
 #include <iostream>
 #include <list>
 
+#include "localState.h"
+#include "globalState.h"
+
 #include "network/client.h"
 #define DEBUG false
 #include "debug.h"
@@ -21,14 +24,15 @@ bool isPlantable (Tile* t) {
 	return false;
 };
 
-float distance(Simulation* s, NPC* npc) {
-	return s->getPlayer()->getPosition().distance(npc->getPosition());
+float distance(LocalState* s, NPC* npc) {
+  return s->getOwner().getPosition().distance(npc->getPosition());
 };
 
 
 
-bool isInThePack(Simulation* s, int stuffID) {
-	return s->getPlayer()->hasItemByID(stuffID);
+
+bool isInThePack(LocalState* s, int stuffID) {
+  return s->getOwner().hasItemByID(stuffID);
 };
 
 
@@ -38,17 +42,18 @@ void newMovement (NewMov n, Simulation* s){
 	printNewMov(n);
 	std::cout << std::endl;
 	s->getClient()->sendMessage(newMovNet,true);
-
-	//s->addAction((ScenarioAction *) new ChangeDirection( s->getPlayer()->getID(),n,s));
-
-	return;
 };
+
+
+/*********************************************************
+** Generated code**
+*********************************************************/
 
 /*********************************************************
 ** Attack**
 *********************************************************/
 
-A_Attack::A_Attack (int weapon, int victim, Simulation* sim) : Action ( "ToA_Attack", sim) {
+A_Attack::A_Attack (int weapon, int victim, LocalState* sim) : Action ( "ToA_Attack", sim) {
 this->weapon = (int)weapon;
 this->victim = (int)victim;
 };
@@ -67,9 +72,9 @@ return true;
 //return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
-void A_Attack::addPendingActions(HostSimulation* hs){
-//hs->addAction(new CoA_Attack (this->weapon, this->victim, (Simulation*) hs));
-hs->deleteAction(this);
+void A_Attack::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Attack (this->weapon, this->victim, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
 AbstractMessage* A_Attack::copy() {
@@ -80,7 +85,7 @@ return (AbstractMessage*) new A_Attack(*this);
 ** Reload**
 *********************************************************/
 
-A_Reload::A_Reload (int gun, int ammunition, Simulation* sim) : Action ( "ToA_Reload", sim) {
+A_Reload::A_Reload (int gun, int ammunition, LocalState* sim) : Action ( "ToA_Reload", sim) {
 this->gun = (int)gun;
 this->ammunition = (int)ammunition;
 };
@@ -99,9 +104,9 @@ return true;
 //return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
-void A_Reload::addPendingActions(HostSimulation* hs){
-//hs->addAction(new CoA_Reload (this->gun, this->ammunition, (Simulation*) hs));
-hs->deleteAction(this);
+void A_Reload::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Reload (this->gun, this->ammunition, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
 AbstractMessage* A_Reload::copy() {
@@ -112,7 +117,7 @@ return (AbstractMessage*) new A_Reload(*this);
 ** Plant**
 *********************************************************/
 
-A_Plant::A_Plant (int bomb, int zone, Simulation* sim) : Action ( "ToA_Plant", sim) {
+A_Plant::A_Plant (int bomb, int zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
 this->bomb = (int)bomb;
 this->zone = (int)zone;
 };
@@ -131,9 +136,9 @@ return true;
 //return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
 };
 
-void A_Plant::addPendingActions(HostSimulation* hs){
-//hs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) hs));
-hs->deleteAction(this);
+void A_Plant::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
 AbstractMessage* A_Plant::copy() {
@@ -144,7 +149,7 @@ return (AbstractMessage*) new A_Plant(*this);
 ** Drop**
 *********************************************************/
 
-A_Drop::A_Drop (int stuff, Simulation* sim) : Action ( "ToA_Drop", sim) {
+A_Drop::A_Drop (int stuff, LocalState* sim) : Action ( "ToA_Drop", sim) {
 this->stuff = (int)stuff;
 this->playerID = (int)(this->simulation->getPlayer()->getID());
 };
@@ -163,9 +168,9 @@ return true;
 //return ((isInThePack(this->simulation,this->g)) && (isInThePack(this->simulation,this->ammu));
 };
 
-void A_Drop::addPendingActions(HostSimulation* hs){
-//hs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) hs));
-hs->deleteAction(this);
+void A_Drop::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
 AbstractMessage* A_Drop::copy() {

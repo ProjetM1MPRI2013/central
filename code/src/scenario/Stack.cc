@@ -1,4 +1,5 @@
 #include "Stack.h"
+#include "localState.h"
 #include "../hud/hudTerro.h"
 #include <iostream>
 #include <string>
@@ -8,7 +9,7 @@
 #define LOG false
 
 // découper ici
-Tile getTile(Simulation* s) {
+Tile getTile(LocalState* s) {
 	Player* p = s->getPlayer();
 	Position& pos = p->getPosition();
 	Geography* map = s->getMap();
@@ -25,7 +26,7 @@ Tile getTile(Simulation* s) {
 //};
 
 
-Stack::Stack (Simulation* s, PreHud* h){
+Stack::Stack (LocalState* s, PreHud* h){
   actionType = 	ToA_Attack ; //TODO NOBODY
   stuffID = -1; // -1 must be an invalid stuff id.
   hud = h;
@@ -41,7 +42,7 @@ void Stack::cancel () {
 	//this->actionsName = Actions::NONE;
 };
 
-Action* createAction (ActionType a, int stuffID,std::list<int> NpcList,std::list<int>StuffList,Simulation* sim) {
+Action* createAction (ActionType a, int stuffID,std::list<int> NpcList,std::list<int>StuffList,LocalState* sim) {
 	return ((Action*) (new A_Drop(stuffID, sim))); //TODO NOBODY
 };
 
@@ -79,7 +80,7 @@ void Stack::sendAction () {
 };
 
 void Stack::newAction(ActionType a, int stuffID) {
-  //this->SoNList = a; TODO SONOF ...
+  //this->SoNList = a; TODO  type SONOF ...
   this->actionType =a ;
   this->stuffID = stuffID;
   this->sendAction();

@@ -25,7 +25,7 @@ public:
 	HudMayor(sf::RenderWindow* window, Simulation& simulation);
 	void init();
 	void event(sf::RenderWindow* window, sf::Event e, TileMap* tilemap);
-	void callback(tgui::Callback callback);
+	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
 

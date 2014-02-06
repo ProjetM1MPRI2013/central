@@ -9,7 +9,7 @@
 
 #include "../simulation/position.h"
 #include "Action.h"
-#include "../simulation/simulation.h"
+class LocalState;
 
 #define COST_COP1 1 //cout d'entretien d'un cop
 #define COST_CAM1 1 //cout d'entretien d'une caméra
@@ -20,7 +20,7 @@ class AddCop : public Action {
  public:
   bool IsActionPossible ();
   void doAction();
-  AddCop (int number, float x, float y, Simulation* s);
+  AddCop (int number, float x, float y, LocalState* s);
   AddCop(const AddCop&);
 
   virtual AbstractMessage* copy();
@@ -45,7 +45,7 @@ class AddCam : public Action {
  public:
   bool IsActionPossible ();
   void doAction();
-  AddCam (int number,float x, float y, Simulation* s);
+  AddCam (int number,float x, float y, LocalState* s);
   AddCam(const AddCam&);
   
   virtual AbstractMessage* copy();

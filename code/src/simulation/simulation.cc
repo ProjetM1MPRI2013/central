@@ -16,7 +16,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 Simulation::Simulation(int nbPlayers, int id) {
@@ -37,7 +37,10 @@ Simulation::Simulation(int nbPlayers, int id) {
 	this->absoluteTime = 0;
 	this->smallTime = 0;
 
-	this->addPlayer(Player(id, 0, 0));
+	DBG << (this->getMap());
+  Tile* firstTile = (this->getMap())->getWalkableTile();
+	this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
+      (firstTile->getCoord()).getOrd()));
 
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
@@ -70,9 +73,32 @@ Client* Simulation::getClient() {
 //  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
 }
 
-Simulation::Simulation(Geography* map, int nbPlayers, int id) :
-		Simulation(nbPlayers, id) {
+Simulation::Simulation(Geography* map, int nbPlayers, int id) {
 	this->setGeography(map);
+	this->NB_JOUEURS = nbPlayers;
+	  //[joseph]map n'est pas définie donc ce qui suit est juste map = map
+	  //this->map = map;
+	  //this->oldMap = map;
+	  this->Id = id;
+
+	//  int t[NB_JOUEURS];
+	//  for (int i = 0; i < NB_JOUEURS; i++) {
+	//    t[i] = 0;
+	//  }
+	  this->mesSous = 0;
+	  //
+	  this->sous = std::vector<int>(NB_JOUEURS, 0);
+	  this->relativeTime = 0;
+	  this->absoluteTime = 0;
+	  this->smallTime = 0;
+
+	  DBG << (this->getMap());
+	  Tile* firstTile = (this->getMap())->getWalkableTile();
+	  this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
+	      (firstTile->getCoord()).getOrd()));
+
+	  std::list<NPC*> NPCs;
+	  this->NPCs = NPCs;
 }
 
 /* Never used
@@ -183,7 +209,8 @@ void Simulation::peopleGeneration() {
 					y = rand() % MAP_SIZE;
 				}
 
-				std::cout << "npc created, target =  (" << x << "," << y << ")" << std::endl;
+				std::cout << "npc created, target =  (" << x << "," << y << ")"
+						<< std::endl;
 
 				//this->addNPC(start,target,1,graContIso.getTexturePack(i%2));
 
@@ -197,13 +224,21 @@ void Simulation::peopleGeneration() {
 	return;
 }
 
+void Simulation::copyTmp() {
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0; j < 100; j++) {
+			tmp[i][j] = this->map->getAnxiety(i, j);
+		}
+	}
+}
+
 //Nivelle la peur via une sorte de norme 2
 void Simulation::lisserMatrice() {
 	float anxiety;
-	//float population;
-	//Adrien K. : Heuuuuu, ..... je trouve cette ligne bizarre ...
-	Geography *oldMap = new Geography;
-	*oldMap = *map;
+
+	//on met les valeurs courantes de la geography dans une matrice de chiffres (attribut de simulation)
+	this->copyTmp();
+
 	//interieur de la map
 	for (int i = 1; i < MAP_SIZE - 2; i++) {
 		for (int j = 1; j < MAP_SIZE - 2; j++) {
@@ -211,14 +246,14 @@ void Simulation::lisserMatrice() {
 			/*anxiety =
 			 sqrt2(
 			 (1 / 8)
-			 * (2 * pow2(oldMap->getAnxiety(i, j), 2)
-			 + pow2(oldMap->getAnxiety(i - 1, j),
+			 * (2 * pow2(tmp[i][j], 2)
+			 + pow2(tmp[i-1][j],
 			 2)
-			 + pow2(oldMap->getAnxiety(i, j - 1),
+			 + pow2(tmp[i][j-1],
 			 2)
-			 + pow2(oldMap->getAnxiety(i + 1, j),
+			 + pow2(tmp[i-1][j],
 			 2)
-			 + pow2(oldMap->getAnxiety(i, j + 1),
+			 + pow2(tmp[i][j-1],
 			 2)
 			 + (1 / 2)
 			 * (pow2(
@@ -249,30 +284,23 @@ void Simulation::lisserMatrice() {
 			 */
 			//set
 			//Pour l'instant ça pour tester
-			anxiety = ((5 * oldMap->getAnxiety(i, j))
-					+ oldMap->getAnxiety(i - 1, j)
-					+ oldMap->getAnxiety(i + 1, j)
-					+ oldMap->getAnxiety(i, j - 1)
-					+ oldMap->getAnxiety(i, j + 1)) / 9;
+			anxiety = ((5 * tmp[i][j]) + tmp[i - 1][j] + tmp[i + 1][j]
+					+ tmp[i][j - 1] + tmp[i][j + 1]) / 9;
 			map->setAnxiety(i, j, anxiety);
 		}
 	}
-	std::cout << "Simulation :fin du centre" << std::endl;
+	DBG << "Simulation :fin du centre" ;
 
 	//bande en bas (i=0)
 	for (int j = 1; j < MAP_SIZE - 2; j++) {
 		//calcul
 		anxiety = sqrt2(
 				(1 / 6)
-						* (2 * pow2(oldMap->getAnxiety(0, j), 2)
-								+ pow2(oldMap->getAnxiety(0, j - 1), 2)
-								+ pow2(oldMap->getAnxiety(1, j), 2)
-								+ pow2(oldMap->getAnxiety(0, j + 1), 2)
+						* (2 * pow2(tmp[0][j], 2) + pow2(tmp[0][j - 1], 2)
+								+ pow2(tmp[1][j], 2) + pow2(tmp[0][j + 1], 2)
 								+ (1 / 2)
-										* (pow2(oldMap->getAnxiety(1, j + 1), 2)
-												+ pow2(
-														oldMap->getAnxiety(1,
-																j - 1), 2))));
+										* (pow2(tmp[1][j + 1], 2)
+												+ pow2(tmp[1][j - 1], 2))));
 		//set
 		map->setAnxiety(0, j, anxiety);
 	}
@@ -282,136 +310,96 @@ void Simulation::lisserMatrice() {
 		//calcul
 		anxiety = sqrt2(
 				(1 / 6)
-						* (2 * pow2(oldMap->getAnxiety(i, 0), 2)
-								+ pow2(oldMap->getAnxiety(i - 1, 0), 2)
-								+ pow2(oldMap->getAnxiety(i + 1, 0), 2)
-								+ pow2(oldMap->getAnxiety(i, 0 + 1), 2)
+						* (2 * pow2(tmp[i][0], 2) + pow2(tmp[i - 1][0], 2)
+								+ pow2(tmp[i + 1][0], 2)
+								+ pow2(tmp[i][0 + 1], 2)
 								+ (1 / 2)
-										* (pow2(
-												oldMap->getAnxiety(i - 1,
-														0 + 1), 2)
-												+ pow2(
-														oldMap->getAnxiety(
-																i + 1, 0 + 1),
-														2))));
+										* (pow2(tmp[i - 1][1], 2)
+												+ pow2(tmp[i + 1][1], 2))));
 		//set
 		map->setAnxiety(i, 0, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande gauche" << std::endl;
+	DBG << "Simulation :fin de la bande gauche";
 
 	//bande à droite (j=MAP_SIZE -1)
 	for (int i = 1; i < MAP_SIZE - 2; i++) {
 		//calcul
-		anxiety =
-				sqrt2(
-						(1 / 6)
-								* (2
-										* pow2(
-												oldMap->getAnxiety(i,
-														MAP_SIZE - 1), 2)
-										+ pow2(
-												oldMap->getAnxiety(i - 1,
-														MAP_SIZE - 1), 2)
-										+ pow2(
-												oldMap->getAnxiety(i + 1,
-														MAP_SIZE - 1), 2)
-										+ pow2(
-												oldMap->getAnxiety(i,
-														MAP_SIZE - 1 - 1), 2)
-										+ (1 / 2)
-												* (pow2(
-														oldMap->getAnxiety(
-																i - 1,
-																MAP_SIZE - 1
-																		- 1), 2)
-														+ pow2(
-																oldMap->getAnxiety(
-																		i + 1,
-																		MAP_SIZE
-																				- 1
-																				- 1),
-																2))));
+		anxiety = sqrt2(
+				(1 / 6)
+						* (2 * pow2(tmp[i][MAP_SIZE - 1], 2)
+								+ pow2(tmp[i - 1][MAP_SIZE - 1], 2)
+								+ pow2(tmp[i + 1][MAP_SIZE - 1], 2)
+								+ pow2(tmp[i][MAP_SIZE - 1 - 1], 2)
+								+ (1 / 2)
+										* (pow2(tmp[i - 1][MAP_SIZE - 1 - 1], 2)
+												+ pow2(
+														tmp[i + 1][MAP_SIZE - 1
+																- 1], 2))));
 		//set
 		map->setAnxiety(i, MAP_SIZE - 1, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande droite" << std::endl;
+	DBG << "Simulation :fin de la bande droite";
 	//bande en haut (i=MAP_SIZE -1)
 	for (int j = 1; j < MAP_SIZE - 2; j++) {
 		//calcul
 		anxiety = sqrt2(
 				(1 / 6)
-						* (2 * pow2(oldMap->getAnxiety(MAP_SIZE - 1, j), 2)
-								+ pow2(oldMap->getAnxiety(MAP_SIZE - 2, j), 2)
-								+ pow2(oldMap->getAnxiety(MAP_SIZE - 1, j - 1),
-										2)
-								+ pow2(oldMap->getAnxiety(MAP_SIZE - 1, j + 1),
-										2)
+						* (2 * pow2(tmp[MAP_SIZE - 1][j], 2)
+								+ pow2(tmp[MAP_SIZE - 2][j], 2)
+								+ pow2(tmp[MAP_SIZE - 1][j - 1], 2)
+								+ pow2(tmp[MAP_SIZE - 1][j + 1], 2)
 								+ (1 / 2)
-										* (pow2(
-												oldMap->getAnxiety(MAP_SIZE - 2,
-														j + 1), 2)
-												+ pow2(
-														oldMap->getAnxiety(
-																MAP_SIZE - 2,
-																j - 1), 2))));
+										* (pow2(tmp[MAP_SIZE - 2][j + 1], 2)
+												+ pow2(tmp[MAP_SIZE - 2][j - 1],
+														2))));
 		//set
 		map->setAnxiety(MAP_SIZE - 1, j, anxiety);
 	}
-	std::cout << "Simulation :fin de la bande en haut" << std::endl;
+	DBG << "Simulation :fin de la bande en haut";
 
 	//coin en haut à gauche
 	anxiety = sqrt2(
 			(1 / 4.5)
-					* (2 * pow2(oldMap->getAnxiety(0, MAP_SIZE - 1), 2)
-							+ pow2(oldMap->getAnxiety(0, MAP_SIZE - 2), 2)
-							+ pow2(oldMap->getAnxiety(1, MAP_SIZE - 1), 2)
-							+ (1 / 2)
-									* (pow2(oldMap->getAnxiety(1, MAP_SIZE - 2),
-											2))));
+					* (2 * pow2(tmp[0][MAP_SIZE - 1], 2)
+							+ pow2(tmp[0][MAP_SIZE - 2], 2)
+							+ pow2(tmp[1][MAP_SIZE - 1], 2)
+							+ (1 / 2) * pow2(tmp[1][MAP_SIZE - 2], 2)));
 	map->setAnxiety(0, MAP_SIZE - 1, anxiety);
 
 	//coin en haut à droite
-	anxiety = sqrt2(
-			(1 / 4.5)
-					* (2
-							* pow2(
-									oldMap->getAnxiety(MAP_SIZE - 1,
-											MAP_SIZE - 1), 2)
-							+ pow2(
-									oldMap->getAnxiety(MAP_SIZE - 1,
-											MAP_SIZE - 2), 2)
-							+ pow2(
-									oldMap->getAnxiety(MAP_SIZE - 2,
-											MAP_SIZE - 1), 2)
-							+ (1 / 2)
-									* (pow2(
-											oldMap->getAnxiety(MAP_SIZE - 2,
-													MAP_SIZE - 2), 2))));
+	anxiety =
+			sqrt2(
+					(1 / 4.5)
+							* (2 * pow2(tmp[MAP_SIZE - 1][MAP_SIZE - 1], 2)
+									+ pow2(tmp[MAP_SIZE - 1][MAP_SIZE - 2], 2)
+									+ pow2(tmp[MAP_SIZE - 2][MAP_SIZE - 1], 2)
+									+ (1 / 2)
+											* (pow2(
+													tmp[MAP_SIZE - 2][MAP_SIZE
+															- 2], 2))));
 	map->setAnxiety(MAP_SIZE - 1, MAP_SIZE - 1, anxiety);
 
 	//coin en bas à gauche
-	anxiety = sqrt2(
-			(1 / 4.5)
-					* (2 * pow2(oldMap->getAnxiety(0, 0), 2)
-							+ pow2(oldMap->getAnxiety(0, 1), 2)
-							+ pow2(oldMap->getAnxiety(1, 0), 2)
-							+ (1 / 2) * (pow2(oldMap->getAnxiety(1, 1), 2))));
+	anxiety =
+			sqrt2(
+					(1 / 4.5)
+							* (2 * pow2(tmp[0][0], 2) + pow2(tmp[0][1], 2)
+									+ pow2(tmp[1][0], 2)
+									+ (1 / 2) * pow2(tmp[1][1], 2)));
 	map->setAnxiety(0, 0, anxiety);
 
 	//coin en bas à droite
 	anxiety = sqrt2(
 			(1 / 4.5)
-					* (2 * pow2(oldMap->getAnxiety(MAP_SIZE - 1, 0), 2)
-							+ pow2(oldMap->getAnxiety(MAP_SIZE - 1, 1), 2)
-							+ pow2(oldMap->getAnxiety(MAP_SIZE - 2, 0), 2)
-							+ (1 / 2)
-									* (pow2(oldMap->getAnxiety(MAP_SIZE - 2, 1),
-											2))));
+					* (2 * pow2(tmp[MAP_SIZE - 1][0], 2)
+							+ pow2(tmp[MAP_SIZE - 1][1], 2)
+							+ pow2(tmp[MAP_SIZE - 2][0], 2)
+							+ (1 / 2) * (pow2(tmp[MAP_SIZE - 2][1], 2))));
 	map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
-	std::cout << "fin de tout" << std::endl;
+	DBG << "fin de tout" ;
 	//delete(oldMap);
-	std::cout << "fin du dl" << std::endl;
+	DBG << "fin du dl" ;
 	return;
 }
 

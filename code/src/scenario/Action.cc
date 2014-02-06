@@ -1,14 +1,16 @@
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 #include "Action.h"
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
 
-Action::Action(std::string n, Simulation* s) {
+#include "localState.h"
+
+Action::Action(std::string n, LocalState* s) {
   name = n;
   simulation = s;
-  this->playerID = this->simulation->getPlayer()->getID ();
+  this->playerID = this->simulation->getOwner().getID ();
 }
 
 Action::Action(const Action& a){
@@ -27,7 +29,7 @@ void Action::doAction(){
   return;
 }
 
-void Action::addPendingActions(HostSimulation* hs){
+void Action::addPendingActions(GlobalState* hs){
   std::cerr << "addPendingActions called but not implemented for the Action type :" << name << "\n";
   return;
 }
