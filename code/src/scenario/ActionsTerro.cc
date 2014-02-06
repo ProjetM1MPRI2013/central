@@ -10,9 +10,8 @@
 #include "debug.h"
 
 bool isPlantable (Tile* t) {
-	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};
-switch(t->getType())
-// todo choisir les quelles sont plantables
+	switch(t->getType())
+	// todo choisir les quelles sont plantables
 	{case(ROADH) : return true;
 	case(ROADV) : return true;
 	case(INTER) : return true;
@@ -21,7 +20,7 @@ switch(t->getType())
 	case(BLANK): return true;
 	default: return true;
 	};
- return false;
+	return false;
 };
 
 float distance(LocalState* s, NPC* npc) {
@@ -30,141 +29,151 @@ float distance(LocalState* s, NPC* npc) {
 
 
 
+
 bool isInThePack(LocalState* s, int stuffID) {
   return s->getOwner().hasItemByID(stuffID);
 };
 
 
+/*********************************************************
+** Generated code**
+*********************************************************/
 
-Drop :: Drop (int stuffID, LocalState* sim) : Action ("Drop",sim) {
-  this->stuffID = stuffID;
-  this->playerID = this->simulation->getOwner().getID();
+/*********************************************************
+** Attack**
+*********************************************************/
+
+A_Attack::A_Attack (int weapon, int victim, LocalState* sim) : Action ( "ToA_Attack", sim) {
+this->weapon = (int)weapon;
+this->victim = (int)victim;
 };
 
-Drop::Drop(const Drop& d) : Action ("Drop",d.simulation){
-  this->stuffID = d.stuffID;
-  this->playerID = d.playerID;
-}
-
-Attack :: Attack (int weaponID, NPC* victim, LocalState* sim)  : Action ("Attack",sim) {
-  vict = victim;
-  this->weaponID = weaponID;
+A_Attack::A_Attack(const A_Attack& a) : Action(" ToA_Attack", a.simulation){
+this->weapon= a.weapon;
+this->victim= a.victim;
 };
 
-Attack::Attack(const Attack& a) : Action("Attack", a.simulation){
-  this->weaponID = a.weaponID;
-  this->vict = a.vict;
-}
-
-
-Plant :: Plant (int bombID, Tile* zone, LocalState* sim)  : Action ("Plant",sim) {
-  this->bombID = bombID;
-  z = zone;
+void A_Attack::doAction() {
+this->simulation->getClient()->sendMessage(*this,true);
 };
 
-Plant::Plant (const Plant& p) : Action ("Plant", p.simulation){
-  this->bombID = p.bombID;
-  this->z = p.z;
-}
-
-
-Reload :: Reload (int gunID, int ammunitionID, LocalState* sim) : Action ("Reload",sim) {
-  this->gunID = gunID;
-  this->ammunitionID = ammunitionID;
+bool A_Attack::isActionPossible() {
+return true;
+//return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
-Reload::Reload(const Reload& r) : Action("Reload", r.simulation){
-  this->gunID = r.gunID;
-  this->ammunitionID = r.ammunitionID;
+void A_Attack::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Attack (this->weapon, this->victim, (Simulation*) gs));
+gs->deleteAction(this);
+};
+
+AbstractMessage* A_Attack::copy() {
+return (AbstractMessage*) new A_Attack(*this);
+};
+
+/*********************************************************
+** Reload**
+*********************************************************/
+
+A_Reload::A_Reload (int gun, int ammunition, LocalState* sim) : Action ( "ToA_Reload", sim) {
+this->gun = (int)gun;
+this->ammunition = (int)ammunition;
+};
+
+A_Reload::A_Reload(const A_Reload& a) : Action(" ToA_Reload", a.simulation){
+this->gun= a.gun;
+this->ammunition= a.ammunition;
+};
+
+void A_Reload::doAction() {
+this->simulation->getClient()->sendMessage(*this,true);
 };
 
 
-bool Drop::isActionPossible(){return isInThePack(this->simulation,this->stuffID);};
-void Drop::doAction () {
-    this->simulation->getClient()->sendMessage(*this,true);
+bool A_Reload::isActionPossible() {
+return true;
+//return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
-void Drop::addPendingActions(GlobalState* hs){
-  hs->addAction(new DropItem(this->stuffID,this->playerID, (Simulation*) hs));
-  hs->deleteAction(this);
-}
-
-
-bool Plant::isActionPossible(){
-  return (
-	  (isInThePack(this->simulation,this->bombID)) 
-	  && (isPlantable (this->z))
-	  );
-};
-void Plant::doAction () {
-    this->simulation->getClient()->sendMessage(*this,true);
+void A_Reload::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Reload (this->gun, this->ammunition, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
-void Plant::addPendingActions(GlobalState* hs){
-  //Pour l'instant on fait exploser la bombe directement. Et on ne la supprime pas de l'inventaire.
-
-    Bomb bomb = hs->getItemByID<Bomb>(bombID);
-    hs->addAction(new Explosion(this->z,bomb.getPower(),(Simulation*)hs));
-    hs->deleteAction(this);
-}
-
-
-bool Reload::isActionPossible(){
-  return ((isInThePack(this->simulation,this->gunID))
-	  && (isInThePack(this->simulation,this->ammunitionID))
-	  );
+AbstractMessage* A_Reload::copy() {
+return (AbstractMessage*) new A_Reload(*this);
 };
-void Reload::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
-void Reload::addPendingActions(GlobalState* hs){
-  //TODO
-  hs->deleteAction(this);
-}
+/*********************************************************
+** Plant**
+*********************************************************/
 
-
-
-bool Attack::isActionPossible(){
-
-  return ((isInThePack(this->simulation,this->weaponID))
-	  && ( this->simulation->getItemByID<Weapon>(weaponID)).getRange() <= distance (this->simulation,this->vict) ) ;
+A_Plant::A_Plant (int bomb, int zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
+this->bomb = (int)bomb;
+this->zone = (int)zone;
 };
-void Attack::doAction () {this->simulation->getClient()->sendMessage(*this,true);};
 
-void Attack::addPendingActions(GlobalState* hs){
-  hs->addAction(new KillNPC(this->vict, (Simulation*)hs));
-  hs->deleteAction(this);
-}
+A_Plant::A_Plant(const A_Plant& a) : Action(" ToA_Plant", a.simulation){
+this->bomb= a.bomb;
+this->zone= a.zone;
+};
 
+void A_Plant::doAction() {
+this->simulation->getClient()->sendMessage(*this,true);
+};
 
-void newMovement (NewMov n, Simulation* s){
-  NewMovNetwork newMovNet(n,s->getPlayer()->getID());
-  std::cout << "Client : New Movement from player : " << s->getPlayer()->getID() << " ";
+bool A_Plant::isActionPossible() {
+return true;
+//return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
+};
+
+void A_Plant::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) gs));
+gs->deleteAction(this);
+};
+
+AbstractMessage* A_Plant::copy() {
+return (AbstractMessage*) new A_Plant(*this);
+};
+
+void newMovement (NewMov n, LocalState* s){
+  std::cout << "Client : New Movement begin\n";
+  NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
+  std::cout << "Client : New Movement from player : " << s->getOwner().getID() << " ";
   printNewMov(n);
   std::cout << std::endl;
+  s->getOwner().setDirection(newMovNet.newDirection);
   s->getClient()->sendMessage(newMovNet,true);
-
-  //s->addAction((ScenarioAction *) new ChangeDirection( s->getPlayer()->getID(),n,s));
-
-  return;
 };
 
+/*********************************************************
+** Drop**
+*********************************************************/
 
-/***********************************
- * AbstractMessage implementations *
- **********************************/
+A_Drop::A_Drop (int stuff, LocalState* sim) : Action ( "ToA_Drop", sim) {
+this->stuff = (int)stuff;
+this->playerID = (int)(this->simulation->getPlayer()->getID());
+};
 
-AbstractMessage* Drop::copy(){
-    return (AbstractMessage*) new Drop(*this);
-}
+A_Drop::A_Drop(const A_Drop& a) : Action(" ToA_Drop", a.simulation){
+this->stuff= a.stuff;
+this->playerID= a.playerID;
+};
 
-AbstractMessage* Attack::copy(){
-  return (AbstractMessage*) new Attack(*this);
-}
+void A_Drop::doAction() {
+this->simulation->getClient()->sendMessage(*this,true);
+};
 
-AbstractMessage* Plant::copy(){
-  return (AbstractMessage*) new Plant(*this);
-}
+bool A_Drop::isActionPossible() {
+return true;
+//return ((isInThePack(this->simulation,this->g)) && (isInThePack(this->simulation,this->ammu));
+};
 
-AbstractMessage* Reload::copy(){
-  return (AbstractMessage*) new Reload(*this);
-}
+void A_Drop::addPendingActions(GlobalState* gs){
+//gs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) gs));
+gs->deleteAction(this);
+};
+
+AbstractMessage* A_Drop::copy() {
+return (AbstractMessage*) new A_Drop(*this);
+};

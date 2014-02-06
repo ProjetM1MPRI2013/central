@@ -2,7 +2,7 @@
  * @Author: Anthony
  */
 #include "hudTerro.h"
-class Stuff;
+class Clickable;
 #include "../scenario/Stack.h"
 
 #include "localState.h"
@@ -18,6 +18,37 @@ class Stuff;
 #define GetCurrentDir getcwd
 #endif
 
+//todo nobody inser in a new .cc
+
+
+/*********************************************************
+ ** Generated code**
+ *********************************************************/
+std::string stringOfActions(ActionType a) {
+	switch (a) {
+	case ToA_Attack:
+		return "Attack";
+		break;
+	case ToA_Reload:
+		return "Reload";
+		break;
+	case ToA_Plant:
+		return "Plant";
+		break;
+	case ToA_Drop:
+		return "Drop";
+		break;
+		//Should not happens
+		return " Error stringOfActions " ;
+	};
+};
+/*********************************************************
+ ** end of Generated code**
+ *********************************************************/
+
+
+
+
 
 void printcwd() {
 	char cCurrentPath[FILENAME_MAX];
@@ -31,7 +62,7 @@ void printcwd() {
 ;
 
 HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation) :
-		simulation(simulation) {
+				simulation(simulation) {
 	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
@@ -45,7 +76,7 @@ HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation) :
 	this->waitFor = WF_NONE;
 	this->currentState = BS_INVENT;
 	this->nextState = BS_INVENT;
-  DBG << "created Hudterro";
+	DBG << "created Hudterro";
 	(this->hud).setGlobalFont("../fonts/leadcoat.ttf");
 
 	//tgui::Picture::Ptr picture3(this->hud);
@@ -58,34 +89,33 @@ HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation) :
 
 void HudTerro::init() {
 	this->currentState = this->nextState;
-  //std::cerr << "KOUKOU" << std::endl; 
-  //if ((this-> currentState) == BS_INVENT) {std::cerr << "BS_INVENT" << std::endl;};
-  //if ((this-> currentState) == BS_ACTIONS) {std::cerr << "BS_ACTIONS" << std::endl;};
+	//std::cerr << "KOUKOU" << std::endl;
+	//if ((this-> currentState) == BS_INVENT) {std::cerr << "BS_INVENT" << std::endl;};
+	//if ((this-> currentState) == BS_ACTIONS) {std::cerr << "BS_ACTIONS" << std::endl;};
 	if (this->currentState == BS_INVENT) {
 		// if the inventory must be updated
 
 
-     //FIXME We don't check that inventory has changed for now (temporary)
-	  if ((this->inventory) != (simulation.getOwner().getInventory())) {
-       //Delete the old buttons
-      for (std::list<tgui::Button::Ptr>::iterator it =
-          (this->buttonsList).begin();
-          it != (this->buttonsList).end(); ++it) {
-        hud.remove(*it);
-      };
-      (this->buttonsList).clear();
+		//FIXME We don't check that inventory has changed for now (temporary)
+		if ((this->inventory) != (simulation.getOwner().getInventory())) {
+			//Delete the old buttons
+			for (std::list<tgui::Button::Ptr>::iterator it =
+					(this->buttonsList).begin();
+					it != (this->buttonsList).end(); ++it) {
+				hud.remove(*it);
+			};
+			(this->buttonsList).clear();
 
-       //Updtate the inventory
-      (this->inventory).clear();
-      this->inventory = (simulation.getOwner().getInventory());
+			//Updtate the inventory
+			(this->inventory).clear();
+			this->inventory = (simulation.getOwner().getInventory());
 
 			// Create the new buttons
 			this->i = 0;
-      for (int stuffID : inventory) {
+			for (int stuffID : inventory) {
 
 
-        Stuff stuff = simulation.getOwner().getItemByID<Stuff>(stuffID);
-
+				Clickable stuff = simulation.getOwner().getItemByID<Clickable>(stuffID);
 				tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
@@ -94,172 +124,173 @@ void HudTerro::init() {
 				button->setText(stuff.name);
 				//button->setCallbackId(this->i + 1);
 				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)), 
-                             tgui::Button::LeftMouseClicked);
+						tgui::Button::LeftMouseClicked);
 				(this->buttonsList).push_back(button);
 				(this->i)++;
 				DBG << "adding " << stuff.name;
 			};
-    };
+		};
 	};
 }
 ;
 
 void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
-		if (event.type == sf::Event::Closed)
-			(*window).close();
+	if (event.type == sf::Event::Closed)
+		(*window).close();
 
-		if (waitFor == WF_NONE) {
-			if (event.type == sf::Event::KeyPressed) {
-				// Je crois qu'on veut rajouter une action terro newmovement
-				// je verrai plus tard comment on fait exactement
-				switch (event.key.code) {
-				case sf::Keyboard::Z:
-					if (not this->bup) {
-						newMovement (NewMov::P_UP,(&this->simulation));
-						this->bup = true;
-					};
-					break;
-				case sf::Keyboard::Q:
-					if (not this->bleft) {
-						newMovement (NewMov::P_LEFT,(&this->simulation));
-						this->bleft = true;
-					};
-					break;
-				case sf::Keyboard::S:
-					if (not this->bdown) {
-						newMovement (NewMov::P_DOWN,(&this->simulation));
-						this->bdown = true;
-					};
-					break;
-				case sf::Keyboard::D:
-					if (not this->bright) {
-						newMovement (NewMov::P_RIGHT,(&this->simulation));
-						this->bright = true;
-					};
-					break;
-				default:
-					break;
+	if (waitFor == WF_NONE) {
+		if (event.type == sf::Event::KeyPressed) {
+			// Je crois qu'on veut rajouter une action terro newmovement
+			// je verrai plus tard comment on fait exactement
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				if (not this->bup) {
+					newMovement (NewMov::P_UP,(&this->simulation));
+					this->bup = true;
 				};
-			};
-
-			if (event.type == sf::Event::KeyReleased) {
-				switch (event.key.code) {
-				case sf::Keyboard::Z:
-					newMovement (NewMov::R_UP,(&this->simulation));
-					this->bup = false;
-					break;
-				case sf::Keyboard::Q:
-					newMovement (NewMov::R_LEFT,(&this->simulation));
-					this->bleft = false;
-					break;
-				case sf::Keyboard::S:
-					newMovement (NewMov::R_DOWN,(&this->simulation));
-					this->bdown = false;
-					break;
-				case sf::Keyboard::D:
-					newMovement (NewMov::R_RIGHT,(&this->simulation));
-					this->bright = false;
-					break;
-				default:
-					break;
+				break;
+			case sf::Keyboard::Q:
+				if (not this->bleft) {
+					newMovement (NewMov::P_LEFT,(&this->simulation));
+					this->bleft = true;
 				};
+				break;
+			case sf::Keyboard::S:
+				if (not this->bdown) {
+					newMovement (NewMov::P_DOWN,(&this->simulation));
+					this->bdown = true;
+				};
+				break;
+			case sf::Keyboard::D:
+				if (not this->bright) {
+					newMovement (NewMov::P_RIGHT,(&this->simulation));
+					this->bright = true;
+				};
+				break;
+			default:
+				break;
 			};
 		};
 
-		if (waitFor == WF_CLICK) {
-			if (event.type == sf::Event::MouseButtonPressed) {
-				if (event.mouseButton.button == sf::Mouse::Left) {
-					// TODO : envoyer le clic si c'est un NPC
-				} else {
-					stack->cancel();
-				};
+		if (event.type == sf::Event::KeyReleased) {
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				newMovement (NewMov::R_UP,(&this->simulation));
+				this->bup = false;
+				break;
+			case sf::Keyboard::Q:
+				newMovement (NewMov::R_LEFT,(&this->simulation));
+				this->bleft = false;
+				break;
+			case sf::Keyboard::S:
+				newMovement (NewMov::R_DOWN,(&this->simulation));
+				this->bdown = false;
+				break;
+			case sf::Keyboard::D:
+				newMovement (NewMov::R_RIGHT,(&this->simulation));
+				this->bright = false;
+				break;
+			default:
+				break;
+			};
+		};
+	};
+
+	if (waitFor == WF_CLICK) {
+		if (event.type == sf::Event::MouseButtonPressed) {
+			if (event.mouseButton.button == sf::Mouse::Left) {
+				// TODO : envoyer le clic si c'est un NPC
 			} else {
-				if (event.type == sf::Event::KeyPressed) {
-					stack->cancel();
-				};
+				stack->cancel();
+			};
+		} else {
+			if (event.type == sf::Event::KeyPressed) {
+				stack->cancel();
 			};
 		};
+	};
 
-		// Pass the event to all the current widgets
-		//std::cerr << "passe dedans" << std::endl;
-		(this->hud).handleEvent(event);
+	// Pass the event to all the current widgets
+	//std::cerr << "passe dedans" << std::endl;
+	(this->hud).handleEvent(event);
 }
 ;
 
 void HudTerro::callback(unsigned int callback_id) {
 	//tgui::Callback callback;
 	//while ((this->hud).pollCallback(callback)) {
-		std::cerr << "callback : " << callback_id << std::endl;
-    	if ((this->currentState) == BS_INVENT) {
-			if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
-				// Save the selected item
-				this->currentStuffID = inventory[(int)callback_id]; // horrible
+	std::cerr << "callback : " << callback_id << std::endl;
+	if ((this->currentState) == BS_INVENT) {
+		if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
+			// Save the selected item
+			this->currentStuffID = inventory[(int)callback_id]; // horrible
 
-				// Get the possible actions for the item
+			// Get the possible actions for the item
 
-				this->actionTypeList = simulation.getOwner().getItemByID<Stuff>(currentStuffID).getActionTypePossible();
 
-				// Delete the old buttons
-				for (std::list<tgui::Button::Ptr>::iterator it =
-						(this->buttonsList).begin();
-						it != (this->buttonsList).end(); ++it) {
-          hud.remove(*it);
-					//delete &it;
-				};
-				(this->buttonsList).clear();
-        (this->inventory).clear(); 
+			this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
 
-				// Create the new buttons
-				this->i = 0;
-				for (std::list<ActionType*>::iterator it =
-						(this->actionTypeList).begin();
-						it != (this->actionTypeList).end(); ++it)
-				{
-					tgui::Button::Ptr button(this->hud);
-					button->load(THEME_CONFIG_FILE_HUD_TERRO);
-					button->setSize(80, 40);
-					button->setPosition(50 + (this->i) * 100, this->h - 100);
-					button->setText((*it)->name);
-          button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
-                               tgui::Button::LeftMouseClicked);
-					//button->setCallbackId(this->i + 1);
-					(this->buttonsList).push_back(button);
-					(this->i)++;
-				};
+			// Delete the old buttons
+			for (std::list<tgui::Button::Ptr>::iterator it =
+					(this->buttonsList).begin();
+					it != (this->buttonsList).end(); ++it) {
+				hud.remove(*it);
+				//delete &it;
+			};
+			(this->buttonsList).clear();
+			(this->inventory).clear();
 
-				// Create the 'Inventory' button.
+			// Create the new buttons
+			this->i = 0;
+			for (std::list<ActionType>::iterator it =
+					(this->actionTypeList).begin();
+					it != (this->actionTypeList).end(); ++it)
+			{
 				tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
 				button->setSize(80, 40);
-				button->setPosition(50 + (this->w - 200), this->h - 100);
-				button->setText("Inventory");
-        button->bindCallback(std::bind(&HudTerro::callback, this, 0),
-                             tgui::Button::LeftMouseClicked);
-				//button->setCallbackId(0);
+				button->setPosition(50 + (this->i) * 100, this->h - 100);
+				button->setText(stringOfActions(*it));
+				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
+						tgui::Button::LeftMouseClicked);
+				//button->setCallbackId(this->i + 1);
 				(this->buttonsList).push_back(button);
-
-				// Update the flag
-				this->nextState = BS_ACTIONS;
+				(this->i)++;
 			};
+
+			// Create the 'Inventory' button.
+			tgui::Button::Ptr button(this->hud);
+			button->load(THEME_CONFIG_FILE_HUD_TERRO);
+			button->setSize(80, 40);
+			button->setPosition(50 + (this->w - 200), this->h - 100);
+			button->setText("Inventory");
+			button->bindCallback(std::bind(&HudTerro::callback, this, 0),
+					tgui::Button::LeftMouseClicked);
+			//button->setCallbackId(0);
+			(this->buttonsList).push_back(button);
+
+			// Update the flag
+			this->nextState = BS_ACTIONS;
+		};
+	};
+
+	if (this->currentState == BS_ACTIONS) {
+		// the button 'Inventory' is clicked.
+		if (callback_id == 0) {
+			std::cerr << "Inventory" << std::endl;
+			this->nextState = BS_INVENT;
+			(this->actionTypeList).clear();
 		};
 
-		if (this->currentState == BS_ACTIONS) {
-			// the button 'Inventory' is clicked.
-			if (callback_id == 0) {
-        std::cerr << "Inventory" << std::endl; 
-				this->nextState = BS_INVENT;
-				(this->actionTypeList).clear();
+		// an action is clicked.
+		if (callback_id > 0 && callback_id < (this->buttonsList).size()) {
+			std::list<ActionType>::iterator it = (this->actionTypeList).begin();
+			for (unsigned int i = 1; i < callback_id; i++) {
+				++it;
 			};
-
-			// an action is clicked.
-			if (callback_id > 0 && callback_id < (this->buttonsList).size()) {
-				std::list<ActionType*>::iterator it = (this->actionTypeList).begin();
-				for (unsigned int i = 1; i < callback_id; i++) {
-					++it;
-				};
-				stack->newAction((*it), this->currentStuffID);
-			};
+			stack->newAction((*it), this->currentStuffID);
 		};
+	};
 }
 ;
 

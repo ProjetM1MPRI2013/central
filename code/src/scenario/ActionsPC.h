@@ -8,7 +8,6 @@
 
 
 #include "../simulation/position.h"
-#include "Clickable.h"
 #include "Action.h"
 class LocalState;
 

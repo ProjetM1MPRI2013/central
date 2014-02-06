@@ -1,52 +1,83 @@
 #include "StuffList.h"
 
 
+/*********************************************************
+ **                    Generated code                   **
+ *********************************************************/
 
-Weapon::Weapon (std::string n): Stuff(n) {
-	std::list<SoN> l_attack ;
-	l_attack.push_back(SON_NPC);
-	//ActionType* A_attack = new ActionType  ("attack",l_attack);
-	//this->ActionTypePossible.push_back(A_attack);
+
+/*********************************************************
+** Weapon**
+*********************************************************/
+C_Weapon::C_Weapon (): Clickable () {
+((Clickable*)this)->name =  "N_Weapon";
+this->ActionTypePossible.push_back(ActionType::ToA_Attack);
 };
 
-float Weapon::getRange () {return 0;};
-int Weapon::getDamage () {return 0;};
-
-
-
-Bomb::Bomb (int p) : Stuff("Bomb") {
-	std::list<SoN> l_plant ;;
-	//ActionType* A_plant = new ActionType  ("plant",l_plant);
-	//this->ActionTypePossible.push_back(A_plant);
-  this->power = p;
+/*********************************************************
+** Gun**
+*********************************************************/
+C_Gun::C_Gun (int ammunitionMax, float range, int damage) : C_Weapon () {
+((Clickable*)this)->name =  "N_Gun";
+this->ammunitionMax = (int)ammunitionMax;
+this->range = (float)range;
+this->ammunitionLoaded = (int)(ammunitionMax);
+this->damage = (int)damage;
+this->ActionTypePossible.push_back(ActionType::ToA_Reload);
 };
+int C_Gun::getammunitionMax () {return this->ammunitionMax;};
+float C_Gun::getrange () {return this->range;};
+int C_Gun::getammunitionLoaded () {return this->ammunitionLoaded;};
+void C_Gun::setammunitionLoaded ( int ammunitionLoaded ) { this->ammunitionLoaded = (int)ammunitionLoaded;};
+int C_Gun::getdamage () {return this->damage;};
 
-int Bomb::getPower() {return this->power;};
-
-Knife::Knife () : Weapon ("Knife") {
+/*********************************************************
+** Mitraillette**
+*********************************************************/
+C_Mitraillette::C_Mitraillette (int damage): C_Gun ((int) 100, (float) 10., damage) {
+((Clickable*)this)->name =  "N_Mitraillette";
+this->ammunitionMax = (int)(100);
+this->range = (float)(10.);
 };
+int C_Mitraillette::getammunitionMax () {return this->ammunitionMax;};
+float C_Mitraillette::getrange () {return this->range;};
 
-
-float Knife::getRange () {return 1;};
-int Knife::getDamage () {return 1;};
-
-Gun::Gun(int max, int dam,float ran) : Weapon ("Gun") {
-  ammunitionLoaded = max;
-  ammunitionMax = max;
-  this->range = ran;
-  this->damage = dam;
-  std::list<SoN> l_reload ;
-  l_reload.push_back(SON_STUFF);
-  //ActionType* A_reload = new ActionType  ("reload",l_reload);
-  //this->ActionTypePossible.push_back(A_reload);
+/*********************************************************
+** UltraM**
+*********************************************************/
+C_UltraM::C_UltraM (): C_Mitraillette ((int) 2000) {
+((Clickable*)this)->name =  "N_UltraM";
+this->damage = (int)(2000);
 };
+int C_UltraM::getdamage () {return this->damage;};
 
-
-float Gun::getRange () {return (this->range);};
-int Gun::getDamage () {return (this->damage);};
-
-
-Ammunition::Ammunition (int n) : Stuff("Ammunition") {
-  number=n;
+/*********************************************************
+** Knife**
+*********************************************************/
+C_Knife::C_Knife (): C_Weapon () {
+((Clickable*)this)->name =  "Knife";
+this->range = (float)(1.);
+this->damage = (int)(1);
 };
+float C_Knife::getrange () {return this->range;};
+int C_Knife::getdamage () {return this->damage;};
 
+/*********************************************************
+** Ammunition**
+*********************************************************/
+C_Ammunition::C_Ammunition (int number): Clickable () {
+((Clickable*)this)->name =  "N_Ammunition";
+this->number = (int)number;
+};
+int C_Ammunition::getnumber () {return this->number;};
+void C_Ammunition::setnumber ( int number ) { this->number = (int)number;};
+
+/*********************************************************
+** Bomb**
+*********************************************************/
+C_Bomb::C_Bomb (int power): Clickable () {
+((Clickable*)this)->name =  "N_Bomb";
+this->power = (int)power;
+this->ActionTypePossible.push_back(ActionType::ToA_Plant);
+};
+int C_Bomb::getpower () {return this->power;};

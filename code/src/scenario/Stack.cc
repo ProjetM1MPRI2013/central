@@ -8,89 +8,77 @@
 #define DEBUG false
 #define LOG false
 
-// découper ici
 Tile getTile(LocalState* s) {
-	if (DEBUG) {std::cout << "getTile" << std::endl ;};
-	Player* p = ((Simulation *)s)->getPlayer();
-	if (DEBUG) {std::cout << "getTile 1" << std::endl ;};
+	Player* p = s->getPlayer();
 	Position& pos = p->getPosition();
-	 if (DEBUG) {std::cout << pos.getX() << "," << pos.getY()  << std::endl ;};
-	if (DEBUG) {std::cout << pos.getX() << std::endl ;};
-	if (DEBUG) {std::cout << "getTile 2" << std::endl ;};
 	Geography* map = s->getMap();
-	if (DEBUG) {std::cout << "getTile 3" << std::endl ;};
-	if (DEBUG) {std::cout << map->getMapHeight() << std::endl ;};
-	if (DEBUG) {std::cout << "getTile 3.2" << std::endl ;};
 	Tile& t = pos.isInTile(*map);
-	if (DEBUG) {std::cout << "getTile 4" << std::endl ;};
 	return t;
-		/*s->getPlayer()->getPosition()->isInTile(
-				*(s->getMap())
-				)
-				*/
-;};
+	;};
 
 // Deprecated. Update it to not use pointers
 // if you uncomment it.
 //Stuff* getStuff(std::list<Stuff*> l) {
-	//Stuff* s = l.front();
-	//l.pop_front();
-	//return s;
+//Stuff* s = l.front();
+//l.pop_front();
+//return s;
 //};
 
 
-NPC* getNpc(std::list<NPC*> l) {
-	NPC* n= l.front();
-	l.pop_front();
-	return n;
+/* generated code*/
+
+void SoNOfActions(ActionType a,std::list<SoN> l){
+	switch (a) {
+	case ToA_Attack:{l.push_front(SON_NPC);
+
+	} break;
+	case ToA_Reload:{l.push_front(SON_STUFF);
+
+	} break;
+	case ToA_Plant:{l.push_front(SON_STUFF);
+
+	} break;
+	case ToA_Drop:{
+	} break;
+	//Should not happens
+	};
+};
+Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::list<int> stuffList,LocalState* sim) {
+	switch (a) {
+	case ToA_Attack:{
+		int weapon = basicStuff;
+		int victim= npcList.back();
+		npcList.pop_back();
+		return (new A_Attack (weapon, victim, sim));
+	};
+	case ToA_Reload:{
+		int gun = basicStuff;
+		int ammunition= stuffList.back();
+		stuffList.pop_back();
+		return (new A_Reload (gun, ammunition, sim));
+	};
+	case ToA_Plant:{
+		int bomb = basicStuff;
+		int zone= stuffList.back();
+		stuffList.pop_back();
+		return (new A_Plant (bomb, zone, sim));
+	};
+	case ToA_Drop:{
+		int stuff = basicStuff;
+		return (new A_Drop (stuff, sim));
+	};
+	//Should not happens
+	};
 };
 
-// TODO ARRETER ICI
-
-Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,LocalState* sim) {
-/*if (DEBUG) {std::cout << "nobody ActionOFSTACK.1" << std::endl ;};
-switch (a)
-{
-	case Actions::DROP :
-    	{
-       	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.0" << std::endl ;};
-    	return (Action *) new Drop(b,sim);
-    	};
-    case Actions::ATTACK :
-    	{
-    	NPC* victim = getNpc(npcs);
-    	return ((Action *) new Attack((Weapon*)b,victim,sim));
-    	};
-    case Actions::RELOAD :
-      	  {
-    	  if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.1" << std::endl ;};
-    	  Stuff* amu= getStuff(stuffs);
-    	  return ((Action *) new Reload ((Gun*)b,(Ammunition *)amu,sim));
-      	  };
-	case PLANT :
-		{
-		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2" << std::endl ;};
-		Tile* t = getTile(sim);
-		if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.2.1" << std::endl ;};
-		return (Action *) new Plant ((Bomb *)b, t,sim);
-		}
-    default:
-    	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2.3" << std::endl ;};
-    	std::cerr << "Stack.cc : error in ActionOfState \n";
-    	};
-	if (DEBUG) {std::cout << "nobody ActionOFSTACK.2" << std::endl ;};
-	return new Action("lolol error", sim);*/
-	return new Action("lolol error", sim);
-};
+/*end of the generated code*/
 
 Stack::Stack (LocalState* s, PreHud* h){
-  actionType = 	NULL;
-  stuffID = -1; // -1 must be an invalid stuff id.
-  hud = h;
-  sim = s;
+	actionType = 	ToA_Attack ; //TODO NOBODY
+	stuffID = -1; // -1 must be an invalid stuff id.
+	hud = h;
+	sim = s;
 };
-
-
 
 
 void Stack::cancel () {
@@ -102,57 +90,48 @@ void Stack::cancel () {
 };
 
 
-Action* Stack::ActionOfStack(ActionType* a) {
-	return create (a,this->stuffID,this->NpcList,this->StuffList,this->sim);
-  };
+Action* Stack::ActionOfStack(ActionType a) {
+	return createAction (a,this->stuffID,this->NpcList,this->StuffList,this->sim);
+};
 
 void Stack::sendAction () {
-	if (DEBUG) {std::cout << "nobody sendAction" << std::endl ;};
-	if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
 	if ((this->SoNList).empty()){
-	//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
-	if (DEBUG) {std::cout << "nobody sendAction.1" << std::endl ;};
+		//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
 		//Actions name = this->actionsName;
-		if (DEBUG) {std::cout << "nobody sendAction.0" << std::endl ;};
 		Action* a (this->ActionOfStack(this->actionType));
-		if (DEBUG) {std::cout << "nobody sendAction.1.1" << std::endl ;};
 		if (a->isActionPossible ())
-		  {
-			if (DEBUG) {std::cout << "nobody sendAction.2" << std::endl ;};
-		    a->doAction();
-		    if (DEBUG) {std::cout << "nobody sendAction.3" << std::endl ;};
-		  }
+		{
+			a->doAction();
+		}
 		else
-		  { if (DEBUG) {std::cout << "nobody sendAction.2.1" << std::endl ;};
-			//(this->hud)->setwf(WF_NOTPOSSIBLE);
-		  };
+		{ };
 		this->cancel();
 		(this->hud)->setwf(WF_NONE);
 	}
 	else
-	  { if ((this->SoNList).front() == SON_NPC)
-	      {
+	{ if ((this->SoNList).front() == SON_NPC)
+	{
 		(this->hud)->setwf(WF_CLICK);
-	      };
-	    /*
+	};
+	/*
 	      else
 	      {
 	      (this->hud)->setwf(WF_STUFF)
 	      }
-	    */
+	 */
 	};
 
 };
 
-void Stack::newAction(ActionType* a, int stuffID) {
-	if (DEBUG) {std::cout << "nobody newAction" << std::endl ;};
-  this->SoNList = a->SoNlist;
-  this->actionType =a ;
-  this->stuffID = stuffID;
-  this->sendAction();
+void Stack::newAction(ActionType a, int stuffID) {
+	this->cancel();
+	SoNOfActions(a,this->SoNList);
+	this->actionType =a ;
+	this->stuffID = stuffID;
+	this->sendAction();
 };
 
-void Stack::sendNpc(NPC* n) {
+void Stack::sendNpc(int n) {
 	if ((this->SoNList).front() == SON_NPC)
 	{
 		(this->NpcList).push_front(n);

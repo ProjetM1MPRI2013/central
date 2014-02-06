@@ -53,10 +53,12 @@ Player::Player(int pid, float xx, float yy) {
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
-  this->addItem(Knife());
-  this->addItem(Bomb(2));
-  this->addItem(Gun(5, 2, 4));
-  this->addItem(Ammunition(10));
+  lastTimeStamp = -1;
+  //this->addItem(Knife());
+  this->addItem(C_Knife());
+  //this->addItem(Bomb(2));
+  //this->addItem(Gun(5, 2, 4));
+  //this->addItem(Ammunition(10));
 }
 ;
 
@@ -78,19 +80,36 @@ Direction Player::getDirection() {
 std::vector<int> Player::getInventory() {
   std::vector<int> ids;
   ids.resize(inventory.size());
-  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Stuff>& stuff) {return stuff->stuffID;});
+  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Clickable>& stuff) {return stuff->ClickableID;});
   return ids;
 }
 ;
 
-void Player::setDirection(Direction newd) {
-  if (isServer == 0) {
-    std::cout << "Client : player " << this->playerID
-        << " changes direction from ";
-  } else {
+void Player::setDirection(Direction newd, int timeStamp) {
+  if (timeStamp > lastTimeStamp){
+      assert(isServer != 0);
+
     std::cout << "Server : player " << this->playerID
-        << " changes direction from ";
+	      << " changes direction from ";
+    printDirection(this->d);
+    std::cout << " to ";
+    printDirection(newd);
+    std::cout << "\n";
+    this->d = newd;
+    lastTimeStamp = timeStamp;
+    return;
   }
+  else{
+    std::cout << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp << std::endl;
+  }
+}
+;
+
+void Player::setDirection(Direction newd) {
+  assert(isServer == 0);
+  std::cout << "Client : player " << this->playerID
+	    << " changes direction from ";
+  
   printDirection(this->d);
   std::cout << " to ";
   printDirection(newd);
@@ -100,15 +119,15 @@ void Player::setDirection(Direction newd) {
 }
 ;
 
-void Player::addItem(Stuff&& stuff) {
-  this->inventory.push_back(std::unique_ptr<Stuff>(new Stuff(stuff)));
-  DBG << "Add item to player " << this->playerID << " : " << stuff.name;
-  return;
+void Player::addItem(Clickable&& stuff) {
+	this->inventory.push_back(std::unique_ptr<Clickable>(new Clickable(stuff)));
+	DBG << "Add item to player " << this->playerID << " : " << stuff.name;
+	return;
 };
 
 void Player::removeItem(int stuffID) {
   for (auto& stuffPtr : inventory) {
-    if (stuffPtr->stuffID == stuffID) {
+    if (stuffPtr->ClickableID == stuffID) {
       inventory.remove(stuffPtr);
       break;
     }
@@ -218,10 +237,10 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
 }
 ;
 
-bool Player::hasItemByID(int stuffID) {
-  try {
+bool Player::hasItemByID(int ClickableID) {
+	try {
 
-    getItemByID<Stuff> (stuffID);
+    getItemByID<Clickable> (ClickableID);
     return true;
   } catch (const StuffNotFound& err) {
     return false;

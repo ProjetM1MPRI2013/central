@@ -55,18 +55,20 @@ void GlobalState::run(sf::Time dt){
   std::vector<NewMovNetwork *> movFromNetwork = server->receiveMessages<NewMovNetwork>();
 
   for (NewMovNetwork * newMove : movFromNetwork){
-       this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->movement,this));
-       std::cout << "Host : New Movement from player : " << newMove->playerID << " ";
-       printNewMov(newMove->movement);
-       std::cout << std::endl;
-     }
+    this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->newDirection,newMove->timeStamp,this));
+    std::cout << "Host : New Movement from player : " << newMove->playerID ;
+    std::cout << std::endl;
+  }
   movFromNetwork.clear();
 
     for (ScenarioAction* action : pendingActions) {
       //The server sends the ScenarioAction to the client, so they can do them.
       //Adrien K. je ne suis pas sur que toutes les ScenarioAction doivent être envoyé chez le client.
       std::cout << "Host : applying pending Scenario Action of type " << action->name << "\n";
-      server->broadcastMessage(*action,true);
+      if (action->name != "ChangeDirection"){
+	std::cout << "Host : sending the action to the network\n";
+	server->broadcastMessage(*action,true);
+      }
       action->run();
     }
     pendingActions.clear();

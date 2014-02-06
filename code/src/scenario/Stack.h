@@ -13,7 +13,8 @@
 Tile* getTyle(LocalState* s);
 
 
-Action* create (ActionType* a,int stuffID,std::list<NPC*> npcs,std::list<int> stuffs,LocalState* sim);
+Action* create (ActionType a,int stuffID,std::list<int> npcs,std::list<int> stuffs,LocalState* sim);
+
 
 
 
@@ -35,18 +36,18 @@ public:
 	 * @param a A name of an action
 	 * @param sf The basic stuff (the player clicked on it to do the action)
 	 */
-	void newAction(ActionType* a, int stuffID);
+	void newAction(ActionType a, int stuffID);
 	/**
 	 * @brief Used when the player click on a Npc
 	 * @param n The Npc
 	 */
-	void sendNpc(NPC* n);
+	void sendNpc(int n);
 	/**
 	 * @brief Used when the player click on a Stuff
 	 * @param s The stuff.
 	 */
 	void sendStuff(int stuffID);
-	Action* ActionOfStack(ActionType* a);
+	Action* ActionOfStack(ActionType a);
 
 private:
 	/**
@@ -55,13 +56,12 @@ private:
 	 */
 	void sendAction();
 	//Stuff* getStuff();
-	NPC* getNpc ();
 	LocalState* sim;
 	PreHud* hud;
-	ActionType* actionType;
+	ActionType actionType;
 	int stuffID;
 	std::list<SoN> SoNList;
-	std::list<NPC*> NpcList;
+	std::list<int> NpcList;
 	std::list<int> StuffList;
 };
 

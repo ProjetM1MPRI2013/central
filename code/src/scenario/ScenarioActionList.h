@@ -14,6 +14,18 @@
 #include <iostream>
 #include <cerrno>
 
+
+class Couple {
+public:
+  int x;
+  int y;
+  Couple (int x, int y);
+};
+
+Couple* directionToInt(Direction a);
+Couple* newMovToInt(NewMov a);
+Direction intToDirection(Couple* a);
+
 /**
  * @brief The player changes of direction.
  */
@@ -24,9 +36,10 @@ class ChangeDirection: public ScenarioAction {
   /**
    * @brief The new direction of the player
    */
-  NewMov newMovement;
+  Direction newDirection;
+  int timeStamp;
 
-  ChangeDirection(int id, NewMov mov, Simulation* s);
+  ChangeDirection(int id, Direction direction, int ts, Simulation* s);
   ChangeDirection(const ChangeDirection&);
 
   virtual void run();
@@ -37,7 +50,7 @@ protected :
   //Serialization
   ChangeDirection() {}
 
-  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newMovement)
+  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection, timeStamp)
 
 };
 
