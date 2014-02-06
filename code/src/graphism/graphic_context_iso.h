@@ -1,5 +1,5 @@
 /**
- * @author: MrKuluW
+ * @author: MrKulu
  */
 #ifndef GRAPHICCONTEXT
 #define GRAPHICCONTEXT

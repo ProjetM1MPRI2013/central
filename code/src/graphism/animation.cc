@@ -1,5 +1,5 @@
 /**
- * @author: MrKuluW
+ * @author: MrKulu
  */
 
 #include "animation.h"

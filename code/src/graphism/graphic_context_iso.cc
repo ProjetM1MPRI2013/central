@@ -1,5 +1,5 @@
 /**
- * @author MrKuluW
+ * @author MrKulu
  */
 #include "graphic_context_iso.h"
 #include "../simulation/npc.h"

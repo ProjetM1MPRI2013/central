@@ -8,7 +8,7 @@
 #include "eventSource.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "graphism/animation.h"
+#include "graphism/drawableObject.h"
 #include <cmath>
 
 
@@ -16,14 +16,14 @@
  * @brief The NPC class
  * It represents a NPC
  */
-class NPC : public Positionable {
+
+class NPC : public Positionable, public DrawableObject {
  private:
   Trajectory trajectory;
   float fear;
   bool shocked;
   float speed;
   float hitboxSize;
-  Animation anim;
   float deltaT = 1;
   float lambda = 1;
   float Vzero = 10;
@@ -165,48 +165,11 @@ class NPC : public Positionable {
   bool hasArrived();
   
   /**
-   * @brief getSprite
-   * @return returns the sprite of the NPC
-   */  
-  sf::Sprite& getSprite();
-  
-  /**
-   * @brief getAnim
-   * @return the NPC's Animation
-   **/
-  Animation getAnim() const;
-
-  /**
    * @brief setAnim
    * Sets the animation of the NPC
    * @param t: New animation
    **/  
   void setAnim(const AnimType t);
-
-  /**
-   * @brief TextureAnim
-   * Changes the texture of the animation of the NPC
-   **/
-  void TextureAnim(TexturePack* tex);
-  
-  
-  /**
-   * @brief TextureOffsetX
-   * Get the abscissa of the origin of the animation in the texture
-   **/
-  int TextureOffsetX();
-  
-  /**
-   * @brief TextureOffsetY
-   * Get the ordinate of the origin of the animation in the texture
-   **/
-  int TextureOffsetY();
-
-  /**
-   * @brief TextureIsInit
-   * Returns true iff the animation texture has been initialized
-   **/
-  bool TextureIsInit();
 
   /**
    * @brief potential
