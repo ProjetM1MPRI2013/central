@@ -40,14 +40,14 @@ int victim;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(GlobalState* hs);
+  void addPendingActions(GlobalState* gs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
-//A_Attack(){};
-//SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
+A_Attack(){};
+SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
 };
-//BOOST_CLASS_EXPORT_KEY(A_Attack);
+BOOST_CLASS_EXPORT_KEY(A_Attack);
 /*********************************************************
 ** Reload**
 *********************************************************/
@@ -62,14 +62,14 @@ int ammunition;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(GlobalState* hs);
+  void addPendingActions(GlobalState* gs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
-//A_Reload(){};
-//SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
+A_Reload(){};
+SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
 };
-//BOOST_CLASS_EXPORT_KEY(A_Reload);
+BOOST_CLASS_EXPORT_KEY(A_Reload);
 /*********************************************************
 ** Plant**
 *********************************************************/
@@ -84,14 +84,14 @@ int zone;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(GlobalState* hs);
+  void addPendingActions(GlobalState* gs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
-//A_Plant(){};
-//SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
+A_Plant(){};
+SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
 };
-//BOOST_CLASS_EXPORT_KEY(A_Plant);
+BOOST_CLASS_EXPORT_KEY(A_Plant);
 /*********************************************************
 ** Drop**
 *********************************************************/
@@ -110,12 +110,12 @@ int playerID;
 public:
  bool isActionPossible ();
   void doAction ();
-  void addPendingActions(GlobalState* hs);
+  void addPendingActions(GlobalState* gs);
   virtual AbstractMessage* copy();
 private :
 //Serialization
-//A_Drop(){};
-//SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
+A_Drop(){};
+SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
 };
-//BOOST_CLASS_EXPORT_KEY(A_Drop);
+BOOST_CLASS_EXPORT_KEY(A_Drop);
 #endif
