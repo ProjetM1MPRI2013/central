@@ -3,17 +3,17 @@
  */
 
 
-#ifndef STUFF_H
-#define STUFF_H
+#ifndef Clickable_H
+#define Clickable_H
 
 #include <list>
 #include <string>
 #include "Actions.h"
 
-class Stuff {
+class Clickable {
  public :
   /**
-   * @brief The stuff name
+   * @brief The Clickable name
    * For exemple Knife or Bomb ...
    */
   std::string name;
@@ -22,19 +22,21 @@ class Stuff {
    * @brief The ID of the object
    * An unique integer identifying the object on the client.
    */
-  int stuffID;
+  int ClickableID;
 
   /**
-   * @brief Return the list of ActionType* possible
+   * @brief Return the list of ActionType possible
    */
-  std::list<ActionType*> getActionTypePossible ();
+  std::list<ActionType> getActionTypePossible ();
 
 
   /**
    * @brief Host Stuff constructor.
    *  The host HAS TO USED this constructor. Generates a new unique identifier.
    */
-  Stuff (std::string n);
+  Clickable ();
+
+  Clickable (std::string n);
 
 
   /**
@@ -42,13 +44,13 @@ class Stuff {
    * @param id: the unique identifier of the Stuff.
    * The client HAS TO USED this constructor, with an identifier given by the server.
    */
-  Stuff (std::string n, int id);
+  Clickable (std::string n, int id);
 
  protected:
   /**
-   * @brief The list of all ActionType* possible on the object.
+   * @brief The list of all ActionType possible on the object.
    */
-  std::list<ActionType*> ActionTypePossible;
+  std::list<ActionType> ActionTypePossible;
 
  private:
   /**

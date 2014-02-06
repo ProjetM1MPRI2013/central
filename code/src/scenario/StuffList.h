@@ -6,85 +6,124 @@
 #ifndef STUFFLIST_H
 #define STUFFLIST_H
 
-#include "Clickable.h"
 #include "Stuff.h"
 #include <list>
 
-class Weapon : public Stuff {
- public:
-  Weapon(std::string n);
-  /**
-   * @brief Compute the number of damage .  
-   */
-  virtual int getDamage () ;
-  /**
-   * @brief Compute the range of the weapon .  
-   */
-  virtual float getRange () ;
+
+/*********************************************************
+ **                    Generated code                   **
+ **************/
+
+/*********************************************************
+** Weapon**
+*********************************************************/
+class C_Weapon: public Clickable {
+public:
+C_Weapon  ();
+public:
+virtual int getdamage () = 0;
+protected:
+int damage;
+public:
+virtual float getrange () = 0;
+protected:
+float range;
 };
 
-class Bomb : public Stuff {
- public :
-  Bomb (int p);
-  int getPower ();
- private:
-  int power;
+/*********************************************************
+** Gun**
+*********************************************************/
+class C_Gun: public C_Weapon {
+public:
+C_Gun  (int ammunitionMax, float range, int damage);
+public:
+int getammunitionMax ();
+protected:
+int ammunitionMax;
+public:
+float getrange ();
+protected:
+float range;
+public:
+int getammunitionLoaded ();
+public:
+void setammunitionLoaded (int);
+protected:
+int ammunitionLoaded;
+public:
+int getdamage ();
+protected:
+int damage;
 };
 
-class Knife : public Weapon {
- public : 
-  Knife () ;
-  int getDamage();
-  float getRange();
- private :
-  /**
-   * @brief The material 0 if it's in plastic, 1 in wood 
-   */
-  std::string material;
+/*********************************************************
+** Mitraillette**
+*********************************************************/
+class C_Mitraillette: public C_Gun {
+public:
+C_Mitraillette  (int damage);
+public:
+int getammunitionMax ();
+protected:
+int ammunitionMax;
+public:
+float getrange ();
+protected:
+float range;
 };
 
-
-
-class Gun : public Weapon {
- public :
- /**
-   * @brief Create a Gun
-   * @param max Number of ammunition maximum
-   * @param dam Damagemade by a shot
-   * @param range Range of the gun
-   */
-  Gun (int max, int dam, float range) ;
-  /**
-   * @brief Number of ammunition in the gun   
-   */
-  int ammunitionLoaded;
-  /**
-   * @brief Number of ammunition maximum   
-   */
-  int ammunitionMax;
-
-  int getDamage();
-  float getRange();
-
- private: 
-  /**
-   * @brief damage of the gun
-   */
-  int damage ;
-  /**
-   * @brief range of the gun   
-   */
-  float range;
-  
+/*********************************************************
+** UltraM**
+*********************************************************/
+class C_UltraM: public C_Mitraillette {
+public:
+C_UltraM  ();
+public:
+int getdamage ();
+protected:
+int damage;
 };
 
-class Ammunition : public Stuff {
- public :
-   /**
-   * @brief number Number of ammunition in the pack   
-   */
-  int number;
-  Ammunition (int n);
+/*********************************************************
+** Knife**
+*********************************************************/
+class C_Knife: public C_Weapon {
+public:
+C_Knife  ();
+public:
+float getrange ();
+protected:
+float range;
+public:
+int getdamage ();
+protected:
+int damage;
+};
+
+/*********************************************************
+** Ammunition**
+*********************************************************/
+class C_Ammunition: public Clickable {
+public:
+C_Ammunition  (int number);
+public:
+int getnumber ();
+public:
+void setnumber (int);
+protected:
+int number;
+};
+
+/*********************************************************
+** Bomb**
+*********************************************************/
+class C_Bomb: public Clickable {
+public:
+C_Bomb  (int power);
+public:
+int getpower ();
+protected:
+int power;
 };
 
 #endif

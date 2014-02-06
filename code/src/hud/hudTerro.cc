@@ -2,7 +2,7 @@
  * @Author: Anthony
  */
 #include "hudTerro.h"
-class Stuff;
+class Clickable;
 #include "../scenario/Stack.h"
 
 #define DEBUG true
@@ -82,7 +82,7 @@ void HudTerro::init() {
       for (int stuffID : inventory) {
 
 
-        Stuff stuff = (simulation.getPlayer())->getItemByID<Stuff>(stuffID);
+        Clickable stuff = (simulation.getPlayer())->getItemByID<Clickable>(stuffID);
 
 				tgui::Button::Ptr button(this->hud);
 				button->load(THEME_CONFIG_FILE_HUD_TERRO);
@@ -195,8 +195,7 @@ void HudTerro::callback(unsigned int callback_id) {
 
 				// Get the possible actions for the item
 
-				this->actionTypeList = (simulation.getPlayer())->getItemByID<Stuff>(currentStuffID).getActionTypePossible();
-
+				this->actionTypeList = (simulation.getPlayer())->getItemByID<Clickable>(currentStuffID).getActionTypePossible();
 				// Delete the old buttons
 				for (std::list<tgui::Button::Ptr>::iterator it =
 						(this->buttonsList).begin();
@@ -209,7 +208,7 @@ void HudTerro::callback(unsigned int callback_id) {
 
 				// Create the new buttons
 				this->i = 0;
-				for (std::list<ActionType*>::iterator it =
+				for (std::list<ActionType>::iterator it =
 						(this->actionTypeList).begin();
 						it != (this->actionTypeList).end(); ++it)
 				{
@@ -217,7 +216,7 @@ void HudTerro::callback(unsigned int callback_id) {
 					button->load(THEME_CONFIG_FILE_HUD_TERRO);
 					button->setSize(80, 40);
 					button->setPosition(50 + (this->i) * 100, this->h - 100);
-					button->setText((*it)->name);
+//					button->setText((*it)); TODO NOBODY
           button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
                                tgui::Button::LeftMouseClicked);
 					//button->setCallbackId(this->i + 1);
@@ -251,7 +250,7 @@ void HudTerro::callback(unsigned int callback_id) {
 
 			// an action is clicked.
 			if (callback_id > 0 && callback_id < (this->buttonsList).size()) {
-				std::list<ActionType*>::iterator it = (this->actionTypeList).begin();
+				std::list<ActionType>::iterator it = (this->actionTypeList).begin();
 				for (unsigned int i = 1; i < callback_id; i++) {
 					++it;
 				};

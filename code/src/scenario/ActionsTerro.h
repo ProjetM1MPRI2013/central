@@ -1,17 +1,13 @@
 /**
    @author: Remy, Adrien K.
  */
-
-
 #ifndef ACTIONTERRO_H
 #define ACTIONTERRO_H
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/access.hpp>
 
-#include "Clickable.h"
 #include "Action.h"
-#include "Stuff.h"
 #include "StuffList.h"
 #include "simulation/npc.h"
 #include "generation/tile.h"
@@ -28,135 +24,100 @@ typedef Simulation HostSimulation;
 
 void newMovement (NewMov n, Simulation* s);
 
+/*********************************************************
+ **                    Generated code                   **
+ *********************************************************/
 
-class Drop : public Action{
- public : 
-   /**
-   * @brief Create a way to drop one stuff
-   * @param stuff the stuff to drop
-   */
-  Drop  (int stuffID, Simulation* s);
-  Drop(const Drop& d);
-   /**
-   * @brief the stuff to drop
-   */
-  int stuffID;
-  int playerID;
-
-  bool isActionPossible ();
+/*********************************************************
+** Attack**
+*********************************************************/
+class A_Attack: public Action {
+public:
+A_Attack  (int weapon, int victim, Simulation* );
+A_Attack(const A_Attack&);
+public:
+int weapon;
+public:
+int victim;
+public:
+ bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
-
   virtual AbstractMessage* copy();
-
-protected :
-  //Serialization
-  Drop() {}
-
-  SIMPLE_MESSAGE(DROP, Action, stuffID, playerID)
-};
-
-BOOST_CLASS_EXPORT_KEY(Drop)
-
-class Attack : public Action {
- public : 
-   /**
-   * @brief Create an Attack
-   * @param weapon the weapon used
-   * @param victim the victim
-   */
-  Attack (int weaponID, NPC* victim, Simulation* s);
-  Attack (const Attack& a);
-   /**
-   * @brief the weapon
-   */
-  int weaponID;
-   /**
-   * @brief the victim
-   */
-  NPC* vict;
-
-  bool isActionPossible ();
-  void doAction ();
-  void addPendingActions(HostSimulation* hs);
-
-  virtual AbstractMessage* copy();
-
 private :
-  //Serialization
-  Attack() {}
-
-  SIMPLE_MESSAGE(Attack, Action, weaponID)
+//Serialization
+//A_Attack(){};
+//SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
 };
-
-BOOST_CLASS_EXPORT_KEY(Attack)
-
-
-class Plant : public Action {
- public : 
-   /**
-   * @brief Create an action to plant a bomb
-   * @param bomb the bomb used
-   * @param zone the zone where the bomb will be planted 
-   */
-  Plant (int bombID ,Tile* zone, Simulation* s);
-  Plant (const Plant&);
-   /**
-   * @brief the bomb
-   */
-  int bombID;
-   /**
-   * @brief the zone
-   */
-  Tile* z;
-
-  bool isActionPossible ();
+//BOOST_CLASS_EXPORT_KEY(A_Attack);
+/*********************************************************
+** Reload**
+*********************************************************/
+class A_Reload: public Action {
+public:
+A_Reload  (int gun, int ammunition, Simulation* );
+A_Reload(const A_Reload&);
+public:
+int gun;
+public:
+int ammunition;
+public:
+ bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
-
   virtual AbstractMessage* copy();
-
 private :
-  //Serialization
-  Plant(){}
-
-  SIMPLE_MESSAGE(Plant, Action, bombID)
+//Serialization
+//A_Reload(){};
+//SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
 };
-
-BOOST_CLASS_EXPORT_KEY(Plant)
-
-class Reload : public Action {
- public : 
-   /**
-   * @brief Create an action to reload a gun
-   * @param gun the gun to reload
-   * @param Ammunition the pack of ammunition used
-   */
-  Reload (int gunID, int ammunitionID, Simulation* s);
-  Reload(const Reload&);
-   /**
-   * @brief the gun
-   */
-  int gunID;
-   /**
-   * @brief the pack of ammunition
-   */
-  int ammunitionID;
- 
-  bool isActionPossible ();
+//BOOST_CLASS_EXPORT_KEY(A_Reload);
+/*********************************************************
+** Plant**
+*********************************************************/
+class A_Plant: public Action {
+public:
+A_Plant  (int bomb, int zone, Simulation* );
+A_Plant(const A_Plant&);
+public:
+int bomb;
+public:
+int zone;
+public:
+ bool isActionPossible ();
   void doAction ();
   void addPendingActions(HostSimulation* hs);
-
   virtual AbstractMessage* copy();
-
 private :
-  //Serialization
-
-  Reload() {}
-
-  SIMPLE_MESSAGE(Reload, Action, gunID, ammunitionID)
+//Serialization
+//A_Plant(){};
+//SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
 };
-
-BOOST_CLASS_EXPORT_KEY(Reload)
-
+//BOOST_CLASS_EXPORT_KEY(A_Plant);
+/*********************************************************
+** Drop**
+*********************************************************/
+class A_Drop: public Action {
+public:
+A_Drop  (int stuff, Simulation* );
+A_Drop(const A_Drop&);
+public:
+int stuff;
+public:
+int getplayerID ();
+public:
+void setplayerID (int);
+protected:
+int playerID;
+public:
+ bool isActionPossible ();
+  void doAction ();
+  void addPendingActions(HostSimulation* hs);
+  virtual AbstractMessage* copy();
+private :
+//Serialization
+//A_Drop(){};
+//SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
+};
+//BOOST_CLASS_EXPORT_KEY(A_Drop);
 #endif
