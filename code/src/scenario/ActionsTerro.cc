@@ -98,6 +98,7 @@ void A_Reload::doAction() {
 this->simulation->getClient()->sendMessage(*this,true);
 };
 
+
 bool A_Reload::isActionPossible() {
 return true;
 //return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
