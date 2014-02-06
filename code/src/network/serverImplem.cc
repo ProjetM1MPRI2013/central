@@ -115,6 +115,15 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
   //TODO : verify that all the message was transmitted
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
+
+  if(service->stopped())
+    {
+      //Server has shutdown -> free all memory and return as soos as possible
+      for(string* p : data)
+        delete p ;
+      return ;
+    }
+
   int id = get_msg_id(*data[0]) ;
   DBG << "SERVER: sent message with id : " << id << " and type " << get_msg_type(*data[0]);
   if(error != 0)
@@ -304,6 +313,16 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
                    int nb_times, deadline_timer *t, const boost::system::error_code &err) {
   assert(msg.size() >= 2) ;
   assert(msg[0]->size() == HEADER_SIZE) ;
+
+  if(service->stopped())
+    {
+      //Server has shutdown -> free all memory and return as soos as possible
+      for(string* p : msg)
+        delete p ;
+      delete t ;
+      return ;
+    }
+
   int id = get_msg_id(*msg[0]) ;
   set<int>::iterator it = ack_set.find(id) ;
   if(it == ack_set.end())

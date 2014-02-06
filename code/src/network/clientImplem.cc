@@ -115,6 +115,14 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
       return ;
     }
 
+  if(service->stopped())
+    {
+      //Client has shutdown -> free all memory and return as soos as possible
+      for(string* p : data)
+        delete p ;
+      return ;
+    }
+
   //No error
   if(ack_message(*data[0]))
     {
@@ -140,12 +148,14 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
 void ClientImplem::on_receive(const boost::system::error_code &error, int size){
   int id = get_msg_id(*header_buff) ;
   DBG << "CLI: Received Message with id " << id << " and type " << get_msg_type(*header_buff);
+
   if(error != 0)
     {
       generate_message(NetEvent(NetEvent::RECEIVE_ERR));
       wait_receive() ;
       return ;
     }
+
   if(ack_message(*header_buff))
     {
         //Handle Ack
@@ -270,6 +280,17 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
                              const boost::system::error_code &err) {
   assert(msg.size() >= 2) ;
   assert(msg[0]->size() == HEADER_SIZE) ;
+
+  if(service->stopped())
+    {
+      //Client has shutdown -> free all memory and return as soos as possible
+      for(string* p : msg)
+        delete p ;
+      delete t ;
+      return ;
+    }
+
+
   int id = get_msg_id(*msg[0]) ;
   set<int>::iterator it = ack_set.find(id) ;
   if(it == ack_set.end())
@@ -303,6 +324,7 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));
 
+          //potentially dangerous : send can occur after the buffers are freed because ack received
           write_buff(msg_buff, [](const error_code&,int){}) ;
           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
           t->async_wait(boost::bind(&ClientImplem::check_ack,this, msg, nb_times +1,t,_1)) ;

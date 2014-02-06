@@ -17,6 +17,8 @@ DummyClient::DummyClient(DummyServer* server) : received_messages(),
 }
 
 DummyClient::~DummyClient(){
+  if(!isShutDown)
+    server->removeClient(this);
   MapType::iterator it ;
   lock.lock() ;
   for(it = received_messages.begin(); it != received_messages.end(); it++)
@@ -44,7 +46,10 @@ void DummyClient::addMessage(AbstractMessage *msg, std::string msgType){
 }
 
 void DummyClient::send_message(AbstractMessage& msg, bool , std::string msgType ) {
-  server->addMessage(msg.copy(), msgType, this) ;
+  if(!isShutDown)
+    server->addMessage(msg.copy(), msgType, this) ;
+  else
+    LOG(warning) << "DummyClient : Trying to send message, but server is shut down" ;
 }
 
 std::vector<AbstractMessage *> DummyClient::receive_messages(std::string msgType, AbstractMessage* (*f) (std::string &) ) {

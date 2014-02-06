@@ -321,8 +321,8 @@ int net_dummy(){
   Client *cli = Network::createDummyClient(ser) ;
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Dummy Test ........ FINISHED"  ;
-  delete ser ;
   delete cli ;
+  delete ser ;
   return i ;
 }
 
@@ -335,8 +335,8 @@ int net_real(){
 
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Real Test ........ FINISHED"  ;
-  delete ser ;
   delete cli ;
+  delete ser ;
   return i ;
 }
 }

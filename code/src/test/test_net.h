@@ -57,7 +57,7 @@ namespace test {
     }
 
     int data ;
-    int data2 ;
+    int data2 = 0 ;
 
     SIMPLE_MESSAGE(TestA, AbstractMessage, data, data2)
   };
