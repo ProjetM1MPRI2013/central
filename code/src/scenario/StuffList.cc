@@ -11,7 +11,7 @@
 *********************************************************/
 C_Weapon::C_Weapon (): Clickable () {
 ((Clickable*)this)->name =  "N_Weapon";
-//this->ActionTypePossible.push_back(ActionType::ToA_Attack);
+this->ActionTypePossible.push_back(ActionType::ToA_Attack);
 };
 
 /*********************************************************
@@ -23,7 +23,7 @@ this->ammunitionMax = (int)ammunitionMax;
 this->range = (float)range;
 this->ammunitionLoaded = (int)(ammunitionMax);
 this->damage = (int)damage;
-//this->ActionTypePossible.push_back(ActionType::ToA_Reload);
+this->ActionTypePossible.push_back(ActionType::ToA_Reload);
 };
 int C_Gun::getammunitionMax () {return this->ammunitionMax;};
 float C_Gun::getrange () {return this->range;};
@@ -78,6 +78,6 @@ void C_Ammunition::setnumber ( int number ) { this->number = (int)number;};
 C_Bomb::C_Bomb (int power): Clickable () {
 ((Clickable*)this)->name =  "N_Bomb";
 this->power = (int)power;
-//this->ActionTypePossible.push_back(ActionType::ToA_Plant);
+this->ActionTypePossible.push_back(ActionType::ToA_Plant);
 };
 int C_Bomb::getpower () {return this->power;};

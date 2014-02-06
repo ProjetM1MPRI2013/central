@@ -11,19 +11,17 @@
 #include "Actions.h"
 
 class Clickable {
- public :
-  /**
+public :
+	/**
    * @brief The Clickable name
    * For exemple Knife or Bomb ...
    */
   std::string name;
-
   /**
    * @brief The ID of the object
    * An unique integer identifying the object on the client.
    */
   int ClickableID;
-
   /**
    * @brief Return the list of ActionType possible
    */

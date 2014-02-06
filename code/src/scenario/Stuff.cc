@@ -11,8 +11,7 @@ Clickable::Clickable () {
   ClickableID = counter;
   counter = counter + 1;
   std::list<SoN> l_drop ;
-  //ActionType* A_drop = new ActionType  ("drop",l_drop);
-  //this->ActionTypePossible.push_back(A_drop);
+  std::list<ActionType> ActionTypePossible;
 };
 
 Clickable::Clickable (std::string n) {
@@ -24,8 +23,7 @@ Clickable::Clickable (std::string n) {
   ClickableID = counter;
   counter = counter + 1;
   std::list<SoN> l_drop ;
-  //ActionType* A_drop = new ActionType  ("drop",l_drop);
-  //this->ActionTypePossible.push_back(A_drop);
+  std::list<ActionType> ActionTypePossible;
 };
 
 
@@ -33,8 +31,8 @@ Clickable::Clickable (std::string n, int id){
   name = n;
   ClickableID = id;
   std::list<SoN> l_drop ;
-  //ActionType* A_drop = new ActionType  ("drop",l_drop);
-  //this->ActionTypePossible.push_back(A_drop);
+  std::list<ActionType> ActionTypePossible ;
+
 };
 
 
