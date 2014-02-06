@@ -1,6 +1,6 @@
 /**
-  *@author Denys Kanunikov, others...
-  */
+ *@author Denys Kanunikov, others...
+ */
 
 #ifndef SIMULATION_H
 #define SIMULATION_H
@@ -30,28 +30,27 @@ class HScenario;
  * provides events to listeners
  */
 
-class Simulation : public EventSource {
+class Simulation: public EventSource {
 
- public :
+public:
 
-//  /**
-//   * @brief Set the Server object
-//   */
-//  virtual void setServer(Server*);
+  //  /**
+  //   * @brief Set the Server object
+  //   */
+  //  virtual void setServer(Server*);
 
-//  //TODO {denys} : remade all references
-//  virtual void setClient(Client*);
+  //  //TODO {denys} : remade all references
+  //  virtual void setClient(Client*);
   virtual Client* getClient();
   /**
    * @brief Get a player by is playerID;
    */
-  virtual Player& getPlayerByID (int playerID);
+  virtual Player& getPlayerByID(int playerID);
 
   /**
    * @brief Get the player of this simulation
    */
-  virtual Player* getPlayer ();
-
+  virtual Player* getPlayer();
 
   /**
    * @brief Add a player to the player list
@@ -69,110 +68,108 @@ class Simulation : public EventSource {
   void addNPC(Position start, Position target, float speed, TexturePack* tex);
 
   //parcourt la matrice et crée/supprime des NPCs aléatoirement en fonction de la population
-  void peopleGeneration();
-  
-  
-  Simulation(int nbPlayers,int id);
-  Simulation(Geography* map,int nbPlayers,int id);
- ~Simulation();
+      void peopleGeneration();
 
-  /* Never used
-  Simulation(std::string seed, std::vector<Player*> players) ;
-  */
-  
-  /**
-   * @brief run
-   * @param dt: short lapse of time
-   * Update all the parameters of Simulation
-   */
-//  virtual void run(sf::Time dt);
+      Simulation(int nbPlayers,int id);
+      Simulation(Geography* map,int nbPlayers,int id);
+      ~Simulation();
 
-  /*methode qui agit sur la matrice pour lisser la peur*/
-  
-  virtual void lisserMatrice();
+      /* Never used
+       Simulation(std::string seed, std::vector<Player*> players) ;
+       */
 
-  template <class T>
-  T getItemByID(int id);
-    
-  /**
-   * @brief setGeography
-   * @param g : a reference to the data structure created by the city generator
-   * Called by the city generator; locally sets the simulation geography
-   */
-  virtual void setGeography(Geography* g);
-  
-  //Cette fonction ne devrait pas exister [Adrien K.]
-  ///**
-  //  * @brief
-  //
-  // */
-  //int actionTerroPerformed(Action a);
-  virtual int getSous();
-  virtual void enleveSous(int n);
-  
-  virtual void supprimerNPC(NPC *);
-  
-  virtual void supprimerNPCDansCase(int i,int j);
-  
-    
-  /**
-   * @brief addAction
-   * Called by the scenario, notifies the simulation that an action has to be performed: movement, firing, etc.
-   */
-  virtual void addAction(ScenarioAction * action);
-    
-  virtual void addAgent(Agent* agent);
-  virtual void addCam(Camera* camera);
+      /**
+       * @brief run
+       * @param dt: short lapse of time
+       * Update all the parameters of Simulation
+       */
+      //  virtual void run(sf::Time dt);
 
-  /**
-   * @brief Add the action to a list, and will be deleted later
-   */
-  virtual void deleteAction(Action* a);
+      /*methode qui agit sur la matrice pour lisser la peur*/
 
-  virtual Geography* getMap(){return map;}
+      virtual void lisserMatrice();
 
-  virtual bool simIsServer();
-  void setScenario(HScenario* s);
- protected :
+      template <class T>
+      T getItemByID(int id);
 
-  void copyTmp();
+      /**
+       * @brief setGeography
+       * @param g : a reference to the data structure created by the city generator
+       * Called by the city generator; locally sets the simulation geography
+       */
+      virtual void setGeography(Geography* g);
 
-  std::list<Camera*> cameras;
-  std::list<Agent*> agents;
-  Client* client;
-  Server* server;
+      //Cette fonction ne devrait pas exister [Adrien K.]
+      ///**
+      //  * @brief
+      //
+      // */
+      //int actionTerroPerformed(Action a);
+      virtual int getSous();
+      virtual void enleveSous(int n);
 
-  int tmp[100][100];
+      virtual void supprimerNPC(NPC *);
 
-  HScenario* scenario;
-  bool isServer;
-  int MAP_SIZE;
-  const int TILE_SIZE_X = 1;
-  const int TILE_SIZE_Y = 1;
-  int NB_JOUEURS;
-  int Id; //0 pour le maire = le serveur, i pour le joueur i
+      virtual void supprimerNPCDansCase(int i,int j);
 
-  //-----------------------------------------------------------//
-  /*Question {denys} : For what we use these */
-  std::vector<int> sous; //tableau des sous de tout le monde
-  int mesSous;
-  /*-----------------------END--------------------------------*/
+      /**
+       * @brief addAction
+       * Called by the scenario, notifies the simulation that an action has to be performed: movement, firing, etc.
+       */
+      virtual void addAction(ScenarioAction * action);
 
-  float absoluteTime;
-  float relativeTime;
-  float smallTime;
-  Geography* map;
-//  Geography* oldMap;
-  std::list<Player> players;
-  std::list<NPC *> NPCs;
-  std::list<ScenarioAction *> pendingActions;
-  //liste des actions déjà traité
-  std::list<Action*> toDelete;
+      virtual void addAgent(Agent* agent);
+      virtual void addCam(Camera* camera);
 
-};
+      /**
+       * @brief Add the action to a list, and will be deleted later
+       */
+      virtual void deleteAction(Action* a);
 
-//#include "eventListener.h"
-template <class T>
+      virtual Geography* getMap() {return map;}
+
+      virtual bool simIsServer();
+      void setScenario(HScenario* s);
+    protected :
+
+      void copyTmp();
+
+      std::list<Camera*> cameras;
+      std::list<Agent*> agents;
+      Client* client;
+      Server* server;
+
+      int tmp[100][100];
+
+      HScenario* scenario;
+      bool isServer;
+      int MAP_SIZE;
+      const int TILE_SIZE_X = 1;
+      const int TILE_SIZE_Y = 1;
+      int NB_JOUEURS;
+      int Id; //0 pour le maire = le serveur, i pour le joueur i
+
+      //-----------------------------------------------------------//
+      /*Question {denys} : For what we use these */
+      std::vector<int> sous; //tableau des sous de tout le monde
+      int mesSous;
+      /*-----------------------END--------------------------------*/
+
+      float absoluteTime;
+      float relativeTime;
+      float smallTime;
+      Geography* map;
+      //  Geography* oldMap;
+      std::list<Player> players;
+      std::list<NPC *> NPCs;
+      std::list<ScenarioAction *> pendingActions;
+      //liste des actions déjà traité
+      std::list<Action*> toDelete;
+
+    };
+
+  //#include "eventListener.h"
+template<class T>
 T Simulation::getItemByID(int stuffID) {
   for (auto& player : players) {
     try {
@@ -181,6 +178,5 @@ T Simulation::getItemByID(int stuffID) {
   }
   throw StuffNotFound();
 }
-
 
 #endif // SIMULATION_H

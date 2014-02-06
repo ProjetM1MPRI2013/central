@@ -29,7 +29,7 @@
 #include "globalState.h"
 
 #define DEBUG true
-#define TERRO false // ~TERRO => MAYOR
+#define TERRO true // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -42,7 +42,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     sf::RenderWindow* window) {
 
   Geography geo = Generation1(seed);
-
+  DBG<<(geo.getWalkableTile()->getCoord().getAbs());
   LocalState loc = LocalState(&geo, nbPlayers, 1);
   HScenario scenar = HScenario(loc);
   loc.setScenario(&scenar);

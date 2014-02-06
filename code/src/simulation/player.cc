@@ -3,94 +3,102 @@
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
 
-
 #define SPEED_AMPLIFIER 8
 
 #define DEBUG false
 #include "debug.h"
 
-StuffNotFound::StuffNotFound() : std::runtime_error("Could not find Stuff in an inventory") {}
+StuffNotFound::StuffNotFound() :
+  std::runtime_error("Could not find Stuff in an inventory") {
+}
 
-void printDirection(Direction d){
-  switch (d){
-  case UP :
+void printDirection(Direction d) {
+  switch (d) {
+  case UP:
     std::cout << "UP";
     break;
-  case  UPRIGHT :
+  case UPRIGHT:
     std::cout << "UPRIGHT";
-   break;
-  case  RIGHT :
+    break;
+  case RIGHT:
     std::cout << "RIGHT";
-   break;
-  case  RIGHTDOWN :
+    break;
+  case RIGHTDOWN:
     std::cout << "RIGHTDOWN";
-   break;
-  case  DOWN :
+    break;
+  case DOWN:
     std::cout << "DOWN";
-   break;
-  case  DOWNLEFT :
+    break;
+  case DOWNLEFT:
     std::cout << "DOWNLEFT";
-   break;
-  case  LEFT :
+    break;
+  case LEFT:
     std::cout << "LEFT";
-   break;
-  case  LEFTUP :
+    break;
+  case LEFTUP:
     std::cout << "LEFTUP";
-   break;
-  case  STOP :
+    break;
+  case STOP:
     std::cout << "STOP";
-   break;
-  case ERROR :
- std::cout << "ERROR";
+    break;
+  case ERROR:
+    std::cout << "ERROR";
   default:
     std::cout << "printDirection : error";
   }
 }
 
-
-Player::Player (int pid, float xx, float yy) {
-  position = Position(xx,yy);
+Player::Player(int pid, float xx, float yy) {
+  position = Position(xx, yy);
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
   this->addItem(Knife());
   this->addItem(Bomb(2));
-  this->addItem(Gun(5,2,4));
+  this->addItem(Gun(5, 2, 4));
   this->addItem(Ammunition(10));
-};
+}
+;
 
 Player::Player(const Player& other) {
   LOG(error) << "The copy constructor of Player should never be called.";
-};
+}
+;
 
-int Player::getID(){
+int Player::getID() {
   return this->playerID;
-};
+}
+;
 
-Direction Player::getDirection () {
+Direction Player::getDirection() {
   return this->d;
-};
+}
+;
 
-std::vector<int> Player::getInventory () {
+std::vector<int> Player::getInventory() {
   std::vector<int> ids;
   ids.resize(inventory.size());
-  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Stuff>& stuff) { return stuff->stuffID; });
+  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Stuff>& stuff) {return stuff->stuffID;});
   return ids;
-};
+}
+;
 
 void Player::setDirection(Direction newd) {
-  if (isServer == 0){
-    std::cout << "Client : player " << this->playerID << " changes direction from ";
+  if (isServer == 0) {
+    std::cout << "Client : player " << this->playerID
+        << " changes direction from ";
   } else {
-    std::cout << "Server : player " << this->playerID << " changes direction from ";
+    std::cout << "Server : player " << this->playerID
+        << " changes direction from ";
   }
-  printDirection (this->d);
+  printDirection(this->d);
   std::cout << " to ";
   printDirection(newd);
   std::cout << "\n";
   this->d = newd;
   return;
-};
+}
+;
 
 void Player::addItem(Stuff&& stuff) {
   this->inventory.push_back(std::unique_ptr<Stuff>(new Stuff(stuff)));
@@ -106,26 +114,29 @@ void Player::removeItem(int stuffID) {
     }
   }
   return;
-};
+}
+;
 
-void Player::updatePosition(sf::Time dt,Geography& map) {
+void Player::updatePosition(sf::Time dt, Geography& map) {
   float dep = (this->speed) * (dt.asSeconds()) * SPEED_AMPLIFIER;
   float sqrttwo = 1.414213562;
   float x = position.getX();
   float y = position.getY();
-  switch (this->d){
-  case UP : 
-    position.add(0,-dep);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(0,dep);
+  switch (this->d) {
+  case UP:
+    position.add(0, -dep);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(0, dep);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(0,dep);
+      position.add(0, dep);
     }
     break;
-  case UPRIGHT :
+  case UPRIGHT:
     position.add(dep / sqrttwo, -dep / sqrttwo);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
       position.add(-dep / sqrttwo, dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -133,77 +144,84 @@ void Player::updatePosition(sf::Time dt,Geography& map) {
     }
     break;
   case RIGHT:
-    position.add(dep,0);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(-dep,0);
+    position.add(dep, 0);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(-dep, 0);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(-dep,0);
+      position.add(-dep, 0);
     }
     break;
-  case RIGHTDOWN :
-    position.add(dep/sqrttwo,dep/sqrttwo);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(-dep/sqrttwo,-dep/sqrttwo);
+  case RIGHTDOWN:
+    position.add(dep / sqrttwo, dep / sqrttwo);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(-dep / sqrttwo, -dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(-dep/sqrttwo,-dep/sqrttwo);
+      position.add(-dep / sqrttwo, -dep / sqrttwo);
     }
     break;
-  case DOWN :
-    position.add(0,dep);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(0,-dep);
+  case DOWN:
+    position.add(0, dep);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(0, -dep);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(0,-dep);
+      position.add(0, -dep);
     }
     break;
-  case DOWNLEFT :
-    position.add(-dep/sqrttwo,dep/sqrttwo);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-     position.add(dep/sqrttwo,-dep/sqrttwo);
+  case DOWNLEFT:
+    position.add(-dep / sqrttwo, dep / sqrttwo);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(dep / sqrttwo, -dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(dep/sqrttwo,-dep/sqrttwo);
+      position.add(dep / sqrttwo, -dep / sqrttwo);
     }
     break;
-  case LEFT :
-    position.add(-dep,0);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(dep,0);
+  case LEFT:
+    position.add(-dep, 0);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(dep, 0);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(dep,0);
+      position.add(dep, 0);
     }
     break;
-  case LEFTUP :
-    position.add(-dep/sqrttwo,-dep/sqrttwo);
-    if (!(position.getX() >0 && position.getX() <10000 && position.getY() >0 && position.getY() < 10000)) {
-      position.add(dep/sqrttwo,dep/sqrttwo);
+  case LEFTUP:
+    position.add(-dep / sqrttwo, -dep / sqrttwo);
+    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
+        && position.getY() < 10000)) {
+      position.add(dep / sqrttwo, dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
-      position.add(dep/sqrttwo,dep/sqrttwo);
+      position.add(dep / sqrttwo, dep / sqrttwo);
     }
     break;
-  case STOP :
+  case STOP:
     break;
   default:
     //ne doit pas arriver
-    std::cerr << "Player::updatePosition : Direction not correct " << (int) (this->d) << "\n";
+    std::cerr << "Player::updatePosition : Direction not correct "
+        << (int) (this->d) << "\n";
     break;
   };
   if (!(x == position.getX() && y == position.getY())) {
-    DBG << position.getX() <<  " + " << position.getY();
+    DBG << position.getX() << " + " << position.getY();
   }
   return;
-};
-
+}
+;
 
 bool Player::hasItemByID(int stuffID) {
   try {
 
-    getItemByID<Stuff>(stuffID);
+    getItemByID<Stuff> (stuffID);
     return true;
   } catch (const StuffNotFound& err) {
     return false;
