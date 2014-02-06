@@ -10,7 +10,6 @@
 #include "debug.h"
 
 bool isPlantable (Tile* t) {
-	if (DEBUG) {std::cout << "nobody isPLANTABLE" << std::endl ;};
 	switch(t->getType())
 	// todo choisir les quelles sont plantables
 	{case(ROADH) : return true;
