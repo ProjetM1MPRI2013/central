@@ -27,12 +27,24 @@ class Player : public Positionable{
 public:
 
 	//Pour débugue
-	int isServer = 0;
+  int isServer = 0;
+  
+  int getID();
+  
+  Direction getDirection();
+  
+  /**
+   * @brief This method sould only be used by server
+   * @param d : the new direction of the player
+   * @param timeStamp : the timeStamp of the direction changement
+   */
+  void setDirection(Direction d, int timeStamp);
 
-	int getID();
-
-	Direction getDirection();
-	void setDirection(Direction d);
+  /**
+   * @brief This method sould only be used by client
+   * @param d : the new direction of the player
+   */
+  void setDirection(Direction d);
 
 	std::vector<int> getInventory(); // returns list of stuff ids currently held by the player
 	template <class T>
@@ -67,16 +79,22 @@ public:
 
 
 private:
-	/**
-	 * @brief Identifier of the player
-	 * 0 for the Chief of the Police, > 0 for the terrorists
-	 */
-	int playerID;
-	float speed;
-	Direction d;
-	/**
-	 * @brief The inventory is polymorphic so it holds pointers
-	 */
+  /**
+   * @brief Identifier of the player
+   * 0 for the Chief of the Police, > 0 for the terrorists
+   */
+  int playerID;
+  float speed;
+  Direction d;
+
+  /**
+   * @brief The last timestamp of a NewMovNetwork message accepted
+   */
+  int lastTimeStamp;
+
+  /**
+   * @brief The inventory is polymorphic so it holds pointers
+   */
 	std::list<std::unique_ptr<Clickable>> inventory;
 
 };

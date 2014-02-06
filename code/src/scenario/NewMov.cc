@@ -2,6 +2,11 @@
 #include <iostream>
 #include "localState.h"
 #include "ScenarioActionList.h"
+#include "debug.h"
+
+#define DEBUG true
+
+int NewMovNetwork::counter = 1;
 
 void printNewMov(NewMov nm){
   switch (nm){
@@ -36,7 +41,7 @@ void printNewMov(NewMov nm){
 }
 
 NewMovNetwork::NewMovNetwork(NewMov m, int pid, LocalState* ls){
-  Direction a = ls->getPlayerByID(playerID).getDirection();
+  Direction a = ls->getOwner().getDirection();
   Couple* b = directionToInt(a);
   Couple* c = newMovToInt(m);
   Couple* newDir = new Couple(b->x + c->x, b->y + c->y);
@@ -47,6 +52,7 @@ NewMovNetwork::NewMovNetwork(NewMov m, int pid, LocalState* ls){
   delete newDir;
 
   this->playerID = pid;
+  timeStamp = counter++;
 }
 
 
@@ -55,4 +61,4 @@ AbstractMessage* NewMovNetwork::copy(){
 }
 
 
-NewMovNetwork::NewMovNetwork() : newDirection(RIGHT), playerID(0) {}
+NewMovNetwork::NewMovNetwork() : newDirection(STOP), playerID(0), timeStamp(counter++) {}

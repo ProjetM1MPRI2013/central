@@ -83,14 +83,31 @@ std::vector<int> Player::getInventory() {
 }
 ;
 
-void Player::setDirection(Direction newd) {
-  if (isServer == 0) {
-    std::cout << "Client : player " << this->playerID
-        << " changes direction from ";
-  } else {
+void Player::setDirection(Direction newd, int timeStamp) {
+  if (timeStamp > lastTimeStamp){
+      assert(isServer != 0);
+
     std::cout << "Server : player " << this->playerID
-        << " changes direction from ";
+	      << " changes direction from ";
+    printDirection(this->d);
+    std::cout << " to ";
+    printDirection(newd);
+    std::cout << "\n";
+    this->d = newd;
+    lastTimeStamp = timeStamp;
+    return;
   }
+  else{
+    std::cout << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp << std::endl;
+  }
+}
+;
+
+void Player::setDirection(Direction newd) {
+  assert(isServer == 0);
+  std::cout << "Client : player " << this->playerID
+	    << " changes direction from ";
+  
   printDirection(this->d);
   std::cout << " to ";
   printDirection(newd);

@@ -37,8 +37,9 @@ class ChangeDirection: public ScenarioAction {
    * @brief The new direction of the player
    */
   Direction newDirection;
+  int timeStamp;
 
-  ChangeDirection(int id, Direction direction, Simulation* s);
+  ChangeDirection(int id, Direction direction, int ts, Simulation* s);
   ChangeDirection(const ChangeDirection&);
 
   virtual void run();
@@ -49,7 +50,7 @@ protected :
   //Serialization
   ChangeDirection() {}
 
-  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection)
+  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection, timeStamp)
 
 };
 

@@ -83,19 +83,21 @@ Direction intToDirection(Couple* a){
   return Direction::ERROR;
 };
 
-ChangeDirection::ChangeDirection(int id, Direction dir,Simulation* s) : ScenarioAction ("ChangeDirection",s){
+ChangeDirection::ChangeDirection(int id, Direction dir, int ts, Simulation* s) : ScenarioAction ("ChangeDirection",s){
   playerID = id;
   newDirection = dir;
+  timeStamp = ts;
 };
 
 ChangeDirection::ChangeDirection(const ChangeDirection& a) : ScenarioAction("ChangeDirection",a.simulation){
   this->playerID = a.playerID;
   this->newDirection = a.newDirection;
+  this->timeStamp = a.timeStamp;
 }
 
 void ChangeDirection::run(){
 
-    simulation->getPlayerByID(playerID).setDirection(newDirection);
+  simulation->getPlayerByID(playerID).setDirection(newDirection,timeStamp);
 
   return;
 };

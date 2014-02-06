@@ -19,16 +19,26 @@ class NewMovNetwork : public AbstractMessage {
  public:
   Direction newDirection;
   int playerID;
+
+  /**
+   * @brief the timeStamp of the new movement, in case of re-ordering by the network
+   */
+  int timeStamp;
+  
   NewMovNetwork(NewMov m, int pid, LocalState* ls);
 
   virtual AbstractMessage* copy();
 
 protected :
+  /**
+   * @brief used to generates unique incressing timestamps
+   */
+  static int counter;
   //Serialization
 
   NewMovNetwork() ;
 
-  SIMPLE_MESSAGE(NewMovNetwork, AbstractMessage, newDirection, playerID)
+  SIMPLE_MESSAGE(NewMovNetwork, AbstractMessage, newDirection, playerID, timeStamp)
 };
 
 BOOST_CLASS_EXPORT_KEY(NewMovNetwork)

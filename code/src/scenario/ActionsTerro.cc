@@ -137,10 +137,12 @@ return (AbstractMessage*) new A_Plant(*this);
 };
 
 void newMovement (NewMov n, LocalState* s){
+  std::cout << "Client : New Movement begin\n";
   NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
-  std::cout << "Client : New Movement from player : " << s->getPlayer()->getID() << " ";
+  std::cout << "Client : New Movement from player : " << s->getOwner().getID() << " ";
   printNewMov(n);
   std::cout << std::endl;
+  s->getOwner().setDirection(newMovNet.newDirection);
   s->getClient()->sendMessage(newMovNet,true);
 };
 
