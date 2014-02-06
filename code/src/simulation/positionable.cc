@@ -6,6 +6,11 @@ Positionable::Positionable() : FogDisabler() {
   return;
 }
 
+Positionable::Positionable(boost::uuids::uuid uuid) : FogDisabler(), EventSource(uuid) {
+  position = Position();
+  return;
+}
+
 Positionable::Positionable(float x,float y) : FogDisabler() {
   position = Position(x,y);
   return;

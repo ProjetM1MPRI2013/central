@@ -14,9 +14,9 @@
 
 /**
  * @brief The NPC class
- * It represents a NPC, and is a subclass of Positionable and Withuuid
+ * It represents a NPC
  */
-class NPC : public EventSource, public Positionable {
+class NPC : public Positionable {
  private:
   Trajectory trajectory;
   float fear;
