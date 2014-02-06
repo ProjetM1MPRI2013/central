@@ -15,8 +15,7 @@
 #include <list>
 #include <stdexcept>
 #include "positionable.h"
-
-enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP, ERROR};
+#include "NewMov.h"
 
 class StuffNotFound : public std::runtime_error
 {

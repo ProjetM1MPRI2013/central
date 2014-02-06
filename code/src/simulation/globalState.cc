@@ -55,9 +55,8 @@ void GlobalState::run(sf::Time dt){
   std::vector<NewMovNetwork *> movFromNetwork = server->receiveMessages<NewMovNetwork>();
 
   for (NewMovNetwork * newMove : movFromNetwork){
-       this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->movement,this));
-       std::cout << "Host : New Movement from player : " << newMove->playerID << " ";
-       printNewMov(newMove->movement);
+       this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->newDirection,this));
+       std::cout << "Host : New Movement from player : " << newMove->playerID ;
        std::cout << std::endl;
      }
   movFromNetwork.clear();

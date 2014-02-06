@@ -35,15 +35,6 @@ bool isInThePack(LocalState* s, int stuffID) {
 };
 
 
-void newMovement (NewMov n, Simulation* s){
-	NewMovNetwork newMovNet(n,s->getPlayer()->getID());
-	std::cout << "Client : New Movement from player : " << s->getPlayer()->getID() << " ";
-	printNewMov(n);
-	std::cout << std::endl;
-	s->getClient()->sendMessage(newMovNet,true);
-};
-
-
 /*********************************************************
 ** Generated code**
 *********************************************************/
@@ -143,6 +134,14 @@ gs->deleteAction(this);
 
 AbstractMessage* A_Plant::copy() {
 return (AbstractMessage*) new A_Plant(*this);
+};
+
+void newMovement (NewMov n, LocalState* s){
+  NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
+  std::cout << "Client : New Movement from player : " << s->getPlayer()->getID() << " ";
+  printNewMov(n);
+  std::cout << std::endl;
+  s->getClient()->sendMessage(newMovNet,true);
 };
 
 /*********************************************************

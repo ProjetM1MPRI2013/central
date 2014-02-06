@@ -20,7 +20,7 @@
 
 
 
-void newMovement (NewMov n, Simulation* s);
+void newMovement (NewMov n, LocalState* s);
 
 /*********************************************************
  **                    Generated code                   **

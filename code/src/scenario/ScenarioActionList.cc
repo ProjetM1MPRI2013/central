@@ -12,13 +12,6 @@
  *ChangeDirection*
  *****************/
 
-class Couple {
-public:
-  int x;
-  int y;
-  Couple (int x, int y);
-};
-
 Couple::Couple (int a, int b){
   x = a;
   y = b;
@@ -90,28 +83,20 @@ Direction intToDirection(Couple* a){
   return Direction::ERROR;
 };
 
-ChangeDirection::ChangeDirection(int id, NewMov mov,Simulation* s) : ScenarioAction ("ChangeDirection",s){
+ChangeDirection::ChangeDirection(int id, Direction dir,Simulation* s) : ScenarioAction ("ChangeDirection",s){
   playerID = id;
-  newMovement = mov;
+  newDirection = dir;
 };
 
 ChangeDirection::ChangeDirection(const ChangeDirection& a) : ScenarioAction("ChangeDirection",a.simulation){
   this->playerID = a.playerID;
-  this->newMovement = a.newMovement;
+  this->newDirection = a.newDirection;
 }
 
 void ChangeDirection::run(){
-  Direction a = simulation->getPlayerByID(playerID).getDirection();
-  Couple* b = directionToInt(a);
-  Couple* c = newMovToInt(this->newMovement);
-  Couple* newDir = new Couple(b->x + c->x, b->y + c->y);
-  Direction d = intToDirection(newDir);
-  if (d != Direction::ERROR){
-    simulation->getPlayerByID(playerID).setDirection(d);
-  }
-  delete b;
-  delete c;
-  delete newDir;
+
+    simulation->getPlayerByID(playerID).setDirection(newDirection);
+
   return;
 };
 
