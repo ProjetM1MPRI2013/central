@@ -2,6 +2,7 @@
 #include "../simulation/position.h"
 #include "../simulation/npc.h"
 #include "../simulation/tilewrapper.h"
+#include "debug.h"
 
 #define DEBUG false
 
@@ -172,7 +173,7 @@ Tile& Tile::operator=(const Tile& t){
 }
 
 void Tile::nobodyTile(){
-	std::cout << "tile : " << this->getCoord().abs << "," << this->getCoord().ord << std::endl;
+  DBG << "tile : " << this->getCoord().abs << "," << this->getCoord().ord;
 };
 float Tile::getAnxiety(){
   return this->anxiety;
@@ -180,7 +181,7 @@ float Tile::getAnxiety(){
 }
 
 void Tile::setAnxiety(float f){
-	std::cout << "nobody : anxiety : " << f << "in " ;
+	DBG << "nobody : anxiety : " << f << "in " ;
 	nobodyTile();
   this->anxiety=f;
   return;

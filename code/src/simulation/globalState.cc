@@ -81,7 +81,7 @@ void GlobalState::run(sf::Time dt){
     int secondes = floor(smallTime);
     smallTime = smallTime - secondes;
 
-    std::cout << "on lisse la matrice " << std::endl;
+    DBG << "on lisse la matrice ";
       /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
       for (int i = 0; i < secondes; i++) {
         this->lisserMatrice();
@@ -102,7 +102,7 @@ void GlobalState::run(sf::Time dt){
   }
 
   //Deplacement de tous les NPCs.
-  std::cout << "on commence à bouger les npcs" << std::endl;
+  DBG << "on commence à bouger les npcs";
   for (NPC* npc : NPCs) {
       bool wasArrived = npc->hasArrived();
       Tile& tileBefore = npc->getPosition().isInTile(*map);
