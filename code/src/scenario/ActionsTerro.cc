@@ -1,3 +1,8 @@
+/**
+   @author: Remy
+ */
+
+
 #include "ActionsTerro.h"
 #include <iostream>
 #include <list>

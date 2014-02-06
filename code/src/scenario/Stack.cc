@@ -1,3 +1,8 @@
+/**
+   @author: Remy
+ */
+
+
 #include "Stack.h"
 #include "localState.h"
 #include "../hud/hudTerro.h"
