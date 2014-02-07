@@ -3,6 +3,7 @@
  */
 #include "position.h"
 #include "../generation/tile.h"
+#include "npc.h"
 
 #include <cmath>
 
@@ -23,11 +24,11 @@ Position::Position(Tile& t) {
   return;
 }
 
-float Position::getX() {
+float Position::getX() const {
   return x;
 }
 
-float Position::getY() {
+float Position::getY() const {
   return y;
 }
 
@@ -58,10 +59,28 @@ std::pair<int,int> Position::isInTile(){
   return std::pair<int,int>(x/TILE_SIZE_X, y/TILE_SIZE_Y) ;
 }
 
-float Position::distance(Position& p) {
+float Position::distance(const Position &p) const {
   float dx,dy,d;
   dx = x-p.getX();
   dy = y-p.getY();
   d = sqrt(pow(dx,2)+pow(dy,2));
   return d;
+}
+
+std::list<NPC*> Position::getNPCList(Geography& map) {
+  std::list<NPC*> npcList;
+  std::list<NPC*> notTooFarNPCs = isInTile(map).getNotTooFarNPCs(map);
+  while (!notTooFarNPCs.empty()) {
+    NPC* npc = notTooFarNPCs.front();
+    notTooFarNPCs.pop_front();
+    if (npc->isInHitbox(*this)) {
+      npcList.push_front(npc);
+    }
+  }
+  return npcList;
+}
+
+std::ostream& operator<<(std::ostream& os, const Position& obj) {
+  os << "(" << obj.getX() << ", " << obj.getY() << ")" ;
+  return os ;
 }

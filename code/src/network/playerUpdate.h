@@ -1,6 +1,7 @@
 #ifndef PLAYERUPDATE_H
 #define PLAYERUPDATE_H
 #include "simulation/position.h"
+#include "abstractMessage.h"
 
 
 class Player ;
@@ -26,6 +27,8 @@ public:
 
   int player_id ;
   Position pos ;
+
+  SIMPLE_SERIALIZATION(player_id, pos)
 };
 
 #endif // PLAYERUPDATE_H

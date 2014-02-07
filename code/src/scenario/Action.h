@@ -81,6 +81,4 @@ protected :
 
 };
 
-BOOST_CLASS_EXPORT_KEY(Action)
-
 #endif

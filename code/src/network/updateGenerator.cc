@@ -34,6 +34,7 @@ GameUpdate UpdateGenerator::generateUpdate(Player& player) {
   GameUpdate update ;
   PlayerUpdate p_update(player);
   update.setPlayerUpdate(p_update);
+  /*
   std::pair<int,int> tilePos = player.getPosition().isInTile() ;
   if(!(tilePos.first >=0 && tilePos.first < globalState->getMap()->getMapWidth()))
     DBG << "Player Outside the map" ;
@@ -45,7 +46,7 @@ GameUpdate UpdateGenerator::generateUpdate(Player& player) {
       for(int j = 0 ; j <  globalState->getMap()->getMapHeight() ; j++ )
         addAllNpcs(update, globalState->getMap()->getTileRef(i,j));
     }
-
+    */
   return update ;
 }
 

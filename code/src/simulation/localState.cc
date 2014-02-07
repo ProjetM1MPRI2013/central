@@ -149,6 +149,8 @@ void LocalState::run(sf::Time dt){
       }
   }
 
+  DBG << "LocalState : Position of the Player" << getOwner().getPosition() ;
+
   client->update(dt);
   return;
 }

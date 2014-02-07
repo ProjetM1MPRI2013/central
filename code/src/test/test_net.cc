@@ -75,7 +75,7 @@ int net_serialization(){
   string s = msg.toString() ;
   TestA* msg2 = (TestA*) TestA::fromString(s) ;
   LOG(info) << "TEST : class TestA before serialisation : data = " << msg.data << ", after : data = " << msg2->data ;
-  LOG(info) << msg.data2 << "-------" << msg2->data2 ;
+  LOG(info) << "TEST : before, data2 = " << msg.data2 << ", after data2 = " << msg2->data2 ;
   if(msg2->data != msg.data)
     LOG(info) << "TEST : .........FAIL" ;
   else

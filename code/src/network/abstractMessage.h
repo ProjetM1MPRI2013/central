@@ -65,7 +65,6 @@ private :
 
 };
 
-BOOST_CLASS_EXPORT_KEY(AbstractMessage)
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(AbstractMessage)
 
 /*******************************************
@@ -82,7 +81,17 @@ void __serialize_variables(Archive& ar, T& var, Types&... rest) {
   __serialize_variables(ar, rest...) ;
 }
 
-#define SIMPLE_SERILAIZATION(BaseClass, vars...) \
+#define SIMPLE_SERIALIZATION(vars...) \
+private :                    \
+  friend class boost::serialization::access ;  \
+  template <class Archive>                    \
+  void serialize(Archive & ar, const unsigned int version)  \
+  {                                                         \
+    __serialize_variables(ar, ## vars) ;   \
+  }              \
+
+
+#define SIMPLE_SERILAIZATION_DERIVED(BaseClass, vars...) \
   private :                    \
     friend class boost::serialization::access ;  \
     template <class Archive>                    \
@@ -95,6 +104,6 @@ void __serialize_variables(Archive& ar, T& var, Types&... rest) {
 #define SIMPLE_MESSAGE(ClassName, BaseClass, vars...) \
   public : \
   static std::string getMsgType() { std::string s = std::string(#ClassName) ; s.resize(8) ; return s ;} \
-  SIMPLE_SERILAIZATION(BaseClass, ## vars) \
+  SIMPLE_SERILAIZATION_DERIVED(BaseClass, ## vars) \
 
 #endif // ABSTRACTMESSAGE_H

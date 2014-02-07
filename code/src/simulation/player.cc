@@ -8,6 +8,7 @@
 #define DEBUG false
 #include "debug.h"
 
+
 StuffNotFound::StuffNotFound() :
   std::runtime_error("Could not find Stuff in an inventory") {
 }
@@ -67,12 +68,12 @@ Player::Player(const Player& other) {
 }
 ;
 
-int Player::getID() {
+int Player::getID() const {
   return this->playerID;
 }
 ;
 
-Direction Player::getDirection() {
+Direction Player::getDirection() const {
   return this->d;
 }
 ;
@@ -80,7 +81,8 @@ Direction Player::getDirection() {
 std::vector<int> Player::getInventory() {
   std::vector<int> ids;
   ids.resize(inventory.size());
-  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Clickable>& stuff) {return stuff->ClickableID;});
+  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Clickable>& stuff) {
+	  return stuff->ClickableID;});
   return ids;
 }
 ;
@@ -238,8 +240,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
 ;
 
 bool Player::hasItemByID(int ClickableID) {
+	std::cout << ClickableID << std::endl;
 	try {
-
     getItemByID<Clickable> (ClickableID);
     return true;
   } catch (const StuffNotFound& err) {

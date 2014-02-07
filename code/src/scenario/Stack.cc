@@ -1,3 +1,8 @@
+/**
+   @author: Remy
+ */
+
+
 #include "Stack.h"
 #include "localState.h"
 #include "../hud/hudTerro.h"
@@ -6,7 +11,11 @@
 #include <fstream>
 //#include "ActionCreator.h"
 #define DEBUG false
-#define LOG false
+#define LOG true
+
+void log (std::string s ) {
+	if (LOG) {std::cout << s << std::endl;};
+};
 
 Tile getTile(LocalState* s) {
 	Player* p = s->getPlayer();
@@ -99,12 +108,13 @@ void Stack::sendAction () {
 		//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
 		//Actions name = this->actionsName;
 		Action* a (this->ActionOfStack(this->actionType));
+		log ("test action possible");
 		if (a->isActionPossible ())
-		{
-			a->doAction();
+		{	log ("lance l'action");
+		a->doAction();
 		}
 		else
-		{ };
+		{ log ("pas possible");};
 		this->cancel();
 		(this->hud)->setwf(WF_NONE);
 	}

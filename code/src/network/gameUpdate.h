@@ -62,9 +62,7 @@ private :
     PlayerUpdate p_update ;
     std::vector<NpcUpdate> npc_updates ;
 
-    SIMPLE_MESSAGE(GameUpdate, AbstractMessage)
+    SIMPLE_MESSAGE(GameUpdate, AbstractMessage, p_update)
 };
-
-BOOST_CLASS_EXPORT_KEY(GameUpdate)
 
 #endif // GAMEUPDATE_H

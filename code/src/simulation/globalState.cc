@@ -151,6 +151,10 @@ void GlobalState::run(sf::Time dt){
         }
       }
   }
+
+  for(Player& player : players)
+    DBG << "GlobalState : Position of player " << player.getID() << " : " << player.getPosition() ;
+
   server->update(dt);
   return;
 }

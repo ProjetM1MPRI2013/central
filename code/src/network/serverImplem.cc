@@ -104,7 +104,11 @@ std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, Ab
     {
       vector<AbstractMessage *> result ;
       for(string& msg : elts->second)
-          result.push_back(f(msg));
+        {
+          AbstractMessage* messagep = f(msg) ;
+          if(NULL != messagep)
+            result.push_back(messagep);
+        }
       received_messages.erase(elts);
       return result ;
     }

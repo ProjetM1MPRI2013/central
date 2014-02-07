@@ -82,7 +82,5 @@ namespace test {
 
 
 }
-BOOST_CLASS_EXPORT_KEY(test::TestA)
-BOOST_CLASS_EXPORT_KEY(test::TestB)
 
 #endif

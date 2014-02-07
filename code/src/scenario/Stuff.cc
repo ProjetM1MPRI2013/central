@@ -1,3 +1,8 @@
+/**
+   @author: Remy
+ */
+
+
 #include "Stuff.h"
 #include "ActionsTerro.h"
 
@@ -8,8 +13,8 @@ Clickable::Clickable () {
   /* This is not an atomic operation.
    * This should not create bug since only the simulation will creates new objects.
    */
-  ClickableID = counter;
-  counter = counter + 1;
+  ClickableID = Clickable::counter;
+  counter = Clickable::counter + 1;
   std::list<SoN> l_drop ;
   std::list<ActionType> ActionTypePossible;
 };

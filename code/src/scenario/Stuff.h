@@ -1,5 +1,5 @@
 /**
-   @author: Adrien K.
+   @author: Adrien K,Rémy P.
  */
 
 

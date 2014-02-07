@@ -4,6 +4,7 @@
 #include "test_interface_init.h"
 #include "test_generation.h"
 #include "test_localstate.h"
+#include "test_globalstate.h"
 #include "test_terroview.h"
 #include "test_mayorview.h"
 #include "test_scenario.h"

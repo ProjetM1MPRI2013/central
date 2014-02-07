@@ -2,21 +2,21 @@
 #include "main.h"
 #include "test.h"
 #include "HScenario.h"
-#include "localState.h"
+#include "globalState.h"
 #include "geography.h"
 #include "tilemap.h"
 #define DEBUG false
 #include "debug.h"
 
 namespace test {
-  int localstate() {
+  int globalstate() {
     std::string seed = "424242";
     auto nbPlayers = 1;
     Geography geo = Generation1(seed);
     LOG(debug) << "address of geo " << &geo;
-    LocalState loc = LocalState(&geo,nbPlayers, 1);
-    LOG(debug) << "address of map in LocalState " << loc.getMap();
-    LOG(info) << "Local State testing done.";
+    GlobalState glob = GlobalState(&geo,nbPlayers, 1);
+    LOG(debug) << "address of map in LocalState " << glob.getMap();
+    LOG(info) << "Global State testing done.";
 
     return 0;
   }

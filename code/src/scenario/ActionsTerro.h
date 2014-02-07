@@ -117,5 +117,5 @@ private :
 A_Drop(){};
 SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
 };
-BOOST_CLASS_EXPORT_KEY(A_Drop);
+//BOOST_CLASS_EXPORT_KEY(A_Drop);
 #endif

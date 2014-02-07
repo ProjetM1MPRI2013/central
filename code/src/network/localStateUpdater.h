@@ -4,7 +4,7 @@
 #include "playerUpdate.h"
 #include "npcUpdate.h"
 
-class Simulation;
+class LocalState;
 
 /**
  * @brief The LocalStateUpdater class : class used to handle and apply updates received by the server
@@ -19,7 +19,7 @@ public:
    * @param state : the local state this updater is attached to
    * @param client : the client used to receive the updates
    */
-  LocalStateUpdater(Simulation* state, Client* client);
+  LocalStateUpdater(LocalState* state, Client* client);
 
   /**
    * @brief update : updates the local state according to the updates received from the server.
@@ -30,11 +30,23 @@ public:
   void update(sf::Time dt) ;
 
 private :
-  Simulation * localState ;
+  LocalState * localState ;
   Client * client ;
 
-  void applyPlayerUpdate(PlayerUpdate &p_update) ;
+  /**
+   * @brief lastUpdate : time corresponding to the last received update
+   */
+  sf::Time lastUpdate ;
+
+  /**
+   * @brief diffPos : difference of position when the last opdate was received
+   */
+  Position diffPos ;
+
+  void applyPlayerUpdate(PlayerUpdate &p_update, sf::Time dt) ;
   void applyNpcUpdate(NpcUpdate & npc_update) ;
+
+  void updatePlayerPosition(sf::Time dt) ;
 
 };
 

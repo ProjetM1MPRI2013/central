@@ -13,29 +13,29 @@
 #include "scenario/ScenarioAction.h"
 #include "scenario/ScenarioActionList.h"
 #include "interfaceinit/chat_event.h"
-
 /*
  * @author mheinric
  */
 
 //Registers the classes used for serialization
-BOOST_CLASS_EXPORT_IMPLEMENT(AbstractMessage)
-BOOST_CLASS_EXPORT_IMPLEMENT(NetEvent)
-BOOST_CLASS_EXPORT_IMPLEMENT(test::TestA)
-BOOST_CLASS_EXPORT_IMPLEMENT(test::TestB)
-BOOST_CLASS_EXPORT_IMPLEMENT(GameUpdate)
-BOOST_CLASS_EXPORT_IMPLEMENT(Action)
-BOOST_CLASS_EXPORT_IMPLEMENT(AddCop)
-BOOST_CLASS_EXPORT_IMPLEMENT(AddCam)
-BOOST_CLASS_EXPORT_IMPLEMENT(NewMovNetwork)
-BOOST_CLASS_EXPORT_IMPLEMENT(ScenarioAction)
-BOOST_CLASS_EXPORT_IMPLEMENT(ChangeDirection)
-BOOST_CLASS_EXPORT_IMPLEMENT(KillNPC)
-BOOST_CLASS_EXPORT_IMPLEMENT(Explosion)
-BOOST_CLASS_EXPORT_IMPLEMENT(AddCams)
-BOOST_CLASS_EXPORT_IMPLEMENT(AddCops)
-BOOST_CLASS_EXPORT_IMPLEMENT(DropItem)
-BOOST_CLASS_EXPORT_IMPLEMENT(ChatEvent)
+BOOST_CLASS_EXPORT(AbstractMessage)
+BOOST_CLASS_EXPORT(NetEvent)
+BOOST_CLASS_EXPORT(test::TestA)
+BOOST_CLASS_EXPORT(test::TestB)
+BOOST_CLASS_EXPORT(GameUpdate)
+BOOST_CLASS_EXPORT(Action)
+BOOST_CLASS_EXPORT(AddCop)
+BOOST_CLASS_EXPORT(AddCam)
+BOOST_CLASS_EXPORT(NewMovNetwork)
+BOOST_CLASS_EXPORT(ScenarioAction)
+BOOST_CLASS_EXPORT(ChangeDirection)
+BOOST_CLASS_EXPORT(A_Drop) //todo nobody : will be generated
+BOOST_CLASS_EXPORT(KillNPC)
+BOOST_CLASS_EXPORT(Explosion)
+BOOST_CLASS_EXPORT(AddCams)
+BOOST_CLASS_EXPORT(AddCops)
+BOOST_CLASS_EXPORT(DropItem)
+BOOST_CLASS_EXPORT(ChatEvent)
 
 #include "debug.h"
 
@@ -43,6 +43,7 @@ using namespace std ;
 using namespace boost::archive ;
 
 AbstractMessage* AbstractMessage::fromString(const std::string &msg){
+  try{
   stringstream ss(msg) ;
   AbstractMessage* message = NULL;
   {
@@ -51,6 +52,10 @@ AbstractMessage* AbstractMessage::fromString(const std::string &msg){
   }
   DBG << "Deserialize from : " << msg ;
   return message ;
+  } catch(...) {
+    LOG(error) << "Could not deserialize message  : " << msg ;
+    return NULL ;
+  }
 }
 
 string AbstractMessage::toString() {

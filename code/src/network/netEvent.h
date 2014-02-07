@@ -193,5 +193,4 @@ protected :
 
 std::ostream& operator<<(std::ostream& os, const NetEvent& obj) ;
 
-BOOST_CLASS_EXPORT_KEY(NetEvent)
 #endif // NETEVENT_H
