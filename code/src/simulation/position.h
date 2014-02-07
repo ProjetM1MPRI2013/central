@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "geography.h"
+#include "network/abstractMessage.h"
 
 
 class Tile;
@@ -112,6 +113,8 @@ class Position {
    * computes the list of the NPCs whose hitbox contains the position
    */
   std::list<NPC*> getNPCList(Geography& map);
+
+  SIMPLE_SERIALIZATION(x,y)
 
 };
 #endif

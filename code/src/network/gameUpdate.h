@@ -62,7 +62,7 @@ private :
     PlayerUpdate p_update ;
     std::vector<NpcUpdate> npc_updates ;
 
-    SIMPLE_MESSAGE(GameUpdate, AbstractMessage)
+    SIMPLE_MESSAGE(GameUpdate, AbstractMessage, p_update)
 };
 
 #endif // GAMEUPDATE_H

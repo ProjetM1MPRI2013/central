@@ -43,6 +43,7 @@ using namespace std ;
 using namespace boost::archive ;
 
 AbstractMessage* AbstractMessage::fromString(const std::string &msg){
+  try{
   stringstream ss(msg) ;
   AbstractMessage* message = NULL;
   {
@@ -51,6 +52,10 @@ AbstractMessage* AbstractMessage::fromString(const std::string &msg){
   }
   DBG << "Deserialize from : " << msg ;
   return message ;
+  } catch(...) {
+    LOG(error) << "Could not deserialize message  : " << msg ;
+    return NULL ;
+  }
 }
 
 string AbstractMessage::toString() {
