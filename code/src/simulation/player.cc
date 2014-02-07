@@ -146,8 +146,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
   switch (this->d) {
   case UP:
     position.add(0, -dep);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(0, dep);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -156,8 +156,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case UPRIGHT:
     position.add(dep / sqrttwo, -dep / sqrttwo);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(-dep / sqrttwo, dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -166,8 +166,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case RIGHT:
     position.add(dep, 0);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(-dep, 0);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -176,8 +176,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case RIGHTDOWN:
     position.add(dep / sqrttwo, dep / sqrttwo);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(-dep / sqrttwo, -dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -186,8 +186,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case DOWN:
     position.add(0, dep);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(0, -dep);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -196,8 +196,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case DOWNLEFT:
     position.add(-dep / sqrttwo, dep / sqrttwo);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(dep / sqrttwo, -dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -206,8 +206,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case LEFT:
     position.add(-dep, 0);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(dep, 0);
     }
     if (!((position.isInTile(map)).isWalkable())) {
@@ -216,8 +216,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   case LEFTUP:
     position.add(-dep / sqrttwo, -dep / sqrttwo);
-    if (!(position.getX() > 0 && position.getX() < 10000 && position.getY() > 0
-        && position.getY() < 10000)) {
+    if (!(position.getX() > 0 && position.getX() < (map.getMapWidth()) && position.getY() > 0
+        && position.getY() < (map.getMapHeight()))) {
       position.add(dep / sqrttwo, dep / sqrttwo);
     }
     if (!((position.isInTile(map)).isWalkable())) {

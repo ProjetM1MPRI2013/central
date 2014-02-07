@@ -1,16 +1,18 @@
-
-AC_INIT([Chaos simulator], [0.5], [matthieu.journault@free.fr],
-        [main_cc], [])
+AC_INIT([Chaos simulator], [0.5], [matthieu.journault@free.fr],[main_cc], [])
 AC_PREREQ([2.59])
+AC_CONFIG_MACRO_DIR([./m4/])
+DX_HTML_FEATURE(ON)
+DX_CHM_FEATURE(OFF)
+DX_CHI_FEATURE(OFF)
+DX_MAN_FEATURE(OFF)
+DX_RTF_FEATURE(OFF)
+DX_XML_FEATURE(OFF)
+DX_PDF_FEATURE(OFF)
+DX_PS_FEATURE(OFF)
+DX_INIT_DOXYGEN($PACKAGE_NAME, [doxygen.cfg])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define silent-rules])
-AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test -z "$DOXYGEN";
-   then AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
-fi
-
-AM_CONDITIONAL([HAVE_DOXYGEN],
-[test -n "$DOXYGEN"])AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
 AC_LANG_PUSH([C++])
+AX_CXX_COMPILE_STDCXX_11
 AC_CHECK_HEADERS([SFML/Graphics.hpp])
 AC_LANG_POP([C++])
 AC_PROG_CXX
