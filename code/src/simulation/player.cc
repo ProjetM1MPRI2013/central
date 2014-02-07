@@ -7,11 +7,6 @@
 
 #define DEBUG false
 #include "debug.h"
-#define NOBODY true
-
-void nobody (std::string s ) {
-	if (NOBODY) {std::cout << s << std::endl;};
-};
 
 
 StuffNotFound::StuffNotFound() :
@@ -86,7 +81,8 @@ Direction Player::getDirection() {
 std::vector<int> Player::getInventory() {
   std::vector<int> ids;
   ids.resize(inventory.size());
-  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Clickable>& stuff) {return stuff->ClickableID;});
+  std::transform(inventory.begin(), inventory.end(), ids.begin(), [](std::unique_ptr<Clickable>& stuff) {
+	  return stuff->ClickableID;});
   return ids;
 }
 ;
@@ -244,7 +240,7 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
 ;
 
 bool Player::hasItemByID(int ClickableID) {
-	nobody ("on cherche ce stuff : " + ClickableID);
+	std::cout << ClickableID << std::endl;
 	try {
     getItemByID<Clickable> (ClickableID);
     return true;

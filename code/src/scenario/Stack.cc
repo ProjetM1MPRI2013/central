@@ -74,7 +74,6 @@ Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::l
 	};
 	case ToA_Drop:{
 		int stuff = basicStuff;
-		log ("create drop");
 		return (new A_Drop (stuff, sim));
 	};
 	//Should not happens
@@ -138,9 +137,7 @@ void Stack::newAction(ActionType a, int stuffID) {
 	this->cancel();
 	SoNOfActions(a,this->SoNList);
 	this->actionType =a ;
-	log ("nobody le select item est d'id " );
 	this->stuffID = stuffID;
-//	log (" : " + stuffID);
 	this->sendAction();
 };
 
