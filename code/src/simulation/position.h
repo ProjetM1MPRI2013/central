@@ -53,7 +53,7 @@ class Position {
    * @brief getX
    * @return the Position's x coordinate
    */
-  float getX();
+  float getX() const;
 
   /**
    * @brief setX
@@ -66,7 +66,7 @@ class Position {
    * @brief getY
    * @return the Position's y coordinate
    */
-  float getY();
+  float getY() const;
 
   /**
    * @brief setY
@@ -106,7 +106,7 @@ class Position {
    * @param p : the other Position
    * @return the distance between the two position
    */
-  float distance(Position& p);
+  float distance(const Position& p) const;
 
   /**
    * @brief getNPCList
@@ -117,4 +117,12 @@ class Position {
   SIMPLE_SERIALIZATION(x,y)
 
 };
+
+/**
+ * @brief operator << : used to print debug info
+ * @param os
+ * @param obj
+ * @return
+ */
+std::ostream& operator<<(std::ostream& os, const Position& obj) ;
 #endif

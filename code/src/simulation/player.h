@@ -29,9 +29,9 @@ public:
 	//Pour débugue
   int isServer = 0;
   
-  int getID();
+  int getID() const;
   
-  Direction getDirection();
+  Direction getDirection() const;
   
   /**
    * @brief This method sould only be used by server

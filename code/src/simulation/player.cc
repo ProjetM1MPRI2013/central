@@ -73,12 +73,12 @@ Player::Player(const Player& other) {
 }
 ;
 
-int Player::getID() {
+int Player::getID() const {
   return this->playerID;
 }
 ;
 
-Direction Player::getDirection() {
+Direction Player::getDirection() const {
   return this->d;
 }
 ;
