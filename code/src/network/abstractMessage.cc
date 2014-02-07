@@ -13,7 +13,6 @@
 #include "scenario/ScenarioAction.h"
 #include "scenario/ScenarioActionList.h"
 #include "interfaceinit/chat_event.h"
-
 /*
  * @author mheinric
  */
@@ -30,6 +29,7 @@ BOOST_CLASS_EXPORT(AddCam)
 BOOST_CLASS_EXPORT(NewMovNetwork)
 BOOST_CLASS_EXPORT(ScenarioAction)
 BOOST_CLASS_EXPORT(ChangeDirection)
+BOOST_CLASS_EXPORT(A_Drop) //todo nobody : will be generated
 BOOST_CLASS_EXPORT(KillNPC)
 BOOST_CLASS_EXPORT(Explosion)
 BOOST_CLASS_EXPORT(AddCams)

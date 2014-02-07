@@ -7,6 +7,12 @@
 
 #define DEBUG false
 #include "debug.h"
+#define NOBODY true
+
+void nobody (std::string s ) {
+	if (NOBODY) {std::cout << s << std::endl;};
+};
+
 
 StuffNotFound::StuffNotFound() :
   std::runtime_error("Could not find Stuff in an inventory") {
@@ -238,8 +244,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
 ;
 
 bool Player::hasItemByID(int ClickableID) {
+	nobody ("on cherche ce stuff : " + ClickableID);
 	try {
-
     getItemByID<Clickable> (ClickableID);
     return true;
   } catch (const StuffNotFound& err) {

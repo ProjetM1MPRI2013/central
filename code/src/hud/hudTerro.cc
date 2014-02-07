@@ -18,6 +18,8 @@ class Clickable;
 #define GetCurrentDir getcwd
 #endif
 
+#define WithNetwork false //just for test (nobody)
+
 //todo nobody inser in a new .cc
 
 
@@ -223,13 +225,20 @@ void HudTerro::callback(unsigned int callback_id) {
 	if ((this->currentState) == BS_INVENT) {
 		if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 			// Save the selected item
+			std::cout << "nobody: ca va core dumped : "<< std::endl;
 			this->currentStuffID = inventory[(int)callback_id]; // horrible
+			std::cout << "nobody le select item est d'id:  " + this->currentStuffID << std::endl;
 
 			// Get the possible actions for the item
-
-
-			this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
-
+			// test without network nobody
+			if (WithNetwork) {
+				this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
+			}
+			else {
+				std::list<ActionType> actionTypeList;
+				this->actionTypeList = actionTypeList;
+				this->actionTypeList.push_back(ToA_Drop);
+			};
 			// Delete the old buttons
 			for (std::list<tgui::Button::Ptr>::iterator it =
 					(this->buttonsList).begin();
@@ -288,6 +297,7 @@ void HudTerro::callback(unsigned int callback_id) {
 			for (unsigned int i = 1; i < callback_id; i++) {
 				++it;
 			};
+			std::cout << "nobody le select item est d'id:  " + this->currentStuffID << std::endl;
 			stack->newAction((*it), this->currentStuffID);
 		};
 	};

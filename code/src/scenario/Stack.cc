@@ -11,7 +11,11 @@
 #include <fstream>
 //#include "ActionCreator.h"
 #define DEBUG false
-#define LOG false
+#define LOG true
+
+void log (std::string s ) {
+	if (LOG) {std::cout << s << std::endl;};
+};
 
 Tile getTile(LocalState* s) {
 	Player* p = s->getPlayer();
@@ -70,6 +74,7 @@ Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::l
 	};
 	case ToA_Drop:{
 		int stuff = basicStuff;
+		log ("create drop");
 		return (new A_Drop (stuff, sim));
 	};
 	//Should not happens
@@ -104,12 +109,13 @@ void Stack::sendAction () {
 		//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
 		//Actions name = this->actionsName;
 		Action* a (this->ActionOfStack(this->actionType));
+		log ("test action possible");
 		if (a->isActionPossible ())
-		{
-			a->doAction();
+		{	log ("lance l'action");
+		a->doAction();
 		}
 		else
-		{ };
+		{ log ("pas possible");};
 		this->cancel();
 		(this->hud)->setwf(WF_NONE);
 	}
@@ -132,7 +138,9 @@ void Stack::newAction(ActionType a, int stuffID) {
 	this->cancel();
 	SoNOfActions(a,this->SoNList);
 	this->actionType =a ;
+	log ("nobody le select item est d'id " );
 	this->stuffID = stuffID;
+//	log (" : " + stuffID);
 	this->sendAction();
 };
 
