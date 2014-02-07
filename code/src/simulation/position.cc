@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "position.h"
 #include "../generation/tile.h"
 

@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "npc.h"
 //#include "localState.h"
 //#include "simulation.h"

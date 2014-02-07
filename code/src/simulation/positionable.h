@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #ifndef POSITIONABLE_H
 #define POSITIONABLE_H
 #include "position.h"

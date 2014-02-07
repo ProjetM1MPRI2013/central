@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "positionable.h"
 #include "position.h"
 

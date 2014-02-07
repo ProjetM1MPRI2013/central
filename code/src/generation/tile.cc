@@ -1,3 +1,6 @@
+/**
+ * @author: Maxime, Joseph
+ */
 #include "tile.h"
 #include "../simulation/position.h"
 #include "../simulation/npc.h"

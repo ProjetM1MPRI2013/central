@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "tilewrapper.h"
 #include <cassert>
 #include <cmath>

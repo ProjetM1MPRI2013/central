@@ -1,5 +1,5 @@
 /**
- * @author: Adrien H.
+ * @author: Adrien H., Joseph
  */
 #ifndef WITH_UUID_H
 #define WITH_UUID_H

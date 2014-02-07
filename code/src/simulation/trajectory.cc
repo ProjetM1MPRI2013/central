@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "trajectory.h"
 #include "../generation/tile.h"
 #include "tilewrapper.h"
