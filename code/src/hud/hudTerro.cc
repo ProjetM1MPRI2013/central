@@ -18,32 +18,10 @@ class Clickable;
 #define GetCurrentDir getcwd
 #endif
 
-#define WithNetwork false //just for test (nobody)
+#define WithNetwork true //just for test (nobody)
 
 //todo nobody inser in a new .cc
 
-
-/*********************************************************
- ** Generated code**
- *********************************************************/
-std::string stringOfActions(ActionType a) {
-	switch (a) {
-	case ToA_Attack:
-		return "Attack";
-		break;
-	case ToA_Reload:
-		return "Reload";
-		break;
-	case ToA_Plant:
-		return "Plant";
-		break;
-	case ToA_Drop:
-		return "Drop";
-		break;
-		//Should not happens
-		return " Error stringOfActions " ;
-	};
-};
 /*********************************************************
  ** end of Generated code**
  *********************************************************/
@@ -116,6 +94,7 @@ void HudTerro::init() {
 			this->i = 0;
 			for (int stuffID : inventory) {
 
+				std::cout << "id du stuff : " <<  stuffID << std::endl;
 
 				Clickable stuff = simulation.getOwner().getItemByID<Clickable>(stuffID);
 				tgui::Button::Ptr button(this->hud);
@@ -225,13 +204,7 @@ void HudTerro::callback(unsigned int callback_id) {
 	if ((this->currentState) == BS_INVENT) {
 		if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 			// Save the selected item
-			std::cout << "nobody: ca va core dumped : "<< std::endl;
-			std::cout << "sans cast " + callback_id<<std::endl;
-			std::cout << "avec cast " + (int) callback_id<<std::endl;
-
-			this->currentStuffID = inventory[(int)callback_id]; // horrible
-			std::cout << "nobody le select item est d'id:  " + this->currentStuffID << std::endl;
-
+			this->currentStuffID = inventory[((int)callback_id) - 1]; // horrible
 			// Get the possible actions for the item
 			// test without network nobody
 			if (WithNetwork) {
@@ -300,7 +273,6 @@ void HudTerro::callback(unsigned int callback_id) {
 			for (unsigned int i = 1; i < callback_id; i++) {
 				++it;
 			};
-			std::cout << "nobody le select item est d'id:  " + this->currentStuffID << std::endl;
 			stack->newAction((*it), this->currentStuffID);
 		};
 	};

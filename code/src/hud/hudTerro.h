@@ -10,7 +10,7 @@
 #include <iostream> 
 #include <sstream> 
 #include "../scenario/Stack.h"
-
+#include "../scenario/PreStack.h"
 enum ButtonState {
 	BS_INVENT, BS_ACTIONS
 };
