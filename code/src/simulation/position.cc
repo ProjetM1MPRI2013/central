@@ -3,6 +3,7 @@
  */
 #include "position.h"
 #include "../generation/tile.h"
+#include "npc.h"
 
 #include <cmath>
 
@@ -64,4 +65,17 @@ float Position::distance(Position& p) {
   dy = y-p.getY();
   d = sqrt(pow(dx,2)+pow(dy,2));
   return d;
+}
+
+std::list<NPC*> Position::getNPCList(Geography& map) {
+  std::list<NPC*> npcList;
+  std::list<NPC*> notTooFarNPCs = isInTile(map).getNotTooFarNPCs(map);
+  while (!notTooFarNPCs.empty()) {
+    NPC* npc = notTooFarNPCs.front();
+    notTooFarNPCs.pop_front();
+    if (npc->isInHitbox(*this)) {
+      npcList.push_front(npc);
+    }
+  }
+  return npcList;
 }

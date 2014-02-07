@@ -12,6 +12,7 @@
 class Tile;
 class Coordinates;
 class Geography;
+class NPC;
 
 /**
  * @brief The Position class
@@ -105,5 +106,12 @@ class Position {
    * @return the distance between the two position
    */
   float distance(Position& p);
+
+  /**
+   * @brief getNPCList
+   * computes the list of the NPCs whose hitbox contains the position
+   */
+  std::list<NPC*> getNPCList(Geography& map);
+
 };
 #endif
