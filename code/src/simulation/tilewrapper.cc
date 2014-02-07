@@ -90,5 +90,5 @@ void TileWrapper::setHandle(PriorityQueue::handle_type& h) {
 
 bool TileWrapperComparator::operator() (TileWrapper* lhs,TileWrapper* rhs) const {
   assert(lhs->getDistance()!=-1 && rhs->getDistance()!=-1);
-  return ((lhs->getDistance()+lhs->getHeuristic()) > (rhs->getDistance()+lhs->getHeuristic()));
+  return ((lhs->getDistance()+lhs->getHeuristic()) > (rhs->getDistance()+rhs->getHeuristic()));
 }
