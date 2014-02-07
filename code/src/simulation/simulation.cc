@@ -19,7 +19,9 @@
 #define DEBUG false
 #include "debug.h"
 
-Simulation::Simulation(int nbPlayers, int id) {
+Simulation::Simulation(int nbPlayers, int id):
+    scenario(NULL),
+    isServer(false){
 	this->NB_JOUEURS = nbPlayers;
 	//[joseph]map n'est pas définie donc ce qui suit est juste map = map
 	//this->map = map;
@@ -45,6 +47,32 @@ Simulation::Simulation(int nbPlayers, int id) {
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
 }
+
+Simulation::Simulation(Geography* map, int nbPlayers, int id):
+    scenario(NULL),
+    isServer(false){
+    this->setGeography(map);
+    this->NB_JOUEURS = nbPlayers;
+      //[joseph]map n'est pas définie donc ce qui suit est juste map = map
+      //this->map = map;
+      //this->oldMap = map;
+      this->Id = id;
+
+      this->mesSous = 0;
+      this->sous = std::vector<int>(NB_JOUEURS, 0);
+      this->relativeTime = 0;
+      this->absoluteTime = 0;
+      this->smallTime = 0;
+
+      DBG << (this->getMap());
+      Tile* firstTile = (this->getMap())->getWalkableTile();
+      this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
+          (firstTile->getCoord()).getOrd()));
+
+      std::list<NPC*> NPCs;
+      this->NPCs = NPCs;
+}
+
 
 Simulation::~Simulation() {
 
@@ -73,33 +101,6 @@ Simulation::~Simulation() {
 ////  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
 //}
 
-Simulation::Simulation(Geography* map, int nbPlayers, int id) {
-	this->setGeography(map);
-	this->NB_JOUEURS = nbPlayers;
-	  //[joseph]map n'est pas définie donc ce qui suit est juste map = map
-	  //this->map = map;
-	  //this->oldMap = map;
-	  this->Id = id;
-
-	//  int t[NB_JOUEURS];
-	//  for (int i = 0; i < NB_JOUEURS; i++) {
-	//    t[i] = 0;
-	//  }
-	  this->mesSous = 0;
-	  //
-	  this->sous = std::vector<int>(NB_JOUEURS, 0);
-	  this->relativeTime = 0;
-	  this->absoluteTime = 0;
-	  this->smallTime = 0;
-
-	  DBG << (this->getMap());
-	  Tile* firstTile = (this->getMap())->getWalkableTile();
-	  this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
-	      (firstTile->getCoord()).getOrd()));
-
-	  std::list<NPC*> NPCs;
-	  this->NPCs = NPCs;
-}
 
 /* Never used
  Simulation::Simulation(std::string seed, std::vector<Player *> p_vect)

@@ -26,6 +26,7 @@ LocalState::LocalState(std::string _seed, Player& _player)
 
 LocalState::LocalState(Geography* map,int nbPlayers,int id) :
     Simulation(map, nbPlayers, id),
+    client(NULL),
     owner_player(getPlayerByID(id)){
     isServer = false;
 }

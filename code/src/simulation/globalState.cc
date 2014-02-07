@@ -21,7 +21,8 @@ GlobalState::GlobalState(std::string _seed, std::vector<Player*> _players)
 */
 
 GlobalState::GlobalState(Geography* map,int nbPlayers,int id) :
-    Simulation(map, nbPlayers, id){
+    Simulation(map, nbPlayers, id),
+    server(NULL){
     isServer = true;
 }
 
