@@ -41,5 +41,4 @@ protected :
   SIMPLE_MESSAGE(NewMovNetwork, AbstractMessage, newDirection, playerID, timeStamp)
 };
 
-BOOST_CLASS_EXPORT_KEY(NewMovNetwork)
 #endif

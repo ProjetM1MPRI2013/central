@@ -54,7 +54,6 @@ protected :
 
 };
 
-BOOST_CLASS_EXPORT_KEY(ChangeDirection)
 
 class AddCops: public ScenarioAction {
  public:
@@ -76,8 +75,6 @@ protected :
   SIMPLE_MESSAGE(AddCops, ScenarioAction, number, x, y)
 };
 
-BOOST_CLASS_EXPORT_KEY(AddCops)
-
 
 class AddCams: public ScenarioAction {
  public:
@@ -98,7 +95,6 @@ private :
   SIMPLE_MESSAGE(AddCams, ScenarioAction, number, x, y)
 };
 
-BOOST_CLASS_EXPORT_KEY(AddCams)
 
 /**
  * @brief Create a new explosion.
@@ -129,8 +125,6 @@ private :
   SIMPLE_MESSAGE(Explosion, ScenarioAction, power)
 };
 
-BOOST_CLASS_EXPORT_KEY(Explosion)
-
 
 /**
  * @brief Kill a NPC.
@@ -158,8 +152,6 @@ private :
 
 };
 
-BOOST_CLASS_EXPORT_KEY(KillNPC)
-
 class DropItem : public ScenarioAction{
  public :
   int stuffID;
@@ -184,6 +176,5 @@ private :
   SIMPLE_MESSAGE(DropItem, ScenarioAction, stuffID, playerID)
 };
 
-BOOST_CLASS_EXPORT_KEY(DropItem)
 
 #endif

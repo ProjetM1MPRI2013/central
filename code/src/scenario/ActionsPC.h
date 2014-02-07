@@ -38,7 +38,6 @@ private :
   SIMPLE_MESSAGE(AddCop, Action, number, x, y)
 
 };
-BOOST_CLASS_EXPORT_KEY(AddCop)
 
 
 class AddCam : public Action {
@@ -63,6 +62,5 @@ private :
   SIMPLE_MESSAGE(AddCam, Action, number, x, y)
 };
 
-BOOST_CLASS_EXPORT_KEY(AddCam)
 
 #endif
