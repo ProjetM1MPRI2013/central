@@ -226,6 +226,9 @@ void HudTerro::callback(unsigned int callback_id) {
 		if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 			// Save the selected item
 			std::cout << "nobody: ca va core dumped : "<< std::endl;
+			std::cout << "sans cast " + callback_id<<std::endl;
+			std::cout << "avec cast " + (int) callback_id<<std::endl;
+
 			this->currentStuffID = inventory[(int)callback_id]; // horrible
 			std::cout << "nobody le select item est d'id:  " + this->currentStuffID << std::endl;
 
