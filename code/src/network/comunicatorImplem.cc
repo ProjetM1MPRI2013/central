@@ -33,7 +33,8 @@ void ComunicatorImplem::shutdown(){
   delete work ;
   work = NULL ;
   service->stop();
-  sock->shutdown(ip::udp::socket::shutdown_both);
+  //not needed for a UDP socket
+  //sock->shutdown(ip::udp::socket::shutdown_both);
   net_thread->join() ;
 }
 

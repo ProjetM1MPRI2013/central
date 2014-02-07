@@ -75,7 +75,7 @@ int net_serialization(){
   string s = msg.toString() ;
   TestA* msg2 = (TestA*) TestA::fromString(s) ;
   LOG(info) << "TEST : class TestA before serialisation : data = " << msg.data << ", after : data = " << msg2->data ;
-  LOG(info) << msg.data2 << "-------" << msg2->data2 ;
+  LOG(info) << "TEST : before, data2 = " << msg.data2 << ", after data2 = " << msg2->data2 ;
   if(msg2->data != msg.data)
     LOG(info) << "TEST : .........FAIL" ;
   else
@@ -321,8 +321,8 @@ int net_dummy(){
   Client *cli = Network::createDummyClient(ser) ;
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Dummy Test ........ FINISHED"  ;
-  delete ser ;
   delete cli ;
+  delete ser ;
   return i ;
 }
 
@@ -335,8 +335,8 @@ int net_real(){
 
   int i = test_cli_ser(ser,cli) ;
   LOG(info) << "TEST : " << "Real Test ........ FINISHED"  ;
-  delete ser ;
   delete cli ;
+  delete ser ;
   return i ;
 }
 }

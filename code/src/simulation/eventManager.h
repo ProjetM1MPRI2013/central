@@ -76,8 +76,10 @@ class EventManager {
   static void remove(EventSource& source);
 
   /* */
+  //template <typename ArgT>
+  //static void triggerEvent(EventName event, EventSource& source, ArgT& arg);
   template <typename ArgT>
-  static void triggerEvent(EventName event, EventSource& source, ArgT& arg);
+  static void triggerEvent(EventName event, EventSource& source, ArgT arg);
   static void triggerEvent(EventName event, EventSource& source, boost::any arg=boost::any{});
 
   static sourceMap sources;
@@ -88,17 +90,27 @@ class EventManager {
  * Implementations for EventManager
 */
 
+//template <typename ArgT>
+//void EventManager::triggerEvent(EventName event, EventSource& source, ArgT& arg) {
+  //EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
+//}
 template <typename ArgT>
-void EventManager::triggerEvent(EventName event, EventSource& source, ArgT& arg) {
-  EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
+void EventManager::triggerEvent(EventName event, EventSource& source, ArgT arg) {
+  EventManager::triggerEvent(event,source,boost::any(arg));
 }
 
 /*
  * Implementations for EventSource
  */
 
+//template <typename ArgT>
+//void EventSource::trigger(EventName event, ArgT& arg) {
+  //EventManager::triggerEvent(event, *this, arg);
+//}
+
 template <typename ArgT>
-void EventSource::trigger(EventName event, ArgT& arg) {
+void EventSource::trigger(EventName event, ArgT arg) {
   EventManager::triggerEvent(event, *this, arg);
 }
+
 #endif

@@ -1,3 +1,6 @@
+/**
+ * @author: Maxime, Joseph
+ */
 #ifndef TILE
 #define TILE
 

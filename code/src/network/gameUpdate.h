@@ -65,6 +65,4 @@ private :
     SIMPLE_MESSAGE(GameUpdate, AbstractMessage)
 };
 
-BOOST_CLASS_EXPORT_KEY(GameUpdate)
-
 #endif // GAMEUPDATE_H

@@ -1,11 +1,12 @@
 /**
- * @author: MrKuluW
+ * @author: MrKulu
  */
 #ifndef GRAPHICCONTEXT
 #define GRAPHICCONTEXT
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "eventListener.h"
 #include "animation.h"          // TexturePack
 #include "../generation/tile.h" // SpriteTilePack
 #include "../generation/geography.h"
@@ -25,7 +26,7 @@
   * draw is called to draw the map on a sf::RenderTarget such as the main window.
   **/
 
-class GraphicContextIso : public sf::Drawable, public sf::Transformable {
+class GraphicContextIso : public sf::Drawable, public sf::Transformable, public EventListener<GraphicContextIso> {
 
  public: 
   /**

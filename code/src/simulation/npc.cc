@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #include "npc.h"
 //#include "localState.h"
 //#include "simulation.h"
@@ -17,7 +20,7 @@ NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& ma
   return;
 }
 
-NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : EventSource(uuid) {
+NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Positionable(uuid) {
   trajectory = Trajectory();
   shocked = false;
   speed = s;
@@ -101,23 +104,8 @@ bool NPC::hasArrived() {
   return trajectory.getHasArrived();
 }
 
-sf::Sprite& NPC::getSprite(){
-  assert(this->anim.isInit());
-  //this->anim.nextFrame();                  // Pas certain 
-  return this->anim.getSprite();
-}
-
-Animation NPC::getAnim() const {
-  return anim;
-}
-
 void NPC::setAnim(const AnimType t){
   this->anim.setAnim(t);
-  return;
-}
-
-void NPC::TextureAnim(TexturePack* tex){
-  anim = Animation(tex);
   return;
 }
 
@@ -128,18 +116,6 @@ Trajectory& NPC::getTrajectory() {
 void NPC::setTrajectory(Trajectory& t) {
   trajectory = t;
   return;
-}
-
-int NPC::TextureOffsetX(){
-  return anim.getOffsetX();
-}
-
-int NPC::TextureOffsetY(){
-  return anim.getOffsetY();
-}
-
-bool NPC::TextureIsInit(){
-  return anim.isInit();
 }
 
 float NPC::potential(Position p) {

@@ -74,6 +74,7 @@ class LocalState : public Simulation{
   void run(sf::Time dt);
 
   private :
+  Client* client;
   sf::Time localtime;
   /**
    * @brief npc_list

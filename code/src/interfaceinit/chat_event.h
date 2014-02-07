@@ -36,6 +36,5 @@ protected :
 
 };
 
-BOOST_CLASS_EXPORT_KEY(ChatEvent)
 
 #endif // NETEVENT_H

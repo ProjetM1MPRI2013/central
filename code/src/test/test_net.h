@@ -57,7 +57,7 @@ namespace test {
     }
 
     int data ;
-    int data2 ;
+    int data2 = 0 ;
 
     SIMPLE_MESSAGE(TestA, AbstractMessage, data, data2)
   };
@@ -82,7 +82,5 @@ namespace test {
 
 
 }
-BOOST_CLASS_EXPORT_KEY(test::TestA)
-BOOST_CLASS_EXPORT_KEY(test::TestB)
 
 #endif

@@ -1,3 +1,6 @@
+/**
+ * @author: Joseph
+ */
 #ifndef TRAJECTORY_H
 #define TRAJECTORY_H
 

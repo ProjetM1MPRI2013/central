@@ -55,7 +55,6 @@ protected :
   SIMPLE_MESSAGE(ScenarioAction, AbstractMessage, date, name)
 };
 
-BOOST_CLASS_EXPORT_KEY(ScenarioAction)
 
 
 #endif

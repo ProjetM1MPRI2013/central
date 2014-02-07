@@ -1,7 +1,15 @@
+/**
+ * @author: Joseph
+ */
 #include "positionable.h"
 #include "position.h"
 
 Positionable::Positionable() : FogDisabler() {
+  position = Position();
+  return;
+}
+
+Positionable::Positionable(boost::uuids::uuid uuid) : FogDisabler(), EventSource(uuid) {
   position = Position();
   return;
 }
