@@ -26,6 +26,8 @@ int run(std::string which)
     return scenario();
   } else if (which == "localstate") {
     return localstate();
+  } else if (which == "globalstate") {
+    return globalstate();
   } else if (which == "terroview") {
     return terroview();
   } else if (which == "mayorview") {
