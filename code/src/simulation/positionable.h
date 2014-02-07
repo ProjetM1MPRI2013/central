@@ -17,7 +17,7 @@ class Positionable : public FogDisabler, public EventSource {
 
 
  public:
-  using EventSource::EventSource;
+//  using EventSource::EventSource;
   /**
    * @brief Positionable
    * the default constructor, creates a new Positionable with the default position

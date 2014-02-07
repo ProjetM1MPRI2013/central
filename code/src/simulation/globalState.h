@@ -35,6 +35,6 @@ class GlobalState : public Simulation{
   void run(sf::Time dt);
 
 private:
-
+    Server *server;
 } ;
 #endif

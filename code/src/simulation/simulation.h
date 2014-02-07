@@ -41,7 +41,7 @@ public:
 
   //  //TODO {denys} : remade all references
   //  virtual void setClient(Client*);
-  virtual Client* getClient();
+//  virtual Client* getClient();
   /**
    * @brief Get a player by is playerID;
    */
@@ -136,8 +136,8 @@ public:
 
       std::list<Camera*> cameras;
       std::list<Agent*> agents;
-      Client* client;
-      Server* server;
+//      Client* client;
+//      Server* server;
 
       int tmp[100][100];
 

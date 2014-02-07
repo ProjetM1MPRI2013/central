@@ -67,11 +67,11 @@ Simulation::~Simulation() {
 	sous.clear();
 }
 
-Client* Simulation::getClient() {
-	assert(client);
-	return client;
-//  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
-}
+//Client* Simulation::getClient() {
+//	assert(client);
+//	return client;
+////  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
+//}
 
 Simulation::Simulation(Geography* map, int nbPlayers, int id) {
 	this->setGeography(map);
