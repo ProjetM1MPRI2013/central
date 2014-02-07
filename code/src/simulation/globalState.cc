@@ -118,7 +118,7 @@ void GlobalState::run(sf::Time dt){
          *   listen("NPC::changedTile",someNPC,&C::someMethod);
          *
          *   with someNPC a reference to the actual stored NPC
-         *   and someMethod(std::pair<Tile,Tile> tilePair)
+         *   and someMethod(NPC& npc, std::pair<Tile,Tile> tilePair)
          *   tilePair.first will be tileBefore
          *   tilePair.second will be tileAfter
          *
