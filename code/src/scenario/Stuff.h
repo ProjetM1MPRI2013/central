@@ -9,6 +9,7 @@
 #include <list>
 #include <string>
 #include "Actions.h"
+#include "PreStuff.h"
 
 class Clickable {
 public :

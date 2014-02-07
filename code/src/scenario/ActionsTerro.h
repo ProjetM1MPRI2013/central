@@ -1,9 +1,8 @@
 /**
-   @author: Remy, Adrien K.
+   @author: Remy
  */
-#ifndef ACTIONTERRO_H
-#define ACTIONTERRO_H
-
+#include "simulation/npc.h"
+#include "PreaActionTerro.h"
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/access.hpp>
 
@@ -17,10 +16,11 @@
 #include "tile.h"
 #include "position.h"
 #include "npc.h"
+#include "localState.h"
+#include "globalState.h"
+#ifndef ACTIONTERRO_H
+#define ACTIONTERRO_H
 
-
-
-void newMovement (NewMov n, LocalState* s);
 
 /*********************************************************
  **                    Generated code                   **

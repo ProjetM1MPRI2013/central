@@ -18,32 +18,10 @@ class Clickable;
 #define GetCurrentDir getcwd
 #endif
 
-#define WithNetwork false //just for test (nobody)
+#define WithNetwork true //just for test (nobody)
 
 //todo nobody inser in a new .cc
 
-
-/*********************************************************
- ** Generated code**
- *********************************************************/
-std::string stringOfActions(ActionType a) {
-	switch (a) {
-	case ToA_Attack:
-		return "Attack";
-		break;
-	case ToA_Reload:
-		return "Reload";
-		break;
-	case ToA_Plant:
-		return "Plant";
-		break;
-	case ToA_Drop:
-		return "Drop";
-		break;
-		//Should not happens
-		return " Error stringOfActions " ;
-	};
-};
 /*********************************************************
  ** end of Generated code**
  *********************************************************/

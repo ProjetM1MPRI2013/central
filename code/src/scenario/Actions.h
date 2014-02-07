@@ -14,13 +14,4 @@ enum SoN {
 	SON_STUFF, SON_NPC
 };
 
-
-
-
-/*********************************************************
- **                    Generated code                   **
- **************/
-
-enum ActionType {ToA_Attack,ToA_Reload,ToA_Plant,ToA_Drop};
-
 #endif
