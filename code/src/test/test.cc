@@ -32,6 +32,8 @@ int run(std::string which)
     return terroview();
   } else if (which == "mayorview") {
     return mayorview();
+  } else if (which == "events") {
+    return events();
   } else {
     LOG(error) << "Unknown test : " << which;
   }
