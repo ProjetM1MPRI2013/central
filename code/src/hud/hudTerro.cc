@@ -4,6 +4,7 @@
 #include "hudTerro.h"
 class Clickable;
 #include "../scenario/Stack.h"
+#include "../scenario/PreStack.h"
 
 #include "localState.h"
 

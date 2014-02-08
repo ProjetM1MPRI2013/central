@@ -1,48 +1,37 @@
 #include "PreStack.h"
 
-#define NOBODY true
+
 /*********************************************************
  ** Generated code**
  *********************************************************/
 std::string stringOfActions(ActionType a) {
 	switch (a) {
-	case ToA_Attack:
-		return "Attack";
-		break;
-	case ToA_Reload:
-		return "Reload";
-		break;
-	case ToA_Plant:
-		return "Plant";
-		break;
-	case ToA_Drop:
-		return "Drop";
-		break;
-		//Should not happens
-		return " Error stringOfActions " ;
+	case ToA_Attack:{
+		return "Attack";}
+	case ToA_Reload:{
+		return "Reload";}
+	case ToA_Plant:{
+		return "Plant";}
+	case ToA_Drop:{
+		return "Drop";}
+	//Should not happens
 	};
 };
-
 void SoNOfActions(ActionType a,std::list<SoN> l){
 	switch (a) {
 	case ToA_Attack:{l.push_front(SON_NPC);
 
-	} break;
+	}; break;
 	case ToA_Reload:{l.push_front(SON_STUFF);
 
-	} break;
-	case ToA_Plant:{l.push_front(SON_STUFF);
-
-	} break;
+	}; break;
+	case ToA_Plant:{
+	}; break;
 	case ToA_Drop:{
-	} break;
+	}; break;
 	//Should not happens
 	};
 };
-
-
-
-
 Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::list<int> stuffList,LocalState* sim) {
 	switch (a) {
 	case ToA_Attack:{
@@ -58,11 +47,8 @@ Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::l
 		return (new A_Reload (gun, ammunition, sim));
 	};
 	case ToA_Plant:{
-		if (NOBODY) {std::cout << "commence"<< std::endl;}
 		int bomb = basicStuff;
-		if (NOBODY) {std::cout << "commence .1"<< std::endl;}
 		Tile zone= sim->getCurrentTile();
-		if (NOBODY) {std::cout << "commence.2"<< std::endl;}
 		return (new A_Plant (bomb, zone, sim));
 	};
 	case ToA_Drop:{

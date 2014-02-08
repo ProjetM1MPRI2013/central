@@ -27,91 +27,91 @@
  *********************************************************/
 
 /*********************************************************
-** Attack**
-*********************************************************/
+ ** Attack**
+ *********************************************************/
 class A_Attack: public Action {
 public:
-A_Attack  (int weapon, int victim, LocalState* s);
-A_Attack(const A_Attack&);
+	A_Attack  (int weapon, int victim, LocalState* s);
+	A_Attack(const A_Attack&);
 public:
-int weapon;
+	int weapon;
 public:
-int victim;
+	int victim;
 public:
- bool isActionPossible ();
-  void doAction ();
-  void addPendingActions(GlobalState* gs);
-  virtual AbstractMessage* copy();
+	bool isActionPossible ();
+	void doAction ();
+	void addPendingActions(GlobalState* gs);
+	virtual AbstractMessage* copy();
 private :
-//Serialization
-A_Attack(){};
-SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
+	//Serialization
+	A_Attack(){};
+	SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
 };
 /*********************************************************
-** Reload**
-*********************************************************/
+ ** Reload**
+ *********************************************************/
 class A_Reload: public Action {
 public:
-A_Reload  (int gun, int ammunition, LocalState* s);
-A_Reload(const A_Reload&);
+	A_Reload  (int gun, int ammunition, LocalState* s);
+	A_Reload(const A_Reload&);
 public:
-int gun;
+	int gun;
 public:
-int ammunition;
+	int ammunition;
 public:
- bool isActionPossible ();
-  void doAction ();
-  void addPendingActions(GlobalState* gs);
-  virtual AbstractMessage* copy();
+	bool isActionPossible ();
+	void doAction ();
+	void addPendingActions(GlobalState* gs);
+	virtual AbstractMessage* copy();
 private :
-//Serialization
-A_Reload(){};
-SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
+	//Serialization
+	A_Reload(){};
+	SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
 };
 /*********************************************************
-** Plant**
-*********************************************************/
+ ** Plant**
+ *********************************************************/
 class A_Plant: public Action {
 public:
-A_Plant  (int bomb, Tile zone, LocalState* s);
-A_Plant(const A_Plant&);
+	A_Plant  (int bomb, Tile zone, LocalState* s);
+	A_Plant(const A_Plant&);
 public:
-int bomb;
+	int bomb;
 public:
-Tile zone;
+	Tile zone;
 public:
- bool isActionPossible ();
-  void doAction ();
-  void addPendingActions(GlobalState* gs);
-  virtual AbstractMessage* copy();
+	bool isActionPossible ();
+	void doAction ();
+	void addPendingActions(GlobalState* gs);
+	virtual AbstractMessage* copy();
 private :
-//Serialization
-A_Plant(){};
-SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
+	//Serialization
+	A_Plant(){};
+	SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
 };
 /*********************************************************
-** Drop**
-*********************************************************/
+ ** Drop**
+ *********************************************************/
 class A_Drop: public Action {
 public:
-A_Drop  (int stuff, LocalState* s);
-A_Drop(const A_Drop&);
+	A_Drop  (int stuff, LocalState* s);
+	A_Drop(const A_Drop&);
 public:
-int stuff;
+	int stuff;
 public:
-int getplayerID ();
+	int getplayerID ();
 public:
-void setplayerID (int);
+	void setplayerID (int);
 protected:
-int playerID;
+	int playerID;
 public:
- bool isActionPossible ();
-  void doAction ();
-  void addPendingActions(GlobalState* gs);
-  virtual AbstractMessage* copy();
+	bool isActionPossible ();
+	void doAction ();
+	void addPendingActions(GlobalState* gs);
+	virtual AbstractMessage* copy();
 private :
-//Serialization
-A_Drop(){};
-SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
+	//Serialization
+	A_Drop(){};
+	SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
 };
 #endif

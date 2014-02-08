@@ -6,6 +6,7 @@
  ** Generated code**
  *********************************************************/
 
+
 /*********************************************************
  ** Attack**
  *********************************************************/
@@ -21,12 +22,11 @@ A_Attack::A_Attack(const A_Attack& a) : Action(" ToA_Attack", a.simulation){
 };
 
 void A_Attack::doAction() {
-	this->simulation->getClient()->sendMessage(*this,true);
+	this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Attack::isActionPossible() {
-	return true;
-	//return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
+	return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
@@ -53,13 +53,11 @@ A_Reload::A_Reload(const A_Reload& a) : Action(" ToA_Reload", a.simulation){
 };
 
 void A_Reload::doAction() {
-	this->simulation->getClient()->sendMessage(*this,true);
+	this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
-
 bool A_Reload::isActionPossible() {
-	return true;
-	//return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
+	return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
@@ -76,8 +74,8 @@ AbstractMessage* A_Reload::copy() {
  *********************************************************/
 
 A_Plant::A_Plant (int bomb, Tile zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
-	this->bomb = (int) bomb;
-	this->zone = zone;
+	this->bomb = (int)bomb;
+	this->zone = (Tile)zone;
 };
 
 A_Plant::A_Plant(const A_Plant& a) : Action(" ToA_Plant", a.simulation){
@@ -86,11 +84,10 @@ A_Plant::A_Plant(const A_Plant& a) : Action(" ToA_Plant", a.simulation){
 };
 
 void A_Plant::doAction() {
-	this->simulation->getClient()->sendMessage(*this,true);
+	this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Plant::isActionPossible() {
-	//return true;
 	return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
 };
 
@@ -101,16 +98,6 @@ void A_Plant::addPendingActions(GlobalState* gs){
 
 AbstractMessage* A_Plant::copy() {
 	return (AbstractMessage*) new A_Plant(*this);
-};
-
-void newMovement (NewMov n, LocalState* s){
-	std::cout << "Client : New Movement begin\n";
-	NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
-	std::cout << "Client : New Movement from player : " << s->getOwner().getID() << " ";
-	printNewMov(n);
-	std::cout << std::endl;
-	s->getOwner().setDirection(newMovNet.newDirection);
-	s->getClient()->sendMessage(newMovNet,true);
 };
 
 /*********************************************************
@@ -132,10 +119,7 @@ void A_Drop::doAction() {
 };
 
 bool A_Drop::isActionPossible() {
-	//return true;
-	return (
-			(isInThePack(this->simulation,this->stuff))
-			);
+	return (isInThePack(this->simulation,this->stuff));
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
