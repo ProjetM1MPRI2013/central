@@ -9,6 +9,7 @@
 #include "eventSource.h"
 #include <string>
 #include <functional>
+#include <type_traits>
 #include <map>
 
 /**
@@ -76,10 +77,8 @@ class EventManager {
   static void remove(EventSource& source);
 
   /* */
-  //template <typename ArgT>
-  //static void triggerEvent(EventName event, EventSource& source, ArgT& arg);
   template <typename ArgT>
-  static void triggerEvent(EventName event, EventSource& source, ArgT arg);
+  static void triggerEvent(EventName event, EventSource& source, ArgT&& arg);
   static void triggerEvent(EventName event, EventSource& source, boost::any arg=boost::any{});
 
   static sourceMap sources;
@@ -90,27 +89,25 @@ class EventManager {
  * Implementations for EventManager
 */
 
-//template <typename ArgT>
-//void EventManager::triggerEvent(EventName event, EventSource& source, ArgT& arg) {
-  //EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
-//}
 template <typename ArgT>
-void EventManager::triggerEvent(EventName event, EventSource& source, ArgT arg) {
-  EventManager::triggerEvent(event,source,boost::any(arg));
+void EventManager::triggerEvent(EventName event, EventSource& source, ArgT&& arg) {
+  boost::any wrappedArg;
+
+  if (std::is_rvalue_reference<ArgT&&>::value) {
+    wrappedArg = boost::any(arg);
+  } else {
+    wrappedArg = boost::any(std::ref(arg));
+  }
+
+  EventManager::triggerEvent(event,source,wrappedArg);
 }
 
 /*
  * Implementations for EventSource
  */
-
-//template <typename ArgT>
-//void EventSource::trigger(EventName event, ArgT& arg) {
-  //EventManager::triggerEvent(event, *this, arg);
-//}
-
 template <typename ArgT>
-void EventSource::trigger(EventName event, ArgT arg) {
-  EventManager::triggerEvent(event, *this, arg);
+void EventSource::trigger(EventName event, ArgT&& arg) {
+  EventManager::triggerEvent(event, *this, std::forward<ArgT>(arg));
 }
 
 #endif

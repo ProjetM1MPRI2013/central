@@ -30,7 +30,7 @@ class EventSource : public WithUuid {
   //template <typename ArgT>
   //void trigger(EventName event, ArgT& arg);
   template <typename ArgT>
-  void trigger(EventName event, ArgT arg);
+  void trigger(EventName event, ArgT&& arg);
 };
 #endif
 
