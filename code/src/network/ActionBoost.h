@@ -23,7 +23,7 @@
 
 BOOST_CLASS_EXPORT(A_Attack);
 BOOST_CLASS_EXPORT(A_Reload);
-BOOST_CLASS_EXPORT(A_Plant);
+//BOOST_CLASS_EXPORT(A_Plant); //sérialiser les tile
 BOOST_CLASS_EXPORT(A_Drop);
 
 #endif

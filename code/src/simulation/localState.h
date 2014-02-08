@@ -47,6 +47,12 @@ class LocalState : public Simulation{
    */
   Tile& getTile(Position p, Layers l);
 
+  /**
+   * @brief getCurrentTile
+   * @return a copy of the tile where the player is
+   */
+  Tile& getCurrentTile();
+
    /**
    * @brief getOwner
    * @return a reference to the player to whom belongs this localState

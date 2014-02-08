@@ -67,6 +67,15 @@ Tile& LocalState::getTile(Position p, Layers l){
   return p.isInTile(*map);
 }
 
+//Nobody je rajoute ça :
+Tile& LocalState::getCurrentTile(){
+	Player* p = this->getPlayer();
+	Position& pos = p->getPosition();
+	Geography* map = this->getMap();
+	Tile& t = pos.isInTile(*map);
+	return t;
+	;};
+
 void LocalState::run(sf::Time dt){
 //  int chance;
   //Adrien K. normalement ça devrait être bon.

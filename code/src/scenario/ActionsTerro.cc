@@ -75,9 +75,9 @@ AbstractMessage* A_Reload::copy() {
  ** Plant**
  *********************************************************/
 
-A_Plant::A_Plant (int bomb, int zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
-	this->bomb = (int)bomb;
-	this->zone = (int)zone;
+A_Plant::A_Plant (int bomb, Tile zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
+	this->bomb = (int) bomb;
+	this->zone = zone;
 };
 
 A_Plant::A_Plant(const A_Plant& a) : Action(" ToA_Plant", a.simulation){
@@ -90,8 +90,8 @@ void A_Plant::doAction() {
 };
 
 bool A_Plant::isActionPossible() {
-	return true;
-	//return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
+	//return true;
+	return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){

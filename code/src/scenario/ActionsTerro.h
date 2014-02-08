@@ -47,7 +47,6 @@ private :
 A_Attack(){};
 SIMPLE_MESSAGE(A_Attack, Action, weapon, victim)
 };
-BOOST_CLASS_EXPORT_KEY(A_Attack);
 /*********************************************************
 ** Reload**
 *********************************************************/
@@ -69,18 +68,17 @@ private :
 A_Reload(){};
 SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition)
 };
-BOOST_CLASS_EXPORT_KEY(A_Reload);
 /*********************************************************
 ** Plant**
 *********************************************************/
 class A_Plant: public Action {
 public:
-A_Plant  (int bomb, int zone, LocalState* s);
+A_Plant  (int bomb, Tile zone, LocalState* s);
 A_Plant(const A_Plant&);
 public:
 int bomb;
 public:
-int zone;
+Tile zone;
 public:
  bool isActionPossible ();
   void doAction ();
@@ -91,7 +89,6 @@ private :
 A_Plant(){};
 SIMPLE_MESSAGE(A_Plant, Action, bomb, zone)
 };
-BOOST_CLASS_EXPORT_KEY(A_Plant);
 /*********************************************************
 ** Drop**
 *********************************************************/
@@ -117,5 +114,4 @@ private :
 A_Drop(){};
 SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID)
 };
-//BOOST_CLASS_EXPORT_KEY(A_Drop);
 #endif

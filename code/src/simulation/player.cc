@@ -57,7 +57,7 @@ Player::Player(int pid, float xx, float yy) {
   lastTimeStamp = -1;
   //this->addItem(Knife());
   this->addItem(C_Knife());
-  //this->addItem(Bomb(2));
+  this->addItem(C_Bomb(2));
   //this->addItem(Gun(5, 2, 4));
   //this->addItem(Ammunition(10));
 }

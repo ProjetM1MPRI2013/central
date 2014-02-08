@@ -17,14 +17,6 @@ void log (std::string s ) {
 	if (LOG) {std::cout << s << std::endl;};
 };
 
-Tile getTile(LocalState* s) {
-	Player* p = s->getPlayer();
-	Position& pos = p->getPosition();
-	Geography* map = s->getMap();
-	Tile& t = pos.isInTile(*map);
-	return t;
-	;};
-
 // Deprecated. Update it to not use pointers
 // if you uncomment it.
 //Stuff* getStuff(std::list<Stuff*> l) {

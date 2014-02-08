@@ -1,6 +1,6 @@
 #include "PreStack.h"
 
-
+#define NOBODY true
 /*********************************************************
  ** Generated code**
  *********************************************************/
@@ -40,6 +40,9 @@ void SoNOfActions(ActionType a,std::list<SoN> l){
 	};
 };
 
+
+
+
 Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::list<int> stuffList,LocalState* sim) {
 	switch (a) {
 	case ToA_Attack:{
@@ -55,9 +58,11 @@ Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::l
 		return (new A_Reload (gun, ammunition, sim));
 	};
 	case ToA_Plant:{
+		if (NOBODY) {std::cout << "commence"<< std::endl;}
 		int bomb = basicStuff;
-		int zone= stuffList.back();
-		stuffList.pop_back();
+		if (NOBODY) {std::cout << "commence .1"<< std::endl;}
+		Tile zone= sim->getCurrentTile();
+		if (NOBODY) {std::cout << "commence.2"<< std::endl;}
 		return (new A_Plant (bomb, zone, sim));
 	};
 	case ToA_Drop:{
