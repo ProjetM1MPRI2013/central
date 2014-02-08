@@ -48,7 +48,7 @@ Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::l
 	};
 	case ToA_Plant:{
 		int bomb = basicStuff;
-		Tile zone= sim->getCurrentTile();
+		std::pair<int,int> zone = sim->getCurrentTile();
 		return (new A_Plant (bomb, zone, sim));
 	};
 	case ToA_Drop:{

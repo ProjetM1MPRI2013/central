@@ -95,6 +95,13 @@ class Geography {
    * @param j : ordinate of the tile
    * @return a ref of the tile
    */
+  Tile* getTile(std::pair<int,int>);
+    /**
+     * @brief gives a tile of the map caracterized by these coordinates
+     * @param first : abscissa of the tile second : ordinate of the tile
+     * @return a ref of the tile
+     */
+
   Tile& getTileRef(int i,int j);
   /**
    * @brief gives the width of the map

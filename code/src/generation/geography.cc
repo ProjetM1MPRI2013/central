@@ -73,6 +73,9 @@ Tile* Geography::getTile(int i,int j){
   assert(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT);
   return (map[i][j]);
 }
+Tile* Geography::getTile(std::pair<int,int> p){
+  getTile(p.first,p.second);
+};
 
 Tile& Geography::getTileRef(int i,int j){
   if (!(i>=0 && i<MAP_WIDTH && j>=0 && j<MAP_HEIGHT)) {

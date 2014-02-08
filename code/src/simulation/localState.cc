@@ -68,12 +68,13 @@ Tile& LocalState::getTile(Position p, Layers l){
 }
 
 //Nobody je rajoute ça :
-Tile& LocalState::getCurrentTile(){
+std::pair<int,int> LocalState::getCurrentTile(){
 	Player* p = this->getPlayer();
 	Position& pos = p->getPosition();
 	Geography* map = this->getMap();
 	Tile& t = pos.isInTile(*map);
-	return t;
+	std::pair<int,int> pr (t.getCoord().abs,t.getCoord().ord);
+	return pr;
 	;};
 
 void LocalState::run(sf::Time dt){
@@ -96,9 +97,14 @@ void LocalState::run(sf::Time dt){
   }
 
   for (ScenarioAction* action: pendingActions) {
-      DBG << "Client : applying pending Scenario Action of type " << action->name ;
+      std::cout << "Client : applying pending Scenario Action of type " << action->name<< std::endl;
       action->run();
+      std::cout << "nobody client fin run " << std::endl;
+
   }
+
+
+
   this->pendingActions.clear();
 
   //On supprime les actions déjà traitées

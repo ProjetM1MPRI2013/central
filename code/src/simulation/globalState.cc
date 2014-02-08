@@ -70,7 +70,10 @@ void GlobalState::run(sf::Time dt){
 	std::cout << "Host : sending the action to the network\n";
 	server->broadcastMessage(*action,true);
       }
+      std::cout << "Nobody : serveur run action \n";
       action->run();
+      std::cout << " Nobody :serveur fin run action\n";
+
     }
     pendingActions.clear();
 

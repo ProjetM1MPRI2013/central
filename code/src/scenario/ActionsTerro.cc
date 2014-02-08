@@ -6,7 +6,6 @@
  ** Generated code**
  *********************************************************/
 
-
 /*********************************************************
  ** Attack**
  *********************************************************/
@@ -27,7 +26,7 @@ void A_Attack::doAction() {
 
 bool A_Attack::isActionPossible() {
 	return true;
-	//	return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
+	//return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
@@ -58,7 +57,8 @@ void A_Reload::doAction() {
 };
 
 bool A_Reload::isActionPossible() {
-	return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
+	return true;
+	//return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
@@ -74,9 +74,9 @@ AbstractMessage* A_Reload::copy() {
  ** Plant**
  *********************************************************/
 
-A_Plant::A_Plant (int bomb, Tile zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
+A_Plant::A_Plant (int bomb, std::pair<int,int> zone, LocalState* sim) : Action ( "ToA_Plant", sim) {
 	this->bomb = (int)bomb;
-	this->zone = (Tile)zone;
+	this->zone = (std::pair<int,int>)zone;
 };
 
 A_Plant::A_Plant(const A_Plant& a) : Action(" ToA_Plant", a.simulation){
@@ -89,11 +89,17 @@ void A_Plant::doAction() {
 };
 
 bool A_Plant::isActionPossible() {
-	return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
+	return true;
+	//return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){
-	//gs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) gs));
+	gs->addAction(new Explosion
+			( (Tile*)(gs->getMap()->getTile(this->zone)),
+					1,
+					 ((Simulation*) gs)
+			)
+	);
 	gs->deleteAction(this);
 };
 
@@ -120,7 +126,8 @@ void A_Drop::doAction() {
 };
 
 bool A_Drop::isActionPossible() {
-	return (isInThePack(this->simulation,this->stuff));
+	return true;
+	//return (isInThePack(this->simulation,this->stuff));
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){

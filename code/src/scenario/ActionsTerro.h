@@ -73,12 +73,12 @@ private :
  *********************************************************/
 class A_Plant: public Action {
 public:
-	A_Plant  (int bomb, Tile zone, LocalState* s);
+	A_Plant  (int bomb, std::pair<int,int> zone, LocalState* s);
 	A_Plant(const A_Plant&);
 public:
 	int bomb;
 public:
-	Tile zone;
+	std::pair<int,int> zone;
 public:
 	bool isActionPossible ();
 	void doAction ();

@@ -2,7 +2,7 @@
  */
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-
+#include <boost/serialization/utility.hpp> // nobody : i need it to serialise pair
 #include "abstractMessage.h"
 #include "netEvent.h"
 #include "test/test_net.h"
@@ -23,7 +23,7 @@
 
 BOOST_CLASS_EXPORT(A_Attack);
 BOOST_CLASS_EXPORT(A_Reload);
-//BOOST_CLASS_EXPORT(A_Plant); //sérialiser les tile
+BOOST_CLASS_EXPORT(A_Plant);
 BOOST_CLASS_EXPORT(A_Drop);
 
 #endif

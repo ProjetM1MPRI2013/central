@@ -49,9 +49,9 @@ class LocalState : public Simulation{
 
   /**
    * @brief getCurrentTile
-   * @return a copy of the tile where the player is
+   * @return a copy of the tile (a pair of int)  where the player is.
    */
-  Tile& getCurrentTile();
+  std::pair<int,int> getCurrentTile();
 
    /**
    * @brief getOwner
