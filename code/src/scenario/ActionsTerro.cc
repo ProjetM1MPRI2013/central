@@ -26,7 +26,8 @@ void A_Attack::doAction() {
 };
 
 bool A_Attack::isActionPossible() {
-	return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
+	return true;
+	//	return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
