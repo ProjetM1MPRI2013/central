@@ -3,6 +3,7 @@
 #include "localStateUpdater.h"
 #include "simulation/localState.h"
 
+#define DEBUG true
 #include "debug.h"
 
 /*
@@ -20,16 +21,17 @@ LocalStateUpdater::LocalStateUpdater(LocalState* state, Client* client) :
 
 void LocalStateUpdater::update(sf::Time dt){
   vector<GameUpdate*> updates = client->receiveMessages<GameUpdate>() ;
-  DBG << "Update : received " << updates.size() << "updates" ;
   if(!updates.empty())
     {
+      DBG << "Update : received " << updates.size() << " updates" ;
+      DBG << "Last diff : " << diffPos ;
       GameUpdate * local_update = updates.back();
       applyPlayerUpdate(local_update->getPlayerUpdate(), dt) ;
+      lastUpdate = sf::Time::Zero ;
     }
-  lastUpdate += dt ;
   for(GameUpdate * l_update : updates)
       delete l_update ;
-
+  lastUpdate += dt ;
   updatePlayerPosition(dt) ;
 
   return ;
@@ -58,6 +60,7 @@ void LocalStateUpdater::applyPlayerUpdate(PlayerUpdate &p_update, sf::Time dt){
         {
           //Great distance between server and Local -> teleport
           player.setPosition(p_update.pos);
+          diffPos = Position((float)0,(float)0) ;
         }
 
     }
@@ -70,9 +73,10 @@ void LocalStateUpdater::applyNpcUpdate(NpcUpdate &npc_update){
 }
 
 void LocalStateUpdater::updatePlayerPosition(sf::Time dt) {
+
   //Parametre de l'exponentielle decroissante
-  float param = 5. ;
-  float ponderation = param * exp(- param * lastUpdate.asMilliseconds()) * dt.asMilliseconds() ;
+  float param = 2. ;
+  float ponderation = param * exp(- param * lastUpdate.asSeconds()) * dt.asSeconds() ;
   Position pos = localState->getOwner().getPosition();
   //min and max to avoid getting outside the map
   float posX = pos.getX() + ponderation * diffPos.getX() ;
@@ -85,5 +89,4 @@ void LocalStateUpdater::updatePlayerPosition(sf::Time dt) {
   pos.setX(posX);
   pos.setY(posY);
   localState->getOwner().setPosition(pos);
-
 }

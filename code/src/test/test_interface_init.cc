@@ -15,6 +15,8 @@ namespace test {
     Server* serverPtr = Network::createDummyServer();
     Client* clientPtr = Network::createDummyClient(serverPtr);
     interface_initiale(sizeFenetre, &isFullScreen,serverPtr,clientPtr);
+    delete clientPtr ;
+    delete serverPtr ;
     return 0;
   }
 }
