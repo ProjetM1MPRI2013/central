@@ -124,7 +124,7 @@ bool A_Drop::isActionPossible() {
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
-	//gs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) gs));
+	gs->addAction(new DropItem (this->stuff, this->playerID, (Simulation*) gs));
 	gs->deleteAction(this);
 };
 
