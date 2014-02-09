@@ -31,6 +31,7 @@ class GlobalState : public Simulation{
   GlobalState(Geography* map,int nbPlayers,int id);
 
   void setServer(Server*);
+  Server* getServer(void);
 
   void run(sf::Time dt);
 

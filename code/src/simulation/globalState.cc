@@ -161,3 +161,7 @@ void GlobalState::run(sf::Time dt){
   server->update(dt);
   return;
 }
+
+Server* GlobalState::getServer(void){
+    return server;
+}

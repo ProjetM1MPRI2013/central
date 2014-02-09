@@ -1,8 +1,13 @@
+/**
+  *@author Denys Kanunikov
+  */
+
 #include <SFML/Graphics.hpp>
 #include "main.h"
 #include "test.h"
 #include "HScenario.h"
 #include "localState.h"
+#include "test_localstate.h"
 #include "geography.h"
 #include "tilemap.h"
 #define DEBUG false
@@ -16,6 +21,21 @@ namespace test {
     LOG(debug) << "address of geo " << &geo;
     LocalState loc = LocalState(&geo,nbPlayers, 1);
     LOG(debug) << "address of map in LocalState " << loc.getMap();
+    ClientInfo client_info;
+    Client *client = Network::createClient(client_info);
+    LOG(info) << "Client created at "<< client;
+    loc.setClient(client);
+    LOG(info) << "Client attached to LocalState at "<< loc.getClient();
+
+    TestA msg(0);
+    while (true){
+        msg.data ++;
+        LOG(info) << "TEST : " << "Sending 1 message of type A from Client to Server with data  :" ;
+        LOG(info) << msg.data ;
+        loc.getClient()->sendMessage<TestA>(msg) ;
+        sleep(2);
+    }
+
     LOG(info) << "Local State testing done.";
 
     return 0;
