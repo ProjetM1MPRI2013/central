@@ -38,6 +38,7 @@ NPC::NPC(const NPC& n) {
   fear = n.getFear();
   hitboxSize = n.getHitboxSize();
   anim = n.getAnim();
+  // FIXME now both NPCs have the same uuid
   setUuid(n.getUuid());
   return;
 }

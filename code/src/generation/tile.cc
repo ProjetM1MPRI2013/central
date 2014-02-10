@@ -106,24 +106,12 @@ Tile::Tile(const Tile& t) :
   speed = t.speed;
   widthBat = t.widthBat;
   heightBat = t.heightBat;
-  if(t.stp)
-    {
-      stp = new SpriteTilePack(*t.stp);
-      sprite.setTexture(t.stp->texture);
-      // this->sprite.setTextureRect(sf::IntRect(this->stp->X1,this->stp->Y1,this->stp->X2,this->stp->Y2));
-    }
-  else
-    {
-      stp = nullptr;
-    }
+
+  stp = t.stp; 
+  if (stp) { sprite.setTexture(stp->texture); }
+  wrapper = t.wrapper;
+
   destructionLevel = t.destructionLevel;
-  if (t.wrapper){
-    wrapper = new TileWrapper(*t.wrapper);
-  }
-  else
-    {
-      wrapper = nullptr;
-    }
   filePictures = t.filePictures;
   alpha = t.alpha;
   // fog = true;
@@ -149,23 +137,12 @@ Tile& Tile::operator=(const Tile& t){
     speed = t.speed;
     widthBat = t.widthBat;
     heightBat = t.heightBat;
-
-
-    SpriteTilePack* temp_stp;
-    if (t.stp){ temp_stp = new SpriteTilePack(*t.stp); }
-    else { temp_stp = nullptr; }
     
-    TileWrapper* temp_wrapper;
-    if (t.wrapper) { temp_wrapper = new TileWrapper(*t.wrapper); }
-    else { temp_wrapper = nullptr; }
-    
-    delete stp;
-    delete wrapper;
+    stp = t.stp; 
+    if (stp) { sprite.setTexture(stp->texture); }
+    wrapper = t.wrapper;
 
-    stp = temp_stp;
-    wrapper = temp_wrapper;
-    
-    destructionLevel = t.destructionLevel;    
+    destructionLevel = t.destructionLevel;
     filePictures = t.filePictures;
     alpha = t.alpha;
     // fog = true;

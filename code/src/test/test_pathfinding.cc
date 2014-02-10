@@ -12,6 +12,7 @@ namespace test {
   int pathfinding() {
     std::string seed = "424242";
     auto nbPlayers = 1;
+    // FIXME 10000 tiles are created then copied here
     Geography geo = Generation1(seed);
     LocalState loc = LocalState(&geo,nbPlayers, 1);
     HScenario scenar = HScenario(loc);
