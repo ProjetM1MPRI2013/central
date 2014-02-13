@@ -120,7 +120,7 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
 
-  if(service->stopped())
+  if(is_shutdown)
     {
       //Server has shutdown -> free all memory and return as soos as possible
       for(string* p : data)
@@ -151,6 +151,7 @@ void ServerImplem::on_sent(vector<string*> &data, endpoint cli_endpoint, const e
       ack_set.insert(id) ;
       deadline_timer *t = new deadline_timer(*service) ;
       t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+      increase_tasks();
       t->async_wait(boost::bind(&ServerImplem::check_ack,this, data, cli_endpoint,1,t,_1)) ;
     }
   else
@@ -170,6 +171,10 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
            << sender_endpoint.address().to_string() << ":" << sender_endpoint.port();
   int id = get_msg_id(*header_buff) ;
   DBG << "SERVER: Received message with id : " << id << " and type " << get_msg_type(*header_buff) ;
+
+  if(is_shutdown)
+    return ;
+
   if(error != 0)
     {
       LOG(error) << "SERVER: Error while sending message : " << error.message() ;
@@ -199,6 +204,7 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
           //remove ack from set in the future (5 sec)
           deadline_timer timer(*service);
           timer.expires_from_now(boost::posix_time::seconds(5)) ;
+          //No increase_tasks here : no memory management involved
           auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
           timer.async_wait(after_wait) ;
         }
@@ -318,7 +324,8 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
   assert(msg.size() >= 2) ;
   assert(msg[0]->size() == HEADER_SIZE) ;
 
-  if(service->stopped())
+  decrease_tasks();
+  if(is_shutdown)
     {
       //Server has shutdown -> free all memory and return as soos as possible
       for(string* p : msg)
@@ -358,8 +365,9 @@ void ServerImplem::check_ack(std::vector<std::string*>& msg, endpoint cli_endpoi
           for(string* p : msg)
             msg_buff.push_back(buffer(*p));
 
-          write_buff(msg_buff,[](boost::system::error_code,int){}, &cli_endpoint) ;
+          write_buff(msg_buff,[this](boost::system::error_code,int){}, &cli_endpoint) ;
           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+          increase_tasks();
           t->async_wait(boost::bind(&ServerImplem::check_ack,this, msg, cli_endpoint,nb_times +1,t,_1)) ;
         }
     }

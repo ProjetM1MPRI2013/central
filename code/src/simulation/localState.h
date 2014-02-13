@@ -2,7 +2,6 @@
   *@author Denys KANUNIKOV,
   */
 
-
 #ifndef LOCAL_STATE_H
 #define LOCAL_STATE_H
 
@@ -10,10 +9,11 @@
 #include "generation1.h"
 #include "simulation.h"
 class Tile; // forward declaration
-//class Simulation; //forward declaration
 class Player;
 
-
+/**
+ * @brief The Layers enum : not implemented
+ */
 enum Layers {
   L_Players = 1,
   L_NPC = 2,
@@ -34,18 +34,14 @@ class LocalState : public Simulation{
    * @param _seed : a seed used for map creating
    * Default constructor
    */
-  /* Never used
-  LocalState(std::string _seed, Player& _player);
-  */
   LocalState(Geography* map,int nbPlayers,int id);
 
   /**
    * @brief getTile
    * @param p : position of the tile
-   * @param l : layers to return (see enum Layers)w
    * @return a copy of the tile at position p, limited to the layers specified by L
    */
-  Tile& getTile(Position p, Layers l);
+  Tile& getTile(Position p);
 
   /**
    * @brief getCurrentTile

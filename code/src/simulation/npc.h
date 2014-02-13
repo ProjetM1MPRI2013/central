@@ -23,6 +23,7 @@
 class NPC : public Positionable, public DrawableObject {
  private:
   Trajectory trajectory;
+  Position target;
   float fear;
   bool shocked;
   float speed;
@@ -41,11 +42,9 @@ class NPC : public Positionable, public DrawableObject {
    * @param f : the NPC's initial fear level
    * @param h : the NPC's hitbox size
    * @param start : the NPC's start position
-   * @param target : the NPC's target position
-   * @param map : the map (to do the initial pathfinding)
    * @param tex: the texture pack of the sprite sheet of the animation
    */
-  NPC(float s,float f,float h,Position& start,Position& target,Geography& map,TexturePack* tex);
+  NPC(float s,float f,float h,Position& start,TexturePack* tex);
 
   /**
    * @brief NPC
@@ -65,7 +64,7 @@ class NPC : public Positionable, public DrawableObject {
    * creates a new NPC by copying an existing one
    * @param n: the NPC to copy
    */
-  NPC(const NPC& n);
+  NPC(const NPC& n) = delete;
 
   virtual ~NPC() = default;
 
@@ -194,5 +193,27 @@ class NPC : public Positionable, public DrawableObject {
    * different parametters of the NPC.
    */
   void nextFrame();
+
+  /**
+   * @brief getTarget
+   * @return the NPC's target position
+   */
+  Position getTarget() const;
+
+  /**
+   * @brief setTarget
+   * sets a new target position for the NPC and recomputes his trajectory
+   * @param t: the new target position
+   * @param map: the map which will be used for the pathfinding
+   */
+  void setTarget(Position t,Geography& map);
+
+private :
+  /**
+   * @brief NPC : default constructor used only for serialization
+   */
+  NPC(){} ;
+
+  SIMPLE_SERIALIZATION(position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
 #endif

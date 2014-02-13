@@ -10,8 +10,9 @@
 
 #define DEBUG false
 
-NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& map,TexturePack* tex) {
-  trajectory = Trajectory(start,target,map);
+NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) {
+  trajectory = Trajectory(start);
+  target = Position();
   shocked = false;
   speed = s;
   fear = f;
@@ -22,6 +23,7 @@ NPC::NPC(float s,float f,float h,Position& start,Position& target, Geography& ma
 
 NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Positionable(uuid) {
   trajectory = Trajectory();
+  target = Position();
   shocked = false;
   speed = s;
   fear = f;
@@ -29,20 +31,6 @@ NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Pos
   anim = Animation(tex);
   return;
 }
-
-
-NPC::NPC(const NPC& n) {
-  trajectory = Trajectory(n.trajectory);
-  shocked = n.isShocked();
-  speed = n.getSpeed();
-  fear = n.getFear();
-  hitboxSize = n.getHitboxSize();
-  anim = n.getAnim();
-  // FIXME now both NPCs have the same uuid
-  setUuid(n.getUuid());
-  return;
-}
-  
 
 float NPC::getFear() const {
   return fear;
@@ -164,5 +152,15 @@ void NPC::nextFrame()
   else
     anim.nextFrame();
 
+  return;
+}
+
+Position NPC::getTarget() const {
+  return target;
+}
+
+void NPC::setTarget(Position t, Geography& map) {
+  target = t;
+  trajectory.setTarget(t,map);
   return;
 }

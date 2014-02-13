@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include "comunicatorImplem.h"
 #include "debug.h"
 
@@ -8,8 +11,8 @@
 using namespace std ;
 using namespace boost::asio ;
 
-ComunicatorImplem::ComunicatorImplem() : last_sent(0), ack_set(), received_messages(), sent_ack(), lock(),
-  pending_writes(), can_write(true){
+ComunicatorImplem::ComunicatorImplem() : ack_set(), received_messages(), sent_ack(), lock(),
+  pending_writes(), can_write(true), last_sent(0), nb_tasks_mutex(){
   //init fields
   service = new io_service() ;
   sock = new ip::udp::socket(*service) ;
@@ -32,6 +35,12 @@ void ComunicatorImplem::shutdown(){
   DBG << "NET: Shutting down communication" ;
   delete work ;
   work = NULL ;
+  is_shutdown = true ;
+  while(nb_tasks != 0)
+    {
+      std::chrono::milliseconds dura( 300 );
+      std::this_thread::sleep_for( dura );
+    }
   service->stop();
   //not needed for a UDP socket
   //sock->shutdown(ip::udp::socket::shutdown_both);
@@ -89,6 +98,7 @@ void ComunicatorImplem::write_buff(vector<const_buffer> buffers,
                                    boost::function<void(const error_code&, int)> handler,
                                    endpoint* rec_endpoint) {
   auto sync_handler = [this, handler](const error_code& error, int i)->void{
+      decrease_tasks();
       handler(error, i) ;
       lock.lock() ;
       if(!pending_writes.empty())
@@ -107,17 +117,19 @@ void ComunicatorImplem::write_buff(vector<const_buffer> buffers,
       if(can_write)
         {
           can_write = false ;
+          increase_tasks();
           sock->async_send(buffers,sync_handler);
         }
       else
           pending_writes.push([this, sync_handler, buffers]()
-                             {sock->async_send(buffers, sync_handler) ;});
+                             {increase_tasks(); sock->async_send(buffers, sync_handler) ;});
     }
   else
     {
       if(can_write)
         {
           can_write = false ;
+          increase_tasks();
           sock->async_send_to(buffers, *rec_endpoint, sync_handler) ;
         }
       else
@@ -125,10 +137,21 @@ void ComunicatorImplem::write_buff(vector<const_buffer> buffers,
            //Use local variable because it shouldn't be a pointer in the capture (not valid when called)
            endpoint end_pt = *rec_endpoint ;
            pending_writes.push([this, sync_handler, end_pt, buffers]()
-                             {sock->async_send_to(buffers,end_pt, sync_handler) ;});
+                             {increase_tasks(); sock->async_send_to(buffers,end_pt, sync_handler) ;});
         }
     }
   lock.unlock() ;
 }
 
+void ComunicatorImplem::decrease_tasks(){
+  nb_tasks_mutex.lock() ;
+  nb_tasks-- ;
+  nb_tasks_mutex.unlock() ;
+}
+
+void ComunicatorImplem::increase_tasks(){
+  nb_tasks_mutex.lock() ;
+  nb_tasks++ ;
+  nb_tasks_mutex.unlock() ;
+}
 

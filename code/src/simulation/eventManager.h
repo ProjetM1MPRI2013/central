@@ -34,6 +34,19 @@ typedef std::map<reference<GenericEventListener>, std::function<void (boost::any
 typedef std::map<EventName, listenerMap> eventMap;
 typedef std::map<reference<EventSource>,eventMap, WithUuidCmp> sourceMap;
 
+/* Conditional template instanciation. Used for clarity in EventManager::triggerEvent.
+ *
+ * Consider E = enable_if<is_?<T>::value, B> 
+ *
+ * E::type will be B if T satisfies is_?.
+ *
+ * otherwise E::type won't exist, so template instanciation will fail.
+ *
+ * With this we can use one function if the argument is an lvalue and and another if it is an rvalue.
+ */
+template <typename T> using void_if_rvalue = typename std::enable_if<std::is_rvalue_reference<T&&>::value, void>::type;
+template <typename T> using void_if_not_rvalue = typename std::enable_if<!std::is_rvalue_reference<T&&>::value, void>::type;
+
 class EventManager {
   public:
 
@@ -78,7 +91,10 @@ class EventManager {
 
   /* */
   template <typename ArgT>
-  static void triggerEvent(EventName event, EventSource& source, ArgT&& arg);
+  static void_if_rvalue<ArgT> triggerEvent(EventName event, EventSource& source, ArgT&& arg);
+  template <typename ArgT>
+  static void_if_not_rvalue<ArgT> triggerEvent(EventName event, EventSource& source, ArgT&& arg);
+
   static void triggerEvent(EventName event, EventSource& source, boost::any arg=boost::any{});
 
   static sourceMap sources;
@@ -90,16 +106,13 @@ class EventManager {
 */
 
 template <typename ArgT>
-void EventManager::triggerEvent(EventName event, EventSource& source, ArgT&& arg) {
-  boost::any wrappedArg;
+void_if_rvalue<ArgT> EventManager::triggerEvent(EventName event, EventSource& source, ArgT&& arg) {
+  EventManager::triggerEvent(event,source,boost::any(arg));
+}
 
-  if (std::is_rvalue_reference<ArgT&&>::value) {
-    wrappedArg = boost::any(arg);
-  } else {
-    wrappedArg = boost::any(std::ref(arg));
-  }
-
-  EventManager::triggerEvent(event,source,wrappedArg);
+template <typename ArgT>
+void_if_not_rvalue<ArgT> EventManager::triggerEvent(EventName event, EventSource& source, ArgT&& arg) {
+  EventManager::triggerEvent(event,source,boost::any(std::ref(arg)));
 }
 
 /*

@@ -53,18 +53,6 @@ public:
    */
   const static int NB_TRY = 10 ;
 
-  /**
-   * @brief last_sent : number attributed to the last sent message
-   */
-  int last_sent ;
-
-  /**
-   * @brief work : used to keep io_service busy. when destroyed, will allow run() method to return.
-   */
-  boost::asio::io_service::work * work ;
-
-  std::thread* net_thread ;
-
 protected :
 
   /*
@@ -145,6 +133,41 @@ protected :
   bool can_write ;
 
   /**
+   * @brief last_sent : number attributed to the last sent message
+   */
+  int last_sent ;
+
+  /**
+   * @brief work : used to keep io_service busy. when destroyed, will allow run() method to return.
+   */
+  boost::asio::io_service::work * work ;
+
+  /**
+   * @brief net_thread : the thread that is running the Client/Server operations (ie : send, receive...)
+   */
+  std::thread* net_thread ;
+
+  /**
+   * @brief nb_tasks : number of tasks that are currently running on the io_service
+   * This counter is used to assert that there is no pending task when the io_service is
+   * shut down, and thus that all used memory was freed.
+   * Only the async_write and async_wait are counted.
+   * async_read handlers do not need to free any memory (and we don't know when the handler will be called)
+   */
+  int nb_tasks = 0 ;
+
+  /**
+   * @brief nb_tasks_mutex : used to modify concurrently the number of running tasks
+   */
+  std::mutex nb_tasks_mutex ;
+
+  /**
+   * @brief shut_down true if this instance is beeing detroyed (used to notify the running tasks)
+   */
+  bool is_shutdown = false ;
+
+
+  /**
    * @brief shutdown
    * properly shuts down the connexion with the server.
    */
@@ -198,6 +221,16 @@ protected :
   void write_buff(std::vector<boost::asio::const_buffer> buffers,
                   boost::function<void(const error_code&, int)> handler,
                   endpoint* rec_endpoint = NULL) ;
+
+  /**
+   * @brief increase_tasks : increases the counter of pending tasks
+   */
+  void increase_tasks() ;
+
+  /**
+   * @brief decrease_tasks : decreses the counter of pending tasks
+   */
+  void decrease_tasks() ;
 
 
 };
