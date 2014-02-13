@@ -32,21 +32,6 @@ NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Pos
   return;
 }
 
-
-NPC::NPC(const NPC& n) {
-  trajectory = Trajectory(n.trajectory);
-  target = n.getTarget();
-  shocked = n.isShocked();
-  speed = n.getSpeed();
-  fear = n.getFear();
-  hitboxSize = n.getHitboxSize();
-  anim = n.getAnim();
-  // FIXME now both NPCs have the same uuid
-  setUuid(n.getUuid());
-  return;
-}
-  
-
 float NPC::getFear() const {
   return fear;
 }

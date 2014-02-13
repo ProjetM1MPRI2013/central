@@ -64,7 +64,7 @@ class NPC : public Positionable, public DrawableObject {
    * creates a new NPC by copying an existing one
    * @param n: the NPC to copy
    */
-  NPC(const NPC& n);
+  NPC(const NPC& n) = delete;
 
   virtual ~NPC() = default;
 
