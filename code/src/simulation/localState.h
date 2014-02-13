@@ -34,9 +34,6 @@ class LocalState : public Simulation{
    * @param _seed : a seed used for map creating
    * Default constructor
    */
-  /* Never used
-  LocalState(std::string _seed, Player& _player);
-  */
   LocalState(Geography* map,int nbPlayers,int id);
 
   /**

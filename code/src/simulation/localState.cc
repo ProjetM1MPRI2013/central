@@ -14,16 +14,12 @@
 
 #include "debug.h"
 
-/* Never used
-LocalState::LocalState(std::string _seed, Player& _player)
-    : Simulation(_seed, std::vector<Player*>()),
-  owner_player(_player){
-  addPlayer(&owner_player);
-  isServer = false;
-  map = (Geography*) new Generation1(_seed);
-}
-*/
-
+/**
+ * @brief LocalState::LocalState
+ * @param map: the map which is used by the LocalState.
+ * @param nbPlayers: number of players in the game
+ * @param id:  id of the player to whom the state belongs
+ */
 LocalState::LocalState(Geography* map,int nbPlayers,int id) :
     Simulation(map, nbPlayers, id),
     client(NULL),
@@ -31,6 +27,10 @@ LocalState::LocalState(Geography* map,int nbPlayers,int id) :
     isServer = false;
 }
 
+/**
+ * @brief LocalState::getLocalTime
+ * @return link to a local time of the state
+ */
 sf::Time &LocalState::getLocalTime(){
   return localtime;
 }
@@ -63,11 +63,21 @@ Player& LocalState::getOwner(){
   return owner_player;
 }
 
+/**
+ * @brief LocalState::getTile
+ * @param p: position
+ * @param l: not implemented
+ * @return a reference to a Tile of the LocalState map
+ */
 Tile& LocalState::getTile(Position p, Layers l){
   return p.isInTile(*map);
 }
 
 //Nobody je rajoute ça :
+/**
+ * @brief LocalState::getCurrentTile
+ * @return a pair<int,int> of Coordinates of the Player
+ */
 std::pair<int,int> LocalState::getCurrentTile(){
 	Player* p = this->getPlayer();
 	Position& pos = p->getPosition();
@@ -75,19 +85,16 @@ std::pair<int,int> LocalState::getCurrentTile(){
 	Tile& t = pos.isInTile(*map);
 	std::pair<int,int> pr (t.getCoord().abs,t.getCoord().ord);
 	return pr;
-	;};
+}
 
 void LocalState::run(sf::Time dt){
-//  int chance;
-  //Adrien K. normalement ça devrait être bon.
   //If their is no enough money, remove an agent and a camera
   if (sous[0] < 0) {
-      if (!agents.empty()){
-          agents.pop_back();}
-      if (!cameras.empty()){
-          cameras.pop_back();}
+      if (!agents.empty())
+          agents.pop_back();
+      if (!cameras.empty())
+          cameras.pop_back();
   }
-
    //The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
   std::vector<ScenarioAction *> scenarioActionFromNetwork = this->client->receiveMessages<ScenarioAction>();
   for (ScenarioAction* action: scenarioActionFromNetwork){
@@ -100,37 +107,24 @@ void LocalState::run(sf::Time dt){
       std::cout << "Client : applying pending Scenario Action of type " << action->name<< std::endl;
       action->run();
       std::cout << "nobody client fin run " << std::endl;
-
   }
-
-
-
   this->pendingActions.clear();
-
   //On supprime les actions déjà traitées
   this->toDelete.clear();
-
   /*on empile les dt jusqu'à obtenir plus d'une seconde*/
   this->smallTime = smallTime + dt.asSeconds();
-
   /*on compte le nombre de secondes dans dt*/
   int secondes = floor(smallTime);
   smallTime = smallTime - secondes;
-
   /* We update the position of all the players */
-  for (Player& player : players) { player.updatePosition(dt,*map); }
-
+  for (Player& player : players) player.updatePosition(dt,*map);
   /*on n'effectue pas le lissage de la matrice plus d'une fois par seconde*/
-        for (int i = 0; i < secondes; i++) {
-          this->lisserMatrice();
-        }
-
+  for (int i = 0; i < secondes; i++) this->lisserMatrice();
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
       for (Agent* agent: agents) {
           sous[0] = sous[0] - agent->getEntretien();
       }
-
       for (Camera* camera: cameras) {
           sous[0] = sous[0] - camera->getEntretien();
         }
@@ -165,17 +159,24 @@ void LocalState::run(sf::Time dt){
   }
 
   DBG << "LocalState : Position of the Player" << getOwner().getPosition() ;
-
   client->update(dt);
   return;
 }
-
+/**
+ * @brief LocalState::setClient setting a network client for the local state.
+ * After this step we can opereate over the network
+ * @param c : client
+ */
 void LocalState::setClient(Client* c) {
   client = c;
   c->setLocalState(this);
   return;
 }
 
+/**
+ * @brief LocalState::getClient
+ * @return a pointer to the client of the LocalState
+ */
 Client* LocalState::getClient(){
   return client;
 }
