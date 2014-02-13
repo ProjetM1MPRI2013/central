@@ -7,8 +7,9 @@
 
 #ifndef ACCORD_H_
 #define ACCORD_H_
-#include <list>
+#include <vector>
 #include <string>
+#include "Note.h"
 
 class Accord {
 public:
@@ -16,11 +17,15 @@ public:
 
 	std::string m_noteDominante ; // exemple C(do)
 	std::string m_typeAccord ; // exemple maj
+	Note m_note;
 
-	Accord(std::string accord); // exemple Accord("Cmin7")
+	Accord();
+	Accord(std::string const& i_accord); // exemple Accord("Cmin7")
+	void setAccord(std::string const& i_accord);
 	virtual ~Accord();
 
-	std::list<std::string> nomNotes(); // methode qui renvoie la liste des notes de l'accord.
+	void nomNotes(
+		std::vector<std::string> &o_list); // methode qui modifie la liste des notes de l'accord.
 };
 
 #endif /* ACCORD_H_ */
