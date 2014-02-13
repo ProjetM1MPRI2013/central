@@ -208,5 +208,12 @@ class NPC : public Positionable, public DrawableObject {
    */
   void setTarget(Position t,Geography& map);
 
+private :
+  /**
+   * @brief NPC : default constructor used only for serialization
+   */
+  NPC(){} ;
+
+  SIMPLE_SERIALIZATION(position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
 #endif

@@ -103,6 +103,7 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
   int id = get_msg_id(*data[0]) ;
   DBG << "CLI: Message sent to server with id " << id << "and type " << get_msg_type(*data[0]) ;
   //TODO : verify that all the message was transmitted
+
   assert(data.size() >= 2) ;
   assert(data[0]->size() == HEADER_SIZE) ;
   if(error != 0)
@@ -118,8 +119,7 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
       LOG(error) << "CLI: " << error.message() << endl ;
       return ;
     }
-
-  if(service->stopped())
+  if(is_shutdown)
     {
       //Client has shutdown -> free all memory and return as soos as possible
       for(string* p : data)
@@ -134,6 +134,7 @@ void ClientImplem::on_sent(const std::vector<std::string *>& data, const boost::
       ack_set.insert(id) ;
       deadline_timer *t = new deadline_timer(*service) ;
       t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+      increase_tasks();
       t->async_wait(boost::bind(&ClientImplem::check_ack,this, data, 1,t,_1)) ;
     }
   else
@@ -159,6 +160,8 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
       wait_receive() ;
       return ;
     }
+  if(is_shutdown)
+    return ;
 
   if(ack_message(*header_buff))
     {
@@ -180,6 +183,7 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
             //remove ack from set in the future (3 sec)
             deadline_timer timer(*service);
             timer.expires_from_now(boost::posix_time::seconds(3)) ;
+            //No increase task here : no memory management involved
             auto after_wait = [this, id](const boost::system::error_code){sent_ack.erase(id);} ;
             timer.async_wait(after_wait) ;
           }
@@ -285,7 +289,8 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
   assert(msg.size() >= 2) ;
   assert(msg[0]->size() == HEADER_SIZE) ;
 
-  if(service->stopped())
+  decrease_tasks();
+  if(is_shutdown)
     {
       //Client has shutdown -> free all memory and return as soos as possible
       for(string* p : msg)
@@ -331,6 +336,7 @@ void ClientImplem::check_ack(std::vector<std::string*>& msg,
           //potentially dangerous : send can occur after the buffers are freed because ack received
           write_buff(msg_buff, [](const error_code&,int){}) ;
           t->expires_from_now(boost::posix_time::millisec(TIME_TO_WAIT)) ;
+          increase_tasks();
           t->async_wait(boost::bind(&ClientImplem::check_ack,this, msg, nb_times +1,t,_1)) ;
         }
     }
