@@ -13,19 +13,11 @@
 
 #include "debug.h"
 
-/* Never used
-GlobalState::GlobalState(std::string _seed, std::vector<Player*> _players)
-    : Simulation(_seed, _players){
-    isServer = true;
-}
-*/
-
 GlobalState::GlobalState(Geography* map,int nbPlayers,int id) :
     Simulation(map, nbPlayers, id),
     server(NULL){
     isServer = true;
 }
-
 
 void GlobalState::setServer(Server *_server){
     server = _server;
@@ -33,8 +25,6 @@ void GlobalState::setServer(Server *_server){
 }
 
 void GlobalState::run(sf::Time dt){
-  //int chance;
-  //Adrien K. normalement ça devrait être bon.
   //If their is no enough money, remove an agent and a camera
   if (sous[0] < 0) {
       if (!this->agents.empty()){
@@ -43,7 +33,10 @@ void GlobalState::run(sf::Time dt){
         this->cameras.pop_back();}
     }
 
-    //The server retrieve all the new messages from the network (of type Action), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
+  /**The server retrieve all the new messages from the network (of type Action),
+   *turn them into ScenarioAction, and add those ScenarioAction to the list of
+   *pending ScenarioAction
+   */
   std::vector<Action *> actionFromNetwork = server->receiveMessages<Action>();
 
   for (Action * action : actionFromNetwork){
@@ -52,7 +45,10 @@ void GlobalState::run(sf::Time dt){
     }
   actionFromNetwork.clear();
 
-  //The server retrieve all the new messages from the network (of type NewMovNetwork), turn them into ScenarioAction, and add those ScenarioAction to the list of pending ScenarioAction
+  /**The server retrieve all the new messages from the network
+   *(of type NewMovNetwork), turn them into ScenarioAction,
+   *and add those ScenarioAction to the list of pending ScenarioAction
+   */
   std::vector<NewMovNetwork *> movFromNetwork = server->receiveMessages<NewMovNetwork>();
 
   for (NewMovNetwork * newMove : movFromNetwork){
@@ -64,7 +60,6 @@ void GlobalState::run(sf::Time dt){
 
     for (ScenarioAction* action : pendingActions) {
       //The server sends the ScenarioAction to the client, so they can do them.
-      //Adrien K. je ne suis pas sur que toutes les ScenarioAction doivent être envoyé chez le client.
       std::cout << "Host : applying pending Scenario Action of type " << action->name << "\n";
       if (action->name != "ChangeDirection"){
 	std::cout << "Host : sending the action to the network\n";
@@ -92,7 +87,6 @@ void GlobalState::run(sf::Time dt){
       for (int i = 0; i < secondes; i++) {
         this->lisserMatrice();
         }
-
       /* We update the position of all the players */
       for (Player& player : players) { player.updatePosition(dt,*map); }
 
@@ -115,7 +109,6 @@ void GlobalState::run(sf::Time dt){
       npc->updatePosition(dt, *map);
       Tile& tileAfter = npc->getPosition().isInTile(*map);
       if (!tileBefore.equals(tileAfter)) {
-
         /*
          * To listen with class C, derive EventListener<C> and then:
          *
@@ -157,7 +150,6 @@ void GlobalState::run(sf::Time dt){
 
   for(Player& player : players)
     DBG << "GlobalState : Position of player " << player.getID() << " : " << player.getPosition() ;
-
   server->update(dt);
   return;
 }

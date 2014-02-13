@@ -15,26 +15,20 @@ class Player;
  * @brief The Global State Class
  * Interface to access the global game state
  */
-
 class GlobalState : public Simulation{
  public :
   /**
-   * @brief GlobalState
-   * @param _seed : a seed used for map creating
-   * Default constructor
+   * @brief GlobalState : default constructor
+   * @param map : pointer to the map
+   * @param nbPlayers: number of players in the game
+   * @param id: id of the current player
    */
-  
-  /* Never used
-  GlobalState(std::string _seed, std::vector<Player *> _players);
-  */
-
   GlobalState(Geography* map,int nbPlayers,int id);
 
   void setServer(Server*);
   Server* getServer(void);
 
   void run(sf::Time dt);
-
 private:
     Server *server;
 } ;

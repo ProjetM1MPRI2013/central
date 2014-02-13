@@ -23,17 +23,9 @@ Simulation::Simulation(int nbPlayers, int id):
     scenario(NULL),
     isServer(false){
 	this->NB_JOUEURS = nbPlayers;
-	//[joseph]map n'est pas définie donc ce qui suit est juste map = map
-	//this->map = map;
-	//this->oldMap = map;
 	this->Id = id;
 
-//	int t[NB_JOUEURS];
-//	for (int i = 0; i < NB_JOUEURS; i++) {
-//		t[i] = 0;
-//	}
 	this->mesSous = 0;
-	//
 	this->sous = std::vector<int>(NB_JOUEURS, 0);
 	this->relativeTime = 0;
 	this->absoluteTime = 0;
@@ -53,24 +45,21 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id):
     isServer(false){
     this->setGeography(map);
     this->NB_JOUEURS = nbPlayers;
-      //[joseph]map n'est pas définie donc ce qui suit est juste map = map
-      //this->map = map;
-      //this->oldMap = map;
-      this->Id = id;
+    this->Id = id;
 
-      this->mesSous = 0;
-      this->sous = std::vector<int>(NB_JOUEURS, 0);
-      this->relativeTime = 0;
-      this->absoluteTime = 0;
-      this->smallTime = 0;
+    this->mesSous = 0;
+    this->sous = std::vector<int>(NB_JOUEURS, 0);
+    this->relativeTime = 0;
+    this->absoluteTime = 0;
+    this->smallTime = 0;
 
-      DBG << (this->getMap());
-      Tile* firstTile = (this->getMap())->getWalkableTile();
-      this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
-          (firstTile->getCoord()).getOrd()));
+    DBG << (this->getMap());
+    Tile* firstTile = (this->getMap())->getWalkableTile();
+    this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
+                           (firstTile->getCoord()).getOrd()));
 
-      std::list<NPC*> NPCs;
-      this->NPCs = NPCs;
+    std::list<NPC*> NPCs;
+    this->NPCs = NPCs;
 }
 
 
@@ -95,28 +84,6 @@ Simulation::~Simulation() {
 	sous.clear();
 }
 
-//Client* Simulation::getClient() {
-//	assert(client);
-//	return client;
-////  else if (DEBUG) {std::cout << "Client is not initialized!\n"; assert(false)
-//}
-
-
-/* Never used
- Simulation::Simulation(std::string seed, std::vector<Player *> p_vect)
- : Simulation(p_vect.size(),0) {
- this->setGeography(new Generation1(seed));
- for(Player* p : p_vect)
- this->players.push_back(p);
- }
- */
-
-//void Simulation::setServer(Server* s) {
-//    assert(false);
-////  this->isServer = true;
-////  this->server = s;
-////  return;
-//}
 bool Simulation::simIsServer() {
 	return isServer;
 }
@@ -195,7 +162,9 @@ void Simulation::supprimerNPCDansCase(int i, int j) {
 	return;
 }
 
-//Crée et tue les gens dans les cases
+/**
+ * @brief Simulation::peopleGeneration : Crée et tue les gens dans les cases
+ */
 void Simulation::peopleGeneration() {
 	float chance;
 	for (int i = 0; i < MAP_SIZE; i++) {
@@ -234,7 +203,9 @@ void Simulation::copyTmp() {
 	}
 }
 
-//Nivelle la peur via une sorte de norme 2
+/**
+ * @brief Simulation::lisserMatrice : Nivelle la peur via une sorte de norme 2
+ */
 void Simulation::lisserMatrice() {
 	float anxiety;
 
@@ -245,45 +216,6 @@ void Simulation::lisserMatrice() {
 	for (int i = 1; i < MAP_SIZE - 2; i++) {
 		for (int j = 1; j < MAP_SIZE - 2; j++) {
 			//calcul
-			/*anxiety =
-			 sqrt2(
-			 (1 / 8)
-			 * (2 * pow2(tmp[i][j], 2)
-			 + pow2(tmp[i-1][j],
-			 2)
-			 + pow2(tmp[i][j-1],
-			 2)
-			 + pow2(tmp[i-1][j],
-			 2)
-			 + pow2(tmp[i][j-1],
-			 2)
-			 + (1 / 2)
-			 * (pow2(
-			 oldMap->getAnxiety(
-			 i - 1,
-			 j + 1), 2)
-			 + pow2(
-			 oldMap->getAnxiety(
-			 i
-			 + 1,
-			 j
-			 + 1),
-			 2)
-			 + pow2(
-			 oldMap->getAnxiety(
-			 i
-			 - 1,
-			 j
-			 - 1),
-			 2)
-			 + pow2(
-			 oldMap->getAnxiety(
-			 i
-			 + 1,
-			 j
-			 - 1),
-			 2))));
-			 */
 			//set
 			//Pour l'instant ça pour tester
 			anxiety = ((5 * tmp[i][j]) + tmp[i - 1][j] + tmp[i + 1][j]
