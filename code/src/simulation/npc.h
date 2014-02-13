@@ -214,6 +214,6 @@ private :
    */
   NPC(){} ;
 
-  SIMPLE_SERIALIZATION(position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
+  SIMPLE_SERIALIZATION(uuid, position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
 #endif
