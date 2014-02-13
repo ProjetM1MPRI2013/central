@@ -21,7 +21,14 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
   //connect socket
   ip::udp::resolver resolver(*service) ;
   ip::udp::resolver::query query(s_info.hostname, s_info.port) ;
-  endpoint local_endpoint = *resolver.resolve(query) ;
+  ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
+  if(addr_iter == ip::udp::resolver::iterator())
+    {
+      //Address not found ....
+      LOG(error) << "Server failed to resolve address " << s_info.hostname << " port : " << s_info.port ;
+      throw std::runtime_error("Address not found") ;
+    }
+  endpoint local_endpoint = *addr_iter ;
   sock->open(ip::udp::v4());
   sock->bind(local_endpoint);
   updateGen = NULL ;

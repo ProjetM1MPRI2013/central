@@ -22,12 +22,26 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
     //connect socket
     ip::udp::resolver resolver(*service) ;
     ip::udp::resolver::query query(c_info.serverName, c_info.serverPort) ;
-    server_endpoint = *resolver.resolve(query) ;
+    ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
+    if(addr_iter == ip::udp::resolver::iterator())
+      {
+        //Address not found ....
+        LOG(error) << "Client failed to resolve Server address " << c_info.serverName << " port : " << c_info.serverPort ;
+        throw std::runtime_error("Address not found") ;
+      }
+    server_endpoint = *addr_iter ;
     if(c_info.localName.compare("") != 0)
     {
         //a local address is provided
         ip::udp::resolver::query query2(c_info.localName,c_info.localPort) ;
-        ip::udp::endpoint local_endpoint = *resolver.resolve(query2) ;
+        addr_iter = resolver.resolve(query2) ;
+        if(addr_iter == ip::udp::resolver::iterator())
+          {
+            //Address not found ....
+            LOG(error) << "Client failed to resolve Server address " << c_info.serverName << " port : " << c_info.serverPort ;
+            throw std::runtime_error("Address not found") ;
+          }
+        ip::udp::endpoint local_endpoint = *addr_iter ;
         sock->open(ip::udp::v4()) ;
         sock->bind(local_endpoint) ;
     }
