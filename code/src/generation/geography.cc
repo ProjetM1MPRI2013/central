@@ -74,7 +74,7 @@ Tile* Geography::getTile(int i,int j){
   return (map[i][j]);
 }
 Tile* Geography::getTile(std::pair<int,int> p){
-  getTile(p.first,p.second);
+  return getTile(p.first,p.second);
 };
 
 Tile& Geography::getTileRef(int i,int j){
