@@ -13,8 +13,9 @@
 class Parametres {
 public:
 	int m_harmonie;
-	Parametres(int harmonie);
+
 	Parametres();
+	Parametres(const int harmonie);
 	virtual ~Parametres();
 };
 

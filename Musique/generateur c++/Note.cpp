@@ -11,13 +11,11 @@
 
 using namespace std;
 
+int Note::indNote(
+	std::string const& i_note){
 
-string Note::m_notes[] = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
-
-
-int Note::indNote(string note){
-	for (int i = 0; i < 12; i++) {
-		if (m_notes[i]==note) {
+	for (unsigned int i = 0; i < m_notes.size(); i++) {
+		if (m_notes[i] == i_note) {
 			return i;
 		}
 	}
@@ -25,12 +23,28 @@ int Note::indNote(string note){
 	return -1;
 }
 
-string Note::decalage(string note,int decalage){
-	return m_notes[(indNote(note)+decalage)%12];
+void Note::decalage(
+	std::string const& i_note,
+	const int i_decalage,
+	std::string &o_note){
+
+	o_note = m_notes[(indNote(i_note) + i_decalage) % m_notes.size()];
 }
 
 Note::Note() {
-
+	m_notes.resize(12);
+	m_notes[ 0] = "C";
+	m_notes[ 1] = "C#";
+	m_notes[ 2] = "D";
+	m_notes[ 3] = "D#";
+	m_notes[ 4] = "E";
+	m_notes[ 5] = "F";
+	m_notes[ 6] = "F#";
+	m_notes[ 7] = "G";
+	m_notes[ 8] = "G#";
+	m_notes[ 9] = "A";
+	m_notes[10] = "A#";
+	m_notes[11] = "B";
 }
 
 

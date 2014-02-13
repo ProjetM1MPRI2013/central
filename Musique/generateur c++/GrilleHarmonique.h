@@ -19,19 +19,25 @@
 class GrilleHarmonique {
 public:
 
-	static const int m_GAMME_MAJEURE=0; //choisit si on est en gamme majeure ou mineur. Pour l'insant par défaut majeure
+	int m_GAMME_MAJEURE; //choisit si on est en gamme majeure ou mineur. Pour l'insant par défaut majeure
 	int m_nbMesure; // nb de mesures qu'on génère
 	std::string m_dominante; // Les accords qu'on tire au sort soeront dans la gamme de cette note dominante.
-	Parametres m_parametres ; //harmonie
-	std::map<std::string,int> m_accords; // la string c'est l'acccord, l'entier c'es sa probabilité d'être tiré au sort.
-	// la map associe à chaque accord sa probabailité d'être tiré.
+	Parametres m_parametres; //harmonie
+	std::map<std::string, int> m_accords; // la string c'est l'acccord, l'entier c'est sa probabilité d'être tiré au sort.
+	// la map associe à chaque accord sa probabilité d'être tiré.
+	Note m_note;
 
 
-
-	GrilleHarmonique(Parametres p,std::string dom );
-	Accord randomAccord(); // tire au sort les accords avec leur probabilité d'être tirés
-	Accord* tabGrille();
-
+	GrilleHarmonique(
+			Parametres const& i_param,
+			std::string const& i_dom,
+			const int i_gamme,
+			const int i_nbMesure); //constructeur
+	void randomAccord(
+			Accord& o_accord); // tire au sort les accords avec leur probabilité d'être tirés
+	//Accord* tabGrille(); // a rajouter
+	void tabGrille(
+			std::vector<std::string> &o_partition);
 	virtual ~GrilleHarmonique();
 };
 
