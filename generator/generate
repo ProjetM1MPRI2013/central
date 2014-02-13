@@ -1,0 +1,11 @@
+
+echo "compile the generator"
+make
+
+
+echo "generate"
+./result
+
+echo  $1 
+exit 0
+
