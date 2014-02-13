@@ -66,10 +66,9 @@ Player& LocalState::getOwner(){
 /**
  * @brief LocalState::getTile
  * @param p: position
- * @param l: not implemented
  * @return a reference to a Tile of the LocalState map
  */
-Tile& LocalState::getTile(Position p, Layers l){
+Tile& LocalState::getTile(Position p){
   return p.isInTile(*map);
 }
 

@@ -39,10 +39,9 @@ class LocalState : public Simulation{
   /**
    * @brief getTile
    * @param p : position of the tile
-   * @param l : layers to return (see enum Layers)w
    * @return a copy of the tile at position p, limited to the layers specified by L
    */
-  Tile& getTile(Position p, Layers l);
+  Tile& getTile(Position p);
 
   /**
    * @brief getCurrentTile

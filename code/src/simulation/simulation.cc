@@ -332,7 +332,6 @@ void Simulation::lisserMatrice() {
 	map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
 	DBG << "fin de tout" ;
-	//delete(oldMap);
 	DBG << "fin du dl" ;
 	return;
 }
