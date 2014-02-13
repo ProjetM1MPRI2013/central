@@ -1,139 +1,129 @@
-/**
-   @author: Remy, Adrien K.
- */
 
-
+/*********************************************************
+** @author: Remy (generated code)**
+*********************************************************/
 #ifndef STUFFLIST_H
 #define STUFFLIST_H
-
 #include "Stuff.h"
 #include <list>
 
-
 /*********************************************************
- **                    Generated code                   **
- **************/
-
-
-
-/*********************************************************
- ** Stuff**
- *********************************************************/
+** Stuff**
+*********************************************************/
 class C_Stuff: public Clickable {
-public:
-	C_Stuff  ();
-};
+ public:
+C_Stuff  ();
+}; 
 
 /*********************************************************
- ** Weapon**
- *********************************************************/
+** Weapon**
+*********************************************************/
 class C_Weapon: public C_Stuff {
+ public:
+C_Weapon  ();
 public:
-	C_Weapon  ();
-public:
-	virtual int getdamage () = 0;
+virtual int getdamage () = 0;
 protected:
-	int damage;
+int damage; 
 public:
-	virtual float getrange () = 0;
+virtual float getrange () = 0;
 protected:
-	float range;
-};
+float range; 
+}; 
 
 /*********************************************************
- ** Gun**
- *********************************************************/
+** Gun**
+*********************************************************/
 class C_Gun: public C_Weapon {
+ public:
+C_Gun  (int ammunitionMax, float range, int damage);
 public:
-	C_Gun  (int ammunitionMax, float range, int damage);
-public:
-	int getammunitionMax ();
+int getammunitionMax ();
 protected:
-	int ammunitionMax;
+int ammunitionMax; 
 public:
-	float getrange ();
+float getrange ();
 protected:
-	float range;
+float range; 
 public:
-	int getammunitionLoaded ();
+int getammunitionLoaded ();
 public:
-	void setammunitionLoaded (int);
+void setammunitionLoaded (int);
 protected:
-	int ammunitionLoaded;
+int ammunitionLoaded; 
 public:
-	int getdamage ();
+int getdamage ();
 protected:
-	int damage;
-};
+int damage; 
+}; 
 
 /*********************************************************
- ** Mitraillette**
- *********************************************************/
+** Mitraillette**
+*********************************************************/
 class C_Mitraillette: public C_Gun {
+ public:
+C_Mitraillette  (int damage);
 public:
-	C_Mitraillette  (int damage);
-public:
-	int getammunitionMax ();
+int getammunitionMax ();
 protected:
-	int ammunitionMax;
+int ammunitionMax; 
 public:
-	float getrange ();
+float getrange ();
 protected:
-	float range;
-};
+float range; 
+}; 
 
 /*********************************************************
- ** UltraM**
- *********************************************************/
+** UltraM**
+*********************************************************/
 class C_UltraM: public C_Mitraillette {
+ public:
+C_UltraM  ();
 public:
-	C_UltraM  ();
-public:
-	int getdamage ();
+int getdamage ();
 protected:
-	int damage;
-};
+int damage; 
+}; 
 
 /*********************************************************
- ** Knife**
- *********************************************************/
+** Knife**
+*********************************************************/
 class C_Knife: public C_Weapon {
+ public:
+C_Knife  ();
 public:
-	C_Knife  ();
-public:
-	float getrange ();
+float getrange ();
 protected:
-	float range;
+float range; 
 public:
-	int getdamage ();
+int getdamage ();
 protected:
-	int damage;
-};
+int damage; 
+}; 
 
 /*********************************************************
- ** Ammunition**
- *********************************************************/
+** Ammunition**
+*********************************************************/
 class C_Ammunition: public C_Stuff {
+ public:
+C_Ammunition  (int number);
 public:
-	C_Ammunition  (int number);
+int getnumber ();
 public:
-	int getnumber ();
-public:
-	void setnumber (int);
+void setnumber (int);
 protected:
-	int number;
-};
+int number; 
+}; 
 
 /*********************************************************
- ** Bomb**
- *********************************************************/
+** Bomb**
+*********************************************************/
 class C_Bomb: public C_Stuff {
+ public:
+C_Bomb  (int power);
 public:
-	C_Bomb  (int power);
-public:
-	int getpower ();
+int getpower ();
 protected:
-	int power;
-};
-
+int power; 
+}; 
 #endif

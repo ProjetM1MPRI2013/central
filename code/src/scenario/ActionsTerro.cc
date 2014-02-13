@@ -1,10 +1,8 @@
-#include"ActionsTerro.h"
-
-
 
 /*********************************************************
- ** Generated code**
+ ** @author: Remy (generated code)**
  *********************************************************/
+#include "ActionsTerro.h"
 
 /*********************************************************
  ** Attack**
@@ -26,7 +24,6 @@ void A_Attack::doAction() {
 
 bool A_Attack::isActionPossible() {
 	return true;
-	//return (isInThePack (this->simulation,this->weapon))&&((this->weapon)->getRange()<=distance (this->simulation,this->victim));
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
@@ -57,8 +54,7 @@ void A_Reload::doAction() {
 };
 
 bool A_Reload::isActionPossible() {
-	return true;
-	//return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
+	return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
@@ -89,17 +85,11 @@ void A_Plant::doAction() {
 };
 
 bool A_Plant::isActionPossible() {
-	return true;
-	//return (isInThePack (this->simulation,this->bomb))&&(isPlantable(this->zone));
+	return (isInThePack (this->simulation,this->bomb))&&(isPlantable((Tile*) ((Simulation*)this->simulation)->getMap()->getTile(this->zone)));
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){
-	gs->addAction(new Explosion
-			( (Tile*)(gs->getMap()->getTile(this->zone)),
-					1,
-					 ((Simulation*) gs)
-			)
-	);
+	gs->addAction(new Explosion (bomb, this->zone, (Simulation*) gs));
 	gs->deleteAction(this);
 };
 
@@ -126,8 +116,7 @@ void A_Drop::doAction() {
 };
 
 bool A_Drop::isActionPossible() {
-	return true;
-	//return (isInThePack(this->simulation,this->stuff));
+	return (isInThePack(this->simulation,this->stuff));
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){

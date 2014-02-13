@@ -22,7 +22,7 @@
 
 void newMovement (NewMov n, LocalState* s);
 
-bool isPlantable (Tile t) ;
+bool isPlantable (Tile* t) ;
 
 float distance(LocalState* s, NPC* npc) ;
 

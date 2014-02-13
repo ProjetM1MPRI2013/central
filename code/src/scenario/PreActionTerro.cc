@@ -14,8 +14,8 @@
 #define DEBUG false
 #include "debug.h"
 
-bool isPlantable (Tile t) {
-	switch(t.getType())
+bool isPlantable (Tile* t) {
+	switch(t->getType())
 	// todo choisir les quelles sont plantables
 	{case(ROADH) : return true;
 	case(ROADV) : return true;

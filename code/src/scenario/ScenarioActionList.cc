@@ -122,7 +122,7 @@ void KillNPC::run(){
  *Explosion*
  ***********/
 
-Explosion::Explosion(Tile* t,int p,Simulation* s) : ScenarioAction("Explosion",s){
+Explosion::Explosion(int p ,std::pair<int,int> t,Simulation* s) : ScenarioAction("Explosion",s){
 	location = t;
 	power = p;
 };
@@ -133,7 +133,7 @@ Explosion::Explosion(const Explosion& a) : ScenarioAction("Explosion",a.simulati
 }
 
 void Explosion::run() {
-	std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, this->location);
+	std::list<Tile*>* nb = this->simulation->getMap()->neighbors(this->power, simulation->getMap()->getTile(this->location));
 	std::cout << "nobody : ça explose!!!!!" << std::endl;
 	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
 		// kill npc in the case. Only the server had to dot this. The client only destroys the buildings

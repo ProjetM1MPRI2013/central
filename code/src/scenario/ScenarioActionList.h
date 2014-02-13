@@ -104,14 +104,14 @@ class Explosion: public ScenarioAction {
   /**
    * @brief The initial location of the explosion
    */
-  Tile* location;
+  std::pair<int,int> location;
 
   /**
    * The power of the explosion
    */
   int power;
 
-  Explosion (Tile* t,int p,Simulation* s);
+  Explosion (int p,std::pair<int,int>,Simulation* s);
   Explosion (const Explosion&);
 
   virtual void run ();
