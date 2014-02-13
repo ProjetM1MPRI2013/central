@@ -2,7 +2,6 @@
   *@author Denys KANUNIKOV,
   */
 
-
 #ifndef LOCAL_STATE_H
 #define LOCAL_STATE_H
 
@@ -10,10 +9,11 @@
 #include "generation1.h"
 #include "simulation.h"
 class Tile; // forward declaration
-//class Simulation; //forward declaration
 class Player;
 
-
+/**
+ * @brief The Layers enum : not implemented
+ */
 enum Layers {
   L_Players = 1,
   L_NPC = 2,
