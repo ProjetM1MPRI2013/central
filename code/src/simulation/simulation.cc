@@ -162,16 +162,17 @@ float floor2(float x) {
 }
 
 void Simulation::addNPC(Position start, Position target, float speed,
-		TexturePack* tex) {
-	//on crée le NPC
-	NPC *npc = new NPC(speed, 10, 10, start, target, *map, tex);
-	//on l'ajoute à la liste
-	NPCs.push_front(npc);
-	//on le met dans sa tile de départ
-	npc->getPosition().isInTile(*map).addNPC(npc);
+                        TexturePack* tex) {
+  //on crée le NPC
+  NPC *npc = new NPC(speed, 10, 10, start, tex);
+  npc->setTarget(target,*map);
+  //on l'ajoute à la liste
+  NPCs.push_front(npc);
+  //on le met dans sa tile de départ
+  npc->getPosition().isInTile(*map).addNPC(npc);
 
-	trigger("NPC::created", *npc);
-	return;
+  trigger("NPC::created", *npc);
+  return;
 }
 
 void Simulation::supprimerNPC(NPC * npc) {

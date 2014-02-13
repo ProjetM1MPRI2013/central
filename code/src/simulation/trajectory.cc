@@ -28,12 +28,10 @@ Trajectory::Trajectory() {
   return;
 }
 
-Trajectory::Trajectory(Position start,Position target,Geography& map) {
+Trajectory::Trajectory(Position start) {
   posList = std::list<Position> ();
-  posList.push_front(target);
   posList.push_front(start);
-  pathfinding(map);
-  hasArrived = false;
+  hasArrived = true;
   speed = std::pair<float,float>(0,0);
   acceleration = std::pair<float,float>(0,0);
   timeoutIgnoreTarget = sf::seconds(10);
@@ -41,15 +39,15 @@ Trajectory::Trajectory(Position start,Position target,Geography& map) {
   return;
 }
 
-/*Trajectory::Trajectory(Trajectory& t) {
-  posList = std::list<Position>(t.getPosList());
-  hasArrived = t.getHasArrived();
-  speed = t.getSpeed();
-  acceleration = t.getAcceleration();
-  timeoutIgnoreTarget = sf::seconds(10);
-  ignoreTarget = false;
+void Trajectory::setTarget(Position target, Geography& map) {
+  Position curPos = posList.front();
+  posList.clear();
+  posList.push_front(target);
+  posList.push_front(curPos);
+  pathfinding(map);
+  hasArrived = false;
   return;
-  }*/
+}
 
 
 void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {

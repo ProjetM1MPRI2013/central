@@ -48,18 +48,16 @@ class Trajectory {
    * @brief Trajectory
    * creates a new Trajectory with given start and target Positions as references, so that the Trajectory's positions will be the same objects
    * @param start: the start position as a reference
-   * @param target: the target position as a reference
-   * @param map: the map where the pathfinding will be done
    */
-  Trajectory(Position start,Position target,Geography& map);
+  Trajectory(Position start);
 
   /**
-   * @brief Trajectory
-   * creates a new Trajectory by copying an existing one
-   * it is a copy so the new Trajectory's Positions will not be the same objects as the first one's
-   * @param t : the Trajectory to copy
+   * @brief setTarget
+   * sets a new target position for the npc, and recomputes his trajectory with this new target
+   * @param target: the new target position
+   * @param map: the map which will be used for the pathfinding
    */
-  //  Trajectory(Trajectory& t);
+  void setTarget(Position target, Geography& map);
 
   /**
    * @brief getPosList
