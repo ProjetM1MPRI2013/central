@@ -142,6 +142,19 @@ void Simulation::addNPC(Position start, Position target, float speed,
   return;
 }
 
+void Simulation::addNPC(Position start, Position target, float speed,
+                        TexturePack* tex, boost::uuids::uuid id) {
+  //on crée le NPC
+  NPC *npc = new NPC(speed, 10, 10, start, tex, id);
+  npc->setTarget(target,*map);
+  //on l'ajoute à la liste
+  NPCs.push_front(npc);
+  //on le met dans sa tile de départ
+  npc->getPosition().isInTile(*map).addNPC(npc);
+  trigger("NPC::created", *npc);
+  return;
+}
+
 void Simulation::supprimerNPC(NPC * npc) {
 	//on le retire de sa tile
 	npc->getPosition().isInTile(*map).removeNPC(npc);

@@ -2,6 +2,7 @@
  * @author: Joseph
  */
 #include "npc.h"
+#include "boost/uuid/uuid_io.hpp"
 //#include "localState.h"
 //#include "simulation.h"
 
@@ -12,6 +13,7 @@
 
 NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) {
   trajectory = Trajectory(start);
+  position = start;
   target = Position();
   shocked = false;
   speed = s;
@@ -21,8 +23,10 @@ NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) {
   return;
 }
 
-NPC::NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid) : Positionable(uuid) {
-  trajectory = Trajectory();
+NPC::NPC(float s,float f,float h,Position& start,
+         TexturePack* tex,boost::uuids::uuid uuid) : Positionable(uuid) {
+  trajectory = Trajectory(start);
+  position = start;
   target = Position();
   shocked = false;
   speed = s;
@@ -64,7 +68,7 @@ void NPC::setSpeed(float s) {
 }
 
 Position& NPC::getPosition() {
-  return (this->trajectory).getPosition();
+  return trajectory.getPosition();
 }
 
 void NPC::setPosition(Position& p) {
@@ -163,4 +167,14 @@ void NPC::setTarget(Position t, Geography& map) {
   target = t;
   trajectory.setTarget(t,map);
   return;
+}
+
+std::ostream& operator<<(std::ostream& os, const NPC& npc) {
+  os << "UUID: " << npc.getUuid() << "\n"
+     << "speed: " << npc.getSpeed() << "\t"
+     << "fear: " << npc.getFear() << "\t"
+     << "hit size: " << npc.getHitboxSize() << "\n"
+     << "position: " << npc.position << "\t"
+     << "target: " << npc.getTarget();
+  return os ;
 }

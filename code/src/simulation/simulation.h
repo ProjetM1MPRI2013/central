@@ -58,7 +58,17 @@ public:
    */
   void addNPC(Position start, Position target, float speed, TexturePack* tex);
 
-
+  /**
+   * @brief addNPC
+   * creates a new NPC
+   * @param start: start position
+   * @param target: target position
+   * @param speed: the NPC's speed in tiles/s
+   * @param tex: the texturepack for the NPC
+   * @param id: id of the npc to synch
+   */
+  void addNPC(Position start, Position target, float speed, TexturePack* tex,
+              boost::uuids::uuid id);
 
   /**
    * @brief peopleGeneration : parcourt la matrice et crée/supprime des NPCs

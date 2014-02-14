@@ -14,10 +14,11 @@
  */
 class WithUuid {
   private:
-    boost::uuids::uuid uuid;
+//    boost::uuids::uuid uuid;
 
  protected:
     void setUuid(boost::uuids::uuid id);
+    boost::uuids::uuid uuid;
     static boost::uuids::random_generator generator;
 
   public:

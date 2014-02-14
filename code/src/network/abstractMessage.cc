@@ -1,4 +1,6 @@
 #include <sstream>
+#include "boost/uuid/uuid_serialize.hpp"
+#include "boost/uuid/uuid_io.hpp"
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include "ActionBoost.h"
