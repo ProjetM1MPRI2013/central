@@ -20,7 +20,7 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
 
   //connect socket
   ip::udp::resolver resolver(*service) ;
-  ip::udp::resolver::query query(s_info.hostname, s_info.port) ;
+  ip::udp::resolver::query query(ip::udp::v4(), s_info.hostname, s_info.port) ;
   ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
   if(addr_iter == ip::udp::resolver::iterator())
     {
