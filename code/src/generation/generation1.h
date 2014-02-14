@@ -12,6 +12,7 @@
  * @brief this class implements a first random generation of a map
  * Geography must generate a map but like we want to have different methods of generation, we use inherited class
  * @commentperso Here, we use a simple method of generation. We obtain a grid of roads with buildins to fill the blanks. It seems like a American city.
+ * @author: ChatanW
  */
 class Generation1 : public Geography
 {

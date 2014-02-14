@@ -15,6 +15,7 @@ class Tile;
  * @brief this class creates the map of the game
  * the maps are randomly generated
  * we want to implement different methods of generation, so we use inherited classes
+ * @author: ChatanW
  */
 class Geography {
 

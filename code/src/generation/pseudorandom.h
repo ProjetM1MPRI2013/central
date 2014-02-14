@@ -4,6 +4,7 @@
 /**
  * @brief It's a generator of pseudo random numbers
  * It makes a sequence of the form: u_(n+1) = a * u_n + c mod m
+ * @author: ChatanW
  */
 class PseudoRandom {
 
