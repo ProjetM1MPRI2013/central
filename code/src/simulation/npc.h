@@ -24,6 +24,8 @@
 class NPC : public Positionable, public DrawableObject, public AbstractMessage {
  private:
   Trajectory trajectory;
+  /*needed for seriliazation*/
+  Position start;
   Position target;
   float fear;
   bool shocked;
@@ -64,8 +66,8 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    * @param tex: the texture pack of the sprite sheet of the animation
    * @param uuid: the uuid for the NPC
    */
-  NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid);
-
+  NPC(float s,float f,float h,Position& start, TexturePack* tex,
+      boost::uuids::uuid uuid);
 
   /**
    * @brief NPC

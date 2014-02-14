@@ -27,6 +27,7 @@ namespace test {
     LOG(info) << "Client created at "<< client;
     loc.setClient(client);
     LOG(info) << "Client attached to LocalState at "<< loc.getClient();
+    GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
 
     TestA msg(0);
     std::vector<NPC*> mes;
@@ -38,8 +39,11 @@ namespace test {
         sleep(1);
         mes = loc.getClient()->receiveMessages<NPC>();
         LOG(info) << "Client : " << "Received <NPC>" << mes.size() << " messages "  ;
-        for(NPC* p : mes)
-            LOG(info) << "NPC :" << (*p)<< "; " ;
+        for(NPC* p : mes){
+            loc.addNPC(p->position, p->getTarget(), p->getSpeed(),
+                      graContIso.getTexturePack(1), p->getUuid());
+            LOG(info) << "NPC :\n" << (*p)<< "; " ;
+        }
         sleep(1);
     }
 

@@ -45,7 +45,7 @@ void createNPCs(int number, GlobalState& glob, GraphicContextIso& graContIso,
     msg->setTarget(target,*(glob.getMap()));
     msg->getPosition().isInTile(*(glob.getMap())).addNPC(msg);
 
-//    simu.addNPC(start, target, 1, graContIso.getTexturePack(i % 2), msg->getUuid());
+    glob.addNPC(start, target, 1, graContIso.getTexturePack(i % 2), msg->getUuid());
     LOG(info) << "Server : " << "Broadcast 1 message of type NPC:\n" << (*msg);
     glob.getServer()->broadcastMessage<NPC>(*msg);
     sleep(1);
