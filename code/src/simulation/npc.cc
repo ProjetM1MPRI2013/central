@@ -2,6 +2,7 @@
  * @author: Joseph
  */
 #include "npc.h"
+#include "boost/uuid/uuid_io.hpp"
 //#include "localState.h"
 //#include "simulation.h"
 
@@ -163,4 +164,14 @@ void NPC::setTarget(Position t, Geography& map) {
   target = t;
   trajectory.setTarget(t,map);
   return;
+}
+
+std::ostream& operator<<(std::ostream& os, const NPC& npc) {
+  os << "UUID: " << npc.getUuid() << "\n"
+     << "speed: " << npc.getSpeed() << "\t"
+     << "fear: " << npc.getFear() << "\t"
+     << "hit size: " << npc.getHitboxSize() << "\n"
+//     << "position: " << npc.trajectory.getPosition() << "\t"
+     << "target: " << npc.getTarget();
+  return os ;
 }

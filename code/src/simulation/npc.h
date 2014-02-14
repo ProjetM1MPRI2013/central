@@ -13,14 +13,15 @@
 #include <SFML/Graphics.hpp>
 #include "graphism/drawableObject.h"
 #include <cmath>
-
+#include "boost/uuid/uuid_serialize.hpp"
+#include <utility>
 
 /**
  * @brief The NPC class
  * It represents a NPC
  */
 
-class NPC : public Positionable, public DrawableObject {
+class NPC : public Positionable, public DrawableObject, public AbstractMessage {
  private:
   Trajectory trajectory;
   Position target;
@@ -34,6 +35,13 @@ class NPC : public Positionable, public DrawableObject {
 
 
  public:
+//  static std::string getMsgType() { return "NPC_msg" ; }
+  virtual AbstractMessage* copy() {
+      std::cout << "ERROR: NPC: we can't copy this class!\n" ;
+    return NULL ;
+  }
+
+
   /**
    * @brief NPC
    * Creates a new NPC
@@ -214,6 +222,10 @@ private :
    */
   NPC(){} ;
 
-  SIMPLE_SERIALIZATION(position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
+//  SIMPLE_SERIALIZATION(uuid, position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
+  SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,
+                 target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
+
+std::ostream& operator<<(std::ostream& os, const NPC& npc);
 #endif

@@ -12,6 +12,7 @@
 #include "tilemap.h"
 #define DEBUG false
 #include "debug.h"
+#include <boost/uuid/uuid_io.hpp>
 
 namespace test {
   int localstate() {
@@ -28,12 +29,18 @@ namespace test {
     LOG(info) << "Client attached to LocalState at "<< loc.getClient();
 
     TestA msg(0);
+    std::vector<NPC*> mes;
     while (true){
         msg.data ++;
-        LOG(info) << "TEST : " << "Sending 1 message of type A from Client to Server with data  :" ;
-        LOG(info) << msg.data ;
+        LOG(info) << "Client : " << "Send a message <TestA> with data:"
+                     << msg.data;
         loc.getClient()->sendMessage<TestA>(msg) ;
-        sleep(2);
+        sleep(1);
+        mes = loc.getClient()->receiveMessages<NPC>();
+        LOG(info) << "Client : " << "Received <NPC>" << mes.size() << " messages "  ;
+        for(NPC* p : mes)
+            LOG(info) << "NPC :" << (*p)<< "; " ;
+        sleep(1);
     }
 
     LOG(info) << "Local State testing done.";
@@ -41,3 +48,5 @@ namespace test {
     return 0;
   }
 }
+
+
