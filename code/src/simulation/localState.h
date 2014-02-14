@@ -82,7 +82,6 @@ class LocalState : public Simulation{
    * @brief npc_list
    * An npc for which this local state exists
    */
-  std::list<NPC> npc_list;
   Player& owner_player;
 } ;
 #endif
