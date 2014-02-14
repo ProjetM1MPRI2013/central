@@ -11,7 +11,7 @@
 
 
 std::string stringOfActions(ActionType a) ;
-void SoNOfActions(ActionType a,std::list<SoN> l);
+std::list<SoN> SoNOfActions(ActionType a);
 Action* createAction(ActionType a,int basicStuff, std::list<boost::uuids::uuid> npcList, std::list<int> stuffList,LocalState* sim) ;
 
 #endif
