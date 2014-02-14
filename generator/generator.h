@@ -90,6 +90,7 @@ public:
 	PreClickable (string name);
 	PreClickable (string name, PreClass* p);
 	void addAction (PreAction*);
+	bool isAbstract; //contain a virtual
 	list<PreAction*> getActionPossible();
 private:
 	list<PreAction*> actionPossible;
@@ -133,6 +134,7 @@ private:
 	void writeAddPendingAction(PreClass*);
 	void writeIsActionPossible(PreAction*);
 	void writeAbstractMessage (PreClass* p);
+	void writeAbstractMessageClickable (PreClass* p);
 	void writeSerialisation (PreClass* p);
 	string ActionName (PreClass*);
 	string ClickableName (PreClass*);

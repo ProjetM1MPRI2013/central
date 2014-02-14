@@ -11,6 +11,9 @@ C_Stuff::C_Stuff (): Clickable () {
 ((Clickable*)this)->name =  "Stuff";
 this->ActionTypePossible.push_back(ActionType::ToA_Drop);
 };
+AbstractMessage* C_Stuff::copy() {
+return (AbstractMessage*) new C_Stuff(*this);
+};
 
 /*********************************************************
 ** Weapon**
@@ -77,6 +80,9 @@ this->number = (int)number;
 };
 int C_Ammunition::getnumber () {return this->number;};
 void C_Ammunition::setnumber ( int number ) { this->number = (int)number;};
+AbstractMessage* C_Ammunition::copy() {
+return (AbstractMessage*) new C_Ammunition(*this);
+};
 
 /*********************************************************
 ** Bomb**
@@ -87,3 +93,6 @@ this->power = (int)power;
 this->ActionTypePossible.push_back(ActionType::ToA_Plant);
 };
 int C_Bomb::getpower () {return this->power;};
+AbstractMessage* C_Bomb::copy() {
+return (AbstractMessage*) new C_Bomb(*this);
+};

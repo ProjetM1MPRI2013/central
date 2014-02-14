@@ -5,6 +5,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
+#include <boost/thread.hpp>
+
 #include "debug.h"
 
 /*
@@ -104,9 +106,14 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
 std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, AbstractMessage *(*f)(string &)){
   //copy of ClientImplem::receive_messages
   //Could not be in comunicatorImplem because this method is in the Client/Server interface
+
+  received_messages_mutex.lock() ;
   mapType::iterator elts = received_messages.find(msgType) ;
   if(elts == received_messages.end())
+    {
+      received_messages_mutex.unlock() ;
       return vector<AbstractMessage*>();
+    }
   else
     {
       vector<AbstractMessage *> result ;
@@ -117,6 +124,7 @@ std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, Ab
             result.push_back(messagep);
         }
       received_messages.erase(elts);
+      received_messages_mutex.unlock() ;
       return result ;
     }
 

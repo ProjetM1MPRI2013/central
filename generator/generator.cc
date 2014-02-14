@@ -110,14 +110,14 @@ void affiche(Loader loader) {
 
 
 Field::Field(FieldType ft, string name, string type) :
-																																														ToLoad(name) {
+																																																		ToLoad(name) {
 	this->type = type;
 	this->initialisation = "";
 	this->fieldtype = ft;
 }
 ;
 Field::Field(FieldType ft,string name, string type, string init) :
-																																														ToLoad(name) {
+																																																		ToLoad(name) {
 	this->type = type;
 	this->initialisation = init;
 	this->fieldtype = ft;
@@ -125,14 +125,14 @@ Field::Field(FieldType ft,string name, string type, string init) :
 ;
 
 Variable::Variable(VariableType vt, string name, string type ) :
-																																														Field (FT_Variable, name,type ) {
+																																																		Field (FT_Variable, name,type ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 
 	;};
 
 Variable::Variable(VariableType vt, string name, string type, string init ) :
-																																														Field (FT_Variable, name,type,init ) {
+																																																		Field (FT_Variable, name,type,init ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 	;};
@@ -153,13 +153,13 @@ Clickable::Clickable (string name, string type): Field (FT_Clickable, name,type 
 	;};
 
 Clickable::Clickable (string name, string type, string init ) :
-																																														Field (FT_Clickable, name,type,init ) {
+																																																		Field (FT_Clickable, name,type,init ) {
 	this->clickableType = stringToClickableType(type);
 	;};
 
 
 PreClass::PreClass(string name) :
-																																														ToLoad(name) {
+																																																		ToLoad(name) {
 	Loader f ;
 	Loader toInitialised ;
 	this->fields = f;
@@ -170,7 +170,7 @@ PreClass::PreClass(string name) :
 ;
 
 PreClass::PreClass(string name, PreClass* heritage) :
-																																														ToLoad(name) {
+																																																		ToLoad(name) {
 	Loader f ;
 	toInitialised = heritage->toInitialised.copy();
 	this->fields = f;
@@ -197,8 +197,7 @@ void PreClass::add(Field* f) {
 	};
 };
 
-PreAction::PreAction(string name) :
-																																														PreClass(name) {
+PreAction::PreAction(string name) : PreClass(name) {
 	this->isActionPossible = "true";
 	this->firstfield = new bool;
 	*(this->firstfield ) = true;
@@ -209,11 +208,15 @@ PreAction::PreAction(string name) :
 PreClickable::PreClickable(string name) : PreClass (name) {
 	list<PreAction*> l ;
 	this->actionPossible = l;
+	this->isAbstract = false;
+
 };
 
 PreClickable::PreClickable(string name, PreClass* heritage) : PreClass (name,heritage) {
 	list<PreAction*> l;
 	this->actionPossible = l;
+	this->isAbstract = false;
+
 };
 
 void PreClickable::addAction(PreAction* p) {
@@ -389,6 +392,8 @@ void Writer::writeStufflistcc (PreClickable* c) {
 		if (f->fieldtype == FT_Variable)
 		{ writeGetAndSet(c,(Variable*) f);};
 	};
+	if (not c->isAbstract) {writeAbstractMessageClickable((PreClass*) c);};
+
 };
 
 string Writer::ActionName(PreClass* p) {
@@ -738,6 +743,15 @@ void Writer::writeAbstractMessage(PreClass* p) {
 	endLine();
 };
 
+void Writer::writeAbstractMessageClickable(PreClass* p) {
+	writeWord("AbstractMessage* " + ClickableName(p) + "::copy() {");
+	endLine();
+	writeWord("return (AbstractMessage*) new " + ClickableName(p) + "(*this);");
+	endLine();
+	writeWord("};");
+	endLine();
+};
+
 void Writer::writeAddPendingAction(PreClass* p) {
 	writeWord(
 			"void " + ActionName(p) + "::addPendingActions(GlobalState* gs){"
@@ -912,12 +926,12 @@ void Writer::writeHAction(PreClass* p) {
 			"public: \n bool isActionPossible (); \n  void doAction (); \n  void addPendingActions(GlobalState* gs); \n  virtual AbstractMessage* copy();"
 	);
 	endLine();
-	writeWord("private :");
+	writeWord("protected :");
 	endLine();
 	writeWord("//Serialization");
 	endLine();
 	string name = ActionName(p);
-	writeWord( name +"(){};");
+	if (not p->toInitialised.getTable().empty()) {writeWord( name +"(){};");};
 	endLine();
 	writeWord("SIMPLE_MESSAGE(" +name +", Action");
 	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
@@ -1011,24 +1025,33 @@ void Writer::writeStuffh (PreClickable* p) {
 		writeWord(f->name);
 		writeWord("; ");
 		endLine();
-	};/* TODO MARC
-	writeWord("private :");
-	endLine();
+	};
 	writeWord("//Serialization");
 	endLine();
-	writeWord( s+"(){};");
+	writeWord("protected :");
+	if (not p->isAbstract) {
+		endLine();
+		writeWord("virtual AbstractMessage* copy();");};
 	endLine();
-	writeWord("SIMPLE_MESSAGE(" +s +", Clickable");
+	if (not p->toInitialised.getTable().empty()) {writeWord( s +"(){};");};
+	endLine();
+	writeWord("SIMPLE_MESSAGE(" +s + ", ");
+	if (p->herite == NULL ) { writeWord("Clickable");}
+	else {writeWord ("C_" + (((ToLoad*)p->herite)->name));};
 	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
 		writeWord(", ");
 		Field* f = (Field*) (*it);
 		writeWord(f->name);
 	};
 
-	writeWord(");");*/
+	writeWord(");");
 	endLine();
 	writeWord("};");
-
+	endLine();
+	if (p->isAbstract){
+		writeWord("BOOST_SERIALIZATION_ASSUME_ABSTRACT("+s+");");
+		endLine();
+	};
 
 };
 
@@ -1038,13 +1061,13 @@ void Writer::writeBoost(){
 	for(list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
 		writeWord("BOOST_CLASS_EXPORT(A_" + (*it)->name + ");");
 		endLine();
-	};/* todo voir avec marc
+	};
 	list<ToLoad*> l2 =this->clickables;
 	for(list<ToLoad*>::iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
 		writeWord("BOOST_CLASS_EXPORT(C_" + (*it2)->name + ");");
 		endLine();
 	};
-	 */
+
 };
 
 
@@ -1233,8 +1256,8 @@ int stackLineReader::readField(int initialPosition, string s) {
 ;
 
 stackBlockReader::stackBlockReader(char blockDelimiter, char fieldDelimiter,std::ifstream* fichier, string buffer) :
-																							ReadBlocker(blockDelimiter, fichier),
-																							rl (fieldDelimiter)
+																											ReadBlocker(blockDelimiter, fichier),
+																											rl (fieldDelimiter)
 {
 	this->stack = new list<string>;
 	rl.setstack(this->stack);
@@ -1255,8 +1278,8 @@ void stackBlockReader::setstack(list<string>* s) {
 ;
 
 ActionCreator::ActionCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																					stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																					nameTreater (':') {
+																									stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																									nameTreater (':') {
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 
@@ -1408,8 +1431,8 @@ void ActionCreator::onALine(list<string>* l) {
 
 
 ClickableCreator::ClickableCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																							stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																							nameTreater (':'){
+																											stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																											nameTreater (':'){
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 };
@@ -1484,6 +1507,8 @@ void ClickableCreator::onALine(list<string>* l) {
 					v->isVirtual = true;
 				};
 				this->generator->AddClickableField((Field*)v);
+				((PreClickable*) (this->generator->clickables.get()))->isAbstract = true;
+
 			}
 
 		};
@@ -1496,8 +1521,8 @@ void ClickableCreator::onALine(list<string>* l) {
 
 
 MainReader::MainReader(Generator* g, char addChar, char blockDelimiter, char fieldDelimiter, string& fichier) :
-																				ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer),
-																				cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
+																								ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer),
+																								cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
 {
 	this->generator = g;
 	this->fichier= new ifstream (fichier.c_str());

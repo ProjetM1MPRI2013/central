@@ -37,7 +37,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Attack(){};
 SIMPLE_MESSAGE(A_Attack, Action, weapon, victim);
@@ -58,7 +58,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Reload(){};
 SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition);
@@ -79,7 +79,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Plant(){};
 SIMPLE_MESSAGE(A_Plant, Action, bomb, zone);
@@ -104,7 +104,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Drop(){};
 SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID);
