@@ -192,6 +192,7 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
         sf::Vector2i clicPosition = sf::Mouse::getPosition(*window); 
         Position mapPosition = (*context).screenToMap(clicPosition.x,clicPosition.y);
         std::list<NPC*> NPCList = mapPosition.getNPCList(*(simulation.getMap()));       
+        std::cout << "Taille de NPCList : " << NPCList.size() << std::endl;
         if (!NPCList.empty()) {
           stack->sendNpc((*(NPCList.front())).getUuid());
         }
