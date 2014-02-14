@@ -10,8 +10,9 @@
 #include <string>
 #include "Actions.h"
 #include "PreStuff.h"
+#include "network/abstractMessage.h"
 
-class Clickable {
+class Clickable : public AbstractMessage{
 public :
 	/**
    * @brief The Clickable name
@@ -56,6 +57,12 @@ public :
    * @brief A counter used to generate unique stuffID
    */
   static int counter;
+ protected :
+ //Serialization
+  AbstractMessage* copy();
+ SIMPLE_MESSAGE(Clickable,AbstractMessage,ClickableID,name);
 };
 
+
 #endif
+
