@@ -94,6 +94,8 @@ protected :
    */
   mapType received_messages ;
 
+  std::mutex received_messages_mutex ;
+
   /**
    * @brief header_buff
    * Used as a buffer to temporarily store the header of received messages
@@ -231,7 +233,6 @@ protected :
    * @brief decrease_tasks : decreses the counter of pending tasks
    */
   void decrease_tasks() ;
-
 
 };
 
