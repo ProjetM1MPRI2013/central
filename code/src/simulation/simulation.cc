@@ -36,6 +36,9 @@ Simulation::Simulation(int nbPlayers, int id):
 	this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
       (firstTile->getCoord()).getOrd()));
 
+    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
+    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
+        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
 }
@@ -57,6 +60,9 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id):
     Tile* firstTile = (this->getMap())->getWalkableTile();
     this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
                            (firstTile->getCoord()).getOrd()));
+    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
+    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
+        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
 
     std::list<NPC*> NPCs;
     this->NPCs = NPCs;

@@ -123,7 +123,8 @@ protected :
     * @brief tmp: used to copy only required information from *map to calculate
     * fear (peur)
     */
-   int tmp[100][100];
+   std::vector<std::vector<int> > tmp;
+//   int tmp [100][100];
 
    HScenario* scenario;
    bool isServer;

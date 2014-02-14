@@ -43,6 +43,7 @@ namespace test {
             loc.addNPC(p->position, p->getTarget(), p->getSpeed(),
                       graContIso.getTexturePack(1), p->getUuid());
             LOG(info) << "NPC :\n" << (*p)<< "; " ;
+
         }
         sleep(1);
     }
