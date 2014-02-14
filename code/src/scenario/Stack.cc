@@ -91,7 +91,7 @@ void Stack::newAction(ActionType a, int stuffID) {
 	this->sendAction();
 };
 
-void Stack::sendNpc(int n) {
+void Stack::sendNpc(boost::uuids::uuid n) {
 	if ((this->SoNList).front() == SON_NPC)
 	{
 		(this->NpcList).push_front(n);

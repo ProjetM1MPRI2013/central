@@ -8,9 +8,9 @@
 ** Attack**
 *********************************************************/
 
-A_Attack::A_Attack (int weapon, int victim, LocalState* sim) : Action ( "ToA_Attack", sim) {
+A_Attack::A_Attack (int weapon, boost::uuids::uuid victim, LocalState* sim) : Action ( "ToA_Attack", sim) {
 this->weapon = (int)weapon;
-this->victim = (int)victim;
+this->victim = (boost::uuids::uuid)victim;
 };
 
 A_Attack::A_Attack(const A_Attack& a) : Action(" ToA_Attack", a.simulation){

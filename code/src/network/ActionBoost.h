@@ -5,6 +5,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/utility.hpp>
+#include "boost/uuid/uuid_io.hpp"
+#include "boost/uuid/uuid_serialize.hpp"
 #include "abstractMessage.h"
 #include "netEvent.h"
 #include "test/test_net.h"

@@ -26,12 +26,12 @@
 *********************************************************/
 class A_Attack: public Action {
 public:
-A_Attack  (int weapon, int victim, LocalState* s);
+A_Attack  (int weapon, boost::uuids::uuid victim, LocalState* s);
 A_Attack(const A_Attack&);
 public:
 int weapon; 
 public:
-int victim; 
+boost::uuids::uuid victim; 
 public: 
  bool isActionPossible (); 
   void doAction (); 
