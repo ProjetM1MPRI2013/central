@@ -38,6 +38,7 @@ class WithUuid {
     WithUuid(boost::uuids::uuid uuid);
 
     friend class WithUuidCmp;
+    friend class WithUuidPtrCmp;
     
     /**
      * @brief getUuid
@@ -56,6 +57,14 @@ class WithUuidCmp{
     bool operator()(const WithUuid& lhs, const WithUuid& rhs) const 
     {
         return lhs.uuid<rhs.uuid;
+    }
+};
+
+class WithUuidPtrCmp{
+ public:
+    bool operator()(const WithUuid* lhs, const WithUuid* rhs) const 
+    {
+        return lhs->uuid<rhs->uuid;
     }
 };
 #endif

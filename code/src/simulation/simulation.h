@@ -14,6 +14,7 @@ class HScenario;
 #include "SFML/System.hpp"
 #include <iostream>
 #include <list>
+#include <set>
 #include <cerrno>
 #include "miscellaneous.h"
 #include "eventManager.h"
@@ -113,6 +114,11 @@ public:
 
    virtual bool simIsServer();
    void setScenario(HScenario* s);
+   /**
+    * @brief Find NPC by id. 
+    * @return nullptr if NPC not found, a pointer to the NPC otherwise.
+    */
+   NPC* getNPCByID(boost::uuids::uuid uuid);
 protected :
 
    void copyTmp();
@@ -146,7 +152,7 @@ protected :
    float smallTime;
    Geography* map;
    std::list<Player> players;
-   std::list<NPC *> NPCs;
+   std::set<NPC*, WithUuidPtrCmp> NPCs;
    std::list<ScenarioAction *> pendingActions;
    /**
     * @brief toDelete : liste des actions déjà traité
