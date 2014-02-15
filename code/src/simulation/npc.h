@@ -42,7 +42,7 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
       std::cout << "ERROR: NPC: we can't copy this class!\n" ;
     return NULL ;
   }
-
+  bool isAlive;
 
   /**
    * @brief NPC

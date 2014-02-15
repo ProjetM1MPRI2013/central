@@ -114,20 +114,16 @@ KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
 }
 
 void KillNPC::run(){
-	std::cout << "OMG they killed Kenny" << std::endl;
 	Simulation* s = ((ScenarioAction*)this)->simulation;
-	std::cout << s->getSous() << std::endl;
-	std::cout << "trouvé la simulation" << std::endl;
 	boost::uuids::uuid t = this->target;
-	std::cout << "trouvé la target " << std::endl;
 	NPC* victim = s->getNPCByID(t);
-	std::cout << "trouvé le npc" << std::endl;
 	if (victim == NULL) {
 		std::cout << "null" << std::endl;
 	}
 	else {
-		std::cout << "pas null" << std::endl;
-		simulation->supprimerNPC(victim);};
+		victim->isAlive = false;
+		//simulation->supprimerNPC(victim);
+		};
 	std::cout << "YOU BASTARD !!!" << std::endl;
 	return;
 };

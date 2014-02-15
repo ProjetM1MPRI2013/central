@@ -20,6 +20,7 @@ NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) : DrawableObj
   speed = s;
   fear = f;
   hitboxSize = h;
+  isAlive = true;
   return;
 }
 
@@ -33,6 +34,7 @@ NPC::NPC(float s,float f,float h,Position& start,
   speed = s;
   fear = f;
   hitboxSize = h;
+  isAlive = true;
   return;
 }
 
