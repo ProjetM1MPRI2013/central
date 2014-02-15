@@ -29,7 +29,7 @@
 #include "globalState.h"
 
 #define DEBUG true
-#define TERRO true // ~TERRO => MAYOR
+#define TERRO false // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -64,14 +64,20 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
     dummy::createNPCs(500, loc, graContIso, geo, npcGen);
   }
-
+  
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
+  HudMayor hudMayor = HudMayor(window,loc); //One needs to be removed
   HudTerro hudTerro = HudTerro(window, loc, &graContIso);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
-    hudTerro.init();
+    if (TERRO) {
+      hudTerro.init();
+    }
+    else {
+      hudMayor.init();
+    }
     sf::Event event;
     while ((*window).pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
@@ -99,7 +105,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
         }
 
       }
-      hudTerro.event(window, event, &graContIso);
+      if (TERRO) {hudTerro.event(window, event, &graContIso);}
+      else {hudMayor.event(window,event,&tilemap);}
     }
 
     loc.run(dt);
@@ -107,10 +114,11 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     if (TERRO) {
       graContIso.run(window);
       (*window).setView((*window).getDefaultView());
+      hudTerro.draw();
     } else { // MAYOR
       tilemap.run(window);
+      hudMayor.draw();
     }
-    hudTerro.draw();
     (*window).display();
   }
 
