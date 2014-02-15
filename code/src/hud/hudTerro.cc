@@ -42,8 +42,8 @@ void printcwd() {
 
 ;
 
-HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicContextIso* context) :
-				simulation(simulation) {
+HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicContextIso& context) :
+				simulation(simulation), context(context) {
 	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
@@ -118,7 +118,7 @@ void HudTerro::init() {
 }
 ;
 
-void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIso* context) {
+void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIso& context) {
 	if (event.type == sf::Event::Closed)
 		(*window).close();
 
@@ -182,9 +182,9 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
       std::cout << "Molette : " << event.mouseWheel.delta << std::endl;
       if (event.mouseWheel.delta != 0) {
         if (event.mouseWheel.delta > 0) {
-          (*context).zoom(0.9);
+          context.zoom(0.9);
         } else {
-          (*context).zoom(1.1);
+          context.zoom(1.1);
         };
       }; 
     };
@@ -195,7 +195,7 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
 			if (event.mouseButton.button == sf::Mouse::Left) {
 				// envoyer le clic si c'est sur la hitbox d'un NPC
         sf::Vector2i clicPosition = sf::Mouse::getPosition(*window); 
-        Position mapPosition = (*context).screenToMap(clicPosition.x,clicPosition.y);
+        Position mapPosition = context.screenToMap(clicPosition.x,clicPosition.y);
         std::list<NPC*> NPCList = mapPosition.getNPCList(*(simulation.getMap()));       
         std::cout << "Taille de NPCList : " << NPCList.size() << std::endl;
         if (!NPCList.empty()) {

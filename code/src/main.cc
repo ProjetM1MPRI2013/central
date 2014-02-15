@@ -70,7 +70,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
   HudMayor hudMayor = HudMayor(window,loc); //One needs to be removed
-  HudTerro hudTerro = HudTerro(window, loc, &graContIso);
+  HudTerro hudTerro = HudTerro(window, loc, graContIso);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
@@ -107,7 +107,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
         }
 
       }
-      if (TERRO) {hudTerro.event(window, event, &graContIso);}
+      if (TERRO) {hudTerro.event(window, event, graContIso);}
       else {hudMayor.event(window,event,&tilemap);}
     }
 

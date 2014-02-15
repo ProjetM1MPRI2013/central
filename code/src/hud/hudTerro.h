@@ -11,8 +11,7 @@
 #include <sstream> 
 #include "../scenario/Stack.h"
 #include "../scenario/PreStack.h"
-#include "../graphism/graphic_context_iso.h"
-
+#include "graphic_context_iso.h"
 enum ButtonState {
 	BS_INVENT, BS_ACTIONS
 };
@@ -24,9 +23,9 @@ class LocalState;
 void printcwd ();
 class HudTerro: public PreHud {
 public:
-	HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicContextIso* context);
+	HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicContextIso& context);
 	void init();
-	void event(sf::RenderWindow* window, sf::Event e, GraphicContextIso* context);
+	void event(sf::RenderWindow* window, sf::Event e, GraphicContextIso& context);
 	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
@@ -44,6 +43,7 @@ private:
 	unsigned int h;
 	int i;
 	LocalState& simulation;
+  GraphicContextIso& context;
 	bool bup;
 	bool bdown;
 	bool bleft;

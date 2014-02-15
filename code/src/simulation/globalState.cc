@@ -41,7 +41,7 @@ void GlobalState::run(sf::Time dt){
 
   for (Action * action : actionFromNetwork){
       action->addPendingActions(this);
-      std::cout << "Host : new Action from network of type " << action->name << "\n";
+      DBG << "Host : new Action from network of type " << action->name;
     }
   actionFromNetwork.clear();
 
@@ -53,22 +53,20 @@ void GlobalState::run(sf::Time dt){
 
   for (NewMovNetwork * newMove : movFromNetwork){
     this->addAction((ScenarioAction *) new ChangeDirection(newMove->playerID,newMove->newDirection,newMove->timeStamp,this));
-    std::cout << "Host : New Movement from player : " << newMove->playerID ;
-    std::cout << std::endl;
+    DBG << "Host : New Movement from player : " << newMove->playerID;
   }
   movFromNetwork.clear();
 
     for (ScenarioAction* action : pendingActions) {
       //The server sends the ScenarioAction to the client, so they can do them.
-      std::cout << "Host : applying pending Scenario Action of type " << action->name << "\n";
       if (action->name != "ChangeDirection"){
-	std::cout << "Host : sending the action to the network\n";
+      DBG << "Host : applying pending Scenario Action of type " << action->name;
+        DBG << "Host : sending the action to the network";
 	server->broadcastMessage(*action,true);
       }
-      std::cout << "Nobody : serveur run action \n";
+      DBG << "Nobody : serveur run action";
       action->run();
-      std::cout << " Nobody :serveur fin run action\n";
-
+      DBG << " Nobody :serveur fin run action";
     }
     pendingActions.clear();
 
@@ -130,7 +128,7 @@ void GlobalState::run(sf::Time dt){
       // Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
       if (npc->hasArrived() or !wasArrived) {
         (*npc).trigger("NPC::arrived");
-        std::cout << "suppression d'un NPC" << std::endl;
+        DBG << "suppression d'un NPC";
         this->supprimerNPC(npc);
 
       }

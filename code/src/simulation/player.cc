@@ -13,39 +13,39 @@ StuffNotFound::StuffNotFound() :
   std::runtime_error("Could not find Stuff in an inventory") {
 }
 
-void printDirection(Direction d) {
+std::string stringDirection(Direction d) {
   switch (d) {
   case UP:
-    std::cout << "UP";
+    return "UP";
     break;
   case UPRIGHT:
-    std::cout << "UPRIGHT";
+    return "UPRIGHT";
     break;
   case RIGHT:
-    std::cout << "RIGHT";
+    return "RIGHT";
     break;
   case RIGHTDOWN:
-    std::cout << "RIGHTDOWN";
+    return "RIGHTDOWN";
     break;
   case DOWN:
-    std::cout << "DOWN";
+    return "DOWN";
     break;
   case DOWNLEFT:
-    std::cout << "DOWNLEFT";
+    return "DOWNLEFT";
     break;
   case LEFT:
-    std::cout << "LEFT";
+    return "LEFT";
     break;
   case LEFTUP:
-    std::cout << "LEFTUP";
+    return "LEFTUP";
     break;
   case STOP:
-    std::cout << "STOP";
+    return "STOP";
     break;
   case ERROR:
-    std::cout << "ERROR";
+    return "ERROR";
   default:
-    std::cout << "printDirection : error";
+    return "stringDirection : error";
   }
 }
 
@@ -91,31 +91,21 @@ void Player::setDirection(Direction newd, int timeStamp) {
   if (timeStamp > lastTimeStamp){
       assert(isServer != 0);
 
-    std::cout << "Server : player " << this->playerID
-	      << " changes direction from ";
-    printDirection(this->d);
-    std::cout << " to ";
-    printDirection(newd);
-    std::cout << "\n";
+    DBG << "Server : player " << this->playerID << " changes direction from " << stringDirection(this->d) << " to " << stringDirection(newd);
+    
     this->d = newd;
     lastTimeStamp = timeStamp;
     return;
   }
   else{
-    std::cout << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp << std::endl;
+    DBG << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp;
   }
 }
 ;
 
 void Player::setDirection(Direction newd) {
   assert(isServer == 0);
-  std::cout << "Client : player " << this->playerID
-	    << " changes direction from ";
-  
-  printDirection(this->d);
-  std::cout << " to ";
-  printDirection(newd);
-  std::cout << "\n";
+  DBG << "Client : player " << this->playerID << " changes direction from " << stringDirection(this->d) << " to " << stringDirection(newd); 
   this->d = newd;
   return;
 }
@@ -228,8 +218,7 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   default:
     //ne doit pas arriver
-    std::cerr << "Player::updatePosition : Direction not correct "
-        << (int) (this->d) << "\n";
+    LOG(error) << "Player::updatePosition : Direction not correct " << (int) (this->d);
     break;
   };
   if (!(x == position.getX() && y == position.getY())) {
@@ -240,7 +229,8 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
 ;
 
 bool Player::hasItemByID(int ClickableID) {
-	std::cout << ClickableID << std::endl;
+  
+	DBG << ClickableID;
 	try {
     getItemByID<Clickable> (ClickableID);
     return true;

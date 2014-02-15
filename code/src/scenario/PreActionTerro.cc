@@ -41,11 +41,9 @@ bool isInThePack(LocalState* s, int stuffID) {
 
 
 void newMovement (NewMov n, LocalState* s){
-	std::cout << "Client : New Movement begin\n";
+  DBG << "Client : New Movement begin";
 	NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
-	std::cout << "Client : New Movement from player : " << s->getOwner().getID() << " ";
-	printNewMov(n);
-	std::cout << std::endl;
+  DBG << "Client : New Movement from player : " << s->getOwner().getID() << " " << stringNewMov(n);
 	s->getOwner().setDirection(newMovNet.newDirection);
 	s->getClient()->sendMessage(newMovNet,true);
 };
