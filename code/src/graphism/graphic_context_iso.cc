@@ -19,10 +19,7 @@
     zoommax = 3;
     zoommin = 0.3;
 
-    unfogVector.push_front(sim->getPlayer());
-    sim->getPlayer()->setActive(true);
-    sim->getPlayer()->setRadius(24);
-
+    addUnfog(sim->getPlayer(),24);
 
     assert(fogT.loadFromFile("../../../sprite/fogtile.png"));
     assert(baseT.loadFromFile("../../../sprite/basetile.png"));
@@ -221,7 +218,7 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   /* Remise à zéro */
   for(int j = 0; j < h; j++){
     for(int i = 0; i < w; i++){
-      map->getTile(i,j)->setFog(true);
+      map->getTile(i,j)->setFog(-1000000);
     }
   }
 
@@ -235,7 +232,7 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   	int ii = x + k - l;
   	int jj = y - r + k + l;
   	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
-  	  map->getTile(ii,jj)->setFog(false);
+  	  map->getTile(ii,jj)->setFog(1);
       }
     }
     for(int k = 0; k < r; k++){
@@ -243,7 +240,7 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   	int ii = x + k - l;
   	int jj = y - r + 1 + k + l;
   	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
-  	  map->getTile(ii,jj)->setFog(false);
+  	  map->getTile(ii,jj)->setFog(1);
       }
     }
   }
@@ -345,6 +342,7 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
 
 void GraphicContextIso::addTexturePack(TexturePack t)
 {
+  t.ID = texVector.size();
   texVector.push_back(t);
   return;
 }
@@ -413,4 +411,66 @@ float GraphicContextIso::zoom(float f)
   view.zoom(g);
   zoomfactor = z;
   return zoomfactor;
+}
+
+void GraphicContextIso::addUnfog(Positionable* p, int radius)
+{
+  p->setActive(true);
+  p->setRadius(radius);
+  unfogVector.push_front(p);
+  updateFog(Coordinates(floor(p->getPosition().getX()),floor(p->getPosition().getY())),radius,1);
+  // listen("Positionable::changedTile",(*p),&GraphicContextIso::changedTile)
+  return;
+}
+
+void GraphicContextIso::updateFog(Coordinates c, int r, int modif)
+{
+  int w = map->getMapWidth(), h = map->getMapHeight();
+  
+  for(int k = 0; k <= r; k++){
+    for(int l = 0; l <= r; l++){
+      int i = c.getAbs() + k - l;
+      int j = c.getOrd() - r + k + l;
+      if(i >= 0 && i < w && j >= 0 && j < h)
+	map->getTile(i,j)->setFog(modif);
+    }
+  }
+  for(int k = 0; k <= r; k++){
+    for(int l = 0; l <= r; l++){
+      int i = c.getAbs() + k - l;
+      int j = c.getOrd() - r + k + l + 1;
+      if(i >= 0 && i < w && j >= 0 && j < h)
+	map->getTile(i,j)->setFog(modif);
+    }
+  }
+  
+  /* Mise à jour des bâtiments */
+  /* On peut faire plus subtil, mais c'est pas important */
+  for(int i = 0; i < w; i++){
+    for(int j = 0; j < h; j++){
+      Tile* tilec = map->getTile(i,j);
+      if(tilec->isBatOrigin()){
+  	int compt = 0;
+  	for(int ii = 0; ii < tilec->getWidthBat(); ii++){
+  	  for(int jj = 0; jj < tilec->getHeightBat(); jj++){
+  	    if(map->getTile(i-ii,j+jj)->isInFog())
+  	      compt++;
+  	  }
+  	}
+  	tilec->setBuildFog(compt);
+      }
+    }
+  }
+ 
+  return;
+}
+
+void GraphicContextIso::changedTile(Positionable& p, std::pair<Coordinates,Coordinates> modifpos)
+{
+  int r = p.getRadius();
+
+  updateFog(modifpos.first,r,-1);
+  updateFog(modifpos.second,r,1);
+  
+  return;
 }

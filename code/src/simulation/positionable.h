@@ -6,14 +6,16 @@
 #include "position.h"
 #include "graphism/fogDisabler.h"
 #include "eventSource.h"
+#include "eventListener.h"
 
 /**
  * @brief The Positionable class
  * it only contains a Position and methods to get and set it
  */
-class Positionable : public FogDisabler, public EventSource {
+class Positionable : public FogDisabler, public EventSource/*, public EventListener<Positionable> */ {
  protected:
  public:
+
 //  using EventSource::EventSource;
   Position position;
   /**
@@ -56,5 +58,7 @@ class Positionable : public FogDisabler, public EventSource {
    * @param p : the new Position as a reference (the Positionable's Position will be the same object)
    */
   virtual void setPosition(Position& p);
+
+  void changedTile(Position& p, std::pair<Coordinates,Coordinates> mod); 
 };
 #endif

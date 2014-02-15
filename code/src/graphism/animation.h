@@ -6,6 +6,7 @@
 #define ANIMATION
 
 #include <SFML/Graphics.hpp>
+#include <cassert>
 
 /**
  * @brief TexturePack
@@ -20,6 +21,7 @@ struct TexturePack {
   std::vector<int> offsetY;
   std::vector<bool> isLoop;
   std::vector<int> fps;
+  int ID = -1;
 };
 
 enum AnimType {IDLE, RUN, DEAD};
@@ -78,6 +80,15 @@ class Animation
    * @return is true iff tex != Null, ie if there is an actual texture pack applied to the animation.
    **/
   virtual bool isInit();
+
+  /**
+   * @brief returns the ID of the texture pack of the animation.
+   * if the texture pack has not been initialized, or it does not come from the
+   * graphic context, then it raises an error.
+   * The ID represents the index of the texture in the vector of textures in the
+   * graphic context.
+   **/
+  int getTexID();
 
  private:
   /**

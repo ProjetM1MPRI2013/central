@@ -1,5 +1,5 @@
 /**
- * @author: Maxime, Joseph
+ * @author: Maxime, Joseph, Lucas
  */
 #ifndef TILE
 #define TILE
@@ -166,7 +166,7 @@ class Tile {
 
   TileWrapper* wrapper;
   bool alpha;
-  bool fog;
+  int fog;
   bool buildfog;
 
   public:
@@ -345,7 +345,7 @@ class Tile {
     /**
      * @brief Changes the fog state of the tile.
      **/
-    void setFog(bool infog);
+    void setFog(int modfog);
 
 };
 

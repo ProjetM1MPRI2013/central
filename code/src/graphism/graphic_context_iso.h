@@ -21,10 +21,10 @@
 #define DOWN_TILE(x) ((x==0) ? 20 : 10)   /* Distance à la tile du bas */
 
 /**
-  * @brief This class contains all the textures of the isometric view.
-  * It is initially loaded at the beginning of the main loop, and should not be destructed.
-  * draw is called to draw the map on a sf::RenderTarget such as the main window.
-  **/
+ * @brief This class contains all the textures of the isometric view.
+ * It is initially loaded at the beginning of the main loop, and should not be destructed.
+ * draw is called to draw the map on a sf::RenderTarget such as the main window.
+ **/
 
 class GraphicContextIso : public sf::Drawable, public sf::Transformable, public EventListener<GraphicContextIso> {
 
@@ -63,6 +63,13 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
   TexturePack* getTexturePack(int n);
 
   float zoom(float f);
+
+  void addUnfog(Positionable* p, int radius);
+
+  void updateFog(Coordinates c, int r, int modif);
+  
+  void changedTile(Positionable& p, std::pair<Coordinates,Coordinates> modifpos);
+  
 
  private:
   std::vector<TexturePack> texVector;

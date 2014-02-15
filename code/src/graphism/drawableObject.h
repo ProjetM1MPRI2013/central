@@ -15,6 +15,11 @@ class DrawableObject {
   Animation anim;
 
  public :
+
+  DrawableObject();
+
+  DrawableObject(TexturePack* tex);
+
   /**
    * @brief getSprite
    * @return returns the sprite of the object
@@ -66,6 +71,7 @@ class DrawableObject {
    */
   virtual void nextFrame();
 
+  int getTexID();
 
 };
 

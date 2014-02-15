@@ -8,6 +8,7 @@
 
 #include "geography.h"
 #include "network/abstractMessage.h"
+#include "simulation/eventSource.h"
 
 
 class Tile;
@@ -19,7 +20,7 @@ class NPC;
  * @brief The Position class
  * it is a couple of floats with some useful methods
  */
-class Position {
+class Position : public EventSource {
  private:
   int TILE_SIZE_X = 1;
   int TILE_SIZE_Y = 1;
