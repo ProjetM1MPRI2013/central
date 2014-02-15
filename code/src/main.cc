@@ -31,6 +31,7 @@
 bool TERRO = true;
 bool AUTOPLAY = false;
 bool CLIENT = false;
+std::string SEED = "424242";
 #define DEBUG true
 #include "debug.h"
 
@@ -163,6 +164,7 @@ int main(int argc, char ** argv) {
     if (cur == "mayor") TERRO = false; // Show mayor view (default: no)
     if (cur == "terro") TERRO = true; // Show terro view (default: yes)
     if (cur == "client") CLIENT = true; // Client only (default:  no)
+    if (cur == "seed" && argc > i+1) SEED = (std::string)argv[++i]; // Seed setting (default: "424242"). Consumes next argument.
   }
 
   int sizeFenetre[3], b;
@@ -199,13 +201,8 @@ int main(int argc, char ** argv) {
       window.create(video_mode, "Game Interface");
     window.setKeyRepeatEnabled(false);
     int nbPlayers = 1;
-    std::string seed;
-    std::cout << argc << std::endl;
-    if (argc <= 1) {
-      seed = "424242";
-    } else {
-      seed = argv[1];
-    }
+    std::string seed = SEED;
+    DBG << "Seed: " << seed;
 
     //geo.printMatrix();
 
