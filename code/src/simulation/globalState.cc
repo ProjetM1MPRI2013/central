@@ -57,10 +57,23 @@ void GlobalState::run(sf::Time dt){
   }
   movFromNetwork.clear();
 
+  /**The server retrieve all the new messages from the network
+   *(of type NewMouseMovNetwork), turn them into ScenarioAction,
+   *and add those ScenarioAction to the list of pending ScenarioAction
+   */
+  std::vector<NewMouseMovNetwork *> mouseMovFromNetwork = server->receiveMessages<NewMouseMovNetwork>();
+
+  for (NewMouseMovNetwork * newMouseMove : mouseMovFromNetwork){
+    this->addAction((ScenarioAction *) new ChangeDestination(newMouseMove->playerID,newMouseMove->destination,newMouseMove->timeStamp,this));
+    DBG << "Host : New Mouse Movement from player : " << newMouseMove->playerID;
+  }
+
+  mouseMovFromNetwork.clear();
+
     for (ScenarioAction* action : pendingActions) {
       //The server sends the ScenarioAction to the client, so they can do them.
-      if (action->name != "ChangeDirection"){
       DBG << "Host : applying pending Scenario Action of type " << action->name;
+      if (action->name != "ChangeDirection" && action->name != "ChangeDestination"){
         DBG << "Host : sending the action to the network";
 	server->broadcastMessage(*action,true);
       }

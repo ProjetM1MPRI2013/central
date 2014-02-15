@@ -102,6 +102,27 @@ void ChangeDirection::run(){
 	return;
 };
 
+/*****************
+ *ChangeDestination*
+ *****************/
+ChangeDestination::ChangeDestination(int id, Position destination, int ts, Simulation* s) : ScenarioAction ("ChangeDestination",s),
+	playerID(id),
+	destination(destination),
+	timeStamp(ts) { }
+
+ChangeDestination::ChangeDestination(const ChangeDestination& a) : ScenarioAction("ChangeDestination",a.simulation){
+	this->playerID = a.playerID;
+	this->destination = a.destination;
+	this->timeStamp = a.timeStamp;
+}
+
+void ChangeDestination::run(){
+
+	simulation->getPlayerByID(playerID).setDestination(destination,timeStamp);
+
+	return;
+};
+
 /*********
  *KillNPC*
  *********/
@@ -272,6 +293,9 @@ AbstractMessage* ChangeDirection::copy(){
 }
 
 
+AbstractMessage* ChangeDestination::copy(){
+	return (AbstractMessage*) new ChangeDestination(*this);
+}
 
 
 AbstractMessage* AddCops::copy(){

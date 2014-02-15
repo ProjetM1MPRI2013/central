@@ -6,7 +6,7 @@
 
 #define DEBUG true
 
-int NewMovNetwork::counter = 1;
+namespace MovNetwork { int counter = 1; }
 
 std::string stringNewMov(NewMov nm){
   switch (nm){
@@ -52,13 +52,23 @@ NewMovNetwork::NewMovNetwork(NewMov m, int pid, LocalState* ls){
   delete newDir;
 
   this->playerID = pid;
-  timeStamp = counter++;
+  timeStamp = MovNetwork::counter++;
 }
 
+NewMouseMovNetwork::NewMouseMovNetwork(Position destination, int pid) : 
+  destination(destination), 
+  playerID(pid),
+  timeStamp(MovNetwork::counter++) {
+}
 
 AbstractMessage* NewMovNetwork::copy(){
   return ((AbstractMessage*) new NewMovNetwork(*this));
 }
 
+AbstractMessage* NewMouseMovNetwork::copy(){
+  return ((AbstractMessage*) new NewMouseMovNetwork(*this));
+}
 
-NewMovNetwork::NewMovNetwork() : newDirection(STOP), playerID(0), timeStamp(counter++) {}
+NewMovNetwork::NewMovNetwork() : newDirection(STOP), playerID(0), timeStamp(MovNetwork::counter++) {}
+
+NewMouseMovNetwork::NewMouseMovNetwork() : destination(Position()), playerID(0), timeStamp(MovNetwork::counter++) {}

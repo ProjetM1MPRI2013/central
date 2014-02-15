@@ -9,6 +9,7 @@
 class LocalState;
 
 #include "network/abstractMessage.h"
+#include "position.h"
 
 enum NewMov {P_RIGHT, P_LEFT, P_UP, P_DOWN, R_RIGHT, R_LEFT, R_UP, R_DOWN};
 enum Direction {UP, UPRIGHT, RIGHT, RIGHTDOWN, DOWN, DOWNLEFT, LEFT, LEFTUP, STOP, ERROR};
@@ -41,4 +42,22 @@ protected :
   SIMPLE_MESSAGE(NewMovNetwork, AbstractMessage, newDirection, playerID, timeStamp)
 };
 
+class NewMouseMovNetwork : public AbstractMessage {
+  public:
+    Position destination;
+    int playerID;
+
+    int timeStamp;
+
+    NewMouseMovNetwork(Position destination, int pid);
+
+    virtual AbstractMessage* copy();
+
+  protected :
+    static int counter;
+
+    NewMouseMovNetwork();
+
+    SIMPLE_MESSAGE(NewMouseMovNetwork, AbstractMessage, destination, playerID, timeStamp)
+};
 #endif

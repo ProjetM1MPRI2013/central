@@ -39,6 +39,7 @@ public:
 	 */
 
 private:
+  bool mouseMovement;
 	unsigned int w;
 	unsigned int h;
 	int i;

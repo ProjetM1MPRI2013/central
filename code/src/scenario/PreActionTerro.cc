@@ -48,3 +48,11 @@ void newMovement (NewMov n, LocalState* s){
 	s->getClient()->sendMessage(newMovNet,true);
 };
 
+void newMouseMovement(Position pos, LocalState* s) {
+  DBG << "Client : New MouseMovement begin";
+  NewMouseMovNetwork newMouseMovNet(pos,s->getOwner().getID());
+	DBG << "Client : New MouseMovement from player : " << s->getOwner().getID() << " " << pos;
+	s->getOwner().setDestination(pos);
+  s->getClient()->sendMessage(newMouseMovNet,true);
+};
+

@@ -21,6 +21,7 @@
 
 
 void newMovement (NewMov n, LocalState* s);
+void newMouseMovement (Position pos, LocalState* s);
 
 bool isPlantable (Tile* t) ;
 

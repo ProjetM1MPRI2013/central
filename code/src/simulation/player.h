@@ -16,7 +16,7 @@
 #include <stdexcept>
 #include "positionable.h"
 #include "NewMov.h"
-
+enum MovementType { DESTINATION, DIRECTION };
 class StuffNotFound : public std::runtime_error
 {
 public:
@@ -39,12 +39,25 @@ public:
    * @param timeStamp : the timeStamp of the direction changement
    */
   void setDirection(Direction d, int timeStamp);
+  
+  /**
+   * @brief This method sould only be used by server
+   * @param d : the new destination of the player
+   * @param timeStamp : the timeStamp of the direction changement
+   */
+  void setDestination(Position pos, int timeStamp);
 
   /**
    * @brief This method sould only be used by client
    * @param d : the new direction of the player
    */
   void setDirection(Direction d);
+
+  /**
+   * @brief This method sould only be used by client
+   * @param d : the new direction of the player
+   */
+  void setDestination(Position pos);
 
 	std::vector<int> getInventory(); // returns list of stuff ids currently held by the player
 	template <class T>
@@ -86,6 +99,8 @@ private:
   int playerID;
   float speed;
   Direction d;
+  Position destination;
+  MovementType movementType;
 
   /**
    * @brief The last timestamp of a NewMovNetwork message accepted

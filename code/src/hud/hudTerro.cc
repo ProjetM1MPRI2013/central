@@ -47,6 +47,7 @@ HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicCont
 	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
+  this->mouseMovement = false;
 	this->bup = false;
 	this->bdown = false;
 	this->bleft = false;
@@ -130,24 +131,28 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
 			case sf::Keyboard::Z:
 				if (not this->bup) {
 					newMovement (NewMov::P_UP,(&this->simulation));
+          mouseMovement = false;
 					this->bup = true;
 				};
 				break;
 			case sf::Keyboard::Q:
 				if (not this->bleft) {
 					newMovement (NewMov::P_LEFT,(&this->simulation));
+          mouseMovement = false;
 					this->bleft = true;
 				};
 				break;
 			case sf::Keyboard::S:
 				if (not this->bdown) {
 					newMovement (NewMov::P_DOWN,(&this->simulation));
+          mouseMovement = false;
 					this->bdown = true;
 				};
 				break;
 			case sf::Keyboard::D:
 				if (not this->bright) {
 					newMovement (NewMov::P_RIGHT,(&this->simulation));
+          mouseMovement = false;
 					this->bright = true;
 				};
 				break;
@@ -207,13 +212,33 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
 		} else {
 			if (event.type == sf::Event::KeyPressed) {
 				stack->cancel();
-			};
-		};
-	};
+			}
 
-	// Pass the event to all the current widgets
-	//std::cerr << "passe dedans" << std::endl;
-	(this->hud).handleEvent(event);
+		};
+	}
+
+  // Pass the event to all the current widgets
+  bool consumed = (this->hud).handleEvent(event);
+
+  // If a click wasn't used by the widgets, pass it to the game area.
+  if (!consumed && waitFor != WF_CLICK) {
+    if (event.type == sf::Event::MouseButtonPressed) {
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        mouseMovement = true;
+      }
+    }
+    if (event.type == sf::Event::MouseButtonReleased) {
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        mouseMovement = false;
+      }
+    }
+  }
+  // Moving player with the mouse. Moving is true if the left mouse button is 
+  // pressed and the player hasn't pressed direction keys.
+  if (mouseMovement) {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+    newMouseMovement(context.screenToMap(mousePos.x, mousePos.y), (&this->simulation));
+  }
 }
 ;
 

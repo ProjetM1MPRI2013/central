@@ -54,6 +54,33 @@ protected :
 
 };
 
+/**
+ * @brief The player changes destination.
+ */
+class ChangeDestination: public ScenarioAction {
+public:
+	int playerID;
+
+	/**
+	 * @brief The new destination of the player
+	 */
+	Position destination;
+	int timeStamp;
+
+	ChangeDestination(int id, Position destination, int ts, Simulation* s);
+	ChangeDestination(const ChangeDestination&);
+
+	virtual void run();
+
+	//AbstractMessage functions
+	virtual AbstractMessage* copy();
+protected :
+	//Serialization
+	ChangeDestination() {}
+
+	SIMPLE_MESSAGE(ChangeDestination, ScenarioAction, playerID, destination, timeStamp)
+
+};
 
 class AddCops: public ScenarioAction {
 public:
