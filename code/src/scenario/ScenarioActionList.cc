@@ -105,7 +105,7 @@ void ChangeDirection::run(){
 /*********
  *KillNPC*
  *********/
-KillNPC::KillNPC(NPC* t,Simulation* s) : ScenarioAction("KillNPC",s){
+KillNPC::KillNPC(boost::uuids::uuid t,Simulation* s) : ScenarioAction("KillNPC",s){
 	target = t;
 };
 
@@ -115,7 +115,7 @@ KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
 
 void KillNPC::run(){
   std::cout << "OMG they killed Kenny" << std::endl;
-	simulation->supprimerNPC(target);
+  simulation->supprimerNPC(((ScenarioAction*)this)->simulation->getNPCByID(this->target));
   std::cout << "YOU BASTARD !!!" << std::endl;
 	return;
 };
@@ -142,7 +142,7 @@ void Explosion::run() {
 		if (this->simulation->simIsServer()){
 			std::list<NPC*> npcs = (*t)->getNPCs();
 			for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-				this->simulation->addAction(new KillNPC(*n, this->simulation));
+//				this->simulation->addAction(new KillNPC(*n, this->simulation));
 			};
 		}
 		//TODO détruire les batiments
@@ -262,6 +262,8 @@ void DropItem::run (){
 AbstractMessage* ChangeDirection::copy(){
 	return (AbstractMessage*) new ChangeDirection(*this);
 }
+
+
 
 
 AbstractMessage* AddCops::copy(){

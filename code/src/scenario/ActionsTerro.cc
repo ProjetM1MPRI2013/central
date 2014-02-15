@@ -28,8 +28,8 @@ return true;
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
-
-gs->deleteAction(this);
+	gs->addAction(new KillNPC (this->victim, (Simulation*) gs));
+	gs->deleteAction(this);
 };
 
 AbstractMessage* A_Attack::copy() {

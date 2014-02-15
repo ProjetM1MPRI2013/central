@@ -38,6 +38,7 @@ void Stack::cancel () {
 	this->NpcList.clear ();
 	this->StuffList.clear ();
 	this->stuffID = -1;
+	(this->hud)->setwf(WF_NONE);
 	//this->actionsName = Actions::NONE;
 };
 

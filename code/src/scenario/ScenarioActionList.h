@@ -17,9 +17,9 @@
 
 class Couple {
 public:
-  int x;
-  int y;
-  Couple (int x, int y);
+	int x;
+	int y;
+	Couple (int x, int y);
 };
 
 Couple* directionToInt(Direction a);
@@ -30,69 +30,69 @@ Direction intToDirection(Couple* a);
  * @brief The player changes of direction.
  */
 class ChangeDirection: public ScenarioAction {
- public:
-  int playerID;
-  
-  /**
-   * @brief The new direction of the player
-   */
-  Direction newDirection;
-  int timeStamp;
+public:
+	int playerID;
 
-  ChangeDirection(int id, Direction direction, int ts, Simulation* s);
-  ChangeDirection(const ChangeDirection&);
+	/**
+	 * @brief The new direction of the player
+	 */
+	Direction newDirection;
+	int timeStamp;
 
-  virtual void run();
+	ChangeDirection(int id, Direction direction, int ts, Simulation* s);
+	ChangeDirection(const ChangeDirection&);
 
-  //AbstractMessage functions
-  virtual AbstractMessage* copy();
+	virtual void run();
+
+	//AbstractMessage functions
+	virtual AbstractMessage* copy();
 protected :
-  //Serialization
-  ChangeDirection() {}
+	//Serialization
+	ChangeDirection() {}
 
-  SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection, timeStamp)
+	SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection, timeStamp)
 
 };
 
 
 class AddCops: public ScenarioAction {
- public:
-  int number;
-  float x;
-  float y;
-  AddCops (int n, float xx, float yy,Simulation* s);
-  AddCops (const AddCops&);
+public:
+	int number;
+	float x;
+	float y;
+	AddCops (int n, float xx, float yy,Simulation* s);
+	AddCops (const AddCops&);
 
-  virtual void run ();
+	virtual void run ();
 
-  //AbstractMessage functions
-  virtual AbstractMessage* copy();
+	//AbstractMessage functions
+	virtual AbstractMessage* copy();
 
 protected :
-  //Serialization
-  AddCops(){}
+	//Serialization
+	AddCops(){}
 
-  SIMPLE_MESSAGE(AddCops, ScenarioAction, number, x, y)
+	SIMPLE_MESSAGE(AddCops, ScenarioAction, number, x, y)
 };
 
 
 class AddCams: public ScenarioAction {
- public:
-  int number;
-  float x;
-  float y;
-  AddCams(int number,float x,float y,Simulation* s);
-  AddCams(const AddCams&);
+public:
+	int number;
+	float x;
+	float y;
+	AddCams(int number,float x,float y,Simulation* s);
+	AddCams(const AddCams&);
 
-  virtual void run ();
+	virtual void run ();
 
-  virtual AbstractMessage* copy();
+	virtual AbstractMessage* copy();
 
 private :
-  //Serialization
-  AddCams(){}
+	//Serialization
+	AddCams(){}
 
-  SIMPLE_MESSAGE(AddCams, ScenarioAction, number, x, y)
+	SIMPLE_MESSAGE(AddCams, ScenarioAction, number, x, y)
 };
 
 
@@ -100,29 +100,29 @@ private :
  * @brief Create a new explosion.
  */
 class Explosion: public ScenarioAction {
- public:
-  /**
-   * @brief The initial location of the explosion
-   */
-  std::pair<int,int> location;
+public:
+	/**
+	 * @brief The initial location of the explosion
+	 */
+	std::pair<int,int> location;
 
-  /**
-   * The power of the explosion
-   */
-  int power;
+	/**
+	 * The power of the explosion
+	 */
+	int power;
 
-  Explosion (int p,std::pair<int,int>,Simulation* s);
-  Explosion (const Explosion&);
+	Explosion (int p,std::pair<int,int>,Simulation* s);
+	Explosion (const Explosion&);
 
-  virtual void run ();
+	virtual void run ();
 
-  virtual AbstractMessage* copy();
+	virtual AbstractMessage* copy();
 
 private :
-  //Serialization
-  Explosion(){}
+	//Serialization
+	Explosion(){}
 
-  SIMPLE_MESSAGE(Explosion, ScenarioAction, power)
+	SIMPLE_MESSAGE(Explosion, ScenarioAction, power)
 };
 
 
@@ -131,49 +131,49 @@ private :
  */
 class KillNPC: public ScenarioAction {
 public:
-  /**
-   * @brief The NPC targeted
-   */
-  NPC* target;
+	/**
+	 * @brief The NPC targeted
+	 */
+	boost::uuids::uuid target;
 
-  KillNPC(NPC* t,Simulation* s);
-  KillNPC(const KillNPC&);
+	KillNPC(boost::uuids::uuid t,Simulation* s);
+	KillNPC(const KillNPC&);
 
-  virtual void run ();
+	virtual void run ();
 
-  //AbstractMessage functions
-  virtual AbstractMessage* copy();
+	//AbstractMessage functions
+	virtual AbstractMessage* copy();
 
 private :
-  //Serialization
-  KillNPC(){}
+	//Serialization
+	KillNPC(){}
 
-  SIMPLE_MESSAGE(KillNPC, ScenarioAction)
+	SIMPLE_MESSAGE(KillNPC, ScenarioAction)
 
 };
 
 class DropItem : public ScenarioAction{
- public :
-  int stuffID;
-  int playerID;
+public :
+	int stuffID;
+	int playerID;
 
-  /**
-   *@param stuffO : item to drop
-   *@param id : id of the player
-   */
-  DropItem(int stuffID, int id, Simulation* s);
-  DropItem (const DropItem&);
-  
-  virtual void run ();
+	/**
+	 *@param stuffO : item to drop
+	 *@param id : id of the player
+	 */
+	DropItem(int stuffID, int id, Simulation* s);
+	DropItem (const DropItem&);
 
-  //AbstractMessage functions
-  virtual AbstractMessage* copy();
+	virtual void run ();
+
+	//AbstractMessage functions
+	virtual AbstractMessage* copy();
 
 private :
-  //Serialization
-  DropItem(){}
+	//Serialization
+	DropItem(){}
 
-  SIMPLE_MESSAGE(DropItem, ScenarioAction, stuffID, playerID)
+	SIMPLE_MESSAGE(DropItem, ScenarioAction, stuffID, playerID)
 };
 
 
