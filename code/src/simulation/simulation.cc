@@ -386,9 +386,8 @@ NPC* Simulation::getNPCByID(boost::uuids::uuid uuid) {
   // FIXME This is a hack. And a useless malloc. 
   // Also having a set of pointers sounds terrible
   // for locality. Use map<uuid,NPC*> instead.
-  NPC* cmp = (NPC*) new WithUuid(uuid); 
-  auto it = NPCs.find(cmp);
-  delete cmp;
+  auto cmp = WithUuid(uuid);
+  auto it = NPCs.find((NPC*) &cmp);
   if (it == NPCs.end()) { 
     return nullptr; 
   } else { 

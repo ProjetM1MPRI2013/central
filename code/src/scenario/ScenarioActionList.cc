@@ -116,6 +116,7 @@ KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
 void KillNPC::run(){
 	std::cout << "OMG they killed Kenny" << std::endl;
 	Simulation* s = ((ScenarioAction*)this)->simulation;
+	std::cout << s->getSous() << std::endl;
 	std::cout << "trouvé la simulation" << std::endl;
 	boost::uuids::uuid t = this->target;
 	std::cout << "trouvé la target " << std::endl;
