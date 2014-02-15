@@ -157,3 +157,5 @@ void GlobalState::run(sf::Time dt){
 Server* GlobalState::getServer(void){
     return server;
 }
+
+

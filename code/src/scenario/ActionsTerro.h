@@ -26,18 +26,18 @@
 *********************************************************/
 class A_Attack: public Action {
 public:
-A_Attack  (int weapon, int victim, LocalState* s);
+A_Attack  (int weapon, boost::uuids::uuid victim, LocalState* s);
 A_Attack(const A_Attack&);
 public:
 int weapon; 
 public:
-int victim; 
+boost::uuids::uuid victim; 
 public: 
  bool isActionPossible (); 
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Attack(){};
 SIMPLE_MESSAGE(A_Attack, Action, weapon, victim);
@@ -58,7 +58,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Reload(){};
 SIMPLE_MESSAGE(A_Reload, Action, gun, ammunition);
@@ -79,7 +79,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Plant(){};
 SIMPLE_MESSAGE(A_Plant, Action, bomb, zone);
@@ -104,7 +104,7 @@ public:
   void doAction (); 
   void addPendingActions(GlobalState* gs); 
   virtual AbstractMessage* copy();
-private :
+protected :
 //Serialization
 A_Drop(){};
 SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID);

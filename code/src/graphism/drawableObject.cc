@@ -4,7 +4,11 @@
 
 #include "drawableObject.h"
 
+DrawableObject::DrawableObject(){}
 
+DrawableObject::DrawableObject(TexturePack* tex){
+  anim = Animation(tex);
+}
 
 sf::Sprite& DrawableObject::getSprite(){
   assert(this->anim.isInit());
@@ -37,10 +41,13 @@ bool DrawableObject::TextureIsInit(){
   return anim.isInit();
 }
 
-
-
 void DrawableObject::nextFrame()
 {
   anim.nextFrame();
   return;
+}
+
+int DrawableObject::getTexID()
+{
+  return anim.getTexID();
 }

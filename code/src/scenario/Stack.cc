@@ -18,13 +18,6 @@ void log (std::string s ) {
 	if (LOG) {std::cout << s << std::endl;};
 };
 
-// Deprecated. Update it to not use pointers
-// if you uncomment it.
-//Stuff* getStuff(std::list<Stuff*> l) {
-//Stuff* s = l.front();
-//l.pop_front();
-//return s;
-//};
 
 
 /* generated code*/
@@ -54,9 +47,9 @@ Action* Stack::ActionOfStack(ActionType a) {
 };
 
 void Stack::sendAction () {
+	std::cout << "send action" <<std::endl;
+	std::cout << (this->SoNList).size() <<std::endl;
 	if ((this->SoNList).empty()){
-		//{   if (DEBUG) {std::cout << this->actionsName << std::endl ;};
-		//Actions name = this->actionsName;
 		Action* a (this->ActionOfStack(this->actionType));
 		log ("test action possible");
 		if (a->isActionPossible ())
@@ -85,26 +78,29 @@ void Stack::sendAction () {
 
 void Stack::newAction(ActionType a, int stuffID) {
 	this->cancel();
-	SoNOfActions(a,this->SoNList);
+	this->SoNList = SoNOfActions(a);
 	this->actionType =a ;
 	this->stuffID = stuffID;
 	this->sendAction();
 };
 
-void Stack::sendNpc(int n) {
+void Stack::sendNpc(boost::uuids::uuid n) {
 	if ((this->SoNList).front() == SON_NPC)
-	{
-		(this->NpcList).push_front(n);
-		(this->SoNList).pop_front();
-		this->sendAction();
+	{		std::cout << "send" <<std::endl;
+	std::cout <<(this->NpcList).size() << std::endl;
+	(this->NpcList).push_front(n);
+	std::cout << "on a push" <<std::endl;
+	(this->SoNList).pop_front();
+	this->sendAction();
 	}
 	else
-	{
+	{   std::cout << "pas send" <<std::endl;
 		//(this->hud)->setwf(WF_ERROR);
 		/*todo : envoyer message d'erreur*/
 	};
 };
 void Stack::sendStuff(int stuffID) {
+	std::cout << "send stuff" <<std::endl;
 	if ((this->SoNList).front() == SON_STUFF)
 	{
 		(this->StuffList).push_front(stuffID);

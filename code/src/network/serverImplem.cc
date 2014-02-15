@@ -5,6 +5,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
+#include <boost/thread.hpp>
+
 #include "debug.h"
 
 /*
@@ -20,8 +22,15 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
 
   //connect socket
   ip::udp::resolver resolver(*service) ;
-  ip::udp::resolver::query query(s_info.hostname, s_info.port) ;
-  endpoint local_endpoint = *resolver.resolve(query) ;
+  ip::udp::resolver::query query(ip::udp::v4(), s_info.hostname, s_info.port) ;
+  ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
+  if(addr_iter == ip::udp::resolver::iterator())
+    {
+      //Address not found ....
+      LOG(error) << "Server failed to resolve address " << s_info.hostname << " port : " << s_info.port ;
+      throw std::runtime_error("Address not found") ;
+    }
+  endpoint local_endpoint = *addr_iter ;
   sock->open(ip::udp::v4());
   sock->bind(local_endpoint);
   updateGen = NULL ;
@@ -97,9 +106,14 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
 std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, AbstractMessage *(*f)(string &)){
   //copy of ClientImplem::receive_messages
   //Could not be in comunicatorImplem because this method is in the Client/Server interface
+
+  received_messages_mutex.lock() ;
   mapType::iterator elts = received_messages.find(msgType) ;
   if(elts == received_messages.end())
+    {
+      received_messages_mutex.unlock() ;
       return vector<AbstractMessage*>();
+    }
   else
     {
       vector<AbstractMessage *> result ;
@@ -110,6 +124,7 @@ std::vector<AbstractMessage *> ServerImplem::receive_messages(string msgType, Ab
             result.push_back(messagep);
         }
       received_messages.erase(elts);
+      received_messages_mutex.unlock() ;
       return result ;
     }
 

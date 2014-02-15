@@ -13,16 +13,19 @@
 #include <SFML/Graphics.hpp>
 #include "graphism/drawableObject.h"
 #include <cmath>
-
+#include "boost/uuid/uuid_serialize.hpp"
+#include <utility>
 
 /**
  * @brief The NPC class
  * It represents a NPC
  */
 
-class NPC : public Positionable, public DrawableObject {
+class NPC : public Positionable, public DrawableObject, public AbstractMessage {
  private:
   Trajectory trajectory;
+  /*needed for seriliazation*/
+  Position start;
   Position target;
   float fear;
   bool shocked;
@@ -34,6 +37,13 @@ class NPC : public Positionable, public DrawableObject {
 
 
  public:
+//  static std::string getMsgType() { return "NPC_msg" ; }
+  virtual AbstractMessage* copy() {
+      std::cout << "ERROR: NPC: we can't copy this class!\n" ;
+    return NULL ;
+  }
+
+
   /**
    * @brief NPC
    * Creates a new NPC
@@ -56,8 +66,8 @@ class NPC : public Positionable, public DrawableObject {
    * @param tex: the texture pack of the sprite sheet of the animation
    * @param uuid: the uuid for the NPC
    */
-  NPC(float s,float f,float h,TexturePack* tex,boost::uuids::uuid uuid);
-
+  NPC(float s,float f,float h,Position& start, TexturePack* tex,
+      boost::uuids::uuid uuid);
 
   /**
    * @brief NPC
@@ -214,6 +224,10 @@ private :
    */
   NPC(){} ;
 
-  SIMPLE_SERIALIZATION(position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
+//  SIMPLE_SERIALIZATION(uuid, position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
+  SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,
+                 target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
+
+std::ostream& operator<<(std::ostream& os, const NPC& npc);
 #endif

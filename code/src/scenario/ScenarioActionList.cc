@@ -114,7 +114,9 @@ KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
 }
 
 void KillNPC::run(){
+  std::cout << "OMG they killed Kenny" << std::endl;
 	simulation->supprimerNPC(target);
+  std::cout << "YOU BASTARD !!!" << std::endl;
 	return;
 };
 

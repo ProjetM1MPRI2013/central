@@ -11,7 +11,8 @@
 using namespace std ;
 using namespace boost::asio ;
 
-ComunicatorImplem::ComunicatorImplem() : ack_set(), received_messages(), sent_ack(), lock(),
+ComunicatorImplem::ComunicatorImplem() : ack_set(), received_messages(), received_messages_mutex(),
+  sent_ack(), lock(),
   pending_writes(), can_write(true), last_sent(0), nb_tasks_mutex(){
   //init fields
   service = new io_service() ;
@@ -66,7 +67,9 @@ int ComunicatorImplem::get_msg_id(const string &header) {
 void ComunicatorImplem::generate_message(NetEvent event) {
   //TODO change
   string msg = event.toString() ;
+  received_messages_mutex.lock() ;
   received_messages[NetEvent::getMsgType()].push_back(msg) ;
+  received_messages_mutex.unlock() ;
 }
 
 bool ComunicatorImplem::ack_message(const string &header) {

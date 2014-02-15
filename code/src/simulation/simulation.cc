@@ -36,6 +36,9 @@ Simulation::Simulation(int nbPlayers, int id):
 	this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
       (firstTile->getCoord()).getOrd()));
 
+    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
+    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
+        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
 	std::list<NPC*> NPCs;
 	this->NPCs = NPCs;
 }
@@ -57,6 +60,9 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id):
     Tile* firstTile = (this->getMap())->getWalkableTile();
     this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
                            (firstTile->getCoord()).getOrd()));
+    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
+    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
+        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
 
     std::list<NPC*> NPCs;
     this->NPCs = NPCs;
@@ -138,6 +144,19 @@ void Simulation::addNPC(Position start, Position target, float speed,
   //on le met dans sa tile de départ
   npc->getPosition().isInTile(*map).addNPC(npc);
 
+  trigger("NPC::created", *npc);
+  return;
+}
+
+void Simulation::addNPC(Position start, Position target, float speed,
+                        TexturePack* tex, boost::uuids::uuid id) {
+  //on crée le NPC
+  NPC *npc = new NPC(speed, 10, 10, start, tex, id);
+  npc->setTarget(target,*map);
+  //on l'ajoute à la liste
+  NPCs.push_front(npc);
+  //on le met dans sa tile de départ
+  npc->getPosition().isInTile(*map).addNPC(npc);
   trigger("NPC::created", *npc);
   return;
 }

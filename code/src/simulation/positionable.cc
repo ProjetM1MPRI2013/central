@@ -6,21 +6,25 @@
 
 Positionable::Positionable() : FogDisabler() {
   position = Position();
+  // listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }
 
 Positionable::Positionable(boost::uuids::uuid uuid) : FogDisabler(), EventSource(uuid) {
   position = Position();
+  // listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }
 
 Positionable::Positionable(float x,float y) : FogDisabler() {
   position = Position(x,y);
+  // listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }
 
 Positionable::Positionable(Position& p) : FogDisabler() {
   position = Position(p);
+  // listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }
 
@@ -29,7 +33,15 @@ Position& Positionable::getPosition() {
 }
 
 void Positionable::setPosition(Position& p) {
-  position = p;
+  position.setX(p.getX());
+  position.setY(p.getY());
+  return;
+}
+
+void Positionable::changedTile(Position& p, std::pair<Coordinates,Coordinates> mod)
+{
+  assert(&p==&position);
+  // trigger("Positionable::changedTile",mod);
   return;
 }
 

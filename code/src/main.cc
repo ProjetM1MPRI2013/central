@@ -67,7 +67,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
-  HudTerro hudTerro = HudTerro(window, loc);
+  HudTerro hudTerro = HudTerro(window, loc, &graContIso);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
@@ -99,7 +99,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
         }
 
       }
-      hudTerro.event(window, event);
+      hudTerro.event(window, event, &graContIso);
     }
 
     loc.run(dt);

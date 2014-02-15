@@ -13,7 +13,12 @@
 class C_Stuff: public Clickable {
  public:
 C_Stuff  ();
-}; 
+//Serialization
+protected :
+virtual AbstractMessage* copy();
+
+SIMPLE_MESSAGE(C_Stuff, Clickable);
+};
 
 /*********************************************************
 ** Weapon**
@@ -29,7 +34,12 @@ public:
 virtual float getrange () = 0;
 protected:
 float range; 
-}; 
+//Serialization
+protected :
+
+SIMPLE_MESSAGE(C_Weapon, C_Stuff, damage, range);
+};
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Weapon);
 
 /*********************************************************
 ** Gun**
@@ -55,7 +65,12 @@ public:
 int getdamage ();
 protected:
 int damage; 
-}; 
+//Serialization
+protected :
+C_Gun(){};
+SIMPLE_MESSAGE(C_Gun, C_Weapon, ammunitionMax, range, ammunitionLoaded, damage);
+};
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Gun);
 
 /*********************************************************
 ** Mitraillette**
@@ -71,7 +86,12 @@ public:
 float getrange ();
 protected:
 float range; 
-}; 
+//Serialization
+protected :
+C_Mitraillette(){};
+SIMPLE_MESSAGE(C_Mitraillette, C_Gun, ammunitionMax, range);
+};
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Mitraillette);
 
 /*********************************************************
 ** UltraM**
@@ -83,7 +103,12 @@ public:
 int getdamage ();
 protected:
 int damage; 
-}; 
+//Serialization
+protected :
+
+SIMPLE_MESSAGE(C_UltraM, C_Mitraillette, damage);
+};
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_UltraM);
 
 /*********************************************************
 ** Knife**
@@ -99,7 +124,12 @@ public:
 int getdamage ();
 protected:
 int damage; 
-}; 
+//Serialization
+protected :
+
+SIMPLE_MESSAGE(C_Knife, C_Weapon, range, damage);
+};
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Knife);
 
 /*********************************************************
 ** Ammunition**
@@ -113,7 +143,12 @@ public:
 void setnumber (int);
 protected:
 int number; 
-}; 
+//Serialization
+protected :
+virtual AbstractMessage* copy();
+C_Ammunition(){};
+SIMPLE_MESSAGE(C_Ammunition, C_Stuff, number);
+};
 
 /*********************************************************
 ** Bomb**
@@ -125,5 +160,11 @@ public:
 int getpower ();
 protected:
 int power; 
-}; 
+//Serialization
+protected :
+virtual AbstractMessage* copy();
+C_Bomb(){};
+SIMPLE_MESSAGE(C_Bomb, C_Stuff, power);
+};
+
 #endif

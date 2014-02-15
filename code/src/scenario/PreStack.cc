@@ -18,7 +18,8 @@ std::string stringOfActions(ActionType a) {
 		return "should not happen in stringofaction";
 	};
 };
-void SoNOfActions(ActionType a,std::list<SoN> l){
+std::list<SoN> SoNOfActions(ActionType a){
+	std::list<SoN> l;
 	switch (a) {
 	case ToA_Attack:{l.push_front(SON_NPC);
 
@@ -34,12 +35,13 @@ void SoNOfActions(ActionType a,std::list<SoN> l){
 		//Should not happens
 		break;
 	};
+	return l;
 };
-Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::list<int> stuffList,LocalState* sim) {
+Action* createAction(ActionType a,int basicStuff, std::list<boost::uuids::uuid> npcList, std::list<int> stuffList,LocalState* sim) {
 	switch (a) {
 	case ToA_Attack:{
 		int weapon = basicStuff;
-		int victim= npcList.back();
+		boost::uuids::uuid victim= npcList.back();
 		npcList.pop_back();
 		return (new A_Attack (weapon, victim, sim));
 	};

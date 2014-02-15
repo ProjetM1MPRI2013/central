@@ -18,7 +18,7 @@
 Tile* getTyle(LocalState* s);
 
 
-Action* create (ActionType a,int stuffID,std::list<int> npcs,std::list<int> stuffs,LocalState* sim);
+Action* create (ActionType a,int stuffID,std::list<boost::uuids::uuid> npcs,std::list<int> stuffs,LocalState* sim);
 
 
 
@@ -46,7 +46,7 @@ public:
 	 * @brief Used when the player click on a Npc
 	 * @param n The Npc
 	 */
-	void sendNpc(int n);
+	void sendNpc(boost::uuids::uuid n);
 	/**
 	 * @brief Used when the player click on a Stuff
 	 * @param s The stuff.
@@ -66,7 +66,7 @@ private:
 	ActionType actionType;
 	int stuffID;
 	std::list<SoN> SoNList;
-	std::list<int> NpcList;
+	std::list<boost::uuids::uuid> NpcList;
 	std::list<int> StuffList;
 };
 

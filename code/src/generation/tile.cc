@@ -1,5 +1,5 @@
 /**
- * @author: Maxime, Joseph
+ * @author: Maxime, Joseph, Lucas
  */
 #include "tile.h"
 #include "../simulation/position.h"
@@ -76,7 +76,7 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   wrapper = NULL;
   this->filePictures = filePicturesO;
   alpha = false;
-  fog = false;
+  fog = 0;
   buildfog = false;
 
   if (DEBUG){std::cout << "Tile : end\n";}
@@ -88,6 +88,9 @@ Tile::Tile() :
   coordBorough(Coordinates()),
   picture(Coordinates()) {
   wrapper = nullptr;
+  alpha = false;
+  fog = 0;
+  buildfog = false;
 }
 
 Tile::Tile(const Tile& t) :
@@ -114,9 +117,10 @@ Tile::Tile(const Tile& t) :
   destructionLevel = t.destructionLevel;
   filePictures = t.filePictures;
   alpha = t.alpha;
-  // fog = true;
-  // sprite.setColor(sf::Color(128,128,128));
-  fog = t.fog; //temporaire
+  fog = t.fog;
+  if (fog == 0)
+    sprite.setColor(sf::Color(128,128,128));
+  buildfog = false;
 }
 
 
@@ -145,9 +149,10 @@ Tile& Tile::operator=(const Tile& t){
     destructionLevel = t.destructionLevel;
     filePictures = t.filePictures;
     alpha = t.alpha;
-    // fog = true;
-    // sprite.setColor(sf::Color(128,128,128));
-    fog = t.fog; //temporaire
+    fog = t.fog;
+    if (fog == 0)
+      sprite.setColor(sf::Color(128,128,128));
+    buildfog = false;
   }
   return *this;
 }
@@ -459,7 +464,7 @@ bool Tile::isWalkable()
 
 bool Tile::isInFog()
 {
-  return fog;
+  return fog == 0;
 }
 
 void Tile::setAlpha(bool a)
@@ -489,7 +494,9 @@ void Tile::setBuildFog(int nbFog)
   return;
 }
 
-void Tile::setFog(bool infog){
-  fog = infog;
+void Tile::setFog(int modfog){
+  fog += modfog;
+  fog = std::max(0,fog); //temp
+  // assert(fog >= 0);
   return;
 }

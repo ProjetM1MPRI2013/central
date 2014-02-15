@@ -5,7 +5,7 @@
 class Clickable;
 #include "../scenario/Stack.h"
 #include "../scenario/PreStack.h"
-
+#include "../graphism/graphic_context_iso.h"
 #include "localState.h"
 
 #define DEBUG false
@@ -42,7 +42,7 @@ void printcwd() {
 
 ;
 
-HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation) :
+HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicContextIso* context) :
 				simulation(simulation) {
 	this->stack = (new Stack (&simulation,this));
 	this->w = (*window).getSize().x;
@@ -78,7 +78,9 @@ void HudTerro::init() {
 
 
 		//FIXME We don't check that inventory has changed for now (temporary)
-		if ((this->inventory) != (simulation.getOwner().getInventory())) {
+		if (((this->inventory) != (simulation.getOwner().getInventory()))
+        ||(this->inventory).empty()) // for the case we just dropped the last item
+    {
 			//Delete the old buttons
 			for (std::list<tgui::Button::Ptr>::iterator it =
 					(this->buttonsList).begin();
@@ -116,7 +118,7 @@ void HudTerro::init() {
 }
 ;
 
-void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
+void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIso* context) {
 	if (event.type == sf::Event::Closed)
 		(*window).close();
 
@@ -176,12 +178,29 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event) {
 				break;
 			};
 		};
+    if (event.type == sf::Event::MouseWheelMoved) {
+      std::cout << "Molette : " << event.mouseWheel.delta << std::endl;
+      if (event.mouseWheel.delta != 0) {
+        if (event.mouseWheel.delta > 0) {
+          (*context).zoom(0.9);
+        } else {
+          (*context).zoom(1.1);
+        };
+      }; 
+    };
 	};
 
 	if (waitFor == WF_CLICK) {
 		if (event.type == sf::Event::MouseButtonPressed) {
 			if (event.mouseButton.button == sf::Mouse::Left) {
-				// TODO : envoyer le clic si c'est un NPC
+				// envoyer le clic si c'est sur la hitbox d'un NPC
+        sf::Vector2i clicPosition = sf::Mouse::getPosition(*window); 
+        Position mapPosition = (*context).screenToMap(clicPosition.x,clicPosition.y);
+        std::list<NPC*> NPCList = mapPosition.getNPCList(*(simulation.getMap()));       
+        std::cout << "Taille de NPCList : " << NPCList.size() << std::endl;
+        if (!NPCList.empty()) {
+          stack->sendNpc((*(NPCList.front())).getUuid());
+        }
 			} else {
 				stack->cancel();
 			};
@@ -275,6 +294,9 @@ void HudTerro::callback(unsigned int callback_id) {
 				++it;
 			};
 			stack->newAction((*it), this->currentStuffID);
+      this->nextState = BS_INVENT;
+			(this->actionTypeList).clear();
+
 		};
 	};
 }

@@ -3,6 +3,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <sstream>
+#include <boost/thread/mutex.hpp>
 
 #include "clientImplem.h"
 #include "debug.h"
@@ -21,13 +22,27 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
-    ip::udp::resolver::query query(c_info.serverName, c_info.serverPort) ;
-    server_endpoint = *resolver.resolve(query) ;
+    ip::udp::resolver::query query(ip::udp::v4(), c_info.serverName, c_info.serverPort) ;
+    ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
+    if(addr_iter == ip::udp::resolver::iterator())
+      {
+        //Address not found ....
+        LOG(error) << "Client failed to resolve Server address " << c_info.serverName << " port : " << c_info.serverPort ;
+        throw std::runtime_error("Address not found") ;
+      }
+    server_endpoint = *addr_iter ;
     if(c_info.localName.compare("") != 0)
     {
         //a local address is provided
-        ip::udp::resolver::query query2(c_info.localName,c_info.localPort) ;
-        ip::udp::endpoint local_endpoint = *resolver.resolve(query2) ;
+        ip::udp::resolver::query query2(ip::udp::v4(), c_info.localName,c_info.localPort) ;
+        addr_iter = resolver.resolve(query2) ;
+        if(addr_iter == ip::udp::resolver::iterator())
+          {
+            //Address not found ....
+            LOG(error) << "Client failed to resolve Server address " << c_info.serverName << " port : " << c_info.serverPort ;
+            throw std::runtime_error("Address not found") ;
+          }
+        ip::udp::endpoint local_endpoint = *addr_iter ;
         sock->open(ip::udp::v4()) ;
         sock->bind(local_endpoint) ;
     }
@@ -78,9 +93,12 @@ void ClientImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
 std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, AbstractMessage *(*f)(string &)){
   //copy of ServerImplem::receive_messages
   //Could not be in comunicatorImplem because this method is in the Client/Server interface
+
+  received_messages_mutex.lock() ;
   mapType::iterator elts = received_messages.find(msgType) ;
   if(elts == received_messages.end())
     {
+      received_messages_mutex.unlock() ;
       return vector<AbstractMessage*>();
     }
   else
@@ -93,6 +111,7 @@ std::vector<AbstractMessage *> ClientImplem::receive_messages(string msgType, Ab
             result.push_back(messagep);
         }
       received_messages.erase(elts);
+      received_messages_mutex.unlock() ;
       return result ;
     }
 
@@ -277,7 +296,9 @@ void ClientImplem::on_receive(const boost::system::error_code &error, int size){
           }
         delete event ;
       }
+    received_messages_mutex.lock() ;
     received_messages[type].push_back(buff->substr(0,size - HEADER_SIZE)) ;
+    received_messages_mutex.unlock() ;
     wait_receive() ;
 }
 

@@ -73,3 +73,9 @@ bool Animation::isInit()
 {
   return tex != NULL;
 }
+
+int Animation::getTexID()
+{
+  assert(tex->ID != -1); 
+  return(tex->ID);
+}
