@@ -114,9 +114,20 @@ KillNPC::KillNPC(const KillNPC& a) : ScenarioAction("KillNPC",a.simulation){
 }
 
 void KillNPC::run(){
-  std::cout << "OMG they killed Kenny" << std::endl;
-  simulation->supprimerNPC(((ScenarioAction*)this)->simulation->getNPCByID(this->target));
-  std::cout << "YOU BASTARD !!!" << std::endl;
+	std::cout << "OMG they killed Kenny" << std::endl;
+	Simulation* s = ((ScenarioAction*)this)->simulation;
+	std::cout << "trouvé la simulation" << std::endl;
+	boost::uuids::uuid t = this->target;
+	std::cout << "trouvé la target " << std::endl;
+	NPC* victim = s->getNPCByID(t);
+	std::cout << "trouvé le npc" << std::endl;
+	if (victim == NULL) {
+		std::cout << "null" << std::endl;
+	}
+	else {
+		std::cout << "pas null" << std::endl;
+		simulation->supprimerNPC(victim);};
+	std::cout << "YOU BASTARD !!!" << std::endl;
 	return;
 };
 
@@ -142,7 +153,7 @@ void Explosion::run() {
 		if (this->simulation->simIsServer()){
 			std::list<NPC*> npcs = (*t)->getNPCs();
 			for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-//				this->simulation->addAction(new KillNPC(*n, this->simulation));
+				//				this->simulation->addAction(new KillNPC(*n, this->simulation));
 			};
 		}
 		//TODO détruire les batiments
