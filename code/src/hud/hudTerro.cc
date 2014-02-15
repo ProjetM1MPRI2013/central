@@ -179,8 +179,13 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
 			};
 		};
     if (event.type == sf::Event::MouseWheelMoved) {
+      std::cout << "Molette : " << event.mouseWheel.delta << std::endl;
       if (event.mouseWheel.delta != 0) {
-        (*context).zoom(pow(0.9, (float) event.mouseWheel.delta));
+        if (event.mouseWheel.delta > 0) {
+          (*context).zoom(0.9);
+        } else {
+          (*context).zoom(1.1);
+        };
       }; 
     };
 	};
