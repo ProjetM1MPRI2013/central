@@ -28,8 +28,10 @@
 #include "localState.h"
 #include "globalState.h"
 
+bool TERRO = true;
+bool AUTOPLAY = false;
+bool CLIENT = false;
 #define DEBUG true
-#define TERRO false // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -154,6 +156,15 @@ int main(int argc, char ** argv) {
     exit(0);
   }
 
+  std::string cur;
+  for (int i=1;i<argc;i++) {
+    cur = (std::string) argv[i];
+    if (cur == "auto") AUTOPLAY = true; // Skip interface_initiale (default: no)
+    if (cur == "mayor") TERRO = false; // Show mayor view (default: no)
+    if (cur == "terro") TERRO = true; // Show terro view (default: yes)
+    if (cur == "client") CLIENT = true; // Client only (default:  no)
+  }
+
   int sizeFenetre[3], b;
   bool isFullScreen;
   sf::VideoMode video_mode;
@@ -165,11 +176,17 @@ int main(int argc, char ** argv) {
   ServerInfo s_info;
   ClientInfo c_info;
   Server* serverPtr = NULL;
-  if (argc < 2 || (std::string) argv[1] != "client")
+  if (!CLIENT)
     serverPtr = Network::createServer(s_info);
   Client* clientPtr = Network::createClient(c_info);
-  b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
-  video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
+  if (AUTOPLAY) {
+    b = 1;
+    video_mode = sf::VideoMode::getDesktopMode();
+    isFullScreen = true;
+  } else {
+    b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
+    video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
+  }
   //}
 
   if (b == 0) {
