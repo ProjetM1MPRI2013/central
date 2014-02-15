@@ -154,10 +154,12 @@ void NPC::nextFrame()
 {
   std::pair<float,float> speedVect = trajectory.getSpeed();
   float sp = sqrt(pow(speedVect.first,2)+pow(speedVect.second,2));
-  if(sp >= 0.01 && anim.getAnim() != RUN)
+  if(sp >= 0.01 && anim.getAnim() != RUN && anim.getAnim() != DEAD)
     anim.setAnim(RUN);
   else if(sp < 0.01 && anim.getAnim() == RUN)
     anim.setAnim(IDLE);
+  else if(anim.getAnim() != DEAD && !isAlive)
+    anim.setAnim(DEAD);
   else
     anim.nextFrame();
 
