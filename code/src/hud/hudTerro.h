@@ -31,10 +31,9 @@ public:
 	void setwf(WaitFor w);
 	Stack* stack;
 
-	/* In the main loop, the 4 methods must be called in this specific order :
+	/* In the main loop, the 3 methods must be called in this specific order :
 	 * init();
-	 * event(window, event);
-	 * callback(callback);
+	 * event(window, event, context);
 	 * draw();
 	 */
 

@@ -11,10 +11,16 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 	simulation(simulation) {
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
+  this->mouseMovement = false;
+  this->bup = false;
+  this->bdown = false; 
+  this->bleft = false;
+  this->bright = false; 
 	this->hud = tgui::Gui((*window));
-	this->currentState = MAYOR_ACTIONS;
-	this->nextState = MAYOR_NUMBERS;
+	this->currentState = MAYOR_NUMBERS;
+	this->nextState = MAYOR_ACTIONS;
 	this->waitFor = WF_NONE;
+  (this->hud).setGlobalFont("../fonts/leadcoat.ttf");
 
 }
 ;
@@ -23,17 +29,18 @@ void HudMayor::init()
 {
   if (this->currentState != this->nextState) 
   {
+    this->currentState = this->nextState;
     // Delete the old buttons 
 		for (std::list<tgui::Button::Ptr>::iterator it =
 		(this->buttonsList).begin();
 		it != (this->buttonsList).end(); ++it) 
     {
-			delete &it;
+      hud.remove(*it);
 		};
 		(this->buttonsList).clear();
 
     // Create the new buttons 
-    if (this->nextState == MAYOR_ACTIONS)
+    if (this->currentState == MAYOR_ACTIONS)
     {
       // Create the "Add Cameras" button
 		  tgui::Button::Ptr b_cam(this->hud);
@@ -86,9 +93,6 @@ void HudMayor::init()
  
     };
   };
-  
-  this->currentState = this->nextState; 
-
 };
 
 void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilemap) {
@@ -100,24 +104,65 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
   if (event.type == sf::Event::Closed)
 		(*window).close();
 
-	if (event.type == sf::Event::KeyPressed) {
+	if (waitFor == WF_NONE) {
 		// Je crois qu'on veut rajouter une action Mayor newmovement
 		// je verrai plus tard comment on fait exactement
-		switch (event.key.code) {
-		case sf::Keyboard::Z:
-			//newMovement (NewMov::P_UP);
-			break;
-		case sf::Keyboard::Q:
-			//NewMovement (NewMov::P_LEFT);
-			break;
-		case sf::Keyboard::S:
-			//NewMovement (NewMov::P_DOWN);
-			break;
-		case sf::Keyboard::D:
-			//NewMovement (NewMov::P_RIGHT);
-			break;
-		default:
-			break;
+		if (event.type == sf::Event::KeyPressed) {
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				if (not this->bup) {
+					//newMovement (NewMov::P_UP,(&this->simulation));
+          mouseMovement = false;
+					this->bup = true;
+				};
+				break;
+			case sf::Keyboard::Q:
+				if (not this->bleft) {
+					//newMovement (NewMov::P_LEFT,(&this->simulation));
+          mouseMovement = false;
+					this->bleft = true;
+				};
+				break;
+			case sf::Keyboard::S:
+				if (not this->bdown) {
+					//newMovement (NewMov::P_DOWN,(&this->simulation));
+          mouseMovement = false;
+					this->bdown = true;
+				};
+				break;
+			case sf::Keyboard::D:
+				if (not this->bright) {
+					//newMovement (NewMov::P_RIGHT,(&this->simulation));
+          mouseMovement = false;
+					this->bright = true;
+				};
+				break;
+			default:
+				break;
+			};
+		};
+
+		if (event.type == sf::Event::KeyReleased) {
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				//newMovement (NewMov::R_UP,(&this->simulation));
+				this->bup = false;
+				break;
+			case sf::Keyboard::Q:
+				//newMovement (NewMov::R_LEFT,(&this->simulation));
+				this->bleft = false;
+				break;
+			case sf::Keyboard::S:
+				//newMovement (NewMov::R_DOWN,(&this->simulation));
+				this->bdown = false;
+				break;
+			case sf::Keyboard::D:
+				//newMovement (NewMov::R_RIGHT,(&this->simulation));
+				this->bright = false;
+				break;
+			default:
+				break;
+			};
 		};
 	};
   
@@ -191,6 +236,7 @@ void HudMayor::callback(unsigned int callback_id)
 
 void HudMayor::draw() {
 	(this->hud).draw();
+  std::cout << "Il y a " << (this->buttonsList).size() << " bouttons." << std::endl;
 }
 ;
 

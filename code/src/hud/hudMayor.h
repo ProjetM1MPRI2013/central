@@ -29,18 +29,22 @@ public:
 	void draw();
 	void setwf(WaitFor w);
 
-	/* In the main loop, the 4 methods must be called in this specific order :
+	/* In the main loop, the 3 methods must be called in this specific order :
 	 * init();
-	 * event(window, event);
-	 * callback(callback);
+	 * event(window, event, tilemap);
 	 * draw();
 	 */
 
 private:
+  bool mouseMovement;
 	unsigned int w;
 	unsigned int h;
 	unsigned int i;
 	Simulation& simulation;
+  bool bup;
+  bool bdown;
+  bool bleft; 
+  bool bright;
 	tgui::Gui hud;
 	std::list<tgui::Button::Ptr> buttonsList;
   MayorState currentState; 
