@@ -5,6 +5,7 @@
 class Stuff;
 #include "../scenario/Stack.h"
 #include "../graphism/tilemap.h"
+#define THEME_CONFIG_FILE_HUD_MAYOR "../widgets/Black.conf"
 
 
 HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
@@ -44,7 +45,7 @@ void HudMayor::init()
     {
       // Create the "Add Cameras" button
 		  tgui::Button::Ptr b_cam(this->hud);
-			b_cam->load("../widgets∕Black.conf");
+			b_cam->load(THEME_CONFIG_FILE_HUD_MAYOR);
 			b_cam->setSize(80, 40);
 			b_cam->setPosition(150, this->h - 100);
 			b_cam->setText("Add Cameras");
@@ -55,7 +56,7 @@ void HudMayor::init()
 
       // Create the "Add Cops" button
 		  tgui::Button::Ptr b_cop(this->hud);
-			b_cop->load("../widgets∕Black.conf");
+			b_cop->load(THEME_CONFIG_FILE_HUD_MAYOR);
 			b_cop->setSize(80, 40);
 			b_cop->setPosition(50, this->h - 100);
 			b_cop->setText("Add Cops");
@@ -70,7 +71,7 @@ void HudMayor::init()
       for (int k = 1; k<11; k++) 
       {
         tgui::Button::Ptr button(this->hud);
-			  button->load("../widgets∕Black.conf");
+			  button->load(THEME_CONFIG_FILE_HUD_MAYOR);
 			  button->setSize(40, 40);
 			  button->setPosition(50 + k*50, this->h - 100);
 			  button->setText(std::to_string(k));
@@ -82,7 +83,7 @@ void HudMayor::init()
 
       // Create the "Back" button
       tgui::Button::Ptr b_back(this->hud);
-	    b_back->load("../widgets∕Black.conf");
+	    b_back->load(THEME_CONFIG_FILE_HUD_MAYOR);
 	    b_back->setSize(80, 40);
 	    b_back->setPosition(this->w - 100, this->h - 100);
 	    b_back->setText("Back");
