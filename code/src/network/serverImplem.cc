@@ -329,7 +329,9 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
         }
         delete event ;
     }
+  received_messages_mutex.lock() ;
   received_messages[type].push_back(buff->substr(0,size - HEADER_SIZE)) ;
+  received_messages_mutex.unlock() ;
   wait_receive() ;
 }
 
