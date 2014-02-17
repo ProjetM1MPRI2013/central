@@ -383,7 +383,7 @@ void Simulation::setScenario(HScenario* s) {
 }
 
 NPC* Simulation::getNPCByID(boost::uuids::uuid uuid) {
-  // FIXME This is a hack. And a useless malloc. 
+  // FIXME This is a hack. 
   // Also having a set of pointers sounds terrible
   // for locality. Use map<uuid,NPC*> instead.
   auto cmp = WithUuid(uuid);
