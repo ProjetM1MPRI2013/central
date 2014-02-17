@@ -22,7 +22,8 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
 
     //connect socket
     ip::udp::resolver resolver(*service) ;
-    ip::udp::resolver::query query(ip::udp::v4(), c_info.serverName, c_info.serverPort) ;
+    ip::udp::resolver::query query(ip::udp::v4(), c_info.serverName, c_info.serverPort,
+                                   ip::udp::resolver::query::passive) ;
     ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
     if(addr_iter == ip::udp::resolver::iterator())
       {
@@ -34,7 +35,8 @@ ClientImplem::ClientImplem(ClientInfo &c_info) : ComunicatorImplem(), server_end
     if(c_info.localName.compare("") != 0)
     {
         //a local address is provided
-        ip::udp::resolver::query query2(ip::udp::v4(), c_info.localName,c_info.localPort) ;
+        ip::udp::resolver::query query2(ip::udp::v4(), c_info.localName,c_info.localPort,
+                                        ip::udp::resolver::query::passive) ;
         addr_iter = resolver.resolve(query2) ;
         if(addr_iter == ip::udp::resolver::iterator())
           {
