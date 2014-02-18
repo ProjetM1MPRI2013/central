@@ -89,15 +89,13 @@ void GrilleHarmonique::randomAccord(
 
 
 void GrilleHarmonique::tabGrille(
-	std::vector<std::string> &o_partition){
+	std::vector<Accord> &o_partition){
 
 	//! Initialisastion
 	o_partition.resize(m_nbMesure);
-	Accord accord;
 
 	for (int i = 0 ; i < m_nbMesure; i++){
-		randomAccord(accord);
-		o_partition[i] = accord.m_noteDominante + accord.m_typeAccord;
+		randomAccord(o_partition[i]);
 	}
 }
 

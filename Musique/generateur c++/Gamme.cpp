@@ -21,36 +21,37 @@ Gamme::Gamme() {
 }
 
 Gamme::Gamme(
-		std::string const& i_gamme) {
+	std::string const& i_gamme) {
 
 	if (i_gamme.substr(1,1)=="#") {
 		m_noteDominante = i_gamme.substr(0,2);
-		m_typeGamme   = i_gamme.substr(2);
+		m_typeGamme     = i_gamme.substr(2);
 	}
 	else {
 		m_noteDominante = i_gamme.substr(0,1);
-		m_typeGamme    = i_gamme.substr(1);
+		m_typeGamme     = i_gamme.substr(1);
 	}
 
 }
 
 
 void Gamme::setGamme(
-		std::string const& i_gamme) {
+	std::string const& i_gamme) {
+
 	if (i_gamme.substr(1,1)=="#") {
 		m_noteDominante = i_gamme.substr(0,2);
-		m_typeGamme   = i_gamme.substr(2);
+		m_typeGamme     = i_gamme.substr(2);
 	}
 	else {
 		m_noteDominante = i_gamme.substr(0,1);
-		m_typeGamme    = i_gamme.substr(1);
+		m_typeGamme     = i_gamme.substr(1);
 	}
 
 }
 
 
 void Gamme::nomNotes(
-		std::vector<std::string> &o_list) {
+	std::vector<std::string> &o_list) {
 
 	o_list.clear();
 	if (m_typeGamme == "maj") {
@@ -81,7 +82,7 @@ void Gamme::nomNotes(
 
 }
 
-	Gamme::~Gamme() {
-		// TODO Auto-generated destructor stub
-	}
+Gamme::~Gamme() {
+	// TODO Auto-generated destructor stub
+}
 
