@@ -367,7 +367,7 @@ void HudTerro::callback(unsigned int callback_id) {
     if (waitFor == WF_STUFF) {
 		  if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
 	      this->currentStuffID = inventory[((int)callback_id) - 1]; 
-        // envoyer le stuff à Rémy
+        stack->sendStuff(this->currentStuffID); 
       };
     };
 	};
