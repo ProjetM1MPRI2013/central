@@ -70,6 +70,28 @@ HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicCont
 ;
 
 void HudTerro::init() {
+
+/*switch (waitFor) {
+  case WF_NONE:
+    std::cout << "WF_NONE" << std::endl;
+    break;
+  case WF_CLICK:
+    std::cout << "WF_CLICK" << std::endl;
+    break;
+  case WF_PICK:
+    std::cout << "WF_PICK" << std::endl;
+    break;
+  case WF_STUFF:
+    std::cout << "WF_STUFF" << std::endl;
+    break;
+   case WF_ERROR:
+    std::cout << "WF_ERROR" << std::endl;
+    break;
+};
+*/
+
+
+
 	this->currentState = this->nextState;
 	//std::cerr << "KOUKOU" << std::endl;
 	//if ((this-> currentState) == BS_INVENT) {std::cerr << "BS_INVENT" << std::endl;};
@@ -94,7 +116,7 @@ void HudTerro::init() {
 			(this->inventory).clear();
 			this->inventory = (simulation.getOwner().getInventory());
 
-			// Create the new buttons
+			// Create the new buttons of the inventory
 			this->i = 0;
 			for (int stuffID : inventory) {
 
@@ -114,6 +136,16 @@ void HudTerro::init() {
 				(this->i)++;
 				DBG << "adding " << stuff.name;
 			};
+
+      // Create the 'pick' button
+      tgui::Button::Ptr b_pick(this->hud);
+      b_pick->load(THEME_CONFIG_FILE_HUD_TERRO);
+      b_pick->setSize(80,40);
+      b_pick->setPosition(50 + this->w - 200, this->h - 100);
+      b_pick->setText("Pick");
+      b_pick->bindCallback(std::bind(&HudTerro::callback, this, 0), 
+            tgui::Button::LeftMouseClicked);
+      (this->buttonsList).push_back(b_pick);
 		};
 	};
 }
@@ -213,9 +245,27 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
 			if (event.type == sf::Event::KeyPressed) {
 				stack->cancel();
 			}
-
 		};
-	}
+	};
+
+  if (waitFor == WF_PICK) {
+		if (event.type == sf::Event::MouseButtonPressed) {
+			if (event.mouseButton.button == sf::Mouse::Left) {
+        sf::Vector2i clicPosition = sf::Mouse::getPosition(*window); 
+        Position mapPosition = context.screenToMap(clicPosition.x,clicPosition.y);
+        // pick the closest item to the position
+        // if there is such an item
+        setwf(WF_NONE);
+      } else {
+        setwf(WF_NONE);
+      };
+    } else {
+      if (event.type == sf::Event::KeyPressed) {
+        setwf(WF_NONE); 
+      }
+    };
+  };
+  
 
   // Pass the event to all the current widgets
   bool consumed = (this->hud).handleEvent(event);
@@ -247,61 +297,75 @@ void HudTerro::callback(unsigned int callback_id) {
 	//while ((this->hud).pollCallback(callback)) {
 	std::cerr << "callback : " << callback_id << std::endl;
 	if ((this->currentState) == BS_INVENT) {
-		if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
-			// Save the selected item
-			this->currentStuffID = inventory[((int)callback_id) - 1]; // horrible
-			// Get the possible actions for the item
-			// test without network nobody
-			if (WithNetwork) {
-				this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
-			}
-			else {
-				std::list<ActionType> actionTypeList;
-				this->actionTypeList = actionTypeList;
-				this->actionTypeList.push_back(ToA_Drop);
-			};
-			// Delete the old buttons
-			for (std::list<tgui::Button::Ptr>::iterator it =
-					(this->buttonsList).begin();
-					it != (this->buttonsList).end(); ++it) {
-				hud.remove(*it);
-				//delete &it;
-			};
-			(this->buttonsList).clear();
-			(this->inventory).clear();
+    if (waitFor == WF_NONE) {
+      // The 'pick' button is clicked
+      if (callback_id == 0) {
+        setwf(WF_PICK);
+      };
 
-			// Create the new buttons
-			this->i = 0;
-			for (std::list<ActionType>::iterator it =
-					(this->actionTypeList).begin();
-					it != (this->actionTypeList).end(); ++it)
-			{
-				tgui::Button::Ptr button(this->hud);
-				button->load(THEME_CONFIG_FILE_HUD_TERRO);
-				button->setSize(80, 40);
-				button->setPosition(50 + (this->i) * 100, this->h - 100);
-				button->setText(stringOfActions(*it));
-				button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
-						tgui::Button::LeftMouseClicked);
-				//button->setCallbackId(this->i + 1);
-				(this->buttonsList).push_back(button);
-				(this->i)++;
-			};
+      // An item of the inventory is clicked
+		  if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
+			  // Save the selected item
+			  this->currentStuffID = inventory[((int)callback_id) - 1]; // horrible
+			  // Get the possible actions for the item
+			  // test without network nobody
+			  if (WithNetwork) {
+				  this->actionTypeList = simulation.getOwner().getItemByID<Clickable>(currentStuffID).getActionTypePossible();
+			  } 
+			  else {
+				  std::list<ActionType> actionTypeList;
+				  this->actionTypeList = actionTypeList;
+				  this->actionTypeList.push_back(ToA_Drop);
+			  };
+			  // Delete the old buttons
+			  for (std::list<tgui::Button::Ptr>::iterator it =
+			  		(this->buttonsList).begin();
+				  	it != (this->buttonsList).end(); ++it) {
+				  hud.remove(*it);
+				  //delete &it;
+			  };
+			  (this->buttonsList).clear();
+			  (this->inventory).clear();
 
-			// Create the 'Inventory' button.
-			tgui::Button::Ptr button(this->hud);
-			button->load(THEME_CONFIG_FILE_HUD_TERRO);
-			button->setSize(80, 40);
-			button->setPosition(50 + (this->w - 200), this->h - 100);
-			button->setText("Inventory");
-			button->bindCallback(std::bind(&HudTerro::callback, this, 0),
-					tgui::Button::LeftMouseClicked);
-			//button->setCallbackId(0);
-			(this->buttonsList).push_back(button);
+			  // Create the new buttons
+			  this->i = 0;
+			  for (std::list<ActionType>::iterator it =
+					  (this->actionTypeList).begin();
+					  it != (this->actionTypeList).end(); ++it)
+			  {
+				  tgui::Button::Ptr button(this->hud);
+				  button->load(THEME_CONFIG_FILE_HUD_TERRO);
+				  button->setSize(80, 40);
+				  button->setPosition(50 + (this->i) * 100, this->h - 100);
+				  button->setText(stringOfActions(*it));
+				  button->bindCallback(std::bind(&HudTerro::callback, this, (i+1)),
+						  tgui::Button::LeftMouseClicked);
+				  //button->setCallbackId(this->i + 1);
+				  (this->buttonsList).push_back(button);
+				  (this->i)++;
+			  };
 
-			// Update the flag
-			this->nextState = BS_ACTIONS;
-		};
+			  // Create the 'Inventory' button.
+			  tgui::Button::Ptr button(this->hud);
+			  button->load(THEME_CONFIG_FILE_HUD_TERRO);
+			  button->setSize(80, 40);
+			  button->setPosition(50 + (this->w - 200), this->h - 100);
+			  button->setText("Inventory");
+			  button->bindCallback(std::bind(&HudTerro::callback, this, 0),
+					  tgui::Button::LeftMouseClicked);
+			  //button->setCallbackId(0);
+			  (this->buttonsList).push_back(button);
+
+			  // Update the flag
+			  this->nextState = BS_ACTIONS;
+		  };
+    };
+    if (waitFor == WF_STUFF) {
+		  if (callback_id > 0 && callback_id <= (this->buttonsList).size()) {
+	      this->currentStuffID = inventory[((int)callback_id) - 1]; 
+        // envoyer le stuff à Rémy
+      };
+    };
 	};
 
 	if (this->currentState == BS_ACTIONS) {
