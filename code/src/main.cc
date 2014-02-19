@@ -79,7 +79,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
       hudTerro.init();
     }
     else {
-      hudMayor.init();
+      hudMayor.init(loc);
     }
     sf::Event event;
     while ((*window).pollEvent(event)) {

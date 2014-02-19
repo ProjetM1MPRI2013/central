@@ -2,9 +2,11 @@
  * @Author: Anthony 
  */
 #include "hudMayor.h"
-class Stuff;
 #include "../scenario/Stack.h"
 #include "../graphism/tilemap.h"
+#include "../scenario/ActionsPC.h"
+#include "../simulation/simulation.h"
+#include "localState.h"
 #define THEME_CONFIG_FILE_HUD_MAYOR "../widgets/Black.conf"
 
 
@@ -22,12 +24,23 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 	this->nextState = MAYOR_ACTIONS;
 	this->waitFor = WF_NONE;
   (this->hud).setGlobalFont("../fonts/leadcoat.ttf");
+  this->gold = simulation.getSous();
+  tgui::Label::Ptr l_gold(this->hud);
+  l_gold->load(THEME_CONFIG_FILE_HUD_MAYOR);
+  l_gold->setText("Gold : "+std::to_string(gold));
+  l_gold->setPosition(this->w - 100, this->h -150);
+  l_gold->setTextColor(sf::Color(255, 255, 0));
+  l_gold->setTextSize(20);
 
 }
 ;
 
-void HudMayor::init() 
+void HudMayor::init(Simulation& simulation) 
 {
+  if (gold != simulation.getSous()) {
+    gold = simulation.getSous();
+    l_gold->setText("Gold : "+std::to_string(gold));
+  };
   if (this->currentState != this->nextState) 
   {
     this->currentState = this->nextState;
@@ -72,8 +85,8 @@ void HudMayor::init()
       {
         tgui::Button::Ptr button(this->hud);
 			  button->load(THEME_CONFIG_FILE_HUD_MAYOR);
-			  button->setSize(40, 40);
-			  button->setPosition(50 + k*50, this->h - 100);
+			  button->setSize(40, 20);
+			  button->setPosition(50 + k*50, this->h - 90);
 			  button->setText(std::to_string(k));
 			  button->bindCallback(std::bind(&HudMayor::callback, this, k), 
                             tgui::Button::LeftMouseClicked);
@@ -173,11 +186,18 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
     { 
       if (event.mouseButton.button == sf::Mouse::Left) 
       {
-        // TODO : obtenir les coordonnées de la map
-        /* TODO : envoyer les coordonnées et currentNumber, 
-         *        en fonction de currentAction
-         *        avec AddCams ou AddCops
-         */
+        sf::Vector2i clicPosition = sf::Mouse::getPosition(*window);
+        //Position mapPosition = TODO
+        if (this->currentAction == CA_COP) {
+          //AddCop addCop = AddCop(this->currentNumber, mapPosition.getX(), 
+          //                        mapPosition.getY(), &localState);
+          //addCop.doAction();
+        };
+        if (this->currentAction == CA_CAM) {
+          //AddCam addCam = AddCam(this->currentNumber, mapPosition.getX(), 
+          //                        mapPosition.getY(), &localState);
+          //addCam.doAction();
+        };
         setwf(WF_NONE); 
       }
       else 
@@ -237,7 +257,7 @@ void HudMayor::callback(unsigned int callback_id)
 
 void HudMayor::draw() {
 	(this->hud).draw();
-  std::cout << "Il y a " << (this->buttonsList).size() << " bouttons." << std::endl;
+  //std::cout << "Il y a " << (this->buttonsList).size() << " bouttons." << std::endl;
 }
 ;
 

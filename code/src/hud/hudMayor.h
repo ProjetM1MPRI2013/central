@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include "../scenario/Stack.h"
+#include "../scenario/ActionsPC.h"
 class TileMap;
 
 //enum WaitFor {WF_NONE, WF_CLICK};
@@ -23,7 +24,7 @@ class Simulation;
 class HudMayor: public PreHud {
 public:
 	HudMayor(sf::RenderWindow* window, Simulation& simulation);
-	void init();
+	void init(Simulation& simulation);
 	void event(sf::RenderWindow* window, sf::Event e, TileMap* tilemap);
 	void callback(unsigned int callback_id);
 	void draw();
@@ -52,7 +53,8 @@ private:
   CurrentAction currentAction; 
   unsigned int currentNumber; 
 	WaitFor waitFor;
-
+  int gold;
+  tgui::Label::Ptr l_gold; 
 };
 
 #endif
