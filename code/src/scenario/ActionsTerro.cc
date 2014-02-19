@@ -28,7 +28,7 @@ return true;
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Attack (this->weapon, this->victim, (Simulation*) gs));
+gs->addAction(new CoA_Attack (this->weapon, this->victim, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 
@@ -60,7 +60,7 @@ return true;
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Reload (this->gun, this->ammunition, (Simulation*) gs));
+gs->addAction(new CoA_Reload (this->gun, this->ammunition, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 
@@ -92,7 +92,7 @@ return true;
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) gs));
+gs->addAction(new CoA_Plant (this->bomb, this->zone, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 
@@ -105,13 +105,12 @@ return (AbstractMessage*) new A_Plant(*this);
 *********************************************************/
 
 A_Drop::A_Drop (int stuff, LocalState* sim) : Action ( "ToA_Drop", sim) {
-this->stuff = (int)stuff;
-this->playerID = (int)(this->simulation->getPlayer()->getID());
+	std::cout << "player id : " << ((Action*)this)->playerID << std::endl;
+	this->stuff = (int)stuff;
 };
 
 A_Drop::A_Drop(const A_Drop& a) : Action(" ToA_Drop", a.simulation){
 this->stuff= a.stuff;
-this->playerID= a.playerID;
 };
 
 void A_Drop::doAction() {
@@ -124,7 +123,8 @@ return true;
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) gs));
+	std::cout << "player id : " << ((Action*)this)->playerID << std::endl;
+gs->addAction(new CoA_Drop (this->stuff, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 

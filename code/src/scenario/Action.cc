@@ -10,7 +10,9 @@
 Action::Action(std::string n, LocalState* s) {
   name = n;
   simulation = s;
+
   this->playerID = this->simulation->getOwner().getID ();
+
 }
 
 Action::Action(const Action& a){

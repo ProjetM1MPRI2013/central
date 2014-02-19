@@ -7,7 +7,7 @@
 #define SCENARIOACTIONLIST_H
 class CoA_Attack: public ScenarioAction {
 public:
-CoA_Attack(int weapon, boost::uuids::uuid victim, Simulation* s);
+CoA_Attack(int weapon, boost::uuids::uuid victim, int playerID,Simulation* s);
 CoA_Attack(const CoA_Attack&);
 public:
 int weapon; 
@@ -23,7 +23,7 @@ SIMPLE_MESSAGE(CoA_Attack, ScenarioAction, weapon, victim);
 };
 class CoA_Reload: public ScenarioAction {
 public:
-CoA_Reload(int gun, int ammunition, Simulation* s);
+CoA_Reload(int gun, int ammunition, int playerID,Simulation* s);
 CoA_Reload(const CoA_Reload&);
 public:
 int gun; 
@@ -39,7 +39,7 @@ SIMPLE_MESSAGE(CoA_Reload, ScenarioAction, gun, ammunition);
 };
 class CoA_Plant: public ScenarioAction {
 public:
-CoA_Plant(int bomb, std::pair<int,int> zone, Simulation* s);
+CoA_Plant(int bomb, std::pair<int,int> zone, int playerID,Simulation* s);
 CoA_Plant(const CoA_Plant&);
 public:
 int bomb; 
@@ -55,18 +55,16 @@ SIMPLE_MESSAGE(CoA_Plant, ScenarioAction, bomb, zone);
 };
 class CoA_Drop: public ScenarioAction {
 public:
-CoA_Drop(int stuff, int playerID, Simulation* s);
+CoA_Drop(int stuff, int playerID,Simulation* s);
 CoA_Drop(const CoA_Drop&);
 public:
 int stuff; 
-public:
-int playerID; 
 public: 
  virtual void run (); 
   virtual AbstractMessage* copy();
 protected :
 //Serialization
 CoA_Drop(){};
-SIMPLE_MESSAGE(CoA_Drop, ScenarioAction, stuff, playerID);
+SIMPLE_MESSAGE(CoA_Drop, ScenarioAction, stuff);
 };
 #endif

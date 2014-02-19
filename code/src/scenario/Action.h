@@ -66,7 +66,7 @@ class Action : public AbstractMessage {
  protected:
   LocalState* simulation;
   
- private:
+ public:
   int playerID;
 
 protected :

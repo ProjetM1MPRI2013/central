@@ -93,12 +93,6 @@ A_Drop  (int stuff, LocalState* s);
 A_Drop(const A_Drop&);
 public:
 int stuff; 
-public:
-int getplayerID ();
-public:
-void setplayerID (int);
-protected:
-int playerID; 
 public: 
  bool isActionPossible (); 
   void doAction (); 
@@ -107,6 +101,6 @@ public:
 protected :
 //Serialization
 A_Drop(){};
-SIMPLE_MESSAGE(A_Drop, Action, stuff, playerID);
+SIMPLE_MESSAGE(A_Drop, Action, stuff);
 };
 #endif
