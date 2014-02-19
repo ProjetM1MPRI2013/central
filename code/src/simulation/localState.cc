@@ -144,7 +144,7 @@ void LocalState::run(sf::Time dt){
           (*npc).trigger("NPC::arrived");
       }
       if (DEBUG) {
-          std::list<NPC*> neighbours = npc->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
+        std::list<NPC*> neighbours = npc->getPosition().isInTile(*map).getNPCsInRadius(*map,2);
           while (!neighbours.empty()) {
               NPC* tempNPC = neighbours.front();
               neighbours.pop_front();

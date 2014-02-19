@@ -132,7 +132,7 @@ float floor2(float x) {
 void Simulation::addNPC(Position start, Position target, float speed,
                         TexturePack* tex) {
   //on crée le NPC
-  NPC *npc = new NPC(speed, 10, 10, start, tex);
+  NPC *npc = new NPC(speed, 10, 1.5, start, tex);
   npc->setTarget(target,*map);
   //on l'ajoute à la liste
   NPCs.insert(npc);
@@ -146,7 +146,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 void Simulation::addNPC(Position start, Position target, float speed,
                         TexturePack* tex, boost::uuids::uuid id) {
   //on crée le NPC
-  NPC *npc = new NPC(speed, 10, 10, start, tex, id);
+  NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
   npc->setTarget(target,*map);
   //on l'ajoute à la liste
   NPCs.insert(npc);

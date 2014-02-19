@@ -9,6 +9,7 @@
 #include <cerrno>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <algorithm>
 
 enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des types de batiments
 
@@ -298,17 +299,26 @@ class Tile {
 
     /**
      * @brief getNeighbourTiles
-     * @return the list of Tiles which can be accesed in one step from this Tile
      * @param map: the map where the Tile is located
+     * @return the list of Tiles which can be accessed in one step from this Tile
      */
     std::list<Tile*> getNeighbourTiles(Geography& map);
     
-    /**
-     * @brief getNotTooFarNPCs
+   /**
+     * @brief getTilesInRadius
      * @param map: the map where the Tile is located
-     * @return the list of the NPCs around this tile
+     * @param r: the radius (in tiles)
+     * @return the list of all Tiles within a radius of r (for ||.||_\infty)
      */
-    std::list<NPC*> getNotTooFarNPCs(Geography& map);
+    std::list<Tile*> getTilesInRadius(Geography& map,int r);
+
+    /**
+     * @brief getNPCsInRadius
+     * @param map: the map where the Tile is located
+     * @param r: the radius (in tiles)
+     * @return the list of the NPCs within a radius of r (for ||.||_\infty)
+     */
+    std::list<NPC*> getNPCsInRadius(Geography& map,int r);
 
     /**
      * @brief isAligned

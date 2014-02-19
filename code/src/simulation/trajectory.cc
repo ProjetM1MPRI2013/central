@@ -281,7 +281,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     }
     
     //add the other NPCs' potentials
-    std::list<NPC*> neighbours = position.isInTile(map).getNotTooFarNPCs(map);
+    std::list<NPC*> neighbours = position.isInTile(map).getNPCsInRadius(map,2);
     while (!neighbours.empty()) {
       NPC* tempNPC = neighbours.front();
       neighbours.pop_front();
