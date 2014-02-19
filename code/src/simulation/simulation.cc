@@ -25,7 +25,7 @@ Simulation::Simulation(int nbPlayers, int id):
 	this->NB_JOUEURS = nbPlayers;
 	this->Id = id;
 
-	this->mesSous = 200;
+	this->mesSous = 300;
 	this->sous = std::vector<int>(NB_JOUEURS, 0);
 	this->relativeTime = 0;
 	this->absoluteTime = 0;
@@ -48,7 +48,7 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id):
     this->NB_JOUEURS = nbPlayers;
     this->Id = id;
 
-    this->mesSous = 200;
+    this->mesSous = 300;
     this->sous = std::vector<int>(NB_JOUEURS, 200);
     this->relativeTime = 0;
     this->absoluteTime = 0;
@@ -351,11 +351,11 @@ void Simulation::lisserMatrice() {
 }
 
 int Simulation::getSous() {
-	return (this->sous[0]);
+	return (this->mesSous);
 }
 
 void Simulation::enleveSous(int n) {
-	this->sous[0] = this->sous[0] - n;
+	this->mesSous = this->mesSous - n;
 	return;
 }
 

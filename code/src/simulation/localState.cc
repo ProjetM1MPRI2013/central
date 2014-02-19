@@ -122,10 +122,10 @@ void LocalState::run(sf::Time dt){
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
       for (Agent* agent: agents) {
-          sous[0] = sous[0] - agent->getEntretien();
+          mesSous = mesSous - agent->getEntretien();
       }
       for (Camera* camera: cameras) {
-          sous[0] = sous[0] - camera->getEntretien();
+          mesSous = mesSous - camera->getEntretien();
         }
       }
 

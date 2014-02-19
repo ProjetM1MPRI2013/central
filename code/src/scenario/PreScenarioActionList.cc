@@ -162,7 +162,7 @@ void AddCops::run(){
 
 
 	};
-	simulation->enleveSous((int)COST_COP2*number);
+	simulation->enleveSous((int)(COST_COP2*number));
 	return;
 };
 
@@ -204,7 +204,7 @@ void AddCams::run(){
 
 
 	};
-	simulation->enleveSous((int)COST_CAM2*number);
+	simulation->enleveSous((int)(COST_CAM2*number));
 };
 
 
