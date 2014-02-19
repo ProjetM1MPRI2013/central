@@ -23,6 +23,7 @@ return (AbstractMessage*) new CoA_Attack(*this);
 };
 
 void CoA_Attack::run () {
+	KillNPC(victim,simulation);
 ;};
 
 
