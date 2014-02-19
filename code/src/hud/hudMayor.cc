@@ -37,9 +37,11 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 
 void HudMayor::init(Simulation& simulation) 
 {
+  if (gold != simulation.getSous()) {
     gold = simulation.getSous();
     std::cout << "Gold : " << gold << std::endl;
     l_gold->setText("Gold : "+std::to_string(gold));
+  };
   if (this->currentState != this->nextState) 
   {
     this->currentState = this->nextState;
