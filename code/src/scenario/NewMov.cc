@@ -6,36 +6,36 @@
 
 #define DEBUG true
 
-int NewMovNetwork::counter = 1;
+namespace MovNetwork { int counter = 1; }
 
-void printNewMov(NewMov nm){
+std::string stringNewMov(NewMov nm){
   switch (nm){
   case P_RIGHT:
-    std::cout << "P_RIGHT";
+    return "P_RIGHT";
     break;
   case P_LEFT:
-    std::cout << "P_LEFT";
+    return "P_LEFT";
     break;
   case P_UP:
-   std::cout << "P_UP";
+   return "P_UP";
     break;
   case P_DOWN:
-   std::cout << "P_DOWN";
+   return "P_DOWN";
     break;
   case R_RIGHT:
-   std::cout << "R_RIGHT";
+   return "R_RIGHT";
     break;
   case R_LEFT:
-   std::cout << "R_LEFT";
+   return "R_LEFT";
     break;
   case R_UP:
-   std::cout << "R_UP";
+   return "R_UP";
     break;
   case R_DOWN:
-   std::cout << "R_DOWN";
+   return "R_DOWN";
     break;
   default:
-    std::cout << "Unknown NewMov";
+    return "Unknown NewMov";
     break;
   }
 }
@@ -52,13 +52,23 @@ NewMovNetwork::NewMovNetwork(NewMov m, int pid, LocalState* ls){
   delete newDir;
 
   this->playerID = pid;
-  timeStamp = counter++;
+  timeStamp = MovNetwork::counter++;
 }
 
+NewMouseMovNetwork::NewMouseMovNetwork(Position destination, int pid) : 
+  destination(destination), 
+  playerID(pid),
+  timeStamp(MovNetwork::counter++) {
+}
 
 AbstractMessage* NewMovNetwork::copy(){
   return ((AbstractMessage*) new NewMovNetwork(*this));
 }
 
+AbstractMessage* NewMouseMovNetwork::copy(){
+  return ((AbstractMessage*) new NewMouseMovNetwork(*this));
+}
 
-NewMovNetwork::NewMovNetwork() : newDirection(STOP), playerID(0), timeStamp(counter++) {}
+NewMovNetwork::NewMovNetwork() : newDirection(STOP), playerID(0), timeStamp(MovNetwork::counter++) {}
+
+NewMouseMovNetwork::NewMouseMovNetwork() : destination(Position()), playerID(0), timeStamp(MovNetwork::counter++) {}

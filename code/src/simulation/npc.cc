@@ -20,6 +20,9 @@ NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) : DrawableObj
   speed = s;
   fear = f;
   hitboxSize = h;
+  dying = false;
+  dead = false;
+  deathTimeout = sf::seconds(5);
   return;
 }
 
@@ -33,6 +36,9 @@ NPC::NPC(float s,float f,float h,Position& start,
   speed = s;
   fear = f;
   hitboxSize = h;
+  dying = false;
+  dead = false;
+  deathTimeout = sf::seconds(5);
   return;
 }
 
@@ -51,6 +57,13 @@ bool NPC::isShocked() const {
   return shocked;
 }
 
+bool NPC::isDying() {
+  return dying;
+}
+
+bool NPC::isDead() {
+  return dead;
+}
 
 void NPC::setShocked(bool s) {
   shocked = s;
@@ -78,8 +91,19 @@ void NPC::setPosition(Position& p) {
 }
 
 void NPC::updatePosition(sf::Time dt,Geography& map) {
-  trajectory.update(dt,speed,map,*this);
-  Positionable::setPosition(trajectory.getPosition());
+  if (!dead && !dying) {
+    trajectory.update(dt,speed,map,*this);
+    Positionable::setPosition(trajectory.getPosition());
+  }
+  
+  if (!dead && dying) {
+    deathTimeout -= dt;
+  }
+
+  if (deathTimeout <= sf::Time::Zero) {
+    dead = true;
+  }
+
   if(DEBUG) {
     printf("NPC at %f %f\n",trajectory.getPosition().getX(),trajectory.getPosition().getY());
   }
@@ -152,10 +176,12 @@ void NPC::nextFrame()
 {
   std::pair<float,float> speedVect = trajectory.getSpeed();
   float sp = sqrt(pow(speedVect.first,2)+pow(speedVect.second,2));
-  if(sp >= 0.01 && anim.getAnim() != RUN)
+  if(sp >= 0.01 && anim.getAnim() != RUN && anim.getAnim() != DEAD)
     anim.setAnim(RUN);
   else if(sp < 0.01 && anim.getAnim() == RUN)
     anim.setAnim(IDLE);
+  else if(anim.getAnim() != DEAD && (dying || dead))
+    anim.setAnim(DEAD);
   else
     anim.nextFrame();
 
@@ -169,6 +195,13 @@ Position NPC::getTarget() const {
 void NPC::setTarget(Position t, Geography& map) {
   target = t;
   trajectory.setTarget(t,map);
+  return;
+}
+
+
+void NPC::kill() {
+  deathTimeout = sf::seconds(5);//il commence à mourir, il sera mort (et delete) dans 5 secondes
+  dying = true;
   return;
 }
 

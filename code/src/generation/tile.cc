@@ -425,10 +425,21 @@ std::list<Tile*> Tile::getNeighbourTiles(Geography& map) {
   return neighbourTiles;
 }
 
+std::list<Tile*> Tile::getTilesInRadius(Geography& map,int r) {
+  std::list<Tile*> tilesInRadius;
+  for (int i=std::max(coord.getAbs()-r,0);i<std::min(coord.getAbs()+r+1,map.getMapWidth());i++) {
+    for (int j=std::max(coord.getOrd()-r,0);j<std::min(coord.getOrd()+r+1,map.getMapHeight());j++) {
+      tilesInRadius.push_front(map.getTile(i,j));
+    }
+  }
+  return tilesInRadius;
+}
+      
+  
 
-std::list<NPC*> Tile::getNotTooFarNPCs(Geography& map) {
-  std::list<NPC*> notTooFarNPCs = getNPCs();
-  std::list<Tile*> neighbourTiles = getNeighbourTiles(map);
+std::list<NPC*> Tile::getNPCsInRadius(Geography& map,int r) {
+  std::list<NPC*> notTooFarNPCs;
+  std::list<Tile*> neighbourTiles = getTilesInRadius(map,r);
   Tile* tempTile;
   while (!neighbourTiles.empty()) {
     tempTile = neighbourTiles.front();

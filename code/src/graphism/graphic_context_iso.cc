@@ -386,14 +386,14 @@ void GraphicContextIso::run(sf::RenderWindow* window)
 Position GraphicContextIso::screenToMap(int x, int y)
 {
   sf::Vector2f v = view.getCenter();
-  Position p;
+  Position p(0,0);
   float xo = x - (view.getSize().x/2), yo = y - (view.getSize().y/2);
   float xc = v.x - OFFSET_X, 
     yc = v.y - OFFSET_Y + (map->getMapWidth()) * RIGHT_TILE(1);
   p.add((xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
-	+ (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)),
+	- (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)),
 	(xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
-	- (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)));
+	+ (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)));
   return p;
 }
 
@@ -404,13 +404,15 @@ TexturePack* GraphicContextIso::getTexturePack(int n)
 
 float GraphicContextIso::zoom(float f)
 {
-  float z = zoomfactor*f;
-  z = std::min(z,zoommax);
-  z = std::max(z,zoommin);
-  float g = zoomfactor / z;
-  view.zoom(g);
-  zoomfactor = z;
-  return zoomfactor;
+  // float z = zoomfactor*f;
+  // z = std::min(z,zoommax);
+  // z = std::max(z,zoommin);
+  // float g = zoomfactor / z;
+  // view.zoom(g);
+  // zoomfactor = z;
+  view.zoom(0.5f);
+  // return zoomfactor;
+  return f;
 }
 
 void GraphicContextIso::addUnfog(Positionable* p, int radius)

@@ -2,42 +2,64 @@
  * @Author: Anthony 
  */
 #include "hudMayor.h"
-class Stuff;
 #include "../scenario/Stack.h"
 #include "../graphism/tilemap.h"
+#include "../scenario/ActionsPC.h"
+#include "../simulation/simulation.h"
+#include "localState.h"
+#define THEME_CONFIG_FILE_HUD_MAYOR "../widgets/Black.conf"
 
 
 HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 	simulation(simulation) {
 	this->w = (*window).getSize().x;
 	this->h = (*window).getSize().y;
+  this->mouseMovement = false;
+  this->bup = false;
+  this->bdown = false; 
+  this->bleft = false;
+  this->bright = false; 
 	this->hud = tgui::Gui((*window));
-	this->currentState = MAYOR_ACTIONS;
-	this->nextState = MAYOR_NUMBERS;
+	this->currentState = MAYOR_NUMBERS;
+	this->nextState = MAYOR_ACTIONS;
 	this->waitFor = WF_NONE;
+  (this->hud).setGlobalFont("../fonts/leadcoat.ttf");
+  this->gold = simulation.getSous();
+  tgui::Label::Ptr l_gold(this->hud);
+  l_gold->load(THEME_CONFIG_FILE_HUD_MAYOR);
+  l_gold->setText("Gold : "+std::to_string(gold));
+  l_gold->setPosition(this->w - 100, this->h -150);
+  l_gold->setTextColor(sf::Color(255, 255, 0));
+  l_gold->setTextSize(20);
 
 }
 ;
 
-void HudMayor::init() 
+void HudMayor::init(Simulation& simulation) 
 {
+  if (gold != simulation.getSous()) {
+    gold = simulation.getSous();
+    std::cout << "Gold : " << gold << std::endl;
+    l_gold->setText("Gold : "+std::to_string(gold));
+  };
   if (this->currentState != this->nextState) 
   {
+    this->currentState = this->nextState;
     // Delete the old buttons 
 		for (std::list<tgui::Button::Ptr>::iterator it =
 		(this->buttonsList).begin();
 		it != (this->buttonsList).end(); ++it) 
     {
-			delete &it;
+      hud.remove(*it);
 		};
 		(this->buttonsList).clear();
 
     // Create the new buttons 
-    if (this->nextState == MAYOR_ACTIONS)
+    if (this->currentState == MAYOR_ACTIONS)
     {
       // Create the "Add Cameras" button
 		  tgui::Button::Ptr b_cam(this->hud);
-			b_cam->load("../widgets∕Black.conf");
+			b_cam->load(THEME_CONFIG_FILE_HUD_MAYOR);
 			b_cam->setSize(80, 40);
 			b_cam->setPosition(150, this->h - 100);
 			b_cam->setText("Add Cameras");
@@ -48,7 +70,7 @@ void HudMayor::init()
 
       // Create the "Add Cops" button
 		  tgui::Button::Ptr b_cop(this->hud);
-			b_cop->load("../widgets∕Black.conf");
+			b_cop->load(THEME_CONFIG_FILE_HUD_MAYOR);
 			b_cop->setSize(80, 40);
 			b_cop->setPosition(50, this->h - 100);
 			b_cop->setText("Add Cops");
@@ -63,9 +85,9 @@ void HudMayor::init()
       for (int k = 1; k<11; k++) 
       {
         tgui::Button::Ptr button(this->hud);
-			  button->load("../widgets∕Black.conf");
-			  button->setSize(40, 40);
-			  button->setPosition(50 + k*50, this->h - 100);
+			  button->load(THEME_CONFIG_FILE_HUD_MAYOR);
+			  button->setSize(40, 20);
+			  button->setPosition(50 + k*50, this->h - 90);
 			  button->setText(std::to_string(k));
 			  button->bindCallback(std::bind(&HudMayor::callback, this, k), 
                             tgui::Button::LeftMouseClicked);
@@ -75,7 +97,7 @@ void HudMayor::init()
 
       // Create the "Back" button
       tgui::Button::Ptr b_back(this->hud);
-	    b_back->load("../widgets∕Black.conf");
+	    b_back->load(THEME_CONFIG_FILE_HUD_MAYOR);
 	    b_back->setSize(80, 40);
 	    b_back->setPosition(this->w - 100, this->h - 100);
 	    b_back->setText("Back");
@@ -86,12 +108,10 @@ void HudMayor::init()
  
     };
   };
-  
-  this->currentState = this->nextState; 
-
 };
 
-void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilemap) {
+void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilemap, 
+                      LocalState* localState) {
 	if (event.type == sf::Event::MouseWheelMoved)
 	{
 		int zoom = tilemap->getZoom();
@@ -100,24 +120,65 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
   if (event.type == sf::Event::Closed)
 		(*window).close();
 
-	if (event.type == sf::Event::KeyPressed) {
+	if (waitFor == WF_NONE) {
 		// Je crois qu'on veut rajouter une action Mayor newmovement
 		// je verrai plus tard comment on fait exactement
-		switch (event.key.code) {
-		case sf::Keyboard::Z:
-			//newMovement (NewMov::P_UP);
-			break;
-		case sf::Keyboard::Q:
-			//NewMovement (NewMov::P_LEFT);
-			break;
-		case sf::Keyboard::S:
-			//NewMovement (NewMov::P_DOWN);
-			break;
-		case sf::Keyboard::D:
-			//NewMovement (NewMov::P_RIGHT);
-			break;
-		default:
-			break;
+		if (event.type == sf::Event::KeyPressed) {
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				if (not this->bup) {
+					//newMovement (NewMov::P_UP,(&this->simulation));
+          mouseMovement = false;
+					this->bup = true;
+				};
+				break;
+			case sf::Keyboard::Q:
+				if (not this->bleft) {
+					//newMovement (NewMov::P_LEFT,(&this->simulation));
+          mouseMovement = false;
+					this->bleft = true;
+				};
+				break;
+			case sf::Keyboard::S:
+				if (not this->bdown) {
+					//newMovement (NewMov::P_DOWN,(&this->simulation));
+          mouseMovement = false;
+					this->bdown = true;
+				};
+				break;
+			case sf::Keyboard::D:
+				if (not this->bright) {
+					//newMovement (NewMov::P_RIGHT,(&this->simulation));
+          mouseMovement = false;
+					this->bright = true;
+				};
+				break;
+			default:
+				break;
+			};
+		};
+
+		if (event.type == sf::Event::KeyReleased) {
+			switch (event.key.code) {
+			case sf::Keyboard::Z:
+				//newMovement (NewMov::R_UP,(&this->simulation));
+				this->bup = false;
+				break;
+			case sf::Keyboard::Q:
+				//newMovement (NewMov::R_LEFT,(&this->simulation));
+				this->bleft = false;
+				break;
+			case sf::Keyboard::S:
+				//newMovement (NewMov::R_DOWN,(&this->simulation));
+				this->bdown = false;
+				break;
+			case sf::Keyboard::D:
+				//newMovement (NewMov::R_RIGHT,(&this->simulation));
+				this->bright = false;
+				break;
+			default:
+				break;
+			};
 		};
 	};
   
@@ -127,11 +188,22 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
     { 
       if (event.mouseButton.button == sf::Mouse::Left) 
       {
-        // TODO : obtenir les coordonnées de la map
-        /* TODO : envoyer les coordonnées et currentNumber, 
-         *        en fonction de currentAction
-         *        avec AddCams ou AddCops
-         */
+        sf::Vector2i clicPosition = sf::Mouse::getPosition(*window);
+        Position mapPosition = (*tilemap).CoordMouse(clicPosition);
+        if (this->currentAction == CA_COP) {
+          AddCop addCop = AddCop(this->currentNumber, mapPosition.getX(), 
+                                  mapPosition.getY(), localState);
+          addCop.doAction();
+          std::cout << "Ajout de " << currentNumber << " Cops en position (" 
+            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
+        };
+        if (this->currentAction == CA_CAM) {
+          AddCam addCam = AddCam(this->currentNumber, mapPosition.getX(), 
+                                  mapPosition.getY(), localState);
+          addCam.doAction();
+          std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
+            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
+       };
         setwf(WF_NONE); 
       }
       else 
@@ -191,6 +263,7 @@ void HudMayor::callback(unsigned int callback_id)
 
 void HudMayor::draw() {
 	(this->hud).draw();
+  //std::cout << "Il y a " << (this->buttonsList).size() << " bouttons." << std::endl;
 }
 ;
 

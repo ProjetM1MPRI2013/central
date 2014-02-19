@@ -29,15 +29,18 @@ public:
 
 
 	GrilleHarmonique(
-			Parametres const& i_param,
-			std::string const& i_dom,
-			const int i_gamme,
-			const int i_nbMesure); //constructeur
+		Parametres const& i_param,
+		std::string const& i_dom,
+		const int i_gamme,
+		const int i_nbMesure); //constructeur
+
 	void randomAccord(
-			Accord& o_accord); // tire au sort les accords avec leur probabilité d'être tirés
+		Accord& o_accord); // tire au sort les accords avec leur probabilité d'être tirés
 	//Accord* tabGrille(); // a rajouter
+
 	void tabGrille(
-			std::vector<std::string> &o_partition);
+		std::vector<Accord> &o_partition);
+
 	virtual ~GrilleHarmonique();
 };
 

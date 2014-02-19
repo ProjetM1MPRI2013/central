@@ -66,7 +66,7 @@ class Action : public AbstractMessage {
  protected:
   LocalState* simulation;
   
- private:
+ public:
   int playerID;
 
 protected :
@@ -77,7 +77,7 @@ protected :
    */
   Action() ;
 
-  SIMPLE_MESSAGE(Action, AbstractMessage)
+  SIMPLE_MESSAGE(Action, AbstractMessage, name, date, delay, playerID)
 
 };
 

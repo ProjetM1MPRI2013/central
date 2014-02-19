@@ -10,6 +10,7 @@
 #include "test_scenario.h"
 #include "test_net.h"
 #include "test_events.h"
+#include "test_misc.h"
 namespace test {
   int run ();
   int run (std::string which);

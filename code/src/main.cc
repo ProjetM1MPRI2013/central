@@ -28,8 +28,11 @@
 #include "localState.h"
 #include "globalState.h"
 
+bool TERRO = true;
+bool AUTOPLAY = false;
+bool CLIENT = false;
+std::string SEED = "424242";
 #define DEBUG true
-#define TERRO true // ~TERRO => MAYOR
 #include "debug.h"
 
 #ifdef __APPLE__
@@ -64,14 +67,20 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
     dummy::createNPCs(500, loc, graContIso, geo, npcGen);
   }
-
+  
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
-  HudTerro hudTerro = HudTerro(window, loc, &graContIso);
+  HudMayor hudMayor = HudMayor(window,loc); //One needs to be removed
+  HudTerro hudTerro = HudTerro(window, loc, graContIso);
   //hudTerro.init();
   while ((*window).isOpen()) {
     dt = clock.restart();
-    hudTerro.init();
+    if (TERRO) {
+      hudTerro.init();
+    }
+    else {
+      hudMayor.init(loc);
+    }
     sf::Event event;
     while ((*window).pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
@@ -99,7 +108,8 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
         }
 
       }
-      hudTerro.event(window, event, &graContIso);
+      if (TERRO) {hudTerro.event(window, event, graContIso);}
+      else {hudMayor.event(window,event,&tilemap,&loc);}
     }
 
     loc.run(dt);
@@ -107,10 +117,11 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     if (TERRO) {
       graContIso.run(window);
       (*window).setView((*window).getDefaultView());
+      hudTerro.draw();
     } else { // MAYOR
       tilemap.run(window);
+      hudMayor.draw();
     }
-    hudTerro.draw();
     (*window).display();
   }
 
@@ -146,6 +157,16 @@ int main(int argc, char ** argv) {
     exit(0);
   }
 
+  std::string cur;
+  for (int i=1;i<argc;i++) {
+    cur = (std::string) argv[i];
+    if (cur == "auto") AUTOPLAY = true; // Skip interface_initiale (default: no)
+    if (cur == "mayor") TERRO = false; // Show mayor view (default: no)
+    if (cur == "terro") TERRO = true; // Show terro view (default: yes)
+    if (cur == "client") CLIENT = true; // Client only (default:  no)
+    if (cur == "seed" && argc > i+1) SEED = (std::string)argv[++i]; // Seed setting (default: "424242"). Consumes next argument.
+  }
+
   int sizeFenetre[3], b;
   bool isFullScreen;
   sf::VideoMode video_mode;
@@ -157,11 +178,17 @@ int main(int argc, char ** argv) {
   ServerInfo s_info;
   ClientInfo c_info;
   Server* serverPtr = NULL;
-  if (argc < 2 || (std::string) argv[1] != "client")
+  if (!CLIENT)
     serverPtr = Network::createServer(s_info);
   Client* clientPtr = Network::createClient(c_info);
-  b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
-  video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
+  if (AUTOPLAY) {
+    b = 1;
+    video_mode = sf::VideoMode::getDesktopMode();
+    isFullScreen = true;
+  } else {
+    b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
+    video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
+  }
   //}
 
   if (b == 0) {
@@ -174,13 +201,8 @@ int main(int argc, char ** argv) {
       window.create(video_mode, "Game Interface");
     window.setKeyRepeatEnabled(false);
     int nbPlayers = 1;
-    std::string seed;
-    std::cout << argc << std::endl;
-    if (argc <= 1) {
-      seed = "424242";
-    } else {
-      seed = argv[1];
-    }
+    std::string seed = SEED;
+    DBG << "Seed: " << seed;
 
     //geo.printMatrix();
 

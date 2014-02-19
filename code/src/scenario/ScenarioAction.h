@@ -20,7 +20,8 @@ class Simulation; // Forward declaration
 class ScenarioAction : public AbstractMessage {
  public :
 
-  ScenarioAction (std::string n, Simulation* s);
+  ScenarioAction (std::string n,int playerID, Simulation* s);
+  ScenarioAction (std::string n, Simulation* s); /*for the mayor*/
   ScenarioAction(const ScenarioAction&);
 
   /**
@@ -43,7 +44,12 @@ class ScenarioAction : public AbstractMessage {
   /**
    * @brief A ScenarioAction can be called by the Client and the Host.
    */
+
   Simulation* simulation;
+  /**
+     * @brief ID of the player who did the action.
+     */
+   int playerID;
 
   //AbstractMessage functions
   virtual AbstractMessage* copy();
@@ -52,7 +58,7 @@ protected :
   //Serialization
   ScenarioAction() ;
 
-  SIMPLE_MESSAGE(ScenarioAction, AbstractMessage, date, name)
+  SIMPLE_MESSAGE(ScenarioAction, AbstractMessage, date, name,playerID)
 };
 
 

@@ -10,6 +10,7 @@
 
 class Instrument {
 public:
+
 	Instrument();
 	virtual ~Instrument();
 };

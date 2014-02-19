@@ -34,6 +34,8 @@ int run(std::string which)
     return mayorview();
   } else if (which == "events") {
     return events();
+  } else if (which == "misc") {
+    return misc();
   } else {
     LOG(error) << "Unknown test : " << which;
   }

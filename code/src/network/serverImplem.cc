@@ -22,7 +22,8 @@ ServerImplem::ServerImplem(ServerInfo& s_info) : ComunicatorImplem(),
 
   //connect socket
   ip::udp::resolver resolver(*service) ;
-  ip::udp::resolver::query query(ip::udp::v4(), s_info.hostname, s_info.port) ;
+  ip::udp::resolver::query query(ip::udp::v4(), s_info.hostname, s_info.port,
+                                 ip::udp::resolver::query::passive) ;
   ip::udp::resolver::iterator addr_iter = resolver.resolve(query) ;
   if(addr_iter == ip::udp::resolver::iterator())
     {
@@ -329,7 +330,9 @@ void ServerImplem::on_receive(const boost::system::error_code &error, int size){
         }
         delete event ;
     }
+  received_messages_mutex.lock() ;
   received_messages[type].push_back(buff->substr(0,size - HEADER_SIZE)) ;
+  received_messages_mutex.unlock() ;
   wait_receive() ;
 }
 

@@ -41,12 +41,18 @@ bool isInThePack(LocalState* s, int stuffID) {
 
 
 void newMovement (NewMov n, LocalState* s){
-	std::cout << "Client : New Movement begin\n";
+  DBG << "Client : New Movement begin";
 	NewMovNetwork newMovNet(n,s->getOwner().getID(),s);
-	std::cout << "Client : New Movement from player : " << s->getOwner().getID() << " ";
-	printNewMov(n);
-	std::cout << std::endl;
+  DBG << "Client : New Movement from player : " << s->getOwner().getID() << " " << stringNewMov(n);
 	s->getOwner().setDirection(newMovNet.newDirection);
 	s->getClient()->sendMessage(newMovNet,true);
+};
+
+void newMouseMovement(Position pos, LocalState* s) {
+  DBG << "Client : New MouseMovement begin";
+  NewMouseMovNetwork newMouseMovNet(pos,s->getOwner().getID());
+	DBG << "Client : New MouseMovement from player : " << s->getOwner().getID() << " " << pos;
+	s->getOwner().setDestination(pos);
+  s->getClient()->sendMessage(newMouseMovNet,true);
 };
 

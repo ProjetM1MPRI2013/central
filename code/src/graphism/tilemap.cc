@@ -102,10 +102,10 @@ void TileMap::createTiles() {
 					Tilesbite[i + j * mapwidth] = 0;
 					break;
 				case ROADV:
-					Tilesbite[i + j * mapwidth] = 1;
+					Tilesbite[i + j * mapwidth] = 2; //that's cool
 					break;
 				case ROADH:
-					Tilesbite[i + j * mapwidth] = 2;
+					Tilesbite[i + j * mapwidth] = 1; //that's cool
 					break;
 				case INTER:
 					Tilesbite[i + j * mapwidth] = 3;
@@ -169,10 +169,10 @@ void TileMap::createTiles() {
 					}
 					break;
 				case ROADV:
-					Tilesbite[i + j * mapwidth] = 1;
+					Tilesbite[i + j * mapwidth] = 2;
 					break;
 				case ROADH:
-					Tilesbite[i + j * mapwidth] = 2;
+					Tilesbite[i + j * mapwidth] = 1;
 					break;
 				case INTER:
 					Tilesbite[i + j * mapwidth] = 3;
@@ -254,3 +254,14 @@ void TileMap::run(sf::RenderWindow* window) {
 	//createTiles();
 	window->draw(*this);
 }
+
+
+Position TileMap::CoordMouse(sf::Vector2i Coord){
+	float X = ((float)Coord.x)/(zoom*78) + ((float)TileMap::getX()) ;
+	float Y = ((float)Coord.y)/(zoom*78)+((float)TileMap::getY()) ;
+	std::cout << X << "\t";
+	std::cout << Y << "\t";
+	Position pos = Position(X,Y);
+	return pos;
+}
+

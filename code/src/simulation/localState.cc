@@ -122,10 +122,10 @@ void LocalState::run(sf::Time dt){
   /*on fait payer l'entretien des différents trucs*/
   for (int i = 1; i < secondes; i++) {
       for (Agent* agent: agents) {
-          sous[0] = sous[0] - agent->getEntretien();
+          mesSous = mesSous - agent->getEntretien();
       }
       for (Camera* camera: cameras) {
-          sous[0] = sous[0] - camera->getEntretien();
+          mesSous = mesSous - camera->getEntretien();
         }
       }
 
@@ -144,7 +144,7 @@ void LocalState::run(sf::Time dt){
           (*npc).trigger("NPC::arrived");
       }
       if (DEBUG) {
-          std::list<NPC*> neighbours = npc->getPosition().isInTile(*map).getNotTooFarNPCs(*map);
+        std::list<NPC*> neighbours = npc->getPosition().isInTile(*map).getNPCsInRadius(*map,2);
           while (!neighbours.empty()) {
               NPC* tempNPC = neighbours.front();
               neighbours.pop_front();

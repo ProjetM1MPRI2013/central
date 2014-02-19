@@ -8,15 +8,24 @@
 #ifndef BASSE_H_
 #define BASSE_H_
 
-class Basse {
+#include "Base.h"
+
+class Basse : public Base {
 public:
-	int nbNotesAjoutes;
 
-	Basse(std::string i_m_dominante, std::vector<std::string> tabAccord, int i_nbNotesAjoutes);
+	int m_nbNotesAjoutees;
+	std::vector<std::string> m_tabNotes;
+	std::string m_instrument;
 
-	nbNotesAjoutes = nbNotesAjoutes;
+	Basse(
+		std::string const& i_dominante,
+		std::vector<Accord> const& i_tabAccord,
+		const unsigned int i_nbNotesAjoutees);
 
 	virtual ~Basse();
+
+	virtual void generePiste(
+		std::string &o_piste);
 };
 
 #endif /* BASSE_H_ */

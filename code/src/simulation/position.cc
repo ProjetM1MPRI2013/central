@@ -79,11 +79,11 @@ float Position::distance(const Position &p) const {
 
 std::list<NPC*> Position::getNPCList(Geography& map) {
   std::list<NPC*> npcList;
-  std::list<NPC*> notTooFarNPCs = isInTile(map).getNotTooFarNPCs(map);
+  std::list<NPC*> notTooFarNPCs = isInTile(map).getNPCsInRadius(map,3);
   while (!notTooFarNPCs.empty()) {
     NPC* npc = notTooFarNPCs.front();
     notTooFarNPCs.pop_front();
-    if (npc->isInHitbox(*this)) {
+    if (npc->isInHitbox(*this) && !(npc->isDying())&& !(npc->isDead())) {
       npcList.push_front(npc);
     }
   }

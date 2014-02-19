@@ -13,44 +13,54 @@ StuffNotFound::StuffNotFound() :
   std::runtime_error("Could not find Stuff in an inventory") {
 }
 
-void printDirection(Direction d) {
+std::string stringMovementType(MovementType m) {
+  switch (m) {
+    case DIRECTION: return "DIRECTION";
+    case DESTINATION: return "DESTINATION";
+    default: return "stringMovementType: error";
+  }
+}
+
+std::string stringDirection(Direction d) {
   switch (d) {
   case UP:
-    std::cout << "UP";
+    return "UP";
     break;
   case UPRIGHT:
-    std::cout << "UPRIGHT";
+    return "UPRIGHT";
     break;
   case RIGHT:
-    std::cout << "RIGHT";
+    return "RIGHT";
     break;
   case RIGHTDOWN:
-    std::cout << "RIGHTDOWN";
+    return "RIGHTDOWN";
     break;
   case DOWN:
-    std::cout << "DOWN";
+    return "DOWN";
     break;
   case DOWNLEFT:
-    std::cout << "DOWNLEFT";
+    return "DOWNLEFT";
     break;
   case LEFT:
-    std::cout << "LEFT";
+    return "LEFT";
     break;
   case LEFTUP:
-    std::cout << "LEFTUP";
+    return "LEFTUP";
     break;
   case STOP:
-    std::cout << "STOP";
+    return "STOP";
     break;
   case ERROR:
-    std::cout << "ERROR";
+    return "ERROR";
   default:
-    std::cout << "printDirection : error";
+    return "stringDirection : error";
   }
 }
 
 Player::Player(int pid, float xx, float yy) {
   position = Position(xx, yy);
+  this->movementType = DIRECTION;
+  this->destination = Position();
   this->d = Direction::STOP;
   this->playerID = pid;
   this->speed = 1.;
@@ -91,35 +101,50 @@ void Player::setDirection(Direction newd, int timeStamp) {
   if (timeStamp > lastTimeStamp){
       assert(isServer != 0);
 
-    std::cout << "Server : player " << this->playerID
-	      << " changes direction from ";
-    printDirection(this->d);
-    std::cout << " to ";
-    printDirection(newd);
-    std::cout << "\n";
+    DBG << "Server : player " << this->playerID << " changes direction from " << stringDirection(this->d) << " to " << stringDirection(newd);
+    
     this->d = newd;
+    this->movementType = DIRECTION;
     lastTimeStamp = timeStamp;
     return;
   }
   else{
-    std::cout << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp << std::endl;
+    DBG << "Server : player " << this->playerID << " reject changement of direction. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp;
   }
 }
 ;
 
 void Player::setDirection(Direction newd) {
   assert(isServer == 0);
-  std::cout << "Client : player " << this->playerID
-	    << " changes direction from ";
-  
-  printDirection(this->d);
-  std::cout << " to ";
-  printDirection(newd);
-  std::cout << "\n";
+  DBG << "Client : player " << this->playerID << " changes direction from " << stringDirection(this->d) << " to " << stringDirection(newd); 
   this->d = newd;
+  this->movementType = DIRECTION;
   return;
 }
 ;
+
+void Player::setDestination(Position pos, int timeStamp) {
+  if (timeStamp > lastTimeStamp){
+      assert(isServer != 0);
+
+    DBG << "Server : player " << this->playerID << " changes destination to " << pos;
+    
+    this->destination = pos;
+    this->movementType = DESTINATION;
+    lastTimeStamp = timeStamp;
+    return;
+  }
+  else{
+    DBG << "Server : player " << this->playerID << " reject changement of destination. Cause : bad timestamp " << lastTimeStamp << " " << timeStamp;
+  }
+}
+;
+
+void Player::setDestination(Position pos) {
+  assert(isServer == 0);
+  this->destination = pos;
+  this->movementType = DESTINATION;
+}
 
 void Player::addItem(Clickable&& stuff) {
 	this->inventory.push_back(std::unique_ptr<Clickable>(new Clickable(stuff)));
@@ -140,9 +165,27 @@ void Player::removeItem(int stuffID) {
 
 void Player::updatePosition(sf::Time dt, Geography& map) {
   float dep = (this->speed) * (dt.asSeconds()) * SPEED_AMPLIFIER;
-  float sqrttwo = 1.414213562;
   float x = position.getX();
   float y = position.getY();
+
+  if (movementType == DESTINATION) {
+
+    if (destination.distance(position) < 0.4) {
+      movementType = DIRECTION;
+    } else {
+      float dX = destination.getX() - x;
+      float dY = destination.getY() - y;
+      DBG << "Destination-based move:";
+      DBG << "  pos     : " << position;
+      DBG << "  dest    : " << destination;
+      DBG << "  x/y/spd : " << (dX/(dX+dY)) << "/" <<  (dY/(dX+dY)) << "/" << dep;
+      position.add(dep * (dX/(dX+dY)), dep * (dY/(dX+dY)));
+      DBG << "  pos'    : " << position;
+    }
+
+  } else {
+
+  float sqrttwo = 1.414213562;
   switch (this->d) {
   case UP:
     position.add(0, -dep);
@@ -228,19 +271,20 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
     break;
   default:
     //ne doit pas arriver
-    std::cerr << "Player::updatePosition : Direction not correct "
-        << (int) (this->d) << "\n";
+    LOG(error) << "Player::updatePosition : Direction not correct " << (int) (this->d);
     break;
   };
   if (!(x == position.getX() && y == position.getY())) {
     DBG << position.getX() << " + " << position.getY();
   }
   return;
+  }
 }
 ;
 
 bool Player::hasItemByID(int ClickableID) {
-	std::cout << ClickableID << std::endl;
+  
+	DBG << ClickableID;
 	try {
     getItemByID<Clickable> (ClickableID);
     return true;

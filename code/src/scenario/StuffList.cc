@@ -39,6 +39,9 @@ float C_Gun::getrange () {return this->range;};
 int C_Gun::getammunitionLoaded () {return this->ammunitionLoaded;};
 void C_Gun::setammunitionLoaded ( int ammunitionLoaded ) { this->ammunitionLoaded = (int)ammunitionLoaded;};
 int C_Gun::getdamage () {return this->damage;};
+AbstractMessage* C_Gun::copy() {
+return (AbstractMessage*) new C_Gun(*this);
+};
 
 /*********************************************************
 ** Mitraillette**
@@ -50,6 +53,9 @@ this->range = (float)(10.);
 };
 int C_Mitraillette::getammunitionMax () {return this->ammunitionMax;};
 float C_Mitraillette::getrange () {return this->range;};
+AbstractMessage* C_Mitraillette::copy() {
+return (AbstractMessage*) new C_Mitraillette(*this);
+};
 
 /*********************************************************
 ** UltraM**
@@ -59,6 +65,9 @@ C_UltraM::C_UltraM (): C_Mitraillette ((int) 2000) {
 this->damage = (int)(2000);
 };
 int C_UltraM::getdamage () {return this->damage;};
+AbstractMessage* C_UltraM::copy() {
+return (AbstractMessage*) new C_UltraM(*this);
+};
 
 /*********************************************************
 ** Knife**
@@ -70,6 +79,9 @@ this->damage = (int)(1);
 };
 float C_Knife::getrange () {return this->range;};
 int C_Knife::getdamage () {return this->damage;};
+AbstractMessage* C_Knife::copy() {
+return (AbstractMessage*) new C_Knife(*this);
+};
 
 /*********************************************************
 ** Ammunition**
