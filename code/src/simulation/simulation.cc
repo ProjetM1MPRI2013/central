@@ -25,7 +25,7 @@ Simulation::Simulation(int nbPlayers, int id):
 	this->NB_JOUEURS = nbPlayers;
 	this->Id = id;
 
-	this->mesSous = 0;
+	this->mesSous = 200;
 	this->sous = std::vector<int>(NB_JOUEURS, 0);
 	this->relativeTime = 0;
 	this->absoluteTime = 0;
@@ -48,8 +48,8 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id):
     this->NB_JOUEURS = nbPlayers;
     this->Id = id;
 
-    this->mesSous = 0;
-    this->sous = std::vector<int>(NB_JOUEURS, 0);
+    this->mesSous = 200;
+    this->sous = std::vector<int>(NB_JOUEURS, 200);
     this->relativeTime = 0;
     this->absoluteTime = 0;
     this->smallTime = 0;

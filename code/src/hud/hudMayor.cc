@@ -37,10 +37,9 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 
 void HudMayor::init(Simulation& simulation) 
 {
-  if (gold != simulation.getSous()) {
     gold = simulation.getSous();
+    std::cout << "Gold : " << gold << std::endl;
     l_gold->setText("Gold : "+std::to_string(gold));
-  };
   if (this->currentState != this->nextState) 
   {
     this->currentState = this->nextState;
@@ -109,7 +108,8 @@ void HudMayor::init(Simulation& simulation)
   };
 };
 
-void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilemap) {
+void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilemap, 
+                      LocalState* localState) {
 	if (event.type == sf::Event::MouseWheelMoved)
 	{
 		int zoom = tilemap->getZoom();
@@ -187,17 +187,21 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
       if (event.mouseButton.button == sf::Mouse::Left) 
       {
         sf::Vector2i clicPosition = sf::Mouse::getPosition(*window);
-        //Position mapPosition = TODO
+        Position mapPosition = (*tilemap).CoordMouse(clicPosition);
         if (this->currentAction == CA_COP) {
-          //AddCop addCop = AddCop(this->currentNumber, mapPosition.getX(), 
-          //                        mapPosition.getY(), &localState);
-          //addCop.doAction();
+          AddCop addCop = AddCop(this->currentNumber, mapPosition.getX(), 
+                                  mapPosition.getY(), localState);
+          addCop.doAction();
+          std::cout << "Ajout de " << currentNumber << " Cops en position (" 
+            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
         if (this->currentAction == CA_CAM) {
-          //AddCam addCam = AddCam(this->currentNumber, mapPosition.getX(), 
-          //                        mapPosition.getY(), &localState);
-          //addCam.doAction();
-        };
+          AddCam addCam = AddCam(this->currentNumber, mapPosition.getX(), 
+                                  mapPosition.getY(), localState);
+          addCam.doAction();
+          std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
+            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
+       };
         setwf(WF_NONE); 
       }
       else 

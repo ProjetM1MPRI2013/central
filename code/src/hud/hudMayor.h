@@ -25,7 +25,7 @@ class HudMayor: public PreHud {
 public:
 	HudMayor(sf::RenderWindow* window, Simulation& simulation);
 	void init(Simulation& simulation);
-	void event(sf::RenderWindow* window, sf::Event e, TileMap* tilemap);
+	void event(sf::RenderWindow* window, sf::Event e, TileMap* tilemap, LocalState* localState);
 	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
