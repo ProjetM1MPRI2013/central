@@ -77,7 +77,7 @@ protected :
    */
   Action() ;
 
-  SIMPLE_MESSAGE(Action, AbstractMessage)
+  SIMPLE_MESSAGE(Action, AbstractMessage, name, date, delay, playerID)
 
 };
 
