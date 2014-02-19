@@ -249,8 +249,7 @@ void KillNPC(boost::uuids::uuid target, Simulation* s ){
 		std::cout << "null" << std::endl;
 	}
 	else {
-		victim->isAlive = false;
-		//simulation->supprimerNPC(victim);
+          victim->kill();
 		};
 	std::cout << "YOU BASTARD !!!" << std::endl;
 	return;

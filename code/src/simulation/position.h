@@ -111,7 +111,7 @@ class Position : public EventSource {
 
   /**
    * @brief getNPCList
-   * computes the list of the NPCs whose hitbox contains the position
+   * computes the list of the alive NPCs whose hitbox contains the position
    */
   std::list<NPC*> getNPCList(Geography& map);
 

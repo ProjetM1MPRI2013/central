@@ -83,7 +83,7 @@ std::list<NPC*> Position::getNPCList(Geography& map) {
   while (!notTooFarNPCs.empty()) {
     NPC* npc = notTooFarNPCs.front();
     notTooFarNPCs.pop_front();
-    if (npc->isInHitbox(*this)) {
+    if (npc->isInHitbox(*this) && !(npc->isDying())&& !(npc->isDead())) {
       npcList.push_front(npc);
     }
   }

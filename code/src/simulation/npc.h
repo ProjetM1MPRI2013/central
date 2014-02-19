@@ -34,6 +34,9 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
   float deltaT = 1;
   float lambda = 1;
   float Vzero = 10;
+  bool dying;
+  bool dead;
+  sf::Time deathTimeout;
 
 
  public:
@@ -42,7 +45,6 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
       std::cout << "ERROR: NPC: we can't copy this class!\n" ;
     return NULL ;
   }
-  bool isAlive;
 
   /**
    * @brief NPC
@@ -96,6 +98,18 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    * @return : true if the NPC is shocked, false otherwise
    */
   bool isShocked() const;
+
+  /**
+   * @brief isDying
+   * @return : true if the NPC is dying, false otherwise
+   */
+  bool isDying();
+
+  /**
+   * @brief isDead
+   * @return : true if the NPC is dead, false otherwise
+   */
+  bool isDead();
 
   /**
    * @brief setShocked
@@ -217,6 +231,12 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    * @param map: the map which will be used for the pathfinding
    */
   void setTarget(Position t,Geography& map);
+
+  /**
+   * @brief kill
+   * kills the npc, ie tells him he is dying
+   */
+  void kill();
 
 private :
   /**
