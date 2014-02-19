@@ -63,16 +63,15 @@ void Stack::sendAction () {
 		(this->hud)->setwf(WF_NONE);
 	}
 	else
-	{ if ((this->SoNList).front() == SON_NPC)
 	{
-		(this->hud)->setwf(WF_CLICK);
-	};
-	/*
-	      else
-	      {
-	      (this->hud)->setwf(WF_STUFF)
-	      }
-	 */
+		if ((this->SoNList).front() == SON_NPC)
+		{
+			(this->hud)->setwf(WF_CLICK);
+		}
+		else
+		{
+			(this->hud)->setwf(WF_STUFF);
+		};
 	};
 
 };
@@ -96,8 +95,8 @@ void Stack::sendNpc(boost::uuids::uuid n) {
 	}
 	else
 	{   std::cout << "pas send" <<std::endl;
-		//(this->hud)->setwf(WF_ERROR);
-		/*todo : envoyer message d'erreur*/
+	//(this->hud)->setwf(WF_ERROR);
+	/*todo : envoyer message d'erreur*/
 	};
 };
 void Stack::sendStuff(int stuffID) {
