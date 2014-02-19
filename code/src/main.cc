@@ -109,7 +109,7 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
 
       }
       if (TERRO) {hudTerro.event(window, event, graContIso);}
-      else {hudMayor.event(window,event,&tilemap);}
+      else {hudMayor.event(window,event,&tilemap,&loc);}
     }
 
     loc.run(dt);
