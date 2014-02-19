@@ -1,207 +1,72 @@
-/**
-   @author: Adrien K.
- */
 
-
+/*********************************************************
+** @author: Remy (generated code)**
+*********************************************************/
+#include "PreScenarioActionList.h"
 #ifndef SCENARIOACTIONLIST_H
 #define SCENARIOACTIONLIST_H
-
-#include "simulation/npc.h"
-#include "generation/tile.h"
-#include "ScenarioAction.h"
-#include "scenario/ActionsTerro.h"
-#include "NewMov.h"
-#include <iostream>
-#include <cerrno>
-
-
-class Couple {
+class CoA_Attack: public ScenarioAction {
 public:
-	int x;
-	int y;
-	Couple (int x, int y);
-};
-
-Couple* directionToInt(Direction a);
-Couple* newMovToInt(NewMov a);
-Direction intToDirection(Couple* a);
-
-/**
- * @brief The player changes of direction.
- */
-class ChangeDirection: public ScenarioAction {
+CoA_Attack(int weapon, boost::uuids::uuid victim, Simulation* s);
+CoA_Attack(const CoA_Attack&);
 public:
-	int playerID;
-
-	/**
-	 * @brief The new direction of the player
-	 */
-	Direction newDirection;
-	int timeStamp;
-
-	ChangeDirection(int id, Direction direction, int ts, Simulation* s);
-	ChangeDirection(const ChangeDirection&);
-
-	virtual void run();
-
-	//AbstractMessage functions
-	virtual AbstractMessage* copy();
+int weapon; 
+public:
+boost::uuids::uuid victim; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
 protected :
-	//Serialization
-	ChangeDirection() {}
-
-	SIMPLE_MESSAGE(ChangeDirection, ScenarioAction, playerID, newDirection, timeStamp)
-
+//Serialization
+CoA_Attack(){};
+SIMPLE_MESSAGE(CoA_Attack, ScenarioAction, weapon, victim);
 };
-
-/**
- * @brief The player changes destination.
- */
-class ChangeDestination: public ScenarioAction {
+class CoA_Reload: public ScenarioAction {
 public:
-	int playerID;
-
-	/**
-	 * @brief The new destination of the player
-	 */
-	Position destination;
-	int timeStamp;
-
-	ChangeDestination(int id, Position destination, int ts, Simulation* s);
-	ChangeDestination(const ChangeDestination&);
-
-	virtual void run();
-
-	//AbstractMessage functions
-	virtual AbstractMessage* copy();
+CoA_Reload(int gun, int ammunition, Simulation* s);
+CoA_Reload(const CoA_Reload&);
+public:
+int gun; 
+public:
+int ammunition; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
 protected :
-	//Serialization
-	ChangeDestination() {}
-
-	SIMPLE_MESSAGE(ChangeDestination, ScenarioAction, playerID, destination, timeStamp)
-
+//Serialization
+CoA_Reload(){};
+SIMPLE_MESSAGE(CoA_Reload, ScenarioAction, gun, ammunition);
 };
-
-class AddCops: public ScenarioAction {
+class CoA_Plant: public ScenarioAction {
 public:
-	int number;
-	float x;
-	float y;
-	AddCops (int n, float xx, float yy,Simulation* s);
-	AddCops (const AddCops&);
-
-	virtual void run ();
-
-	//AbstractMessage functions
-	virtual AbstractMessage* copy();
-
+CoA_Plant(int bomb, std::pair<int,int> zone, Simulation* s);
+CoA_Plant(const CoA_Plant&);
+public:
+int bomb; 
+public:
+std::pair<int,int> zone; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
 protected :
-	//Serialization
-	AddCops(){}
-
-	SIMPLE_MESSAGE(AddCops, ScenarioAction, number, x, y)
+//Serialization
+CoA_Plant(){};
+SIMPLE_MESSAGE(CoA_Plant, ScenarioAction, bomb, zone);
 };
-
-
-class AddCams: public ScenarioAction {
+class CoA_Drop: public ScenarioAction {
 public:
-	int number;
-	float x;
-	float y;
-	AddCams(int number,float x,float y,Simulation* s);
-	AddCams(const AddCams&);
-
-	virtual void run ();
-
-	virtual AbstractMessage* copy();
-
-private :
-	//Serialization
-	AddCams(){}
-
-	SIMPLE_MESSAGE(AddCams, ScenarioAction, number, x, y)
-};
-
-
-/**
- * @brief Create a new explosion.
- */
-class Explosion: public ScenarioAction {
+CoA_Drop(int stuff, int playerID, Simulation* s);
+CoA_Drop(const CoA_Drop&);
 public:
-	/**
-	 * @brief The initial location of the explosion
-	 */
-	std::pair<int,int> location;
-
-	/**
-	 * The power of the explosion
-	 */
-	int power;
-
-	Explosion (int p,std::pair<int,int>,Simulation* s);
-	Explosion (const Explosion&);
-
-	virtual void run ();
-
-	virtual AbstractMessage* copy();
-
-private :
-	//Serialization
-	Explosion(){}
-
-	SIMPLE_MESSAGE(Explosion, ScenarioAction, power)
-};
-
-
-/**
- * @brief Kill a NPC.
- */
-class KillNPC: public ScenarioAction {
+int stuff; 
 public:
-	/**
-	 * @brief The NPC targeted
-	 */
-	boost::uuids::uuid target;
-
-	KillNPC(boost::uuids::uuid t,Simulation* s);
-	KillNPC(const KillNPC&);
-
-	virtual void run ();
-
-	//AbstractMessage functions
-	virtual AbstractMessage* copy();
-
-private :
-	//Serialization
-	KillNPC(){}
-
-	SIMPLE_MESSAGE(KillNPC, ScenarioAction)
-
+int playerID; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
+protected :
+//Serialization
+CoA_Drop(){};
+SIMPLE_MESSAGE(CoA_Drop, ScenarioAction, stuff, playerID);
 };
-
-class DropItem : public ScenarioAction{
-public :
-	int stuffID;
-	int playerID;
-
-	/**
-	 *@param stuffO : item to drop
-	 *@param id : id of the player
-	 */
-	DropItem(int stuffID, int id, Simulation* s);
-	DropItem (const DropItem&);
-
-	virtual void run ();
-
-	//AbstractMessage functions
-	virtual AbstractMessage* copy();
-
-private :
-	//Serialization
-	DropItem(){}
-
-	SIMPLE_MESSAGE(DropItem, ScenarioAction, stuffID, playerID)
-};
-
-
 #endif

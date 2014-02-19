@@ -28,8 +28,8 @@ return true;
 };
 
 void A_Attack::addPendingActions(GlobalState* gs){
-	gs->addAction(new KillNPC (this->victim, (Simulation*) gs));
-	gs->deleteAction(this);
+gs->addAction(new CoA_Attack (this->weapon, this->victim, (Simulation*) gs));
+gs->deleteAction(this);
 };
 
 AbstractMessage* A_Attack::copy() {
@@ -60,7 +60,7 @@ return true;
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
-
+gs->addAction(new CoA_Reload (this->gun, this->ammunition, (Simulation*) gs));
 gs->deleteAction(this);
 };
 
@@ -92,7 +92,7 @@ return true;
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){
-gs->addAction(new Explosion (this->bomb, this->zone, (Simulation*) gs));
+gs->addAction(new CoA_Plant (this->bomb, this->zone, (Simulation*) gs));
 gs->deleteAction(this);
 };
 
@@ -124,7 +124,7 @@ return true;
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
-gs->addAction(new DropItem (this->stuff, this->playerID, (Simulation*) gs));
+gs->addAction(new CoA_Drop (this->stuff, this->playerID, (Simulation*) gs));
 gs->deleteAction(this);
 };
 

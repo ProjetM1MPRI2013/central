@@ -29,15 +29,13 @@ C_Weapon  ();
 public:
 virtual int getdamage () = 0;
 protected:
-int damage; 
 public:
 virtual float getrange () = 0;
 protected:
-float range; 
 //Serialization
 protected :
 
-SIMPLE_MESSAGE(C_Weapon, C_Stuff, damage, range);
+SIMPLE_MESSAGE(C_Weapon, C_Stuff);
 };
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Weapon);
 
@@ -67,10 +65,10 @@ protected:
 int damage; 
 //Serialization
 protected :
+virtual AbstractMessage* copy();
 C_Gun(){};
 SIMPLE_MESSAGE(C_Gun, C_Weapon, ammunitionMax, range, ammunitionLoaded, damage);
 };
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Gun);
 
 /*********************************************************
 ** Mitraillette**
@@ -88,10 +86,10 @@ protected:
 float range; 
 //Serialization
 protected :
+virtual AbstractMessage* copy();
 C_Mitraillette(){};
 SIMPLE_MESSAGE(C_Mitraillette, C_Gun, ammunitionMax, range);
 };
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Mitraillette);
 
 /*********************************************************
 ** UltraM**
@@ -105,10 +103,10 @@ protected:
 int damage; 
 //Serialization
 protected :
+virtual AbstractMessage* copy();
 
 SIMPLE_MESSAGE(C_UltraM, C_Mitraillette, damage);
 };
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_UltraM);
 
 /*********************************************************
 ** Knife**
@@ -126,10 +124,10 @@ protected:
 int damage; 
 //Serialization
 protected :
+virtual AbstractMessage* copy();
 
 SIMPLE_MESSAGE(C_Knife, C_Weapon, range, damage);
 };
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(C_Knife);
 
 /*********************************************************
 ** Ammunition**
