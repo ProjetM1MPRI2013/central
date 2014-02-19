@@ -30,6 +30,7 @@ public:
 	void draw();
 	void setwf(WaitFor w);
 	Stack* stack;
+  ~HudTerro();
 
 	/* In the main loop, the 3 methods must be called in this specific order :
 	 * init();

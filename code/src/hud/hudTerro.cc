@@ -69,6 +69,10 @@ HudTerro::HudTerro(sf::RenderWindow* window, LocalState& simulation, GraphicCont
 }
 ;
 
+HudTerro::~HudTerro(){
+  delete stack;
+}
+
 void HudTerro::init() {
 
 /*switch (waitFor) {
