@@ -14,6 +14,7 @@
 #include <chat_event.h>
 #include "../generation/geography.h"
 #include "simulation.h"
+#include "../simulation/position.h"
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {
@@ -26,7 +27,7 @@ public:
   int getX();
   int getY();
   void changeView();
-
+  Position CoordMouse(sf::Vector2i Coord);
   // resize = le niveau actuel de zoom
   void run(sf::RenderWindow* window);
 private:

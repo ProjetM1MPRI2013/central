@@ -256,12 +256,12 @@ void TileMap::run(sf::RenderWindow* window) {
 }
 
 
-TileMap::CoordMouse(sf::Vector2i Coord){
-	float X = ((float)Coord.x)/(zoom*20*78) + TileMap::setcoord->x ;
-	float Y = ((float)Coord.y)/(zoom*20*78)+TileMap::setcoord->y ;
+Position TileMap::CoordMouse(sf::Vector2i Coord){
+	float X = ((float)Coord.x)/(zoom*20*78) + ((float)TileMap::getX()) ;
+	float Y = ((float)Coord.y)/(zoom*20*78)+((float)TileMap::getY()) ;
 	std::cout << X << "\t";
 	std::cout << Y << "\t";
-	Position pos = Position(X,Y)
+	Position pos = Position(X,Y);
+	return pos;
 }
 
-}
