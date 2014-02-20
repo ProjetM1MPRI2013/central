@@ -133,6 +133,14 @@ void LocalState::run(sf::Time dt) {
 			mesSous = mesSous - camera->getEntretien();
 		}
 	}
+	if (mesSous < 0) {
+			if (!(this->agents.empty())) {
+				this->agents.pop_back();
+			}
+			if (!(this->cameras.empty())) {
+				this->cameras.pop_back();
+			}
+		}
 
 	//Deplacement de tous les NPCs.
 	for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
