@@ -2,7 +2,10 @@
 #define TO_MIDI_H
 
 #include <fluidsynth.h>
-#include "debug.h"
+#include <vector>
+#include <string>
+#include <list>
+#include "Musique.h"
 
 /**
  * @brief Set an instrument on a given MIDI channel
@@ -13,13 +16,21 @@ void set_instrument (fluid_synth_t * synth, int channel, int instrument);
 
 class MIDIEvent {
  public:
-  float time;
+  bool isplayed;
+  float begintime;
+  float duration;
   int MIDInumber;
-  MIDIEvent (float,int);
+  MIDIEvent (float begin, float duration, int instrument);
   MIDIEvent ();
   void print();
 };
 
-std::vector<MIDIEvent> parse_notes (std::string s, int tempo);
+/**
+ * @brief parsed the string returned by the music generator and set the result in the input vector
+ * @param resetInstrument: if set at true then set the instrument on the MIDI channel to those given by the music generator
+ */
+void setNextMesures(Musique& musique, std::vector<std::list<MIDIEvent>>& MIDImusic,fluid_synth_t * synth, bool resetInstrument);
+
+
 
 #endif
