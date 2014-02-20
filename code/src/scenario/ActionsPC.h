@@ -15,8 +15,8 @@ class LocalState;
 #define COST_CAM1 1 //cout d'entretien d'une caméra
 #define COST_COP2 1 //cout de placement d'un cop
 #define COST_CAM2 1 //cout de placement d'une caméra
-#define COST_CAM2_2 2 //cout de placement d'une caméra
-#define COST_CAM1_2 2 //cout de placement d'une caméra
+#define COST_CAM2_2 2 //cout de placement d'une caméra#Swag
+#define COST_CAM1_2 2 //cout de placement d'une caméra#SWAG
 
 
 class AddCop : public Action {
