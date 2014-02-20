@@ -60,21 +60,20 @@ bool ServerImplem::isConnected(int player){
 }
 
 void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgType, int player){
-  //TODO : msg_id faux si il y a plusieurs clients (utilisé plusieurs fois)
-  last_sent++ ;
-  //asynchronous send requires that buffers are stored on the heap.
-  //they are freed when the callback on_sent is called
-  string* header = create_header(reliable, msgType, last_sent) ;
-  string* data = new string(msg.toString()) ;
-
   if(player == -1)
     {
       //broadcast
       for(endpoint cli_endpoint : client_endpoints)
         {
+          last_sent++ ;
+          //asynchronous send requires that buffers are stored on the heap.
+          //they are freed when the callback on_sent is called
+          string* header = create_header(reliable, msgType, last_sent) ;
+          string* data = new string(msg.toString()) ;
+
           vector<string *> string_msg ;
-          string_msg.push_back(new string(*header));
-          string_msg.push_back(new string(*data));
+          string_msg.push_back(header);
+          string_msg.push_back(data);
           vector<const_buffer>buffs ;
           buffs.push_back(buffer(*string_msg[0]));
           buffs.push_back(buffer(*string_msg[1]));
@@ -82,15 +81,13 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
           auto handler = boost::bind(&ServerImplem::on_sent, this,string_msg,cli_endpoint, _1, _2) ;
           write_buff(buffs, handler, &cli_endpoint) ;
         }
-      //new objects were used at each turn of the loop.
-      //the orignal ones can be deleted
-      delete header ;
-      delete data ;
     }
   else
     {
       //send to a given player
       assert(registered_players.find(player) != registered_players.end()) ;
+      string* header = create_header(reliable, msgType, last_sent) ;
+      string* data = new string(msg.toString()) ;
       vector<string *> string_msg ;
       string_msg.push_back(header);
       string_msg.push_back(data);
@@ -100,7 +97,6 @@ void ServerImplem::send_message(AbstractMessage &msg, bool reliable, string msgT
       endpoint cli_endpoint = registered_players.at(player) ;
       auto handler = boost::bind(&ServerImplem::on_sent, this,string_msg,cli_endpoint, _1, _2) ;
       write_buff(buffs, handler, &cli_endpoint) ;
-
     }
 }
 

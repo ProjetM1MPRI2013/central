@@ -16,6 +16,7 @@
 #include "scenario/ScenarioActionList.h"
 #include "interfaceinit/chat_event.h"
 #include "simulation/npc.h"
+#include "npcUpdate.h"
 /*
  * @author mheinric
  */
@@ -38,6 +39,7 @@ BOOST_CLASS_EXPORT(AddCams)
 BOOST_CLASS_EXPORT(AddCops)
 BOOST_CLASS_EXPORT(ChatEvent)
 BOOST_CLASS_EXPORT(NPC)
+BOOST_CLASS_EXPORT(NpcUpdate)
 
 #include "debug.h"
 
