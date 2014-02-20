@@ -92,7 +92,7 @@ public:
   virtual void lisserMatrice();
   template <class T>
 
-  T getItemByID(int id);
+  T& getItemByID(int id);
   /**
    * @brief setGeography
    * @param g : a reference to the data structure created by the city generator
@@ -172,7 +172,7 @@ protected :
 };
 
 template<class T>
-T Simulation::getItemByID(int stuffID) {
+T& Simulation::getItemByID(int stuffID) {
   for (auto& player : players) {
     try {
       return player.getItemByID<T>(stuffID);

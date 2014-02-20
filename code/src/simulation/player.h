@@ -61,7 +61,12 @@ public:
 
 	std::vector<int> getInventory(); // returns list of stuff ids currently held by the player
 	template <class T>
-	T getItemByID(int ClickableID); // raises exception if Stuff not found
+  /*
+   * Get a reference to the inventory item with ID ClickableID.
+   * If you store this reference, it may become invalid later.
+   * See note for future improvement above implementation
+   */
+	T& getItemByID(int ClickableID); // raises exception if Stuff not found
 	bool hasItemByID(int ClickableID);
 	void addItem(Clickable&& s);
 	void removeItem(int ClickableID);
@@ -114,16 +119,27 @@ private:
 
 };
 
+/*
+* Note for future improvement: 
+*
+* Ideally we want to return a copy of the found item, but some items derive a
+* class B which has undefined virtual methods. So you can't say get<B>(id)
+* because B is not constructible.
+*
+* A solution would be to use "virtual constructors", 
+*
+* - either by defining a clone() method on all classes deriving B :
+* http://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Virtual_Constructor
+*
+* - or by defining a generic close on B, and making all D classes derive B<D>:
+*   http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern#Polymorphic_copy_construction
+*/
 template <typename T>
-T Player::getItemByID(int ClickableID) {
+T& Player::getItemByID(int ClickableID) {
 	for (auto& stuffPtr : inventory) {
-		/*
-		 * Not sure how casting works for copy constructors and unique_ptrs:
-		 * let's say B derives A, and you want to create a new instance of A from
-		 * a unique_ptr<B>. Well, implicit casting from 'unique_ptr<B>' to 'const A&'
-		 * does not work. That's why I'm casting manually.
-		 */
-		if (stuffPtr->ClickableID == ClickableID) { return T(*(static_cast<T*>(stuffPtr.get()))); }
+		if (stuffPtr->ClickableID == ClickableID) { 
+      return (*(static_cast<T*>(stuffPtr.get())));
+    }
 	}
 	throw StuffNotFound();
 }

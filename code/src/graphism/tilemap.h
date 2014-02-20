@@ -30,6 +30,7 @@ public:
   Position CoordMouse(sf::Vector2i Coord);
   // resize = le niveau actuel de zoom
   void run(sf::RenderWindow* window);
+  void newMovement(NewMov mov,Simulation s);
 private:
   //les coordonnées du point en haut à gauche. 0,0 veut dire le bord du haut à gauche de l'écran est le bord du haut à gauche de l'écran
   int x = 0,y = 0;

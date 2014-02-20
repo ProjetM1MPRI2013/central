@@ -146,28 +146,28 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 			switch (event.key.code) {
 			case sf::Keyboard::Z:
 				if (not this->bup) {
-					//newMovement (NewMov::P_UP,(&this->simulation));
+					newMovement (NewMov::P_UP,(localState));
           mouseMovement = false;
 					this->bup = true;
 				};
 				break;
 			case sf::Keyboard::Q:
 				if (not this->bleft) {
-					//newMovement (NewMov::P_LEFT,(&this->simulation));
+					newMovement (NewMov::P_LEFT,(localState));
           mouseMovement = false;
 					this->bleft = true;
 				};
 				break;
 			case sf::Keyboard::S:
 				if (not this->bdown) {
-					//newMovement (NewMov::P_DOWN,(&this->simulation));
+					newMovement (NewMov::P_DOWN,(localState));
           mouseMovement = false;
 					this->bdown = true;
 				};
 				break;
 			case sf::Keyboard::D:
 				if (not this->bright) {
-					//newMovement (NewMov::P_RIGHT,(&this->simulation));
+					newMovement (NewMov::P_RIGHT,(localState));
           mouseMovement = false;
 					this->bright = true;
 				};
@@ -180,19 +180,19 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 		if (event.type == sf::Event::KeyReleased) {
 			switch (event.key.code) {
 			case sf::Keyboard::Z:
-				//newMovement (NewMov::R_UP,(&this->simulation));
+				newMovement (NewMov::R_UP,(localState));
 				this->bup = false;
 				break;
 			case sf::Keyboard::Q:
-				//newMovement (NewMov::R_LEFT,(&this->simulation));
+				newMovement (NewMov::R_LEFT,(localState));
 				this->bleft = false;
 				break;
 			case sf::Keyboard::S:
-				//newMovement (NewMov::R_DOWN,(&this->simulation));
+				newMovement (NewMov::R_DOWN,(localState));
 				this->bdown = false;
 				break;
 			case sf::Keyboard::D:
-				//newMovement (NewMov::R_RIGHT,(&this->simulation));
+				newMovement (NewMov::R_RIGHT,(localState));
 				this->bright = false;
 				break;
 			default:

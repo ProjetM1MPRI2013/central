@@ -29,6 +29,8 @@ public:
 	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
+  void newMessage(std::string message);
+  void deleteMessage();
 	Stack* stack;
   ~HudTerro();
 
@@ -53,6 +55,7 @@ private:
 	std::vector<int> inventory;
 	std::list<ActionType> actionTypeList;
 	std::list<tgui::Button::Ptr> buttonsList;
+  std::list<tgui::Label::Ptr> messagesList;
 	WaitFor waitFor;
 	ButtonState currentState;
 	ButtonState nextState;
