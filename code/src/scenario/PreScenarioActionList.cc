@@ -7,6 +7,7 @@
 #include "ActionsPC.h"
 #include "ActionsTerro.h"
 #include "geography.h"
+#include "../simulation/npc.h"
 
 /*****************
  *ChangeDirection*
@@ -106,9 +107,9 @@ void ChangeDirection::run(){
  *ChangeDestination*
  *****************/
 ChangeDestination::ChangeDestination(int id, Position destination, int ts, Simulation* s) : ScenarioAction ("ChangeDestination",s),
-	playerID(id),
-	destination(destination),
-	timeStamp(ts) { }
+		playerID(id),
+		destination(destination),
+		timeStamp(ts) { }
 
 ChangeDestination::ChangeDestination(const ChangeDestination& a) : ScenarioAction("ChangeDestination",a.simulation){
 	this->playerID = a.playerID;
@@ -238,8 +239,8 @@ AbstractMessage* AddCams::copy(){
 
 
 /*********************************************************
-** Library for created scenario action**
-*********************************************************/
+ ** Library for created scenario action**
+ *********************************************************/
 
 
 void KillNPC(boost::uuids::uuid target, Simulation* s ){
@@ -249,8 +250,8 @@ void KillNPC(boost::uuids::uuid target, Simulation* s ){
 		std::cout << "null" << std::endl;
 	}
 	else {
-          victim->kill();
-		};
+		victim->kill();
+	};
 	std::cout << "YOU BASTARD !!!" << std::endl;
 	return;
 };
@@ -260,18 +261,18 @@ void DropItem (int stuffID, int playerID, Simulation* simulation){
 	simulation->getPlayerByID(playerID).removeItem(stuffID);
 };
 
+
 void Explosion (int power, std::pair<int,int> location,Simulation* simulation) {
 	std::list<Tile*>* nb = simulation->getMap()->neighbors(power, simulation->getMap()->getTile(location));
 	std::cout << "nobody : ça explose!!!!!" << std::endl;
 	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
 		// kill npc in the case. Only the server had to dot this. The client only destroys the buildings
-		if (simulation->simIsServer()){
+		if (true){
 			std::list<NPC*> npcs = (*t)->getNPCs();
 			for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-				//				this->simulation->addAction(new KillNPC(*n, this->simulation));
+				(*n)->kill();
 			};
 		}
-		//TODO détruire les batiments
 	};
 	std::cout << "nobody : fin d'explosion!!!!!"<< std::endl ;
 };

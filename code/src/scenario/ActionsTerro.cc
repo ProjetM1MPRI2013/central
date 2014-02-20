@@ -105,8 +105,7 @@ return (AbstractMessage*) new A_Plant(*this);
 *********************************************************/
 
 A_Drop::A_Drop (int stuff, LocalState* sim) : Action ( "ToA_Drop", sim) {
-	std::cout << "player id : " << ((Action*)this)->playerID << std::endl;
-	this->stuff = (int)stuff;
+this->stuff = (int)stuff;
 };
 
 A_Drop::A_Drop(const A_Drop& a) : Action(" ToA_Drop", a.simulation){
@@ -123,7 +122,6 @@ return true;
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
-	std::cout << "player id : " << ((Action*)this)->playerID << std::endl;
 gs->addAction(new CoA_Drop (this->stuff, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
