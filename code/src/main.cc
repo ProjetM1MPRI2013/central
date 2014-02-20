@@ -6,6 +6,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include "interfaceinit/interface_init.h"
+#include "interfaceinit/interface_init2.h"
 #include "generation/geography.h"
 #include "generation/generation1.h"
 #include "network/network.h"

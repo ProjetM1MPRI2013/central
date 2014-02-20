@@ -28,7 +28,7 @@ static const std::vector<sf::VideoMode> vect_fs_vm =
 		sf::VideoMode::getFullscreenModes();
 bool synchro_vert3 = false;
 
-tgui::Widget::Ptr& getWidget(Interface* inter,std::string str) {
+tgui::Widget::Ptr& getWidget(Interface* inter,std::string str) { //trouve un widget associé à un nom donné
 	std::vector<sf::String> nametab = (inter->getCurrent())->getWidgetNames();
 	std::vector<tgui::Widget::Ptr> widtab = (inter->getCurrent())->getWidgets();
 	int widtabn = widtab.size();
@@ -40,7 +40,6 @@ tgui::Widget::Ptr& getWidget(Interface* inter,std::string str) {
 	};
 	return (widtab[0]);
 }
-//Définition des éléments de main
 
 int callbackMain(int n , std::string* str, Interface* inter) {
 	DBG << "I am in callbackMain";
@@ -73,9 +72,8 @@ int funcEventMain(sf::Event* event,int n,Interface* inter) {
 	//DBG<< "I am in funcEventMain";
 	return 0;
 }
-//End définition main widgets
 
-//Definition of options menu widgets
+
 int callbackOpt(int n , std::string* str,Interface* inter) {
 	if (n == 4) {
 		//go back to main menu
@@ -93,14 +91,13 @@ int callbackOpt(int n , std::string* str,Interface* inter) {
 		return 1;
 	}
 	if (n == 2) {
-		//wima = 4;// go to audio option menu
-		//changementMenu.play();
+		//go to audio option menu
 		*str = "aopt";
 		return 1;
 	}
 	return 0;
 }
-void resizeInterface(int w , int h , Interface * inter) {
+void resizeInterface(int w , int h , Interface * inter) { //resize tout les boutons de l'interface
 	std::list<GuiExtended*> guiList = inter->getGuilist ();
 	std::list<GuiExtended*>::iterator i;
 	for(i = guiList.begin() ; i != guiList.end() ; ++i) {
@@ -176,7 +173,6 @@ int funcEventOpt(sf::Event* event,int n,Interface* inter) {
 	return 0;
 }
 int callbackGopt(int n , std::string* str,Interface* inter) {
-
 	DBG << "I m in callbackGopt";
 	if (n == 1) {
 		DBG << "I m in callbackGopt plus loin";
@@ -289,7 +285,7 @@ int funcEventGaopt(sf::Event* event,int n,Interface* inter) {
 int callbackGaopt(int n , std::string* str,Interface* inter) {
 	DBG << "callbackGaopt";
 
-	if (n == 2) { //return button pushed
+	if (n == 2) {
 		*str = "opt"; // go back to option menu
 		return 1;
 	}

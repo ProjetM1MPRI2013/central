@@ -1,3 +1,6 @@
+/*
+ * @Author : Matthieu
+ */
 #include "chat_event.h"
 #include "assert.h"
 

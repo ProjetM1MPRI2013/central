@@ -8,7 +8,10 @@
 #endif
 
 class Interface;
-
+/**
+ * @brief : Classe GuiExtended
+ * Cette classe étent la clase tgui::Gui pour y mettre les fonctions propres à ce gui gérant les callback et les évenements
+ */
 class GuiExtended : public tgui::Gui {
 private :
 	int (*funcCallBack)(int,std::string*,Interface* inter);
@@ -27,6 +30,14 @@ public :
 	void setFuncCallback(int (*f)(int,std::string*,Interface* inter));
 	void setFuncEvent(int (*f)(sf::Event* event,int flag,Interface* inter));
 };
+
+/**
+ * @brief : Classe Interface
+ * Classe contenant une liste de fenêtres tgui ainsi que la liste de leurs nom.
+ * La classe contient le nécessaire pour être compatible avec le réseau, la musique du jeu.
+ * Elle contient aussi l'état courant de la fenêtre
+ * @Author : Matthieu
+ */
 
 class Interface {
  public :
