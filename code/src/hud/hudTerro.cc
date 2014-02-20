@@ -406,3 +406,23 @@ void HudTerro::setwf(WaitFor w) {
 	this->waitFor = w;
 }
 ;
+
+void HudTerro::newMessage(std::string message) {
+    tgui::Label::Ptr l_message(this->hud);
+    l_message->load(THEME_CONFIG_FILE_HUD_TERRO);
+    l_message->setText(message);
+    l_message->setPosition(this->w/2, this->h -150);
+    l_message->setTextColor(sf::Color(255, 0, 0));
+    l_message->setTransparency(0);
+    (this->messagesList).push_back(l_message);
+};
+
+void HudTerro::deleteMessage() {
+	for (std::list<tgui::Label::Ptr>::iterator it =
+	    	(this->messagesList).begin();
+		    it != (this->messagesList).end(); ++it) {
+		hud.remove(*it);
+	};
+	(this->messagesList).clear();
+};
+
