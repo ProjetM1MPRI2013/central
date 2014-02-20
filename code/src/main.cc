@@ -186,7 +186,7 @@ int main(int argc, char ** argv) {
     video_mode = sf::VideoMode::getDesktopMode();
     isFullScreen = true;
   } else {
-    b = interface_initiale(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
+    b = interface_initiale2(sizeFenetre, &isFullScreen, serverPtr, clientPtr);
     video_mode = sf::VideoMode(sizeFenetre[0], sizeFenetre[1], sizeFenetre[2]);
   }
   //}
