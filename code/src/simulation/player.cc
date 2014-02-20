@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "player.h"
+#include <cmath>
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
 
@@ -171,15 +172,20 @@ void Player::updatePosition(sf::Time dt, Geography& map) {
   if (movementType == DESTINATION) {
 
     if (destination.distance(position) < 0.4) {
+      DBG << "__________________________";
+       
       movementType = DIRECTION;
     } else {
       float dX = destination.getX() - x;
       float dY = destination.getY() - y;
+      float aX = fabs(dX);
+      float aY = fabs(dY);
       DBG << "Destination-based move:";
       DBG << "  pos     : " << position;
       DBG << "  dest    : " << destination;
-      DBG << "  x/y/spd : " << (dX/(dX+dY)) << "/" <<  (dY/(dX+dY)) << "/" << dep;
-      position.add(dep * (dX/(dX+dY)), dep * (dY/(dX+dY)));
+      DBG << "  abs     : " << dX << "/" << aX << " " << dY << "/" << aY;
+      DBG << "  x/y/spd : " << (dX/(aX+aY)) << "/" <<  (dY/(aX+aY)) << "/" << dep;
+      position.add(dep * (dX/(aX+aY)), dep * (dY/(aX+aY)));
       DBG << "  pos'    : " << position;
     }
 
