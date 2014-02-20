@@ -265,3 +265,28 @@ Position TileMap::CoordMouse(sf::Vector2i Coord){
 	return pos;
 }
 
+void TileMap::newMovement(NewMov mov,Simulation s){
+
+					int x=TileMap::getX();
+					int y=TileMap::getY();
+			switch (mov) {
+			case NewMov::P_UP:
+				if (x>0) {TileMap::setCoord(x-1,y);
+				};
+				break;
+			case NewMov::P_LEFT:
+				if (y>0) {TileMap::setCoord(x,y-1);
+				};
+				break;
+			case NewMov::P_DOWN:
+				if (x<100) {TileMap::setCoord(x+1,y);
+				};
+				break;
+			case NewMov::P_RIGHT:
+				if (y<100) {TileMap::setCoord(x,y+1);
+				};
+				break;
+			default:
+				break;
+			};
+}
