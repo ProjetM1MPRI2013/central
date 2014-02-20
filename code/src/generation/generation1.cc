@@ -6,24 +6,45 @@
 #include "pseudorandom.h"
 
 
-#define INITIAL_ANXIETY 80.
-#define INITIAL_POPULATION 10.
 #define DEBUG false
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
 
-  debugbuildings = 0;
+  
   int debugcpt = 0;
   int debugforcpt = 0;
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+
+  float initialAnxiety = 80.;
+  float initialPopulation = 10.;
+  int minInitAnx = 10;
+  int maxInitAnx = 95;
+  int minInitPop = 10;
+  int maxInitPop = 95;
   
-  //int MAP_HEIGHT = 100;
-  //int MAP_WIDTH = 100;
+  
   std::size_t seed1 = hachage(seed);
   if (DEBUG){std::cout << "seed : " << seed1 << std::endl;}
   PseudoRandom randomGen(seed1);
+  int nbRand;
+  nbRand = randomGen.pseudorand();
+  nbRand = nbRand % maxInitAnx;
+  //On choisit l'anxiété initiale des routes
+  while(nbRand < minInitAnx) {
+    nbRand = randomGen.pseudorand();
+    nbRand = nbRand % maxInitAnx;
+  }
+  initialAnxiety = (float) nbRand;
+  nbRand = randomGen.pseudorand();
+  nbRand = nbRand % maxInitAnx;
+  //On choisit la population initiale, qui va être présente sur les routes
+  while(nbRand < minInitPop) {
+    nbRand = randomGen.pseudorand();
+    nbRand = nbRand % maxInitPop;
+  }
+  initialPopulation = (float) nbRand;
   //srand(int(seed1));
-  int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
+  int maxInter, minInter, nbInter1, nbInter2, nbLine;
   std::string file = "../graphism/buildings";
   std::string ligne;
   std::fstream fichier;
@@ -206,6 +227,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   
   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;}; //9
   
+  float districtAnxiety;
   int abs0, ord0, abs1, ord1, longV, longH, k;
   abs0 = 0;
   ord0 = 0;
@@ -221,7 +243,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
       // On remplit le quartier
       if(DEBUG){std::cout << "fill district" << std::endl;}
-      fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+      //On choisit l'anxiété initiale pour le quartier
+      while(nbRand < minInitAnx) {
+	nbRand = randomGen.pseudorand();
+	nbRand = nbRand % maxInitAnx;
+      }
+      districtAnxiety = (float) nbRand;
+      nbRand = randomGen.pseudorand();
+      fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict, districtAnxiety);
       //Ancienne méthode
       //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
       // On met la route verticale
@@ -230,7 +259,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longV; k++) {
 	for(i2=0; i2<widthRoadV; i2++){
 	  for(j2=0; j2<heightInter; j2++){
-	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, INITIAL_ANXIETY, INITIAL_POPULATION, j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, initialAnxiety, initialPopulation, j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
 	  }
 	}
       }
@@ -239,14 +268,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(k=0; k<longH; k++) {
 	for(i2=0; i2<widthInter; i2++){
 	  for(j2=0; j2<heightRoadH; j2++){
- 	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, INITIAL_ANXIETY, INITIAL_POPULATION,(ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+ 	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, initialAnxiety, initialPopulation,(ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
  	  }
  	}
       }
       // On met l'intersection
       for(i2=0; i2<widthInter; i2++){
  	for(j2=0; j2<heightInter; j2++){
- 	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, INITIAL_ANXIETY, INITIAL_POPULATION, (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs1 + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
+ 	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, initialAnxiety, initialPopulation, (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs1 + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
  	}
       }
       ord0 = ord1 + heightInter;
@@ -259,7 +288,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
     // On remplit le quartier
     if(DEBUG){std::cout << "fill district" << std::endl;}
-    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+    //On choisit l'anxiété initiale pour le quartier
+    while(nbRand < minInitAnx) {
+      nbRand = randomGen.pseudorand();
+      nbRand = nbRand % maxInitAnx;
+    }
+    districtAnxiety = (float) nbRand;
+    nbRand = randomGen.pseudorand();
+    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict, districtAnxiety);
     //Ancienne méthode
     //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     longH = (ord1 - ord0) / heightRoadH;
@@ -267,7 +303,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(i2=0; i2<widthInter; i2++){
  	for(j2=0; j2<heightRoadH; j2++){
  	  //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
- 	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, INITIAL_ANXIETY, INITIAL_POPULATION, (ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+ 	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, initialAnxiety, initialPopulation, (ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
  	}
       }
     }
@@ -286,7 +322,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
     std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
     // On remplit le quartier
     if(DEBUG){std::cout << "fill district" << std::endl;}
-    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+    //On choisit l'anxiété initiale pour le quartier
+    while(nbRand < minInitAnx) {
+      nbRand = randomGen.pseudorand();
+      nbRand = nbRand % maxInitAnx;
+    }
+    districtAnxiety = (float) nbRand;
+    nbRand = randomGen.pseudorand();
+    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict, districtAnxiety);
     //Ancienne méthode
     //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
     // On met la route verticale
@@ -295,7 +338,7 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
       for(i2=0; i2<widthRoadV; i2++){
  	for(j2=0; j2<heightInter; j2++){
  	  //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
- 	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, INITIAL_ANXIETY, INITIAL_POPULATION, j2<(heightInter-1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+ 	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, initialAnxiety, initialPopulation, j2<(heightInter-1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
  	}
       }
     }
@@ -308,7 +351,14 @@ Generation1::Generation1 (std::string seed) : Geography(seed) {
   std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
   // On remplit le quartier
   if(DEBUG){std::cout << "fill district" << std::endl;}
-  fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+  //On choisit l'anxiété initiale pour le quartier
+  while(nbRand < minInitAnx) {
+    nbRand = randomGen.pseudorand();
+    nbRand = nbRand % maxInitAnx;
+  }
+  districtAnxiety = (float) nbRand;
+  nbRand = randomGen.pseudorand();
+  fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict, districtAnxiety);
   //Ancienne méthode
   //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
   
@@ -352,7 +402,7 @@ std::size_t Generation1::hachage(std::string seed) {
   return(seed1);
 }
 
-void Generation1::fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict) {
+void Generation1::fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict, int Anx0) {
   if(abs1 > abs0 && ord1 > ord0) {
     int nbRand = seed;
     PseudoRandom randomGen (seed);
@@ -363,21 +413,21 @@ void Generation1::fillBuilding(int absOri, int ordOri, int abs0, int ord0, int a
     int poidsBank = 3;
     int poidsHouse = 100;
     
-    if(DEBUG) {std::cout << "caractéristiques BANK: " << ++debugbuildings << std::endl;}
+    if(DEBUG) {std::cout << "caractéristiques BANK: " << std::endl;}
     int widthBank = batBank->getWidth();
     int heightBank = batBank->getHeight();
     std::string filePictureBank = batBank->getFilePictures();
     Coordinates pictureBank = batBank->getPicture();
     floatMatrix speedBank = batBank->getSpeed();
     
-    if(DEBUG) {std::cout << "caractéristiques HOUSE: "<< debugbuildings << std::endl;}
+    if(DEBUG) {std::cout << "caractéristiques HOUSE: "<< std::endl;}
     int widthHouse = batHouse->getWidth();
     int heightHouse = batHouse->getHeight();
     std::string filePictureHouse = batHouse->getFilePictures();
     Coordinates pictureHouse =batHouse->getPicture();
     floatMatrix speedHouse = batHouse->getSpeed();
     
-    if(DEBUG) {std::cout << "caractéristiques BLANK: " << debugbuildings << std::endl;}
+    if(DEBUG) {std::cout << "caractéristiques BLANK: " << std::endl;}
     int widthBlank = batBlank->getWidth();
     int heightBlank = batBlank->getHeight();
     std::string filePictureBlank = batBlank->getFilePictures();
@@ -389,29 +439,29 @@ void Generation1::fillBuilding(int absOri, int ordOri, int abs0, int ord0, int a
     if (poids <= poidsBank && heightBank <= (ord1 - ord0 + 1) && widthBank <= (abs1 - abs0 + 1)) {
       for(i3=abs0; i3<abs0 + widthBank; i3++){
 	for(j3=ord0; j3<ord0 + heightBank; j3++){
-	  this->map[i3][j3] = new Tile(i3,j3,TileType::BANK,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBank, pictureBank, widthBank, heightBank);
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::BANK,false, Anx0, 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBank, pictureBank, widthBank, heightBank);
 	}
       }
-      fillBuilding(absOri, ordOri, abs0 + widthBank, ord0, abs1, ord1, nbRand, buildingsDistrict);
-      fillBuilding(absOri, ordOri, abs0, ord0 + heightBank, abs0 + widthBank - 1 , ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0 + widthBank, ord0, abs1, ord1, nbRand, buildingsDistrict, Anx0);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightBank, abs0 + widthBank - 1 , ord1, nbRand, buildingsDistrict, Anx0);
     }
     else if (heightHouse <= (ord1 - ord0 + 1) && widthHouse <= (abs1 - abs0 + 1)) {
       for(i3=abs0; i3<abs0 + widthHouse ; i3++){
 	for(j3=ord0; j3<ord0 + heightHouse; j3++){
-	  this->map[i3][j3] = new Tile(i3,j3,TileType::HOUSE,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureHouse, pictureHouse, widthHouse, heightHouse);
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::HOUSE,false, Anx0, 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureHouse, pictureHouse, widthHouse, heightHouse);
 	}
       }
-      fillBuilding(absOri, ordOri, abs0 + widthHouse, ord0, abs1, ord1, nbRand, buildingsDistrict);
-      fillBuilding(absOri, ordOri, abs0, ord0 + heightHouse, abs0 + widthHouse - 1 , ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0 + widthHouse, ord0, abs1, ord1, nbRand, buildingsDistrict, Anx0);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightHouse, abs0 + widthHouse - 1 , ord1, nbRand, buildingsDistrict, Anx0);
     }
     else {
       for(i3=abs0; i3<abs0 + widthBlank ; i3++){
 	for(j3=ord0; j3<ord0 + heightBlank; j3++){
-	  this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBlank, pictureBlank, widthBlank, heightBlank);
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, Anx0, 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBlank, pictureBlank, widthBlank, heightBlank);
 	}
       }
-      fillBuilding(absOri, ordOri, abs0 + widthBlank, ord0, abs1, ord1, nbRand, buildingsDistrict);
-      fillBuilding(absOri, ordOri, abs0, ord0 + heightBlank, abs0 + widthBlank - 1 , ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0 + widthBlank, ord0, abs1, ord1, nbRand, buildingsDistrict, Anx0);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightBlank, abs0 + widthBlank - 1 , ord1, nbRand, buildingsDistrict, Anx0);
     }
   }
   else { 
@@ -482,7 +532,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     for(i3=abs0; i3<=abs1; i3++){
       for(j3=ord0; j3<=ord1; j3++){
 	if(DEBUG) {std::cout << i3 << " " << j3 << std::endl;}
-	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(i3, j3), Coordinates(0,0), nullptr, filePicture, picture, 1, 1); // MrKulu : Pose problème quand les tiles blank ne sont pas de taille 1. TODO
+	this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, 0., 0., false, false, false, false, 0., Coordinates(i3, j3), Coordinates(0,0), nullptr, filePicture, picture, 1, 1); // MrKulu : Pose problème quand les tiles blank ne sont pas de taille 1. TODO
       }
     }
   }
@@ -500,8 +550,7 @@ void Generation1::fillBuildings(int abs0, int ord0, int abs1, int ord1, int seed
     if (DEBUG){std::cout << "height: " << height << std::endl;}
     for(i3=abs0; i3<abs0 + width ; i3++){
       for(j3=ord0; j3<ord0 + height; j3++){
-	//this->map[i3][j3] = Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, speedBat[i3][j3], Coordinates(abs0, ord0), Coordinates(0,0), NULL, filePicture, picture, width, height);
-	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), nullptr, filePicture, picture, width, height);
+	this->map[i3][j3] = new Tile(i3,j3,batiment.getType(),false, 0., 0., false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(0,0), nullptr, filePicture, picture, width, height);
       }
     }
     
@@ -539,7 +588,7 @@ void Generation1::fillNull(int seed, int nbLine, std::string file){
 	}
 	// Now, we fill the tile
 	batiment = Batiment(file,choose);
-	map[i][j] = new Tile(i,j,batiment.getType(), false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(i,j), Coordinates(i,j), nullptr, batiment.getFilePictures(), batiment.getPicture(), batiment.getWidth(), batiment.getHeight());
+	map[i][j] = new Tile(i,j,batiment.getType(), false, 0., 0., false, false, false, false, 0., Coordinates(i,j), Coordinates(i,j), nullptr, batiment.getFilePictures(), batiment.getPicture(), batiment.getWidth(), batiment.getHeight());
 	if(DEBUG) {std::cout << "fill NULL with type : " << batiment.getType() << std::endl;}
       }
     }
