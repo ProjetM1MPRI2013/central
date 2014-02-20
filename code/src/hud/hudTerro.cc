@@ -95,7 +95,6 @@ void HudTerro::init() {
 */
 
 
-
 	this->currentState = this->nextState;
 	//std::cerr << "KOUKOU" << std::endl;
 	//if ((this-> currentState) == BS_INVENT) {std::cerr << "BS_INVENT" << std::endl;};
@@ -156,6 +155,8 @@ void HudTerro::init() {
 ;
 
 void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIso& context) {
+  bool b_wf_click = (waitFor == WF_CLICK);
+
 	if (event.type == sf::Event::Closed)
 		(*window).close();
 
@@ -275,7 +276,7 @@ void HudTerro::event(sf::RenderWindow* window, sf::Event event, GraphicContextIs
   bool consumed = (this->hud).handleEvent(event);
 
   // If a click wasn't used by the widgets, pass it to the game area.
-  if (!consumed && waitFor != WF_CLICK) {
+  if (!consumed && !b_wf_click) {
     if (event.type == sf::Event::MouseButtonPressed) {
       if (event.mouseButton.button == sf::Mouse::Left) {
         mouseMovement = true;
