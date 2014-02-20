@@ -1,5 +1,5 @@
 /**
- *@author Denys KANUNIKOV,
+ *@author Denys KANUNIKOV,Marc B
  */
 #include "localState.h"
 #include <boost/uuid/uuid_io.hpp>
@@ -127,12 +127,12 @@ void LocalState::run(sf::Time dt) {
 	/*on fait payer l'entretien des différents trucs*/
 	for (int i = 0; i < secondes; i++) {
 		for (Agent* agent : agents) {
-			mesSous = mesSous - agent->getEntretien();
+			mesSous = mesSous - (i+1)*agent->getEntretien();
 		}
 		for (Camera* camera : cameras) {
-			mesSous = mesSous - camera->getEntretien();
+			mesSous = mesSous - (i+1)*camera->getEntretien();
 		}
-		mesSous = mesSous + 10;
+		mesSous = mesSous + (i+1)*10;
 	}
 	if (mesSous < 0) {
 			if (!(this->agents.empty())) {

@@ -1,22 +1,23 @@
 /*
- * Miscellaneous.h
+
+* Miscellaneous.h
  *
  *  Created on: 25 nov. 2013
- *      Author: gac
+ *      Author: Marc
  */
 
 #ifndef MISCELLANEOUS_H_
 #define MISCELLANEOUS_H_
 
 #include "position.h"
+#include "positionable.h"
 #include <list>
 class Tile;
 class NPC;
 
-class Agent {
+class Agent : public Positionable {
   
  private :
-  Position position;
   float entretien;//en unité/seconde
   int type;
   
@@ -26,10 +27,9 @@ class Agent {
   
 };
 
-class Camera {
+class Camera : public Positionable {
 
  private :
-  Position position;
   float entretien;//en unité/seconde
   int type;
 

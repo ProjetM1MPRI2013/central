@@ -412,8 +412,9 @@ void HudTerro::newMessage(std::string message) {
     tgui::Label::Ptr l_message(this->hud);
     l_message->load(THEME_CONFIG_FILE_HUD_TERRO);
     l_message->setText(message);
-    l_message->setPosition(this->w/2, this->h -150);
-    l_message->setTextColor(sf::Color(255, 0, 0));
+    l_message->setPosition(this->w/3, 50);
+    l_message->setSize(this->w/3, 80);
+    l_message->setTextColor(sf::Color(255, 255, 255));
     l_message->setTransparency(0);
     (this->messagesList).push_back(l_message);
 };

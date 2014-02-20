@@ -1,3 +1,6 @@
+/*
+ * @Author : Matthieu
+ */
 #ifndef CHATEVENT_H
 #define CHATEVENT_H
 

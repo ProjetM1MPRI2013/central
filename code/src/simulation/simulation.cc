@@ -1,5 +1,5 @@
 /**
- *@author Denys Kanunikov, others...
+ *@author Denys Kanunikov, Marc B
  */
 #include "simulation.h"
 #include "../graphism/graphic_context_iso.h"
