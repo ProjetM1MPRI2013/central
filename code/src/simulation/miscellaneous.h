@@ -1,8 +1,9 @@
 /*
- * Miscellaneous.h
+
+* Miscellaneous.h
  *
  *  Created on: 25 nov. 2013
- *      Author: gac
+ *      Author: Marc
  */
 
 #ifndef MISCELLANEOUS_H_
