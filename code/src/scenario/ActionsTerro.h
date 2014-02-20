@@ -22,14 +22,14 @@
 #define ACTIONTERRO_H
 
 /*********************************************************
-** Attack**
+** Shoot**
 *********************************************************/
-class A_Attack: public Action {
+class A_Shoot: public Action {
 public:
-A_Attack  (int weapon, boost::uuids::uuid victim, LocalState* s);
-A_Attack(const A_Attack&);
+A_Shoot  (int gun, boost::uuids::uuid victim, LocalState* s);
+A_Shoot(const A_Shoot&);
 public:
-int weapon; 
+int gun; 
 public:
 boost::uuids::uuid victim; 
 public: 
@@ -39,8 +39,8 @@ public:
   virtual AbstractMessage* copy();
 protected :
 //Serialization
-A_Attack(){};
-SIMPLE_MESSAGE(A_Attack, Action, weapon, victim);
+A_Shoot(){};
+SIMPLE_MESSAGE(A_Shoot, Action, gun, victim);
 };
 /*********************************************************
 ** Reload**
@@ -89,10 +89,12 @@ SIMPLE_MESSAGE(A_Plant, Action, bomb, zone);
 *********************************************************/
 class A_Drop: public Action {
 public:
-A_Drop  (int stuff, LocalState* s);
+A_Drop  (int stuff, std::pair<int,int> zone, LocalState* s);
 A_Drop(const A_Drop&);
 public:
 int stuff; 
+public:
+std::pair<int,int> zone; 
 public: 
  bool isActionPossible (); 
   void doAction (); 
@@ -101,6 +103,6 @@ public:
 protected :
 //Serialization
 A_Drop(){};
-SIMPLE_MESSAGE(A_Drop, Action, stuff);
+SIMPLE_MESSAGE(A_Drop, Action, stuff, zone);
 };
 #endif

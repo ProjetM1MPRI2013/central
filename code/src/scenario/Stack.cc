@@ -26,7 +26,7 @@ void log (std::string s ) {
 /*end of the generated code*/
 
 Stack::Stack (LocalState* s, PreHud* h){
-	actionType = 	ToA_Attack ; //TODO NOBODY
+	actionType = 	ToA_Drop ;
 	stuffID = -1; // -1 must be an invalid stuff id.
 	hud = h;
 	sim = s;

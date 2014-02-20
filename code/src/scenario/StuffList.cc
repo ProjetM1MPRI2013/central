@@ -20,7 +20,6 @@ return (AbstractMessage*) new C_Stuff(*this);
 *********************************************************/
 C_Weapon::C_Weapon (): C_Stuff () {
 ((Clickable*)this)->name =  "Weapon";
-this->ActionTypePossible.push_back(ActionType::ToA_Attack);
 };
 
 /*********************************************************
@@ -32,6 +31,7 @@ this->ammunitionMax = (int)ammunitionMax;
 this->range = (float)range;
 this->ammunitionLoaded = (int)(ammunitionMax);
 this->damage = (int)damage;
+this->ActionTypePossible.push_back(ActionType::ToA_Shoot);
 this->ActionTypePossible.push_back(ActionType::ToA_Reload);
 };
 int C_Gun::getammunitionMax () {return this->ammunitionMax;};
