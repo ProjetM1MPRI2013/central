@@ -27,7 +27,6 @@ class Generation1 : public Geography
    */
   Generation1(std::string seed);
   std::size_t hachage(std::string seed);
-  int debugbuildings;
     
  private:
   /**
@@ -58,7 +57,7 @@ class Generation1 : public Geography
    * @brief we fill a district
    * 
    */
-  void fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict);
+  void fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict, int districtAnxiety);
 
   std::map<TileType, Batiment*> chooseBat(int nbRand, int nbLine, std::string file);
 
