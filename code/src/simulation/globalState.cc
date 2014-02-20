@@ -24,7 +24,7 @@ void GlobalState::setServer(Server *_server) {
 }
 
 void GlobalState::run(sf::Time dt) {
-	//If their is no enough money, remove an agent and a camera
+	//If their is not enough money, remove an agent and a camera
 	if (sous[0] < 0) {
 		if (!this->agents.empty()) {
 			this->agents.pop_back();
@@ -167,8 +167,10 @@ void GlobalState::run(sf::Time dt) {
 			(*npc).trigger("NPC::arrived");
 			DBG << "suppression d'un NPC";
 			this->supprimerNPC(npc);
-
+			//this->addAction((ScenarioAction(new ())));
+			//ajouter ici les npc à envoyer aux clients quand la scenarioaction pour remove npc existera
 		}
+
 		if (DEBUG) {
 			std::list<NPC*> neighbours =
 					(npc)->getPosition().isInTile(*map).getNPCsInRadius(*map,
