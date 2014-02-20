@@ -13,7 +13,7 @@
 #include <../network/netEvent.h>
 #include <chat_event.h>
 #include "interface_globale.h"
-#define DEBUG true
+#define DEBUG false
 #include <debug.h>
 using namespace std;
 
