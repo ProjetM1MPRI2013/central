@@ -134,7 +134,8 @@ void LocalState::run(sf::Time dt) {
 	}
 
 	//Deplacement de tous les NPCs.
-	for (NPC *npc : NPCs) {
+	for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
+    NPC* npc = pair.second;
 		bool wasArrived = npc->hasArrived();
 		Tile& tileBefore = npc->getPosition().isInTile(*map);
 		npc->updatePosition(dt, *map);
