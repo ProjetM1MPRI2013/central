@@ -124,9 +124,23 @@ public :
 };
 
 
+class RemoveNPC: public ScenarioAction {
+public:
+	RemoveNPC(boost::uuids::uuid npc,Simulation* s);
+	RemoveNPC(const RemoveNPC&);
+	boost::uuids::uuid npc;
+public:
+	virtual void run ();
+	virtual AbstractMessage* copy();
+protected :
+	//Serialization
+	RemoveNPC(){};
+	SIMPLE_MESSAGE(RemoveNPC, ScenarioAction, npc);
+};
+
 /*********************************************************
-** Library for created scenario action**
-*********************************************************/
+ ** Library for create scenario action**
+ *********************************************************/
 
 void DropItem (int stuffID, int playerID, Simulation* simulation);
 void Explosion (int p,std::pair<int,int>,Simulation* s);

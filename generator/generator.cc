@@ -27,6 +27,8 @@ Loader::Loader() {
 
 Loader::~Loader() {
 	current = NULL;
+	/* if (current == NULL) {delete current}*/
+	this->table.clear();
 }
 ;
 
@@ -110,14 +112,14 @@ void affiche(Loader loader) {
 
 
 Field::Field(FieldType ft, string name, string type) :
-																																																		ToLoad(name) {
+																																																																																														ToLoad(name) {
 	this->type = type;
 	this->initialisation = "";
 	this->fieldtype = ft;
 }
 ;
 Field::Field(FieldType ft,string name, string type, string init) :
-																																																		ToLoad(name) {
+																																																																																														ToLoad(name) {
 	this->type = type;
 	this->initialisation = init;
 	this->fieldtype = ft;
@@ -125,14 +127,14 @@ Field::Field(FieldType ft,string name, string type, string init) :
 ;
 
 Variable::Variable(VariableType vt, string name, string type ) :
-																																																		Field (FT_Variable, name,type ) {
+																																																																																														Field (FT_Variable, name,type ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 
 	;};
 
 Variable::Variable(VariableType vt, string name, string type, string init ) :
-																																																		Field (FT_Variable, name,type,init ) {
+																																																																																														Field (FT_Variable, name,type,init ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 	;};
@@ -153,13 +155,13 @@ Clickable::Clickable (string name, string type): Field (FT_Clickable, name,type 
 	;};
 
 Clickable::Clickable (string name, string type, string init ) :
-																																																		Field (FT_Clickable, name,type,init ) {
+																																																																																														Field (FT_Clickable, name,type,init ) {
 	this->clickableType = stringToClickableType(type);
 	;};
 
 
 PreClass::PreClass(string name) :
-																																																		ToLoad(name) {
+																																																																																														ToLoad(name) {
 	Loader f ;
 	Loader toInitialised ;
 	this->fields = f;
@@ -170,7 +172,7 @@ PreClass::PreClass(string name) :
 ;
 
 PreClass::PreClass(string name, PreClass* heritage) :
-																																																		ToLoad(name) {
+																																																																																														ToLoad(name) {
 	Loader f ;
 	toInitialised = heritage->toInitialised.copy();
 	this->fields = f;
@@ -199,9 +201,9 @@ void PreClass::add(Field* f) {
 
 PreAction::PreAction(string name) : PreClass(name) {
 	this->isActionPossible = "true";
-	this->firstfield = new bool;
-	*(this->firstfield ) = true;
-	this->consequence = "";
+	this->firstfield = true;
+	list<string> consequence;
+	this->consequence = consequence;
 }
 ;
 
@@ -241,6 +243,23 @@ Writer::Writer(list<ToLoad*> actions, list<ToLoad*> clickables) {
 	this->clickables = clickables;
 }
 ;
+
+
+void Writer::write() {
+	writeActionTerroCC();
+	writeActionTerroH();
+	writePreStuffH();
+	writePreStackCC();
+	writeStuffListCC();
+	writeStuffListH();
+	writeActionBoostH();
+	writeScenarioActionListCC();
+	writeScenarioActionListH();
+	fichier->close();
+}
+;
+
+/*need to write*/
 void Writer::changeFile(string s) {
 	string direction = "../code/src/scenario/";
 	if (DEBUG) {cout << "fichier " + s << endl;};
@@ -266,6 +285,7 @@ void Writer::writeInclude2 (string s) {
 	endLine();
 };
 
+
 void Writer::writeIfndef (string s) {
 	writeWord("#ifndef " +s + "_H");
 	endLine();
@@ -274,515 +294,57 @@ void Writer::writeIfndef (string s) {
 }
 
 
-
-
-void Writer::write() {
-	changeFile("ActionsTerro.cc");
-	writeInclude("ActionsTerro.h");
-	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
-			++it) {
-		writeAction((PreClass*) (*it));
+FieldType FTOfString (string s) {
+	switch (s[0]){
+	case 'C': return FT_Clickable;break;
+	case 'I': {return FT_IAP;break;}
+	case 'Q': {return FT_Consequence; break;}
+	default : return FT_Variable;
 	};
-
-
-	changeFile("ActionsTerro.h");
-	writeInclude ("PreActionTerro.h");
-	writeInclude ("simulation/npc.h");
-	writeInclude2 ("boost/serialization/base_object.hpp");
-	writeInclude2 ("boost/serialization/access.hpp");
-	writeInclude ("Action.h");
-	writeInclude ("StuffList.h");
-	writeInclude ("simulation/npc.h");
-	writeInclude ("generation/tile.h");
-	writeInclude ("Actions.h");
-	writeInclude ("ScenarioActionList.h");
-	writeInclude ("NewMov.h");
-	writeInclude ("tile.h");
-	writeInclude ("position.h");
-	writeInclude ("npc.h");
-	writeInclude ("localState.h");
-	writeInclude ("globalState.h");
-	writeIfndef("ACTIONTERRO");
-	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
-			++it) {
-		writeHAction((PreClass*) (*it));
-	};
-	endLine();
-	writeWord("#endif");
-
-
-	changeFile("sauvegarde.txt");
-	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
-			++it) {
-		writeSClickable((PreClickable*) (*it));
-	};
-	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
-			++it) {
-		writeSAction((PreAction* ) (*it));
-	};
-
-	changeFile("PreStuff.h");
-	writeIfndef("PRESTUFF");
-	writeActionTypeH();
-	endLine();
-	writeWord("#endif");
-
-	changeFile("PreStack.cc");
-	writeInclude("PreStack.h");
-	writeActionTypeCC();
-
-	changeFile("StuffList.cc");
-	writeInclude("StuffList.h");
-	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
-			++it) {
-		writeStufflistcc ((PreClickable*) (*it));
-	};
-	changeFile("StuffList.h");
-	writeIfndef("STUFFLIST");
-	writeInclude("Stuff.h");
-	writeInclude2("list");
-	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
-			++it) {
-		writeStuffh ((PreClickable*) (*it));
-	};
-	endLine();
-	writeWord("#endif");
-
-	changeFile("../network/ActionBoost.h");
-	writeInclude2("boost/archive/text_iarchive.hpp");
-	writeInclude2("boost/archive/text_oarchive.hpp");
-	writeInclude2 ("boost/serialization/utility.hpp"); // nobody : i need it to serialise pair
-	writeInclude("abstractMessage.h");
-	writeInclude("netEvent.h");
-	writeInclude("test/test_net.h");
-	writeInclude("gameUpdate.h");
-	writeInclude("scenario/Action.h");
-	writeInclude("scenario/ActionsPC.h");
-	writeInclude("scenario/ActionsTerro.h");
-	writeInclude("scenario/NewMov.h");
-	writeInclude("scenario/ScenarioAction.h");
-	writeInclude("scenario/ScenarioActionList.h");
-	writeInclude("interfaceinit/chat_event.h");
-	writeInclude("abstractMessage.h");
-	writeIfndef("ACTIONBOOST");
-	writeBoost();
-	writeWord("#endif");
-	fichier->close();
-}
-;
-
-void Writer::writeCommentName (string s) {
-	endLine();
-	writeWord( "/*********************************************************");
-	endLine();
-	writeWord( "** " + s + "**" );
-	endLine();
-	writeWord( "*********************************************************/");
-	endLine();
-
-};
-
-void Writer::writeStufflistcc (PreClickable* c) {
-	writeCommentName(((ToLoad*) c)->name);
-	writeConstructorClickable( (PreClass*) c);
-	list<ToLoad*> l = ((PreClass*) c)->fields.getTable();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end();
-			++it) {
-		Field* f = (Field*) (*it);
-		if (f->fieldtype == FT_Variable)
-		{ writeGetAndSet(c,(Variable*) f);};
-	};
-	if (not c->isAbstract) {writeAbstractMessageClickable((PreClass*) c);};
-
-};
-
-string Writer::ActionName(PreClass* p) {
-	return ("A_" + ((ToLoad*) p)->name);
 }
 
-void Writer::writeWord(string s) {
-	*fichier << s;
+VariableType VTOfString (string s) {
+	switch (s[0]){
+	case 'G': return VT_Get;break;
+	case 'S': return VT_Set;break;
+	case 'B': return VT_BOTH;break;
+	case 'N': return VT_Nothing;break;
+	default : {if (DEBUG) {cout << "erreur in VTOfString avec " + s << endl;}; return VT_BOTH;}
+	};
+};
+
+string StringOfVT (VariableType vt) {
+	switch (vt){
+	case VT_Get: return "G";break;
+	case VT_Set: return "S" ; break;
+	case VT_BOTH: return "B" ;break;
+	case VT_Nothing: return "N" ;break;
+	default : return ""; break;
+	};
+};
+
+string StringOfFT (Field* f) {
+	switch (f->fieldtype){
+	case FT_Clickable : return "C";break;
+	case FT_IAP : {return "I";break;}
+	case FT_Consequence: {return "Q";  break;}
+	case FT_Variable : return StringOfVT(((Variable*)f)->variabletype) ;
+	default : return ""; break;
+	};
 }
-;
-
-void Writer::endLine() {
-	*fichier << endl;
-}
-;
-
-void Writer::writeAction(PreClass* p) {
-	writeCommentName(((ToLoad*) p)->name);
-	endLine();
-	this->writeCCconstructeur(p);
-	endLine();
-	this->writeCopy(p);
-	endLine();
-	this->writeDoAction(p);
-	endLine();
-	this->writeIsActionPossible((PreAction*) p);
-	endLine();
-	this->writeAddPendingAction(p);
-	endLine();
-	this->writeAbstractMessage(p);
-}
-;
-
-void Writer::writeActionTypeH() {
-	writeWord("enum ActionType {");
-	list<ToLoad*> l = this->actions;
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		if (it != l.begin()) {writeWord(",");};
-		writeWord("To"+ ActionName(
-				((PreClass*)(*it))
-		));
-	};
-	writeWord("};");
-	endLine();
-};
-
-void Writer::writeActionTypeCC() {
-	writeWord("std::string stringOfActions(ActionType a) {");
-	endLine();
-	writeWord("switch (a) {");
-	endLine();
-	list<ToLoad*> l = this->actions;
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		writeWord("case To"+ ActionName(((PreClass*)(*it)))+ ":{");
-		endLine();
-		writeWord("return \""+ (((ToLoad*) (*it))->name)+ "\";}");
-		endLine();
-	};
-	writeWord("default: \n //Should not happens \n return \"should not happen in stringofaction\"; \n  }; \n };");
-	endLine();
-	writeWord("void SoNOfActions(ActionType a,std::list<SoN> l){");
-	endLine();
-	writeWord("switch (a) {");
-	endLine();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		writeWord("case To"+ ActionName(((PreClass*)(*it)))+ ":{");
-		list<ToLoad*> fields = ((PreClass*)(*it))->fields.getTable();
-		bool isBasic = true;
-		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
-			Field* f = (Field*)(*it2);
-			if (f->fieldtype == FT_Clickable) {
-				if (isBasic) {
-					debug("is basic " +f->name);
-					isBasic = false;
-				}
-				else{
-					ClickableType ct = ((Clickable*)f)->clickableType;
-					if (ct == CT_NPC){
-						writeWord("l.push_front(SON_NPC);" );
-						endLine();
-					}
-					else if (ct == CT_Stuff){
-						writeWord("l.push_front(SON_STUFF);" );
-						endLine();
-					};
-
-				};
-			};
-		};
-		endLine();
-		writeWord("}; break;");
-		endLine();
-	};
-	writeWord("default: \n	//Should not happens \n	break; \n  }; \n };");
-	endLine();
-	writeWord("Action* createAction(ActionType a,int basicStuff, std::list<int> npcList, std::list<int> stuffList,LocalState* sim) {"
-	);
-	endLine();
-	writeWord("switch (a) {");
-	endLine();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		string name = ActionName(((PreClass*)(*it)));
-		writeWord("case To"+ name + ":{");
-		endLine();
-		list<ToLoad*> fields = ((PreClass*)(*it))->fields.getTable();
-		bool isBasic = true;
-		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
-			Field* f = (Field*)(*it2);
-			if (f->fieldtype == FT_Clickable) {
-				if (isBasic) {
-					isBasic = false;
-					writeWord("int "+ f->name +" = basicStuff;");
-					endLine();
-				}
-				else{
-					ClickableType ct = ((Clickable*)f)->clickableType;
-					if (ct == CT_Tile ) {
-						writeWord("std::pair<int,int> " + f->name +"= sim->getCurrentTile();" );
-						endLine();
-					}
-					else {
-						string s ;
-						if (ct == CT_Stuff) {s = "stuffList";}
-						else {s = "npcList";};
-						writeWord("int " + f->name +"= "+ s+".back();");
-						endLine();
-						writeWord(s+".pop_back();");
-						endLine();
-					};
-				};
-			};
-		};
-		writeWord("return (new "+ name + " (" );
-		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
-			Field* f = (Field*)(*it2);
-			if (f->fieldtype == FT_Clickable) {
-				if (it2 != fields.begin()) {writeWord(", ");}
-				writeWord(f->name);
-			};
-		};
-		writeWord(", sim));");
-		endLine();
-		writeWord("};");
-		endLine();
-	};
-	writeWord("default:\n	//Should not happens\n	return (new Action(\"fake\", sim));\n	break;\n   }; \n };");
-	endLine();
-
-};
-
-
-void Writer::writeSAction(PreAction* a) {
-	writeWord("+a:" + ((ToLoad*) a)->name +":" + a->isActionPossible );
-	endLine();
-	list<ToLoad*> l = ((PreClass*)a)->fields.getTable();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		Field* f = (Field*) (*it);
-		writeWord(f->name + ":" + f->type);
-		if (f->initialisation != "") {writeWord(":"+ f->initialisation);};
-		endLine();
-	};
-	writeWord(";");
-	endLine();
-}
-;
-
-string Writer::ClickableName (PreClass* p){
-	return ("C_"+ ((ToLoad*) p)->name);
-};
-
-void Writer::writeConstructorClickable(PreClass* p) {
-	string s = ClickableName(p);
-	writeWord(s);
-	writeWord("::");
-	writeWord(s);
-	writeArguments(p);
-	writeWord(")");
-	if (p->herite != NULL) {
-		writeWord(": ");
-		writeWord(ClickableName(p->herite));
-		writeWord(" (");
-		list<ToLoad*> l2 = p->herite->toInitialised.getTable();
-		for (list<ToLoad*>::iterator it = l2.begin(); it != l2.end(); ++it) {
-			Field* f = (Field*) (*it);
-			if (it != l2.begin()) {
-				writeWord(", ");
-			};
-			Field* f2 =(Field*) p->fields.find(f->name);
-			if (f2 == NULL) {
-				writeWord(f->name);}
-			else {
-				writeWord("(");
-				writeType(f);
-				writeWord(") " + f2->initialisation);
-			};
-		};
-		writeWord(") ");
-	} else {
-		writeWord(": Clickable () ");
-	};
-	writeWord("{");
-	endLine();
-	writeWord("((Clickable*)this)->name =  \"" + ((ToLoad*)p)->name +"\";"  );
-	endLine();
-
-	list<ToLoad*> l = p->fields.getTable();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		Field* f = (Field*) (*it);
-		if ((f->fieldtype ==FT_Variable) && ((Variable*)f)->isVirtual ) {
-
-		}
-		else {
-			if (f->initialisation == "") {
-				writeWord("this->");
-				writeWord((*it)->name);
-				writeWord(" = (");
-				writeType(f);
-				writeWord(")");
-				writeWord((*it)->name);
-			}
-			else {
-				writeWord("this->");
-				writeWord((*it)->name);
-				writeWord(" = (");
-				writeType(f);
-				writeWord(")(");
-				writeWord(f->initialisation);
-				writeWord(")");
-			};
-			writeWord(";");
-			endLine();
-		};
-	};
-	list<PreAction*> la = ((PreClickable*) p)->getActionPossible();
-	for (list<PreAction*>::iterator it = la.begin(); it != la.end(); ++it) {
-		writeWord("this->ActionTypePossible.push_back(ActionType::ToA_" + ((ToLoad*) (*it))->name + ");");
-		endLine();
-
-	};
-	writeWord("};");
-	endLine();
-
-}
-;
-
-void Writer::writeGet(PreClickable* c, Variable* v) {
-	if (not v->isVirtual){
-		writeWord (
-				v->type
-				+ " C_"
-				+ ((ToLoad*) c)->name
-				+ "::get"
-				+ v->name
-				+ " () {return this->"
-				+ v->name
-				+ ";};");
-		endLine();
-	};
-};
-
-
-void Writer::writeSet(PreClickable* c, Variable* v) {
-	if (not v->isVirtual){
-		writeWord (
-				"void C_"
-				+ ((ToLoad*) c)->name
-				+ "::set"
-				+ v->name
-				+ " ( "
-				+ v->type
-				+ " "
-				+ v->name
-				+ " ) { this->"
-				+ v->name
-				+ " = ("
-				+ v->type
-				+ ")"
-				+ v->name
-				+";};"
-		);
-		endLine();
-	};
-};
-
-void Writer::writeGetAndSet (PreClickable* c, Variable* v) {
-	switch (v->variabletype) {
-	case VT_BOTH:
-		writeGet(c,v );
-		writeSet(c,v);
-		break;
-	case VT_Get:
-		writeGet(c,v);
-		break;
-	case VT_Set:
-		writeSet(c,v);
-		break;
-	case VT_Nothing:
-		break;
-	default:
-		break;
-	};
-};
-
-
-void Writer::writeSClickable(PreClickable* c) {
-	writeWord("+c:" + ((ToLoad*) c)->name );
-	endLine();
-	list<ToLoad*> l = ((PreClass*)c)->fields.getTable();
-	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		Field* f = (Field*) (*it);
-		writeWord(f->name + ":" + f->type);
-		if (f->initialisation != "") {writeWord(":"+ f->initialisation);};
-		endLine();
-	};
-	writeWord(";");
-	endLine();
-
-}
-;
-void Writer::writeDoAction(PreClass* p) {
-	writeWord("void " + ActionName(p) + "::doAction() {");
-	endLine();
-	writeWord("this->simulation->getClient()->sendMessage<Action>(*this,true);");
-	endLine();
-	writeWord("};");
-	endLine();
-};
-
-void Writer::writeIsActionPossible(PreAction* a) {
-	writeWord("bool " + ActionName((PreClass*) a) + "::isActionPossible() {");
-	endLine();
-	writeWord("return true;");
-	endLine();
-	writeWord("//return " + a->isActionPossible + ";");
-	endLine();
-	writeWord("};");
-	endLine();
-}
-;
-
-void Writer::writeAbstractMessage(PreClass* p) {
-	writeWord("AbstractMessage* " + ActionName(p) + "::copy() {");
-	endLine();
-	writeWord("return (AbstractMessage*) new " + ActionName(p) + "(*this);");
-	endLine();
-	writeWord("};");
-	endLine();
-};
-
-void Writer::writeAbstractMessageClickable(PreClass* p) {
-	writeWord("AbstractMessage* " + ClickableName(p) + "::copy() {");
-	endLine();
-	writeWord("return (AbstractMessage*) new " + ClickableName(p) + "(*this);");
-	endLine();
-	writeWord("};");
-	endLine();
-};
-
-void Writer::writeAddPendingAction(PreClass* p) {
-	writeWord(
-			"void " + ActionName(p) + "::addPendingActions(GlobalState* gs){"
-
-	);
-	endLine();
-	if (((PreAction*) p)->consequence != "") {
-		writeWord("gs->addAction(new " + ((PreAction*) p)->consequence + " (");
-		list<ToLoad*> l = p->fields.getTable();
-		for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-			Field* f = (Field*) (*it);
-			writeWord("this->");
-			writeWord(f->name);
-			writeWord(", ");
-		};
-
-		writeWord("(Simulation*) gs));");
-	};
-	endLine();
-	writeWord("gs->deleteAction(this);");
-	endLine();
-	writeWord("};");
-	endLine();
-}
-;
-
-
 void Writer::writeType (Field* f) {
 	if(f->fieldtype == FT_Clickable) {
-		if (((Clickable*) f)->clickableType == CT_Tile) {writeWord("std::pair<int,int>");}
-		else {writeWord("int");};
+		switch (((Clickable*) f)->clickableType) {
+		case CT_Tile:
+			writeWord("std::pair<int,int>");
+			break;
+		case CT_NPC:
+			writeWord("boost::uuids::uuid");
+			break;
+		default:
+			writeWord("int");
+			break;
+		};
 	}
 	else {writeWord(f->type);};
 };
@@ -802,6 +364,33 @@ void Writer::writeArguments(PreClass* p) {
 };
 
 
+/* writing of ActionsTerro.cc */
+
+void Writer::writeActionTerroCC (){
+	changeFile("ActionsTerro.cc");
+	writeInclude("ActionsTerro.h");
+	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
+			++it) {
+		writeAction((PreClass*) (*it));
+	};
+};
+
+void Writer::writeAction(PreClass* p) {
+	writeCommentName(((ToLoad*) p)->name);
+	endLine();
+	this->writeCCconstructeur(p);
+	endLine();
+	this->writeCopy(p);
+	endLine();
+	this->writeDoAction(p);
+	endLine();
+	this->writeIsActionPossible((PreAction*) p);
+	endLine();
+	this->writeAddPendingAction(p);
+	endLine();
+	this->writeAbstractMessage(p);
+}
+;
 
 void Writer::writeCCconstructeur(PreClass* p) {
 	string s = ActionName(p);
@@ -817,8 +406,7 @@ void Writer::writeCCconstructeur(PreClass* p) {
 		list<ToLoad*> l2 = p->herite->fields.getTable();
 		for (list<ToLoad*>::iterator it = l2.begin(); it != l2.end(); ++it) {
 			Field* f = (Field*) (*it);
-			if (f->initialisation == ""
-					&& true /*tester si l'argument est pas def */) {
+			if (f->initialisation == "") {
 				if (it != l2.begin()) {
 					writeWord(", ");
 				};
@@ -875,6 +463,95 @@ void Writer::writeCopy(PreClass* p) {
 	endLine();
 }
 ;
+
+void Writer::writeDoAction(PreClass* p) {
+	writeWord("void " + ActionName(p) + "::doAction() {");
+	endLine();
+	writeWord("this->simulation->getClient()->sendMessage<Action>(*this,true);");
+	endLine();
+	writeWord("};");
+	endLine();
+};
+
+void Writer::writeIsActionPossible(PreAction* a) {
+	writeWord("bool " + ActionName((PreClass*) a) + "::isActionPossible() {");
+	endLine();
+	writeWord("return true;");
+	endLine();
+	writeWord("//return " + a->isActionPossible + ";");
+	endLine();
+	writeWord("};");
+	endLine();
+}
+;
+
+
+void Writer::writeAddPendingAction(PreClass* p) {
+	writeWord(
+			"void " + ActionName(p) + "::addPendingActions(GlobalState* gs){"
+
+	);
+	endLine();
+	writeWord("gs->addAction(new Co" + ActionName(p) + " (");
+	list<ToLoad*> l = p->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		writeWord("this->");
+		writeWord(f->name);
+		writeWord(", ");
+	};
+	writeWord("((Action*)this)->playerID,(Simulation*) gs));");
+	endLine();
+	writeWord("gs->deleteAction(this);");
+	endLine();
+	writeWord("};");
+	endLine();
+}
+;
+
+
+void Writer::writeAbstractMessage(PreClass* p) {
+	writeWord("AbstractMessage* " + ActionName(p) + "::copy() {");
+	endLine();
+	writeWord("return (AbstractMessage*) new " + ActionName(p) + "(*this);");
+	endLine();
+	writeWord("};");
+	endLine();
+};
+
+
+
+/* writing of ActionsTerro.h */
+
+
+void Writer::writeActionTerroH (){
+	changeFile("ActionsTerro.h");
+	writeInclude ("PreActionTerro.h");
+	writeInclude ("simulation/npc.h");
+	writeInclude2 ("boost/serialization/base_object.hpp");
+	writeInclude2 ("boost/serialization/access.hpp");
+	writeInclude ("Action.h");
+	writeInclude ("StuffList.h");
+	writeInclude ("simulation/npc.h");
+	writeInclude ("generation/tile.h");
+	writeInclude ("Actions.h");
+	writeInclude ("ScenarioActionList.h");
+	writeInclude ("NewMov.h");
+	writeInclude ("tile.h");
+	writeInclude ("position.h");
+	writeInclude ("npc.h");
+	writeInclude ("localState.h");
+	writeInclude ("globalState.h");
+	writeIfndef("ACTIONTERRO");
+	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
+			++it) {
+		writeHAction((PreClass*) (*it));
+	};
+	endLine();
+	writeWord("#endif");
+
+};
+
 
 
 void Writer::writeHAction(PreClass* p) {
@@ -977,7 +654,334 @@ void Writer::writeHSet (Field* f) {
 	endLine();
 }
 
-void Writer::writeStuffh (PreClickable* p) {
+/* writing of PreStuff.h */
+
+
+void Writer::writePreStuffH (){
+	changeFile("PreStuff.h");
+	writeIfndef("PRESTUFF");
+	writeActionTypeH();
+	endLine();
+	writeWord("#endif");
+
+};
+
+void Writer::writeActionTypeH() {
+	writeWord("enum ActionType {");
+	list<ToLoad*> l = this->actions;
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		if (it != l.begin()) {writeWord(",");};
+		writeWord("To"+ ActionName(
+				((PreClass*)(*it))
+		));
+	};
+	writeWord("};");
+	endLine();
+};
+
+
+
+/* writing of PreStack.cc */
+
+
+void Writer::writePreStackCC (){
+	changeFile("PreStack.cc");
+	writeInclude("PreStack.h");
+	writeActionTypeCC();
+};
+void Writer::writeActionTypeCC() {
+	writeWord("std::string stringOfActions(ActionType a) {");
+	endLine();
+	writeWord("switch (a) {");
+	endLine();
+	list<ToLoad*> l = this->actions;
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		writeWord("case To"+ ActionName(((PreClass*)(*it)))+ ":{");
+		endLine();
+		writeWord("return \""+ (((ToLoad*) (*it))->name)+ "\";}");
+		endLine();
+	};
+	writeWord("default: \n //Should not happens \n return \"should not happen in stringofaction\"; \n  }; \n };");
+	endLine();
+	writeWord("std::list<SoN> SoNOfActions(ActionType a){");
+	endLine();
+	writeWord("	std::list<SoN> l;");
+	endLine();
+	writeWord("switch (a) {");
+	endLine();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		writeWord("case To"+ ActionName(((PreClass*)(*it)))+ ":{");
+		list<ToLoad*> fields = ((PreClass*)(*it))->fields.getTable();
+		bool isBasic = true;
+		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
+			Field* f = (Field*)(*it2);
+			if (f->fieldtype == FT_Clickable) {
+				if (isBasic) {
+					debug("is basic " +f->name);
+					isBasic = false;
+				}
+				else{
+					ClickableType ct = ((Clickable*)f)->clickableType;
+					if (ct == CT_NPC){
+						writeWord("l.push_front(SON_NPC);" );
+						endLine();
+					}
+					else if (ct == CT_Stuff){
+						writeWord("l.push_front(SON_STUFF);" );
+						endLine();
+					};
+
+				};
+			};
+		};
+		endLine();
+		writeWord("}; break;");
+		endLine();
+	};
+	writeWord("default:  \n	//Should not happens \n	break; \n  }; \n return l; \n };");
+	endLine();
+	writeWord("Action* createAction(ActionType a,int basicStuff, std::list<boost::uuids::uuid> npcList, std::list<int> stuffList,LocalState* sim) {"
+	);
+	endLine();
+	writeWord("switch (a) {");
+	endLine();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		string name = ActionName(((PreClass*)(*it)));
+		writeWord("case To"+ name + ":{");
+		endLine();
+		list<ToLoad*> fields = ((PreClass*)(*it))->fields.getTable();
+		bool isBasic = true;
+		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
+			Field* f = (Field*)(*it2);
+			if (f->fieldtype == FT_Clickable) {
+				if (isBasic) {
+					isBasic = false;
+					writeWord("int "+ f->name +" = basicStuff;");
+					endLine();
+				}
+				else{
+					ClickableType ct = ((Clickable*)f)->clickableType;
+					if (ct == CT_Tile ) {
+						writeWord("std::pair<int,int> " + f->name +"= sim->getCurrentTile();" );
+						endLine();
+					}
+					else {
+						string s ;
+						if (ct == CT_Stuff) {s = "stuffList";}
+						else {s = "npcList";};
+						writeType(f);
+						writeWord(" " +f->name +"= "+ s+".back();");
+						endLine();
+						writeWord(s+".pop_back();");
+						endLine();
+					};
+				};
+			};
+		};
+		writeWord("return (new "+ name + " (" );
+		for (list<ToLoad*>::iterator it2 = fields.begin(); it2 != fields.end(); ++it2) {
+			Field* f = (Field*)(*it2);
+			if (f->fieldtype == FT_Clickable) {
+				if (it2 != fields.begin()) {writeWord(", ");}
+				writeWord(f->name);
+			};
+		};
+		writeWord(", sim));");
+		endLine();
+		writeWord("};");
+		endLine();
+	};
+	writeWord("default:\n	//Should not happens\n	return (new Action(\"fake\", sim));\n	break;\n   }; \n };");
+	endLine();
+
+};
+
+
+/* writing StuffList.cc */
+
+void Writer::writeStuffListCC(){
+	changeFile("StuffList.cc");
+	writeInclude("StuffList.h");
+	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
+			++it) {
+		writeCCStuff ((PreClickable*) (*it));
+	};
+};
+
+void Writer::writeCCStuff (PreClickable* c) {
+	writeCommentName(((ToLoad*) c)->name);
+	writeConstructorClickable( (PreClass*) c);
+	list<ToLoad*> l = ((PreClass*) c)->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end();
+			++it) {
+		Field* f = (Field*) (*it);
+		if (f->fieldtype == FT_Variable)
+		{ writeGetAndSet(c,(Variable*) f);};
+	};
+	if (not c->isAbstract) {writeAbstractMessageClickable((PreClass*) c);};
+
+};
+
+void Writer::writeConstructorClickable(PreClass* p) {
+	string s = ClickableName(p);
+	writeWord(s);
+	writeWord("::");
+	writeWord(s);
+	writeArguments(p);
+	writeWord(")");
+	if (p->herite != NULL) {
+		writeWord(": ");
+		writeWord(ClickableName(p->herite));
+		writeWord(" (");
+		list<ToLoad*> l2 = p->herite->toInitialised.getTable();
+		for (list<ToLoad*>::iterator it = l2.begin(); it != l2.end(); ++it) {
+			Field* f = (Field*) (*it);
+			if (it != l2.begin()) {
+				writeWord(", ");
+			};
+			Field* f2 =(Field*) p->fields.find(f->name);
+			if (f2 == NULL) {
+				writeWord(f->name);}
+			else {
+				writeWord("(");
+				writeType(f);
+				writeWord(") " + f2->initialisation);
+			};
+		};
+		writeWord(") ");
+	} else {
+		writeWord(": Clickable () ");
+	};
+	writeWord("{");
+	endLine();
+	writeWord("((Clickable*)this)->name =  \"" + ((ToLoad*)p)->name +"\";"  );
+	endLine();
+
+	list<ToLoad*> l = p->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		if (not ((f->fieldtype ==FT_Variable) && ((Variable*)f)->isVirtual )) {
+			if (f->initialisation == "") {
+				writeWord("this->");
+				writeWord((*it)->name);
+				writeWord(" = (");
+				writeType(f);
+				writeWord(")");
+				writeWord((*it)->name);
+			}
+			else {
+				writeWord("this->");
+				writeWord((*it)->name);
+				writeWord(" = (");
+				writeType(f);
+				writeWord(")(");
+				writeWord(f->initialisation);
+				writeWord(")");
+			};
+			writeWord(";");
+			endLine();
+		};
+	};
+	list<PreAction*> la = ((PreClickable*) p)->getActionPossible();
+	for (list<PreAction*>::iterator it = la.begin(); it != la.end(); ++it) {
+		writeWord("this->ActionTypePossible.push_back(ActionType::ToA_" + ((ToLoad*) (*it))->name + ");");
+		endLine();
+
+	};
+	writeWord("};");
+	endLine();
+
+}
+;
+
+void Writer::writeAbstractMessageClickable(PreClass* p) {
+	writeWord("AbstractMessage* " + ClickableName(p) + "::copy() {");
+	endLine();
+	writeWord("return (AbstractMessage*) new " + ClickableName(p) + "(*this);");
+	endLine();
+	writeWord("};");
+	endLine();
+};
+
+
+
+void Writer::writeGet(PreClickable* c, Variable* v) {
+	if (not v->isVirtual){
+		writeWord (
+				v->type
+				+ " C_"
+				+ ((ToLoad*) c)->name
+				+ "::get"
+				+ v->name
+				+ " () {return this->"
+				+ v->name
+				+ ";};");
+		endLine();
+	};
+};
+
+
+void Writer::writeSet(PreClickable* c, Variable* v) {
+	if (not v->isVirtual){
+		writeWord (
+				"void C_"
+				+ ((ToLoad*) c)->name
+				+ "::set"
+				+ v->name
+				+ " ( "
+				+ v->type
+				+ " "
+				+ v->name
+				+ " ) { this->"
+				+ v->name
+				+ " = ("
+				+ v->type
+				+ ")"
+				+ v->name
+				+";};"
+		);
+		endLine();
+	};
+};
+
+void Writer::writeGetAndSet (PreClickable* c, Variable* v) {
+	switch (v->variabletype) {
+	case VT_BOTH:
+		writeGet(c,v );
+		writeSet(c,v);
+		break;
+	case VT_Get:
+		writeGet(c,v);
+		break;
+	case VT_Set:
+		writeSet(c,v);
+		break;
+	case VT_Nothing:
+		break;
+	default:
+		break;
+	};
+};
+
+
+/* writing StuffList.h */
+
+void Writer::writeStuffListH(){
+	changeFile("StuffList.h");
+	writeIfndef("STUFFLIST");
+	writeInclude("Stuff.h");
+	writeInclude2("list");
+	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
+			++it) {
+		writeHStuff ((PreClickable*) (*it));
+	};
+	endLine();
+	writeWord("#endif");
+};
+
+
+
+void Writer::writeHStuff (PreClickable* p) {
 	writeCommentName(((ToLoad*) p)->name);
 	string s = ClickableName( (PreClass*) p);
 	writeWord("class " + s + ": public ");
@@ -1020,11 +1024,13 @@ void Writer::writeStuffh (PreClickable* p) {
 			writeWord("protected:");
 			endLine();
 		};
-		writeWord(f->type);
-		writeWord(" ");
-		writeWord(f->name);
-		writeWord("; ");
-		endLine();
+		if (not ((f->fieldtype ==FT_Variable) && ((Variable*)f)->isVirtual )) {
+			writeWord(f->type);
+			writeWord(" ");
+			writeWord(f->name);
+			writeWord("; ");
+			endLine();
+		};
 	};
 	writeWord("//Serialization");
 	endLine();
@@ -1039,9 +1045,11 @@ void Writer::writeStuffh (PreClickable* p) {
 	if (p->herite == NULL ) { writeWord("Clickable");}
 	else {writeWord ("C_" + (((ToLoad*)p->herite)->name));};
 	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
-		writeWord(", ");
 		Field* f = (Field*) (*it);
-		writeWord(f->name);
+		if (not ((f->fieldtype ==FT_Variable) && ((Variable*)f)->isVirtual )) {
+			writeWord(", ");
+			writeWord(f->name);
+		};
 	};
 
 	writeWord(");");
@@ -1055,11 +1063,38 @@ void Writer::writeStuffh (PreClickable* p) {
 
 };
 
+/*writing ActionBoost.h*/
+
+void Writer::writeActionBoostH () {
+	changeFile("../network/ActionBoost.h");
+	writeInclude2("boost/archive/text_iarchive.hpp");
+	writeInclude2("boost/archive/text_oarchive.hpp");
+	writeInclude2 ("boost/serialization/utility.hpp"); // nobody : i need it to serialise pair
+	writeInclude ("boost/uuid/uuid_io.hpp");
+	writeInclude ("boost/uuid/uuid_serialize.hpp");
+	writeInclude("abstractMessage.h");
+	writeInclude("netEvent.h");
+	writeInclude("test/test_net.h");
+	writeInclude("gameUpdate.h");
+	writeInclude("scenario/Action.h");
+	writeInclude("scenario/ActionsPC.h");
+	writeInclude("scenario/ActionsTerro.h");
+	writeInclude("scenario/NewMov.h");
+	writeInclude("scenario/ScenarioAction.h");
+	writeInclude("scenario/ScenarioActionList.h");
+	writeInclude("interfaceinit/chat_event.h");
+	writeInclude("abstractMessage.h");
+	writeIfndef("ACTIONBOOST");
+	writeBoost();
+	writeWord("#endif");
+};
 
 void Writer::writeBoost(){
 	list<ToLoad*> l =this->actions;
 	for(list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
 		writeWord("BOOST_CLASS_EXPORT(A_" + (*it)->name + ");");
+		endLine();
+		writeWord("BOOST_CLASS_EXPORT(CoA_" + (*it)->name + ");");
 		endLine();
 	};
 	list<ToLoad*> l2 =this->clickables;
@@ -1069,6 +1104,272 @@ void Writer::writeBoost(){
 	};
 
 };
+
+/*writing ScenarioActionList.cc*/
+
+void Writer::writeScenarioActionListCC(){
+	changeFile("ScenarioActionList.cc");
+	writeInclude("ScenarioActionList.h");
+	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
+			++it) {
+		writeCommentName("Consequences of "+((ToLoad*)(*it))->name);
+		writeSAConstructor((PreAction*) (*it));
+		endLine();
+		writeSACopy((PreAction*) (*it));
+		endLine();
+		writeSAAbstractMessage((PreAction*) (*it));
+		endLine();
+		writeSARun((PreAction*) (*it));
+		endLine();
+	};
+};
+
+
+void Writer::writeSAConstructor (PreAction* p) {
+	string s = "Co" + ActionName(p);
+	writeWord(s);
+	writeWord("::");
+	writeWord(s+ "(");
+	list<ToLoad*> l = p->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		writeType(f);
+		writeWord(" " + f->name);
+		writeWord(", ");
+	};
+	writeWord("int playerID,Simulation* sim)");
+	endLine();
+	writeWord(": ScenarioAction(\""+((ToLoad*)p)->name+"\",playerID,sim){ ");
+	endLine();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		if (f->initialisation == "") {
+			writeWord("this->");
+			writeWord((*it)->name);
+			writeWord(" = (");
+			writeType (f);
+			writeWord(")");
+			writeWord((*it)->name);
+		} else {
+			writeWord("this->");
+			writeWord((*it)->name);
+			writeWord(" = (");
+			writeType (f);
+			writeWord(")(");
+			writeWord(f->initialisation);
+			writeWord(")");
+		};
+		writeWord(";");
+		endLine();
+	};
+	writeWord("};");
+	endLine();
+}
+;
+void Writer::writeSACopy(PreAction* p){
+	string s = "Co" + ActionName(p);
+	writeWord(s);
+	writeWord("::");
+	writeWord(s);
+	writeWord ("(const "+ s + "& a) : ScenarioAction(\"" + ((ToLoad* )p)->name + "\",a.playerID, a.simulation){");
+	endLine();
+	list<ToLoad*> l = p->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		writeWord("this->"+ f->name + "= a." + f->name  + ";");
+		endLine();
+	};
+	writeWord("};");
+	endLine();
+};
+
+void Writer::writeSAAbstractMessage(PreAction* p ) {
+	writeWord("AbstractMessage* Co" + ActionName((PreClass*)p) + "::copy() {");
+	endLine();
+	writeWord("return (AbstractMessage*) new Co" + ActionName((PreClass*)p) + "(*this);");
+	endLine();
+	writeWord("};");
+	endLine();
+};
+
+void Writer::writeSARun (PreAction* p){
+	string s = "Co" + ActionName(p);
+	writeWord("void " + s + "::run () {");
+	endLine();
+	list<string> l = p->consequence;
+	for (list<string>::iterator it = l.begin() ;it != l.end(); ++it) {
+		writeWord((*it));
+		endLine();
+	};
+	writeWord(";};");
+	endLine();
+}
+
+
+
+
+
+
+
+
+/*writing ScenarioActionList.h*/
+
+void Writer::writeScenarioActionListH(){
+	changeFile("ScenarioActionList.h");
+	writeInclude("PreScenarioActionList.h");
+	writeIfndef("SCENARIOACTIONLIST");
+	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
+			++it) {
+		writeSAH((PreAction*) (*it));
+		endLine();
+
+	};
+	writeWord("#endif");
+};
+
+void Writer::writeSAH(PreAction* p) {
+	string s = "Co" + ActionName(p);
+	writeWord("class " + s + ": public ScenarioAction {");
+	endLine();
+	writeWord("public:");
+	endLine();
+	writeWord(s + "(");
+	list<ToLoad*> l = p->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		writeType(f);
+		writeWord(" " + f->name);
+		writeWord(", ");
+	};
+	writeWord("int playerID,Simulation* s);");
+	endLine();
+	writeWord(s + "(const " + s + "&);");
+	endLine();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		Field* f = (Field*) (*it);
+		writeWord("public:");
+		endLine();
+		writeType (f);
+		writeWord(" ");
+		writeWord(f->name);
+		writeWord("; ");
+		endLine();
+	};
+	writeWord(
+			"public: \n virtual void run (); \n  virtual AbstractMessage* copy();"
+	);
+	endLine();
+	writeWord("protected :");
+	endLine();
+	writeWord("//Serialization");
+	endLine();
+	if (not p->toInitialised.getTable().empty()) {writeWord( s +"(){};");};
+	endLine();
+	writeWord("SIMPLE_MESSAGE(" + s +", ScenarioAction");
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		writeWord(", ");
+		Field* f = (Field*) (*it);
+		writeWord(f->name);
+	};
+	writeWord(");");
+	endLine();
+	writeWord("};");
+}
+;
+
+
+
+
+void Writer::writeCommentName (string s) {
+	endLine();
+	writeWord( "/*********************************************************");
+	endLine();
+	writeWord( "** " + s + "**" );
+	endLine();
+	writeWord( "*********************************************************/");
+	endLine();
+
+};
+
+string Writer::ActionName(PreClass* p) {
+	return ("A_" + ((ToLoad*) p)->name);
+}
+
+void Writer::writeWord(string s) {
+	*fichier << s;
+}
+;
+
+void Writer::endLine() {
+	*fichier << endl;
+}
+;
+
+
+string Writer::ClickableName (PreClass* p){
+	return ("C_"+ ((ToLoad*) p)->name);
+};
+
+/*writing Sauvegarde.txt*/
+void Writer::writeSauvegardeTXT(){
+	changeFile("sauvegarde.txt");
+	for (list<ToLoad*>::iterator it = clickables.begin(); it != clickables.end();
+			++it) {
+		writeSClickable((PreClickable*) (*it));
+	};
+	for (list<ToLoad*>::iterator it = actions.begin(); it != actions.end();
+			++it) {
+		writeSAction((PreAction* ) (*it));
+		endLine();
+	};
+};
+
+
+
+void Writer::writeSField (Field* f) {
+	writeWord(StringOfFT(f) +":" + f->name + ":" + f->type);
+	if (f->initialisation != "") {writeWord(":"+ f->initialisation);}
+	else if ((f->fieldtype ==FT_Variable) && ((Variable*)f)->isVirtual ) {
+		writeWord(":V");
+	}
+	endLine();
+};
+
+
+void Writer::writeSAction(PreAction* a) {
+	writeWord("+a:" + ((ToLoad*) a)->name );
+	endLine();
+	list<ToLoad*> l = ((PreClass*)a)->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		writeSField((Field*) (*it));
+	};
+	writeWord("I:" + a->isActionPossible);
+	endLine();
+	if (not a->consequence.empty()) {writeWord("E");};
+	for (list<string>::iterator it = a->consequence.begin(); it != a->consequence.end(); ++it) {
+		writeWord(":");
+		writeWord((*it));
+		endLine();
+	};
+	writeWord(";");
+
+	endLine();
+}
+;
+
+
+void Writer::writeSClickable(PreClickable* c) {
+	writeWord("+c:" + ((ToLoad*) c)->name );
+	endLine();
+	list<ToLoad*> l = ((PreClass*)c)->fields.getTable();
+	for (list<ToLoad*>::iterator it = l.begin(); it != l.end(); ++it) {
+		writeSField((Field*) (*it));
+	};
+	writeWord(";");
+	endLine();
+
+}
+;
 
 
 //GENERATOR
@@ -1080,6 +1381,16 @@ Generator::Generator() {
 	this->clickables = clickables;
 }
 ;
+
+void Generator::clear() {
+	if (this->actions.get() == NULL) {cout << "null" << endl;};
+	cout << this->actions.getTable().size() << endl;
+	this->actions.~Loader();
+	cout << this->actions.getTable().size() << endl;
+	if (this->actions.get() == NULL) {cout << "null" << endl;};
+	this->clickables.~Loader();
+	this->fields.~Loader();
+};
 
 void Generator::addAction(PreAction* a) {
 	if (DEBUG) {cout << "on ADD ACTION dans le gen " << endl;};
@@ -1103,7 +1414,7 @@ void Generator::AddIap(string s) {
 ;
 
 void Generator::AddConsequence(string s) {
-	((PreAction*) (this->actions.get()))->consequence = s;
+	((PreAction*) (this->actions.get()))->consequence.push_back(s);
 }
 ;
 
@@ -1123,8 +1434,8 @@ PreClickable* Generator::LoadClickable(string name) {
 void Generator::AddActionField(Field* f) {
 	PreAction* p = ((PreAction*) (this->actions.get()));
 	((PreClass *)p)->add(f);
-	if (*(p->firstfield)) {
-		*(p->firstfield) = false;
+	if (p->firstfield) {
+		p->firstfield = false;
 		//ajoute l'action à l'object
 		PreClickable* c = (PreClickable*) (this->clickables.find(f->type));
 		if (c == NULL) {debug ("Pas trouver l'action dans add action field");}
@@ -1142,11 +1453,12 @@ void Generator::AddClickableField(Field* f) {
 void Generator::write() {
 	if (DEBUG) {cout << "lààà" << endl;}
 	affiche(this->actions);
-	Writer* w = new Writer(this->actions.getTable(),this->clickables.getTable());
-	w->write();
-	delete w;
+	Writer w = Writer(this->actions.getTable(),this->clickables.getTable());
+	w.write();
 }
 ;
+
+
 
 //reader
 
@@ -1256,8 +1568,8 @@ int stackLineReader::readField(int initialPosition, string s) {
 ;
 
 stackBlockReader::stackBlockReader(char blockDelimiter, char fieldDelimiter,std::ifstream* fichier, string buffer) :
-																											ReadBlocker(blockDelimiter, fichier),
-																											rl (fieldDelimiter)
+																																																																							ReadBlocker(blockDelimiter, fichier),
+																																																																							rl (fieldDelimiter)
 {
 	this->stack = new list<string>;
 	rl.setstack(this->stack);
@@ -1278,8 +1590,8 @@ void stackBlockReader::setstack(list<string>* s) {
 ;
 
 ActionCreator::ActionCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																									stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																									nameTreater (':') {
+																																																																					stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																																																																					nameTreater (':') {
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 
@@ -1360,26 +1672,6 @@ void ActionCreator::treatName(string s) {
 	if (DEBUG) {cout << "là add " + name << endl;};
 	this->generator->addAction(a);
 };
-
-FieldType FTOfString (string s) {
-	switch (s[0]){
-	case 'C': return FT_Clickable;break;
-	case 'I': {return FT_IAP;break;}
-	case 'Q': {return FT_Consequence; break;}
-	default : return FT_Variable;
-	};
-}
-
-VariableType VTOfString (string s) {
-	switch (s[0]){
-	case 'G': return VT_Get;break;
-	case 'S': return VT_Set;break;
-	case 'B': return VT_BOTH;break;
-	case 'N': return VT_Nothing;break;
-	default : {if (DEBUG) {cout << "erreur in VTOfString avec " + s << endl;}; return VT_BOTH;}
-	};
-};
-
 void ActionCreator::onALine(list<string>* l) {
 	if (l->size() >= 2) {
 		string fts = l->front();
@@ -1431,24 +1723,16 @@ void ActionCreator::onALine(list<string>* l) {
 
 
 ClickableCreator::ClickableCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																											stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																											nameTreater (':'){
+																																																																							stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																																																																							nameTreater (':'){
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 };
 
 void ClickableCreator::treatName(string s) {
-	debug ("treat name");
-
-
-	debug ("treat name.2");
-	debug (s);
-
 	this->nameTreater.readLine(s);
 	list<string>* l = this->stack;
 	debug ("treat name.3");
-	if (l->size() == 0) {debug ("c'est ce que tu crois");}
-	else {debug ("c'est pas ce que tu crois");};
 
 	//TODO tester la string quand on pop;
 	l->pop_front();
@@ -1505,9 +1789,10 @@ void ClickableCreator::onALine(list<string>* l) {
 				Variable* v = new Variable (VTOfString(fts), name,type,init);
 				if (init == "V") {
 					v->isVirtual = true;
+					((PreClickable*) (this->generator->clickables.get()))->isAbstract = true;
 				};
 				this->generator->AddClickableField((Field*)v);
-				((PreClickable*) (this->generator->clickables.get()))->isAbstract = true;
+
 
 			}
 
@@ -1521,8 +1806,7 @@ void ClickableCreator::onALine(list<string>* l) {
 
 
 MainReader::MainReader(Generator* g, char addChar, char blockDelimiter, char fieldDelimiter, string& fichier) :
-																								ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer),
-																								cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
+																														ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer), cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
 {
 	this->generator = g;
 	this->fichier= new ifstream (fichier.c_str());
@@ -1539,24 +1823,14 @@ MainReader::MainReader(Generator* g, char addChar, char blockDelimiter, char fie
 void MainReader::readLine() {
 	debug ("read line");
 	if (buffer.length() == 0) {
-		debug ("read line.1");
-
 		if (DEBUG) {cout << "vide" << endl;};
 	} else {
-		debug ("read line.1.0");
-
 		if ((buffer[0]) == this->addChar) {
 			if ((buffer[1]) == 'a') {
-				debug ("read line.2");
-
 				ac.readBlock(buffer);
 			}
 			else if ((buffer[1]) == 'c') {
-				debug ("read line.3");
-				debug(buffer);
 				cc.readBlock(buffer);
-				debug ("read line.3.1");
-
 			}
 			else {
 				if (DEBUG) {cout << "pas un block" << endl;};
@@ -1574,7 +1848,7 @@ void MainReader::read() {
 			affiche(this->generator->actions);
 		};
 		fichier->close();
-
+		//delete fichier;
 	} else {
 		if (DEBUG) {cout << "le fichier n'existe pas  " << endl;};
 	};

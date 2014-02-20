@@ -70,7 +70,7 @@ public:
 	PreClass (string name);
 	PreClass (string name,PreClass* herite);
 	void add(Field*);
-// pourra etre mis private: mais il faut pouvoir iterer
+	// pourra etre mis private: mais il faut pouvoir iterer
 	Loader fields;
 	PreClass* herite ;
 	Loader toInitialised;
@@ -80,8 +80,8 @@ class PreAction : public PreClass {
 public:
 	PreAction (string name);
 	string isActionPossible;
-	bool* firstfield;
-	string consequence;
+	bool firstfield;
+	list<string> consequence;
 };
 
 
@@ -103,49 +103,95 @@ public:
 	Writer (list<ToLoad*>,list<ToLoad*>);
 	void write ();
 private:
+	list<ToLoad*> actions;
+	list<ToLoad*> clickables;
+	ofstream* fichier;
+
+/*need to write*/
 	void changeFile (string);
 	void writeAuthor ();
 	void writeInclude (string);
 	void writeInclude2 (string);
 	void writeIfndef (string);
-	list<ToLoad*> actions;
-	list<ToLoad*> clickables;
 	void writeCommentName (string);
-	void writeAction(PreClass*);
-	void writeHAction(PreClass*);
-	void writeStufflistcc (PreClickable* );
-	void writeHGet (Field* f);
-	void writeHSet (Field* f);
-	void writeStuffh (PreClickable*);
 	void writeType (Field* f) ;
 	void writeArguments(PreClass*);
 	void writeWord(string);
 	void endLine ();
-	ofstream* fichier;
-	void writeActionTypeH();
-	void writeActionTypeCC();
-	void writeSAction(PreAction*);
-	void writeGet(PreClickable* c, Variable* v);
-	void writeSet(PreClickable* c, Variable* v);
-	void writeGetAndSet(PreClickable* c, Variable* v);
+	string ActionName (PreClass*);
+	string ClickableName (PreClass*);
+
+
+
+	/* writing of ActionsTerro.cc */
+	void writeActionTerroCC();
+	void writeAction(PreClass*); /*for one action*/
 	void writeCCconstructeur (PreClass*);
 	void writeCopy (PreClass*);
 	void writeDoAction (PreClass*);
 	void writeAddPendingAction(PreClass*);
 	void writeIsActionPossible(PreAction*);
 	void writeAbstractMessage (PreClass* p);
-	void writeAbstractMessageClickable (PreClass* p);
-	void writeSerialisation (PreClass* p);
-	string ActionName (PreClass*);
-	string ClickableName (PreClass*);
-	void writeSClickable(PreClickable*);
+
+	/* writing of ActionsTerro.h */
+	void writeActionTerroH();
+	void writeHAction(PreClass*); /*for one action*/
+	void writeHGet (Field* f);
+	void writeHSet (Field* f);
+
+	/* writing PreStuff.h */
+	void writePreStuffH();
+	void writeActionTypeH();
+
+
+	/* writing PreStack.cc */
+	void writePreStackCC();
+	void writeActionTypeCC();
+
+	/* writing StuffList.h */
+
+	void writeStuffListH();
+	void writeHStuff (PreClickable*); /*on a clickable*/
+
+	/* writing StuffList.cc */
+	void writeStuffListCC();
+	void writeCCStuff (PreClickable* ); /*on a clickable*/
 	void writeConstructorClickable(PreClass*);
+	void writeGet(PreClickable* c, Variable* v);
+	void writeSet(PreClickable* c, Variable* v);
+	void writeGetAndSet(PreClickable* c, Variable* v);
+	void writeAbstractMessageClickable (PreClass* p);
+
+	/* writing ActionBoost.h */
+	void writeActionBoostH();
 	void writeBoost();
+
+	/*writing ScenarioActionList.cc*/
+	void writeScenarioActionListCC();
+	void writeSAConstructor (PreAction*);
+	void writeSACopy (PreAction*);
+	void writeSAAbstractMessage(PreAction*);
+	void writeSARun(PreAction*);
+
+	/*writing ScenarioActionList.h*/
+	void writeScenarioActionListH();
+	void writeSAH(PreAction*);
+
+	/*writing Sauvegarde.txt*/
+	void writeSauvegardeTXT();
+	void writeSAction(PreAction*);
+	void writeSClickable(PreClickable*);
+	void writeSField (Field* f);
+
+
+
+
 };
 
 
 class Generator {
 public :
+	void clear ();
 	Generator () ;
 	void write () ;
 	void addAction (PreAction*);
@@ -156,7 +202,7 @@ public :
 	void AddClickableField (Field*);
 	void AddIap (string);
 	void AddConsequence (string);
-//private: need to be public
+	//private: need to be public
 	Loader clickables;
 	Loader actions;
 	Loader fields;
