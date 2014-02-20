@@ -144,27 +144,27 @@ AddCops::AddCops(const AddCops& a) : ScenarioAction("AddCops",a.simulation){
 
 void AddCops::run(){
 	if (simulation->getSous() > 0) {
-	for (int i=1;i<number/4;i++) {
-		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
-	};
-	if (number%4 == 1) {
-		simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
-	};
-	if (number%4 == 2) {
-		simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
-	};
-	if (number%4 == 3) {
-		simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
-		simulation->addAgent(new Agent(x+number/4,y-number/4,(float)COST_COP1,0));
+		for (int i=1;i<number/4;i++) {
+			simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
+		};
+		if (number%4 == 1) {
+			simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+		};
+		if (number%4 == 2) {
+			simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
+		};
+		if (number%4 == 3) {
+			simulation->addAgent(new Agent(x+number/4,y+number/4,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x-number/4,y+number/4,(float)COST_COP1,0));
+			simulation->addAgent(new Agent(x+number/4,y-number/4,(float)COST_COP1,0));
 
 
-	};
-	simulation->enleveSous((int)(COST_COP2*number));
+		};
+		simulation->enleveSous((int)(COST_COP2*number));
 	}
 
 	return;
@@ -189,28 +189,28 @@ void AddCops::run(){
 
 void AddCams::run(){
 	if (simulation->getSous() > 0) {
-	for (int i=1;i<number/4;i++) {
-		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1,1));
-	};
-	if (number%4 == 1) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+		for (int i=1;i<number/4;i++) {
+			simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1,1));
+		};
+		if (number%4 == 1) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
 
-	};
-	if (number%4 == 2) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
-	};
-	if (number%4 == 3) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
-		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1,1));
+		};
+		if (number%4 == 2) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
+		};
+		if (number%4 == 3) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
+			simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1,1));
 
 
-	};
-	simulation->enleveSous((int)(COST_CAM2*number));
+		};
+		simulation->enleveSous((int)(COST_CAM2*number));
 	}
 };
 
@@ -230,27 +230,27 @@ AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
 
 void AddCams::run2(){
 	if (simulation->getSous() > 0) {
-	for (int i=1;i<number/4;i++) {
-		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1_2,2));
-	};
-	if (number%4 == 1) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
-	};
-	if (number%4 == 2) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1_2,2));
-	};
-	if (number%4 == 3) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1_2,2));
+		for (int i=1;i<number/4;i++) {
+			simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1_2,2));
+		};
+		if (number%4 == 1) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
+		};
+		if (number%4 == 2) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1_2,2));
+		};
+		if (number%4 == 3) {
+			simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1_2,2));
 
-		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1_2,2));
+			simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1_2,2));
 
-	};
-	simulation->enleveSous((int)(COST_CAM2_2*number));
+		};
+		simulation->enleveSous((int)(COST_CAM2_2*number));
 	}
 };
 
@@ -295,7 +295,7 @@ AbstractMessage* RemoveNPC::copy() {
 
 void RemoveNPC::run () {
 	simulation->supprimerNPC(this->simulation->getNPCByID(this->npc))
-	;};
+			;};
 
 
 
@@ -328,12 +328,9 @@ void Explosion (int power, std::pair<int,int> location,Simulation* simulation) {
 	std::list<Tile*>* nb = simulation->getMap()->neighbors(power, simulation->getMap()->getTile(location));
 	std::cout << "nobody : ça explose!!!!!" << std::endl;
 	for (std::list<Tile*>::iterator t = nb->begin(); t != nb->end();++t) {
-		// kill npc in the case. Only the server had to dot this. The client only destroys the buildings
-		if (true){
-			std::list<NPC*> npcs = (*t)->getNPCs();
-			for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
-				(*n)->kill();
-			};
+		std::list<NPC*> npcs = (*t)->getNPCs();
+		for(std::list<NPC*>::iterator n = npcs.begin(); n != npcs.end(); ++n){
+			(*n)->kill();
 		}
 	};
 	std::cout << "nobody : fin d'explosion!!!!!"<< std::endl ;

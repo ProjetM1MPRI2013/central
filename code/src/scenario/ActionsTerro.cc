@@ -23,8 +23,8 @@ this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Shoot::isActionPossible() {
-//return true;
-return (isInThePack (this->simulation,this->gun))&&(((((C_Gun*)(&((Simulation*)this->simulation)->getItemByID<C_Gun>(this->gun)))))->getrange()<=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
+return true;
+//return (isInThePack (this->simulation,this->gun))&&(((((C_Gun*)(&((Simulation*)this->simulation)->getItemByID<C_Gun>(this->gun)))))->getrange()<=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
 };
 
 void A_Shoot::addPendingActions(GlobalState* gs){
@@ -55,8 +55,8 @@ this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Reload::isActionPossible() {
-//return true;
-return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
+return true;
+//return (isInThePack (this->simulation,this->gun))&&(isInThePack (this->simulation,this->ammunition));
 };
 
 void A_Reload::addPendingActions(GlobalState* gs){
@@ -87,8 +87,8 @@ this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Plant::isActionPossible() {
-//return true;
-return (isInThePack (this->simulation,this->bomb))&&(isPlantable((Tile*) ((Simulation*)this->simulation)->getMap()->getTile(this->zone)));
+return true;
+//return (isInThePack (this->simulation,this->bomb))&&(isPlantable((Tile*) ((Simulation*)this->simulation)->getMap()->getTile(this->zone)));
 };
 
 void A_Plant::addPendingActions(GlobalState* gs){
@@ -119,8 +119,8 @@ this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Drop::isActionPossible() {
-//return true;
-return (isInThePack(this->simulation,this->stuff));
+return true;
+//return (isInThePack(this->simulation,this->stuff));
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){

@@ -52,9 +52,9 @@ I:(:P:gun:)&&(:P:ammunition:)
 C:bomb:Bomb
 C:zone:Tile
 I:(:P:bomb:)&&:(isPlantable:T:zone:)
-Q:Explosion(3,this->zone,this->simulation);
-Q:DropItem(this->bomb,this->playerID,this->simulation);
-
+Q://Explosion(((C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb)))->getpower(),this->zone,this->simulation);
+Q://DropItem(this->bomb,this->playerID,this->simulation);
+Q:Explosion(10,this->zone,this->simulation);
 ;
 
 

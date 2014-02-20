@@ -60,7 +60,6 @@ private:
 	ButtonState currentState;
 	ButtonState nextState;
 	int currentStuffID;
-
 };
 
 #endif

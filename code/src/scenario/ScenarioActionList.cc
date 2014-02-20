@@ -68,9 +68,9 @@ return (AbstractMessage*) new CoA_Plant(*this);
 };
 
 void CoA_Plant::run () {
-	C_Bomb* b =(C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb));
-	Explosion(b->getpower(),this->zone,this->simulation);
-	DropItem(this->bomb,this->playerID,this->simulation);
+//Explosion(((C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb)))->getpower(),this->zone,this->simulation);
+//DropItem(this->bomb,this->playerID,this->simulation);
+Explosion(10,this->zone,this->simulation);
 ;};
 
 
@@ -93,7 +93,7 @@ return (AbstractMessage*) new CoA_Drop(*this);
 };
 
 void CoA_Drop::run () {
-	simulation->getMap()->getTile(this->zone)->addStuff((Clickable*)(&this->simulation->getItemByID<C_Stuff>(this->stuff)));
-	DropItem(this->stuff,this->playerID,this->simulation);
-};
+DropItem(this->stuff,this->playerID,this->simulation);
+//simulation->getMap()->getTile(this->zone)->addStuff((Clickable*)(&this->simulation->getItemByID<C_Stuff>(this->stuff)));
+;};
 
