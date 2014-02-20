@@ -19,9 +19,8 @@
 #define DEBUG false
 #include "debug.h"
 
-Simulation::Simulation(int nbPlayers, int id):
-    scenario(NULL),
-    isServer(false){
+Simulation::Simulation(int nbPlayers, int id) :
+		scenario(NULL), isServer(false) {
 	this->NB_JOUEURS = nbPlayers;
 	this->Id = id;
 
@@ -32,37 +31,37 @@ Simulation::Simulation(int nbPlayers, int id):
 	this->smallTime = 0;
 
 	DBG << (this->getMap());
-  Tile* firstTile = (this->getMap())->getWalkableTile();
-	this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
-      (firstTile->getCoord()).getOrd()));
+	Tile* firstTile = (this->getMap())->getWalkableTile();
+	this->addPlayer(
+			Player(id, (firstTile->getCoord()).getAbs(),
+					(firstTile->getCoord()).getOrd()));
 
-    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
-    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
-        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
+	tmp = std::vector<std::vector<int> >(getMap()->getMapWidth() + 1);
+	for (int i = 0; i < getMap()->getMapWidth() + 1; ++i)
+		tmp[i] = std::vector<int>(getMap()->getMapWidth() + 1, 0);
 }
 
-Simulation::Simulation(Geography* map, int nbPlayers, int id):
-    scenario(NULL),
-    isServer(false){
-    this->setGeography(map);
-    this->NB_JOUEURS = nbPlayers;
-    this->Id = id;
+Simulation::Simulation(Geography* map, int nbPlayers, int id) :
+		scenario(NULL), isServer(false) {
+	this->setGeography(map);
+	this->NB_JOUEURS = nbPlayers;
+	this->Id = id;
 
-    this->mesSous = 300;
-    this->sous = std::vector<int>(NB_JOUEURS, 200);
-    this->relativeTime = 0;
-    this->absoluteTime = 0;
-    this->smallTime = 0;
+	this->mesSous = 300;
+	this->sous = std::vector<int>(NB_JOUEURS, 200);
+	this->relativeTime = 0;
+	this->absoluteTime = 0;
+	this->smallTime = 0;
 
-    DBG << (this->getMap());
-    Tile* firstTile = (this->getMap())->getWalkableTile();
-    this->addPlayer(Player(id, (firstTile->getCoord()).getAbs(),
-                           (firstTile->getCoord()).getOrd()));
-    tmp = std::vector<std::vector<int> > (getMap()->getMapWidth()+1);
-    for (int i =0; i< getMap()->getMapWidth()+1; ++i)
-        tmp[i] = std::vector<int> (getMap()->getMapWidth()+1, 0);
+	DBG << (this->getMap());
+	Tile* firstTile = (this->getMap())->getWalkableTile();
+	this->addPlayer(
+			Player(id, (firstTile->getCoord()).getAbs(),
+					(firstTile->getCoord()).getOrd()));
+	tmp = std::vector<std::vector<int> >(getMap()->getMapWidth() + 1);
+	for (int i = 0; i < getMap()->getMapWidth() + 1; ++i)
+		tmp[i] = std::vector<int>(getMap()->getMapWidth() + 1, 0);
 }
-
 
 Simulation::~Simulation() {
 
@@ -130,30 +129,30 @@ float floor2(float x) {
 }
 
 void Simulation::addNPC(Position start, Position target, float speed,
-                        TexturePack* tex) {
-  //on crée le NPC
-  NPC *npc = new NPC(speed, 10, 1.5, start, tex);
-  npc->setTarget(target,*map);
-  //on l'ajoute à la liste
-  NPCs.insert(npc);
-  //on le met dans sa tile de départ
-  npc->getPosition().isInTile(*map).addNPC(npc);
+		TexturePack* tex) {
+	//on crée le NPC
+	NPC *npc = new NPC(speed, 10, 1.5, start, tex);
+	npc->setTarget(target, *map);
+	//on l'ajoute à la liste
+	NPCs.insert(npc);
+	//on le met dans sa tile de départ
+	npc->getPosition().isInTile(*map).addNPC(npc);
 
-  trigger("NPC::created", *npc);
-  return;
+	trigger("NPC::created", *npc);
+	return;
 }
 
 void Simulation::addNPC(Position start, Position target, float speed,
-                        TexturePack* tex, boost::uuids::uuid id) {
-  //on crée le NPC
-  NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
-  npc->setTarget(target,*map);
-  //on l'ajoute à la liste
-  NPCs.insert(npc);
-  //on le met dans sa tile de départ
-  npc->getPosition().isInTile(*map).addNPC(npc);
-  trigger("NPC::created", *npc);
-  return;
+		TexturePack* tex, boost::uuids::uuid id) {
+	//on crée le NPC
+	NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
+	npc->setTarget(target, *map);
+	//on l'ajoute à la liste
+	NPCs.insert(npc);
+	//on le met dans sa tile de départ
+	npc->getPosition().isInTile(*map).addNPC(npc);
+	trigger("NPC::created", *npc);
+	return;
 }
 
 void Simulation::supprimerNPC(NPC * npc) {
@@ -209,6 +208,17 @@ void Simulation::peopleGeneration() {
 	return;
 }
 
+void Simulation::reroute(NPC& npc) {
+	int x = rand() % MAP_SIZE;
+	int y = rand() % MAP_SIZE;
+	while (this->map->getTile(x, y)->getSpeed() == 0) {
+		x = rand() % MAP_SIZE;
+		y = rand() % MAP_SIZE;
+	}
+	npc.setTarget(Position(x, y), *(this->map));
+	return;
+}
+
 void Simulation::copyTmp() {
 	for (int i = 0; i < 100; i++) {
 		for (int j = 0; j < 100; j++) {
@@ -237,7 +247,7 @@ void Simulation::lisserMatrice() {
 			map->setAnxiety(i, j, anxiety);
 		}
 	}
-	DBG << "Simulation :fin du centre" ;
+	DBG << "Simulation :fin du centre";
 
 	//bande en bas (i=0)
 	for (int j = 1; j < MAP_SIZE - 2; j++) {
@@ -345,8 +355,8 @@ void Simulation::lisserMatrice() {
 							+ (1 / 2) * (pow2(tmp[MAP_SIZE - 2][1], 2))));
 	map->setAnxiety(MAP_SIZE - 1, 0, anxiety);
 
-	DBG << "fin de tout" ;
-	DBG << "fin du dl" ;
+	DBG << "fin de tout";
+	DBG << "fin du dl";
 	return;
 }
 
@@ -384,14 +394,14 @@ void Simulation::setScenario(HScenario* s) {
 }
 
 NPC* Simulation::getNPCByID(boost::uuids::uuid uuid) {
-  // FIXME This is a hack. 
-  // Also having a set of pointers sounds terrible
-  // for locality. Use map<uuid,NPC*> instead.
-  auto cmp = WithUuid(uuid);
-  auto it = NPCs.find((NPC*) &cmp);
-  if (it == NPCs.end()) { 
-    return nullptr; 
-  } else { 
-    return *it; 
-  }
+	// FIXME This is a hack.
+	// Also having a set of pointers sounds terrible
+	// for locality. Use map<uuid,NPC*> instead.
+	auto cmp = WithUuid(uuid);
+	auto it = NPCs.find((NPC*) &cmp);
+	if (it == NPCs.end()) {
+		return nullptr;
+	} else {
+		return *it;
+	}
 }

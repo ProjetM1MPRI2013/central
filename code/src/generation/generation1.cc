@@ -2,6 +2,7 @@
 #include <boost/functional/hash.hpp>
 #include "tile.h"
 #include <string>
+#include <map>
 #include "pseudorandom.h"
 
 
@@ -11,309 +12,337 @@
 
 Generation1::Generation1 (std::string seed) : Geography(seed) {
 
-   int debugcpt = 0;
-   int debugforcpt = 0;
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-
-   //int MAP_HEIGHT = 100;
-   //int MAP_WIDTH = 100;
-   std::size_t seed1 = hachage(seed);
-   if (DEBUG){std::cout << "seed : " << seed1 << std::endl;}
-   PseudoRandom randomGen(seed1);
-   //srand(int(seed1));
-   int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
-   std::string file = "../graphism/buildings";
-   std::string ligne;
-   std::fstream fichier;
-   fichier.open(file, std::fstream::in);
-   assert(fichier);
-   nbLine = 0;
-   while(getline(fichier, ligne)){
-     nbLine++;
-   }
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   fichier.close();
-   maxInter = 9;
-   minInter = 5;
-   assert(minInter <= maxInter);
-   nbInter1 = 0;
-   nbInter2 = 0;
-   // On choisit le nombre d'intersections sur l'axe des abscisses
-   while (nbInter1 < minInter) {
-     nbRand = randomGen.pseudorand();
-     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-     nbInter1 = (nbRand % maxInter) + 1;
-   }
-   if (DEBUG) {std::cout << "nbInter1 : " << nbInter1 << std::endl;};
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   // On choisit le nombre d'intersections sur l'axe des ordonnées
-   while (nbInter2 < minInter)  {
-     nbRand = randomGen.pseudorand();
-     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-     nbInter2 = (nbRand % maxInter) + 1;
-   }
-   if (DEBUG) {std::cout << "nbInter2 : " << nbInter2 << std::endl;};
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   Batiment batiment; 
-
-   //J'initialise choose a -1 par défault, je ne suis pas sur que cela soit une bonne idée [Adrien K.]
-   int choose = 0;
-
-   int heightInter, widthInter, poids, widthRoadV, heightRoadH;
-   poids = -1;
-   // On choisit le type d'intersection que l'on va utiliser de maière aléatoire, à l'aide d'un poids donner à chaque intersection
-   int i, j, i2, j2;
-   for(i=0; i < nbLine; i++) {
-     if (DEBUG) {std::cout << "generation1 : For : " << ++debugforcpt << std::endl;};
-     batiment = Batiment(file, i);
-     if(batiment.getType()==INTER) {
-       nbRand = randomGen.pseudorand();
-       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-       if (nbRand > poids) {choose = i; poids = nbRand;}
-     }
-   }
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   Batiment intersection = Batiment(file, choose);
-   heightInter = intersection.getHeight();
-   widthInter = intersection.getWidth();
-   std::string fileInter = intersection.getFilePictures();
-   if (DEBUG) {std::cout << fileInter << std::endl;}
-   Coordinates pictureInter = intersection.getPicture();
-   floatMatrix speedInter = intersection.getSpeed();
-   if (DEBUG) {std::cout << "heightInter " << heightInter << std::endl;};
-   if (DEBUG) {std::cout << "widthInter " << widthInter << std::endl;};
-   // On choisit une sprite de route horizontale avec la bonne largeur
-   choose = 0;
-   poids = -1;
-   for(i=0; i<nbLine; i++) {
-     batiment = Batiment(file, i);
-     if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
-       nbRand = randomGen.pseudorand();
-       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-       if (nbRand > poids) {choose = i; poids = nbRand;}
-     }
-   }
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   Batiment roadh = Batiment(file, choose);
-   heightRoadH = roadh.getHeight();
-   std::string fileRoadH = roadh.getFilePictures();
-   if (DEBUG) {std::cout << fileRoadH << std::endl;}
-   Coordinates pictureRoadH = roadh.getPicture();
-   floatMatrix speedRoadH = roadh.getSpeed();
-   // On choisit une sprite de route verticale avec la bonne longueur
-   choose = 0;
-   poids = -1;
-   for(i=0; i<nbLine; i++) {
-     batiment = Batiment(file, i);
-     if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
-       nbRand = randomGen.pseudorand();
-       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-       if (nbRand > poids) {choose = i ; poids = nbRand;}
-     }
-   }
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   Batiment roadv = Batiment(file, choose);
-   widthRoadV = roadv.getWidth();
-   std::string fileRoadV = roadv.getFilePictures();
-   if (DEBUG) {std::cout << roadv.getType() << std::endl;}
-   if (DEBUG) {std::cout << fileRoadV << std::endl;}
-   Coordinates pictureRoadV = roadv.getPicture();
-   floatMatrix speedRoadV = roadv.getSpeed();
-
-   // On choisit les abscisses et les ordonnées des intersections
-   int absInter[nbInter1];
-   int ordInter[nbInter2];
-   int min, max;
-   int nbRand2;
-   int seuil1 = 666;
-   int seuil2 = 6;
-   min = 0;
-   max = MAP_WIDTH - nbInter1*widthInter;
-   if (DEBUG) {std::cout << "min : " << min << std::endl;}
-   if (DEBUG) {std::cout << "max : " << max << std::endl;}
-   for (i=0; i<nbInter1; i++) {
-     nbRand = randomGen.pseudorand();
-     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-     nbRand = nbRand % (max-min+1);
-     if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
-       nbRand2 = randomGen.pseudorand();
-       nbRand2 = nbRand2 % seuil1;
-     }
-     else {
-       nbRand2 = -1;
-     }
-     while(nbRand % widthRoadV != 0 || nbRand2 > seuil2){
-       nbRand = randomGen.pseudorand();
-       if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-       nbRand = nbRand % (max-min+1);
-       if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
+  debugbuildings = 0;
+  int debugcpt = 0;
+  int debugforcpt = 0;
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  
+  //int MAP_HEIGHT = 100;
+  //int MAP_WIDTH = 100;
+  std::size_t seed1 = hachage(seed);
+  if (DEBUG){std::cout << "seed : " << seed1 << std::endl;}
+  PseudoRandom randomGen(seed1);
+  //srand(int(seed1));
+  int maxInter, minInter, nbInter1, nbInter2, nbRand, nbLine;
+  std::string file = "../graphism/buildings";
+  std::string ligne;
+  std::fstream fichier;
+  fichier.open(file, std::fstream::in);
+  assert(fichier);
+  nbLine = 0;
+  while(getline(fichier, ligne)){
+    nbLine++;
+  }
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  fichier.close();
+  maxInter = 9;
+  minInter = 5;
+  assert(minInter <= maxInter);
+  nbInter1 = 0;
+  nbInter2 = 0;
+  // On choisit le nombre d'intersections sur l'axe des abscisses
+  while (nbInter1 < minInter) {
+    nbRand = randomGen.pseudorand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+    nbInter1 = (nbRand % maxInter) + 1;
+  }
+  if (DEBUG) {std::cout << "nbInter1 : " << nbInter1 << std::endl;};
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  // On choisit le nombre d'intersections sur l'axe des ordonnées
+  while (nbInter2 < minInter)  {
+    nbRand = randomGen.pseudorand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+    nbInter2 = (nbRand % maxInter) + 1;
+  }
+  if (DEBUG) {std::cout << "nbInter2 : " << nbInter2 << std::endl;};
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  Batiment batiment; 
+  
+  //J'initialise choose a -1 par défault, je ne suis pas sur que cela soit une bonne idée [Adrien K.]
+  int choose = 0;
+  
+  int heightInter, widthInter, poids, widthRoadV, heightRoadH;
+  poids = -1;
+  // On choisit le type d'intersection que l'on va utiliser de maière aléatoire, à l'aide d'un poids donner à chaque intersection
+  int i, j, i2, j2;
+  for(i=0; i < nbLine; i++) {
+    if (DEBUG) {std::cout << "generation1 : For : " << ++debugforcpt << std::endl;};
+    batiment = Batiment(file, i);
+    if(batiment.getType()==INTER) {
+      nbRand = randomGen.pseudorand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+      if (nbRand > poids) {choose = i; poids = nbRand;}
+    }
+  }
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  Batiment intersection = Batiment(file, choose);
+  heightInter = intersection.getHeight();
+  widthInter = intersection.getWidth();
+  std::string fileInter = intersection.getFilePictures();
+  if (DEBUG) {std::cout << fileInter << std::endl;}
+  Coordinates pictureInter = intersection.getPicture();
+  floatMatrix speedInter = intersection.getSpeed();
+  if (DEBUG) {std::cout << "heightInter " << heightInter << std::endl;};
+  if (DEBUG) {std::cout << "widthInter " << widthInter << std::endl;};
+  // On choisit une sprite de route horizontale avec la bonne largeur
+  choose = 0;
+  poids = -1;
+  for(i=0; i<nbLine; i++) {
+    batiment = Batiment(file, i);
+    if(batiment.getType()==ROADH && batiment.getWidth() == widthInter) {
+      nbRand = randomGen.pseudorand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+      if (nbRand > poids) {choose = i; poids = nbRand;}
+    }
+  }
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  Batiment roadh = Batiment(file, choose);
+  heightRoadH = roadh.getHeight();
+  std::string fileRoadH = roadh.getFilePictures();
+  if (DEBUG) {std::cout << fileRoadH << std::endl;}
+  Coordinates pictureRoadH = roadh.getPicture();
+  floatMatrix speedRoadH = roadh.getSpeed();
+  // On choisit une sprite de route verticale avec la bonne longueur
+  choose = 0;
+  poids = -1;
+  for(i=0; i<nbLine; i++) {
+    batiment = Batiment(file, i);
+    if(batiment.getType()==ROADV && batiment.getHeight() == heightInter) {
+      nbRand = randomGen.pseudorand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+      if (nbRand > poids) {choose = i ; poids = nbRand;}
+    }
+  }
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  Batiment roadv = Batiment(file, choose);
+  widthRoadV = roadv.getWidth();
+  std::string fileRoadV = roadv.getFilePictures();
+  if (DEBUG) {std::cout << roadv.getType() << std::endl;}
+  if (DEBUG) {std::cout << fileRoadV << std::endl;}
+  Coordinates pictureRoadV = roadv.getPicture();
+  floatMatrix speedRoadV = roadv.getSpeed();
+  
+  // On choisit les abscisses et les ordonnées des intersections
+  int absInter[nbInter1];
+  int ordInter[nbInter2];
+  int min, max;
+  int nbRand2;
+  int seuil1 = 666;
+  int seuil2 = 6;
+  min = 0;
+  max = MAP_WIDTH - nbInter1*widthInter;
+  if (DEBUG) {std::cout << "min : " << min << std::endl;}
+  if (DEBUG) {std::cout << "max : " << max << std::endl;}
+  for (i=0; i<nbInter1; i++) {
+    nbRand = randomGen.pseudorand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+    nbRand = nbRand % (max-min+1);
+    if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
+      nbRand2 = randomGen.pseudorand();
+      nbRand2 = nbRand2 % seuil1;
+    }
+    else {
+      nbRand2 = -1;
+    }
+    while(nbRand % widthRoadV != 0 || nbRand2 > seuil2){
+      nbRand = randomGen.pseudorand();
+      if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+      nbRand = nbRand % (max-min+1);
+      if (nbRand > (3*(max-min+1)/(2*(nbInter1 - i))) || nbRand < ((max-min+1)/(2*(nbInter1 - i)))) {
  	nbRand2 = randomGen.pseudorand();
  	nbRand2 = nbRand2 % seuil1;
-       }
-       else {
+      }
+      else {
  	nbRand2 = -1;
-       }
-     }
-     if (DEBUG) {std::cout << "Tour de boucle choix inter abs : " << i << std::endl;}
-     absInter[i] = nbRand + min;
-     min = absInter[i] + widthInter;
-     max = max + widthInter;
-     if (DEBUG) {std::cout << "nbRand : " << nbRand << std::endl;}
-     if (DEBUG) {std::cout << "nbRand2 : " << nbRand2 << std::endl;}
-     if (DEBUG) {std::cout << "absInter[i] : " << absInter[i] << std::endl;}
-     if (DEBUG) {std::cout << "min : " << min << std::endl;}
-     if (DEBUG) {std::cout << "max : " << max << std::endl;}
-     assert(absInter[i] < MAP_WIDTH);
-   }
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-   min = 0;
-   max = MAP_HEIGHT - nbInter2*heightInter;
-   if (DEBUG) {std::cout << "min : " << min << std::endl;}
-   if (DEBUG) {std::cout << "max : " << max << std::endl;}
-   for (j=0; j<nbInter2; j++) {
-     nbRand = randomGen.pseudorand();
-     if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
-     nbRand = nbRand % (max-min+1);
-     if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
-       nbRand2 = randomGen.pseudorand();
-       nbRand2 = nbRand2 % seuil1;
-     }
-     else {
-       nbRand2 = -1;
-     }
-     while(nbRand % heightRoadH != 0 || nbRand2 > seuil2){
-       nbRand = randomGen.pseudorand();
-       nbRand = nbRand % (max-min+1);
-       if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
+      }
+    }
+    if (DEBUG) {std::cout << "Tour de boucle choix inter abs : " << i << std::endl;}
+    absInter[i] = nbRand + min;
+    min = absInter[i] + widthInter;
+    max = max + widthInter;
+    if (DEBUG) {std::cout << "nbRand : " << nbRand << std::endl;}
+    if (DEBUG) {std::cout << "nbRand2 : " << nbRand2 << std::endl;}
+    if (DEBUG) {std::cout << "absInter[i] : " << absInter[i] << std::endl;}
+    if (DEBUG) {std::cout << "min : " << min << std::endl;}
+    if (DEBUG) {std::cout << "max : " << max << std::endl;}
+    assert(absInter[i] < MAP_WIDTH);
+  }
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
+  min = 0;
+  max = MAP_HEIGHT - nbInter2*heightInter;
+  if (DEBUG) {std::cout << "min : " << min << std::endl;}
+  if (DEBUG) {std::cout << "max : " << max << std::endl;}
+  for (j=0; j<nbInter2; j++) {
+    nbRand = randomGen.pseudorand();
+    if (DEBUG) {std::cout << "nbRand: " << nbRand << std::endl;}
+    nbRand = nbRand % (max-min+1);
+    if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
+      nbRand2 = randomGen.pseudorand();
+      nbRand2 = nbRand2 % seuil1;
+    }
+    else {
+      nbRand2 = -1;
+    }
+    while(nbRand % heightRoadH != 0 || nbRand2 > seuil2){
+      nbRand = randomGen.pseudorand();
+      nbRand = nbRand % (max-min+1);
+      if (nbRand > (3*(max-min+1)/(2*(nbInter2 - j))) || nbRand < ((max-min+1)/(2*(nbInter2 - j)))) {
  	nbRand2 = randomGen.pseudorand();
  	nbRand2 = nbRand2 % seuil1;
-       }
-       else {
-       nbRand2 = -1;
-       }
-     }
-      if (DEBUG) {std::cout << "Tour de boucle choix inter ord : " << j << std::endl;}
-     ordInter[j] = nbRand + min;
-     min = ordInter[j] + heightInter;
-     max = max + heightInter;
-     if (DEBUG) {std::cout << "ordInter[j] : " << ordInter[j] << std::endl;}
-     if (DEBUG) {std::cout << "min : " << min << std::endl;}
-     if (DEBUG) {std::cout << "max : " << max << std::endl;}
-     assert(ordInter[j] < MAP_HEIGHT);
-   }
-
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;}; //9
-
-   int abs0, ord0, abs1, ord1, longV, longH, k;
-   abs0 = 0;
-   ord0 = 0;
-   for(i=0; i<nbInter1; i++){
-     abs1 = absInter[i];
-     // On parcoure les pâtés de maison "complets" sur une même route horizontale
-     for(j=0; j<nbInter2; j++){
-       ord1 = ordInter[j];
-       // On met des batiments dans le pâté de maison
-       nbRand = randomGen.pseudorand();
-       fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
-       // On met la route verticale
-       longV = (abs1 - abs0) / widthRoadV ;
-       for(k=0; k<longV; k++) {
- 	for(i2=0; i2<widthRoadV; i2++){
- 	  for(j2=0; j2<heightInter; j2++){
- 	    //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
- 	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, INITIAL_ANXIETY, INITIAL_POPULATION, j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
- 	  }
- 	}
-       }
-       // On met la route horizontale
-       longH = (ord1 - ord0) / heightRoadH;
-       for(k=0; k<longH; k++) {
- 	for(i2=0; i2<widthInter; i2++){
- 	  for(j2=0; j2<heightRoadH; j2++){
- 	    //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
+      }
+      else {
+	nbRand2 = -1;
+      }
+    }
+    if (DEBUG) {std::cout << "Tour de boucle choix inter ord : " << j << std::endl;}
+    ordInter[j] = nbRand + min;
+    min = ordInter[j] + heightInter;
+    max = max + heightInter;
+    if (DEBUG) {std::cout << "ordInter[j] : " << ordInter[j] << std::endl;}
+    if (DEBUG) {std::cout << "min : " << min << std::endl;}
+    if (DEBUG) {std::cout << "max : " << max << std::endl;}
+    assert(ordInter[j] < MAP_HEIGHT);
+  }
+  
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;}; //9
+  
+  int abs0, ord0, abs1, ord1, longV, longH, k;
+  abs0 = 0;
+  ord0 = 0;
+  for(i=0; i<nbInter1; i++){
+    abs1 = absInter[i];
+    // On parcoure les pâtés de maison "complets" sur une même route horizontale
+    for(j=0; j<nbInter2; j++){
+      ord1 = ordInter[j];
+      // On met des batiments dans le pâté de maison
+      nbRand = randomGen.pseudorand();
+      // On crée la hash table pour le quartier
+      if(DEBUG){std::cout << "création hash table" << std::endl;}
+      std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
+      // On remplit le quartier
+      if(DEBUG){std::cout << "fill district" << std::endl;}
+      fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+      //Ancienne méthode
+      //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
+      // On met la route verticale
+      longV = (abs1 - abs0) / widthRoadV ;
+      if(DEBUG) {std::cout << "ROUTE VERTICALE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;}
+      for(k=0; k<longV; k++) {
+	for(i2=0; i2<widthRoadV; i2++){
+	  for(j2=0; j2<heightInter; j2++){
+	    this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, INITIAL_ANXIETY, INITIAL_POPULATION, j2<(heightInter - 1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
+	  }
+	}
+      }
+      // On met la route horizontale
+      longH = (ord1 - ord0) / heightRoadH;
+      for(k=0; k<longH; k++) {
+	for(i2=0; i2<widthInter; i2++){
+	  for(j2=0; j2<heightRoadH; j2++){
  	    this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, INITIAL_ANXIETY, INITIAL_POPULATION,(ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
  	  }
  	}
-       }
-       // On met l'intersection
-       for(i2=0; i2<widthInter; i2++){
+      }
+      // On met l'intersection
+      for(i2=0; i2<widthInter; i2++){
  	for(j2=0; j2<heightInter; j2++){
- 	  //this->map[abs1 + i2][ord1 + j2] = Tile(abs1 + i2, ord1 + j2, INTER, false, float(0.), float(1.), true, true, true, true, speedInter[i2][j2], Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
  	  this->map[abs1 + i2][ord1 + j2] = new Tile(abs1 + i2, ord1 + j2, INTER, false, INITIAL_ANXIETY, INITIAL_POPULATION, (ord1 + j2) < (MAP_HEIGHT - 1), (ord1 + j2) >  0, (abs1 + i2) < (MAP_WIDTH - 1), (abs1 + i2) >  0, 1., Coordinates(abs1, ord1), Coordinates(0,0), NULL, fileInter, pictureInter, widthInter, heightInter);
  	}
-       }
-       ord0 = ord1 + heightInter;
-     }
-     // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
-     ord1 = MAP_HEIGHT;
-     nbRand = randomGen.pseudorand();
-     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
-     longH = (ord1 - ord0) / heightRoadH;
-     for(k=0; k<longH; k++) {
-       for(i2=0; i2<widthInter; i2++){
+      }
+      ord0 = ord1 + heightInter;
+    }
+    // On s'occupe du bord droit de la carte, où il n'y a qu'un pâté de maison et une route horizontale
+    ord1 = MAP_HEIGHT;
+    nbRand = randomGen.pseudorand();
+    // On crée la hash table pour le quartier
+    if(DEBUG){std::cout << "création hash table" << std::endl;}
+    std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
+    // On remplit le quartier
+    if(DEBUG){std::cout << "fill district" << std::endl;}
+    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+    //Ancienne méthode
+    //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
+    longH = (ord1 - ord0) / heightRoadH;
+    for(k=0; k<longH; k++) {
+      for(i2=0; i2<widthInter; i2++){
  	for(j2=0; j2<heightRoadH; j2++){
  	  //this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, float(0.), float(1.), true, true, true, true, speedRoadH[i2][j2], Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
  	  this->map[abs1 + i2][ord0 + k*heightRoadH + j2] = new Tile(abs1 + i2, ord0 + k*heightRoadH + j2, ROADH, false, INITIAL_ANXIETY, INITIAL_POPULATION, (ord0 + k*heightRoadH + j2) < (MAP_HEIGHT - 1), (ord0 + k*heightRoadH + j2)>0, i2 < (widthInter - 1), i2 > 0, 1., Coordinates(abs1, ord0 + k*heightRoadH), Coordinates(0,0), NULL, fileRoadH, pictureRoadH, widthInter, heightRoadH);
  	}
-       }
-     }
-     abs0 = abs1 + widthInter;
-     ord0 = 0;
-   }
-   // On s'occupe maintenant du bord bas de la carte, pour lequel il n'y a qu'un pâté de maison et une route verticale
-   abs1 = MAP_WIDTH;
-   // On parcoure les pates de maison "complets" sur une même route horizontale
-   for(j=0; j<nbInter2; j++){
-     ord1 = ordInter[j];
-     // On met des batiments dans le paté de maison
-     nbRand = randomGen.pseudorand();
-     fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
-     // On met la route verticale
-     longV = (abs1 - abs0) / widthRoadV ;
-     for(k=0; k<longV; k++) {
-       for(i2=0; i2<widthRoadV; i2++){
+      }
+    }
+    abs0 = abs1 + widthInter;
+    ord0 = 0;
+  }
+  // On s'occupe maintenant du bord bas de la carte, pour lequel il n'y a qu'un pâté de maison et une route verticale
+  abs1 = MAP_WIDTH;
+  // On parcoure les pates de maison "complets" sur une même route horizontale
+  for(j=0; j<nbInter2; j++){
+    ord1 = ordInter[j];
+    // On met des batiments dans le paté de maison
+    nbRand = randomGen.pseudorand();
+    // On crée la hash table pour le quartier
+    if(DEBUG){std::cout << "création hash table" << std::endl;}
+    std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
+    // On remplit le quartier
+    if(DEBUG){std::cout << "fill district" << std::endl;}
+    fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+    //Ancienne méthode
+    //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
+    // On met la route verticale
+    longV = (abs1 - abs0) / widthRoadV ;
+    for(k=0; k<longV; k++) {
+      for(i2=0; i2<widthRoadV; i2++){
  	for(j2=0; j2<heightInter; j2++){
  	  //this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, float(0.), float(1.), true, true, true, true, speedRoadV[i2][j2], Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
  	  this->map[abs0 + k*widthRoadV + i2][ord1 + j2] = new Tile(abs0 + k* widthRoadV + i2, ord1 + j2, ROADV, false, INITIAL_ANXIETY, INITIAL_POPULATION, j2<(heightInter-1), j2>0, (abs0 + k*widthRoadV + i2) < (MAP_WIDTH - 1), (abs0 + k*widthRoadV + i2) > 0, 1., Coordinates(abs0 + k* widthRoadV, ord1), Coordinates(0,0), NULL, fileRoadV, pictureRoadV, widthRoadV, heightInter);
  	}
-       }
-     }
-     ord0 = ord1 + heightInter;
-   }
-   ord1 = MAP_HEIGHT;
-   nbRand = randomGen.pseudorand();
-   fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
-
-   // We fill all the tiles still NULL (it's possible, cf. doc of the method)
-   nbRand = randomGen.pseudorand();
-   fillNull(nbRand, nbLine, file);
-
-   if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
-
-   //std::cout << "lololol" << std::endl;
-
-   for (int i=0; i < 30; i++){
- 	  for (int j = 0; j< 30 ; j++) {
- 		 //std::cout << "on up la population" << std::endl;
- 		 this->map[i][j]->setPopulationDensity(80);
- 	  }
-   }
-
-   for (int i=30;i<45;i++){
-	   for(int j=0;j<45;j++){
-		  // std::cout << "on up la population" << std::endl;
-		   this->map[i][j]->setPopulationDensity(35);
-	   }
-   }
-
-   for (int i=0;i<45;i++){
-   	   for(int j=30;j<45;j++){
-   		  // std::cout << "on up la population" << std::endl;
-   		   this->map[i][j]->setPopulationDensity(35);
-   	   }
       }
+    }
+    ord0 = ord1 + heightInter;
+  }
+  ord1 = MAP_HEIGHT;
+  nbRand = randomGen.pseudorand();
+  // On crée la hash table pour le quartier
+  if(DEBUG){std::cout << "création hash table" << std::endl;}
+  std::map<TileType, Batiment*> buildingsDistrict = chooseBat(nbRand, nbLine, file);
+  // On remplit le quartier
+  if(DEBUG){std::cout << "fill district" << std::endl;}
+  fillBuilding(abs0, ord0, abs0, ord0, abs1 - 1, ord1 - 1, nbRand, buildingsDistrict);
+  //Ancienne méthode
+  //fillBuildings(abs0, ord0, abs1 - 1, ord1 - 1, nbRand, nbLine, file);
+  
+  // We fill all the tiles still NULL (it's possible, cf. doc of the method)
+  nbRand = randomGen.pseudorand();
+  if(DEBUG) {std::cout << "exécution de fillNull" << std::endl;}
+  fillNull(nbRand, nbLine, file);
+  
+  if (DEBUG) {std::cout << "generation1 : " << ++debugcpt << std::endl;};
 
- }
+  if(DEBUG) {std::cout << "fin génération" << std::endl;}
+  
+  for (int i=0; i < 30; i++){
+    for (int j = 0; j< 30 ; j++) {
+      //std::cout << "on up la population" << std::endl;
+      this->map[i][j]->setPopulationDensity(80);
+    }
+  }
+  
+  for (int i=30;i<45;i++){
+    for(int j=0;j<45;j++){
+      // std::cout << "on up la population" << std::endl;
+      this->map[i][j]->setPopulationDensity(35);
+    }
+  }
+  
+  for (int i=0;i<45;i++){
+    for(int j=30;j<45;j++){
+      // std::cout << "on up la population" << std::endl;
+      this->map[i][j]->setPopulationDensity(35);
+    }
+  }
+  
+}
 
 
 std::size_t Generation1::hachage(std::string seed) {
@@ -321,6 +350,73 @@ std::size_t Generation1::hachage(std::string seed) {
   std::size_t seed1;
   seed1 = string_hash(seed);
   return(seed1);
+}
+
+void Generation1::fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict) {
+  if(abs1 > abs0 && ord1 > ord0) {
+    int nbRand = seed;
+    PseudoRandom randomGen (seed);
+    Batiment* batBlank = buildingsDistrict[TileType::BLANK];
+    Batiment* batHouse = buildingsDistrict[TileType::HOUSE];
+    Batiment* batBank = buildingsDistrict[TileType::BANK];
+    int i3, j3;
+    int poidsBank = 3;
+    int poidsHouse = 100;
+    
+    if(DEBUG) {std::cout << "caractéristiques BANK: " << ++debugbuildings << std::endl;}
+    int widthBank = batBank->getWidth();
+    int heightBank = batBank->getHeight();
+    std::string filePictureBank = batBank->getFilePictures();
+    Coordinates pictureBank = batBank->getPicture();
+    floatMatrix speedBank = batBank->getSpeed();
+    
+    if(DEBUG) {std::cout << "caractéristiques HOUSE: "<< debugbuildings << std::endl;}
+    int widthHouse = batHouse->getWidth();
+    int heightHouse = batHouse->getHeight();
+    std::string filePictureHouse = batHouse->getFilePictures();
+    Coordinates pictureHouse =batHouse->getPicture();
+    floatMatrix speedHouse = batHouse->getSpeed();
+    
+    if(DEBUG) {std::cout << "caractéristiques BLANK: " << debugbuildings << std::endl;}
+    int widthBlank = batBlank->getWidth();
+    int heightBlank = batBlank->getHeight();
+    std::string filePictureBlank = batBlank->getFilePictures();
+    Coordinates pictureBlank = batBlank->getPicture();
+    floatMatrix speedBlank = batBlank->getSpeed();
+    
+    nbRand = randomGen.pseudorand();
+    int poids = nbRand % poidsHouse;
+    if (poids <= poidsBank && heightBank <= (ord1 - ord0 + 1) && widthBank <= (abs1 - abs0 + 1)) {
+      for(i3=abs0; i3<abs0 + widthBank; i3++){
+	for(j3=ord0; j3<ord0 + heightBank; j3++){
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::BANK,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBank, pictureBank, widthBank, heightBank);
+	}
+      }
+      fillBuilding(absOri, ordOri, abs0 + widthBank, ord0, abs1, ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightBank, abs0 + widthBank - 1 , ord1, nbRand, buildingsDistrict);
+    }
+    else if (heightHouse <= (ord1 - ord0 + 1) && widthHouse <= (abs1 - abs0 + 1)) {
+      for(i3=abs0; i3<abs0 + widthHouse ; i3++){
+	for(j3=ord0; j3<ord0 + heightHouse; j3++){
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::HOUSE,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureHouse, pictureHouse, widthHouse, heightHouse);
+	}
+      }
+      fillBuilding(absOri, ordOri, abs0 + widthHouse, ord0, abs1, ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightHouse, abs0 + widthHouse - 1 , ord1, nbRand, buildingsDistrict);
+    }
+    else {
+      for(i3=abs0; i3<abs0 + widthBlank ; i3++){
+	for(j3=ord0; j3<ord0 + heightBlank; j3++){
+	  this->map[i3][j3] = new Tile(i3,j3,TileType::BLANK,false, INITIAL_ANXIETY, INITIAL_POPULATION, false, false, false, false, 0., Coordinates(abs0, ord0), Coordinates(absOri,ordOri), nullptr, filePictureBlank, pictureBlank, widthBlank, heightBlank);
+	}
+      }
+      fillBuilding(absOri, ordOri, abs0 + widthBlank, ord0, abs1, ord1, nbRand, buildingsDistrict);
+      fillBuilding(absOri, ordOri, abs0, ord0 + heightBlank, abs0 + widthBlank - 1 , ord1, nbRand, buildingsDistrict);
+    }
+  }
+  else { 
+    if(DEBUG){std::cout << "fin construction quartier" << std::endl;}
+  }
 }
 
 
@@ -451,3 +547,52 @@ void Generation1::fillNull(int seed, int nbLine, std::string file){
   // Now, there is not any NULL tile into the map
 }
 
+ std::map<TileType, Batiment*> Generation1::chooseBat(int seed, int nbLine, std::string file){
+   Batiment batiment;
+   int poids = -1;
+   int modulo = 100;
+   int l;
+   int nbRand = seed;
+   PseudoRandom randomGen (seed);
+   std::map<TileType, Batiment*> districtBuildings;
+   if(DEBUG){std::cout << "Hash Table House" << std::endl;}
+   for(l=0; l<nbLine; l++){
+     batiment= Batiment(file,l);
+     if(batiment.getType()==HOUSE){
+       nbRand = randomGen.pseudorand();
+       nbRand = nbRand % modulo;
+       if (nbRand > poids){
+	 districtBuildings[TileType::HOUSE]= new Batiment(file,l);
+	 poids = nbRand;
+       }
+     }
+   }
+   poids = -1;
+  if(DEBUG){std::cout << "Hash Table Bank" << std::endl;}
+  for(l=0; l<nbLine; l++){
+    batiment= Batiment(file,l);
+    if(batiment.getType()==BANK){
+      nbRand = randomGen.pseudorand();
+      nbRand = nbRand % modulo;
+      if (nbRand > poids){
+	districtBuildings[TileType::BANK]= new Batiment(file,l);
+	poids = nbRand;
+      }
+    }
+  }
+  poids = -1;
+  if(DEBUG){std::cout << "Hash Table Blank" << std::endl;}
+  for(l=0; l<nbLine; l++){
+    batiment= Batiment(file,l);
+    if(batiment.getType()==BLANK){
+      nbRand = randomGen.pseudorand();
+      nbRand = nbRand % modulo;
+      if (nbRand > poids){
+	districtBuildings[TileType::BLANK]= new Batiment(file,l);
+	poids = nbRand;
+      }
+    }
+  }
+  return(districtBuildings);
+ }
+ 

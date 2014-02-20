@@ -12,6 +12,7 @@ typedef std::vector<std::vector<float>> floatMatrix;
 
 /**
  * @brief gives the caracteristic of a building and its sprite
+ * @author: ChatanW
  */
 class Batiment {
 

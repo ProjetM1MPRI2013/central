@@ -3,6 +3,7 @@
 
 #include "geography.h"
 #include <string>
+#include <map>
 #include <fstream>
 #include "batiment.h"
 #include <iostream>
@@ -12,6 +13,7 @@
  * @brief this class implements a first random generation of a map
  * Geography must generate a map but like we want to have different methods of generation, we use inherited class
  * @commentperso Here, we use a simple method of generation. We obtain a grid of roads with buildins to fill the blanks. It seems like a American city.
+ * @author: ChatanW
  */
 class Generation1 : public Geography
 {
@@ -25,6 +27,7 @@ class Generation1 : public Geography
    */
   Generation1(std::string seed);
   std::size_t hachage(std::string seed);
+  int debugbuildings;
     
  private:
   /**
@@ -50,7 +53,17 @@ class Generation1 : public Geography
    * @comment This method is usefull if the lenght of the sprite of the road is not a divisor of the width or the height of the map
    */
   void fillNull(int seed, int nbLine, std::string file);
+
+  /**
+   * @brief we fill a district
+   * 
+   */
+  void fillBuilding(int absOri, int ordOri, int abs0, int ord0, int abs1, int ord1, int seed, std::map<TileType, Batiment*> buildingsDistrict);
+
+  std::map<TileType, Batiment*> chooseBat(int nbRand, int nbLine, std::string file);
+
 };
+
 
 
 
