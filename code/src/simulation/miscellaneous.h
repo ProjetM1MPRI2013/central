@@ -10,14 +10,14 @@
 #define MISCELLANEOUS_H_
 
 #include "position.h"
+#include "positionable.h"
 #include <list>
 class Tile;
 class NPC;
 
-class Agent {
+class Agent : public Positionable {
   
  private :
-  Position position;
   float entretien;//en unité/seconde
   int type;
   
@@ -27,10 +27,9 @@ class Agent {
   
 };
 
-class Camera {
+class Camera : public Positionable {
 
  private :
-  Position position;
   float entretien;//en unité/seconde
   int type;
 

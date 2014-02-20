@@ -22,7 +22,7 @@ bool isInList(NPC& a,std::list<NPC*> b){
 
 
 Agent::Agent(float x, float y, float entretien, int type) : 
-  position(x,y),
+  Positionable(x,y),
   entretien(entretien), 
   type(type)
 {}
@@ -38,7 +38,7 @@ float Agent::getEntretien(){
 //{}
 
 Camera::Camera(float x,float y,float entretien, int type) :
-  position(x,y),
+  Positionable(x,y),
   entretien(entretien),
   type (type)
   {}
