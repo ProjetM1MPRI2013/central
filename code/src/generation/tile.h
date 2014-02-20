@@ -17,6 +17,7 @@ enum TileType {ROADH, ROADV, INTER, BANK, HOUSE, BLANK}; // énumération des ty
 class NPC;
 class TileWrapper;
 class Geography;
+class Clickable;
 
 class SpriteTilePack
 {
@@ -157,6 +158,11 @@ class Tile {
    */
   std::list<NPC*> listNPC;
 
+  /**
+   * @brief List of the stuff currently in the tile
+   */
+  std::list<Clickable*> listStuff;
+
 
   /**
    * @brief sprite of the bat thanks to its type
@@ -248,6 +254,14 @@ class Tile {
 
     void addNPC (NPC* a);
     void removeNPC (NPC* a);
+
+    /**
+     * @brief Return the list of the stuff in the tile
+     */
+    std::list<Clickable*>& getStuffs();
+
+    void addStuff (Clickable* a);
+    void removeStuff (Clickable* a);
     
     /**
      *@brief The tile belongs to a borough caracterized by a tile, given by this function

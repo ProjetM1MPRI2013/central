@@ -6,6 +6,7 @@
 #include "../simulation/npc.h"
 #include "../simulation/tilewrapper.h"
 #include "debug.h"
+#include "../scenario/Stuff.h"
 
 #define DEBUG false
 
@@ -203,6 +204,10 @@ std::list<NPC*>& Tile::getNPCs() {
   return listNPC;
 };
 
+std::list<Clickable*>& Tile::getStuffs() {
+  return listStuff;
+};
+
 float Tile::getPopulationDensity(){
 	return this->populationDensity;
 }
@@ -230,6 +235,16 @@ void Tile::addNPC (NPC* a){
 
 void Tile::removeNPC (NPC* a){
   listNPC.remove(a);
+  return;
+};
+
+void Tile::addStuff (Clickable* a){
+  listStuff.push_front(a);
+  return;
+};
+
+void Tile::removeStuff (Clickable* a){
+  listStuff.remove(a);
   return;
 };
 
