@@ -8,6 +8,14 @@
  * @author mheinric
  */
 
+NpcUpdate::NpcUpdate() : isCreated(false), id(),
+  currentPosition(), start(), target(), fear(),
+  shocked(false), speed(), hitboxSize(), deltaT(), lambda(), Vzero(),
+  dying(), dead(), deathTimeout(), textPackID()
+{
+}
+
+
 NpcUpdate::NpcUpdate(NPC &npc, bool is_created) : isCreated(is_created), id(npc.uuid), currentPosition(npc.position),
   start(npc.start), target(npc.target),
   fear(npc.getFear()), shocked(npc.isShocked()), speed(npc.getSpeed()),

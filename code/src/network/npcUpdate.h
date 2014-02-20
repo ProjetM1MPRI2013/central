@@ -65,7 +65,7 @@ public:
   static std::string getMsgType() { std::string s = std::string("NpcUpdate") ; s.resize(8) ; return s ;}
   NpcUpdate* copy() ;
 
-  NpcUpdate() {}
+  NpcUpdate() ;
 
 
 private :
