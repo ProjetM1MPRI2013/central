@@ -8,7 +8,7 @@ void debug (string s) {
 	if (DEBUG) {cout << s << endl;}
 };
 
-// LOADER
+// LOADEtofoR
 
 // justification new toload :
 // un toload à vocation à être stocké sous forme de liste et repéré par un pointeur
@@ -476,9 +476,9 @@ void Writer::writeDoAction(PreClass* p) {
 void Writer::writeIsActionPossible(PreAction* a) {
 	writeWord("bool " + ActionName((PreClass*) a) + "::isActionPossible() {");
 	endLine();
-	writeWord("return true;");
+	writeWord("//return true;");
 	endLine();
-	writeWord("//return " + a->isActionPossible + ";");
+	writeWord("return " + a->isActionPossible + ";");
 	endLine();
 	writeWord("};");
 	endLine();
@@ -1603,11 +1603,9 @@ string ActionCreator::ById (Clickable* c) {
 	ClickableType ct = c->clickableType;
 	switch (ct) {
 	case CT_Stuff:
-		return (
-				"((C_"+c->type+"*)(((Simulation*)this->simulation)->getItemByID(this->"+c->name+")))"
-		);
+			return ("(((C_"+c->type+"*)(&((Simulation*)this->simulation)->getItemByID<C_"+c->type+">(this->"+c->name+"))))");
 	case CT_NPC:
-		return ("todo"); //TODO
+		return ("(this->simulation->getNPCByID(this->"+c->name+"))");
 	case CT_Tile:
 		return ("((Tile*) ((Simulation*)this->simulation)->getMap()->getTile(this->"+ c->name +"))");
 	default:

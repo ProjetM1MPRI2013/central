@@ -33,6 +33,7 @@ int main() {
 	g->AddConsequence("DropItem(this->stuff,this->playerID,this->simulation);");
 	cout << "3" << endl;
 	g->AddActionField((Field*) new Clickable("stuff","Stuff"));
+	g->AddActionField((Field*) new Clickable("zone","Tile"));
 	cout << "4" << endl;
 	affiche (g->actions);
 	g->write();

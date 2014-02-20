@@ -5,24 +5,24 @@
 #include "ScenarioActionList.h"
 
 /*********************************************************
-** Consequences of Attack**
+** Consequences of Shoot**
 *********************************************************/
-CoA_Attack::CoA_Attack(int weapon, boost::uuids::uuid victim, int playerID,Simulation* sim)
-: ScenarioAction("Attack",playerID,sim){ 
-this->weapon = (int)weapon;
+CoA_Shoot::CoA_Shoot(int gun, boost::uuids::uuid victim, int playerID,Simulation* sim)
+: ScenarioAction("Shoot",playerID,sim){ 
+this->gun = (int)gun;
 this->victim = (boost::uuids::uuid)victim;
 };
 
-CoA_Attack::CoA_Attack(const CoA_Attack& a) : ScenarioAction("Attack",a.playerID, a.simulation){
-this->weapon= a.weapon;
+CoA_Shoot::CoA_Shoot(const CoA_Shoot& a) : ScenarioAction("Shoot",a.playerID, a.simulation){
+this->gun= a.gun;
 this->victim= a.victim;
 };
 
-AbstractMessage* CoA_Attack::copy() {
-return (AbstractMessage*) new CoA_Attack(*this);
+AbstractMessage* CoA_Shoot::copy() {
+return (AbstractMessage*) new CoA_Shoot(*this);
 };
 
-void CoA_Attack::run () {
+void CoA_Shoot::run () {
 KillNPC(victim,simulation);
 ;};
 
@@ -68,21 +68,24 @@ return (AbstractMessage*) new CoA_Plant(*this);
 };
 
 void CoA_Plant::run () {
-Explosion(3,this->zone,this->simulation);
-DropItem(this->bomb,this->playerID,this->simulation);
+	C_Bomb* b =(C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb));
+	Explosion(b->getpower(),this->zone,this->simulation);
+	DropItem(this->bomb,this->playerID,this->simulation);
 ;};
 
 
 /*********************************************************
 ** Consequences of Drop**
 *********************************************************/
-CoA_Drop::CoA_Drop(int stuff, int playerID,Simulation* sim)
+CoA_Drop::CoA_Drop(int stuff, std::pair<int,int> zone, int playerID,Simulation* sim)
 : ScenarioAction("Drop",playerID,sim){ 
 this->stuff = (int)stuff;
+this->zone = (std::pair<int,int>)zone;
 };
 
 CoA_Drop::CoA_Drop(const CoA_Drop& a) : ScenarioAction("Drop",a.playerID, a.simulation){
 this->stuff= a.stuff;
+this->zone= a.zone;
 };
 
 AbstractMessage* CoA_Drop::copy() {
@@ -90,6 +93,7 @@ return (AbstractMessage*) new CoA_Drop(*this);
 };
 
 void CoA_Drop::run () {
-DropItem(this->stuff,this->playerID,this->simulation);
-;};
+	simulation->getMap()->getTile(this->zone)->addStuff((Clickable*)(&this->simulation->getItemByID<C_Stuff>(this->stuff)));
+	DropItem(this->stuff,this->playerID,this->simulation);
+};
 

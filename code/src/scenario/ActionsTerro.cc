@@ -5,45 +5,35 @@
 #include "ActionsTerro.h"
 
 /*********************************************************
-** Attack**
+** Shoot**
 *********************************************************/
 
-A_Attack::A_Attack (int weapon, boost::uuids::uuid victim, LocalState* sim) : Action ( "ToA_Attack", sim) {
-this->weapon = (int)weapon;
+A_Shoot::A_Shoot (int gun, boost::uuids::uuid victim, LocalState* sim) : Action ( "ToA_Shoot", sim) {
+this->gun = (int)gun;
 this->victim = (boost::uuids::uuid)victim;
 };
 
-A_Attack::A_Attack(const A_Attack& a) : Action(" ToA_Attack", a.simulation){
-this->weapon= a.weapon;
+A_Shoot::A_Shoot(const A_Shoot& a) : Action(" ToA_Shoot", a.simulation){
+this->gun= a.gun;
 this->victim= a.victim;
 };
 
-void A_Attack::doAction() {
+void A_Shoot::doAction() {
 this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
-bool A_Attack::isActionPossible() {
+bool A_Shoot::isActionPossible() {
 //return true;
-	std::cout << "ca va core dumped" << std::endl;
-	Simulation* s = (Simulation*)this->simulation;
-	std::cout << "ca va core dumped" << std::endl;
-	C_Weapon& w = (s->getItemByID<C_Weapon>(this->weapon));
-	std::cout << "ca va core dumped" << std::endl;
-	C_Weapon* w2 = (C_Weapon*) (&w);
-	std::cout << "ca va vraiment core dumped" << std::endl;
-	int range = w2->getrange();
-	std::cout << "ca va core dumped" << std::endl;
-	return range<= 3;
-
+return (isInThePack (this->simulation,this->gun))&&(((((C_Gun*)(&((Simulation*)this->simulation)->getItemByID<C_Gun>(this->gun)))))->getrange()<=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
 };
 
-void A_Attack::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Attack (this->weapon, this->victim, ((Action*)this)->playerID,(Simulation*) gs));
+void A_Shoot::addPendingActions(GlobalState* gs){
+gs->addAction(new CoA_Shoot (this->gun, this->victim, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 
-AbstractMessage* A_Attack::copy() {
-return (AbstractMessage*) new A_Attack(*this);
+AbstractMessage* A_Shoot::copy() {
+return (AbstractMessage*) new A_Shoot(*this);
 };
 
 /*********************************************************
@@ -114,12 +104,14 @@ return (AbstractMessage*) new A_Plant(*this);
 ** Drop**
 *********************************************************/
 
-A_Drop::A_Drop (int stuff, LocalState* sim) : Action ( "ToA_Drop", sim) {
+A_Drop::A_Drop (int stuff, std::pair<int,int> zone, LocalState* sim) : Action ( "ToA_Drop", sim) {
 this->stuff = (int)stuff;
+this->zone = (std::pair<int,int>)zone;
 };
 
 A_Drop::A_Drop(const A_Drop& a) : Action(" ToA_Drop", a.simulation){
 this->stuff= a.stuff;
+this->zone= a.zone;
 };
 
 void A_Drop::doAction() {
@@ -132,7 +124,7 @@ return (isInThePack(this->simulation,this->stuff));
 };
 
 void A_Drop::addPendingActions(GlobalState* gs){
-gs->addAction(new CoA_Drop (this->stuff, ((Action*)this)->playerID,(Simulation*) gs));
+gs->addAction(new CoA_Drop (this->stuff, this->zone, ((Action*)this)->playerID,(Simulation*) gs));
 gs->deleteAction(this);
 };
 
