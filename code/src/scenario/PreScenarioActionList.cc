@@ -143,6 +143,7 @@ AddCops::AddCops(const AddCops& a) : ScenarioAction("AddCops",a.simulation){
 }
 
 void AddCops::run(){
+	if (simulation->getSous() < 0) {
 	for (int i=1;i<number/4;i++) {
 		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
 		simulation->addAgent(new Agent(x+i,y+i,(float)COST_COP1,0));
@@ -164,6 +165,7 @@ void AddCops::run(){
 
 	};
 	simulation->enleveSous((int)(COST_COP2*number));
+	}
 
 	return;
 };
@@ -186,6 +188,7 @@ void AddCops::run(){
 //}
 
 void AddCams::run(){
+	if (simulation->getSous() < 0) {
 	for (int i=1;i<number/4;i++) {
 		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1,1));
 		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1,1));
@@ -208,6 +211,7 @@ void AddCams::run(){
 
 	};
 	simulation->enleveSous((int)(COST_CAM2*number));
+	}
 };
 
 
@@ -225,6 +229,7 @@ AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
 };
 
 void AddCams::run2(){
+	if (simulation->getSous() < 0) {
 	for (int i=1;i<number/4;i++) {
 		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1_2,2));
 		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1_2,2));
@@ -246,6 +251,7 @@ void AddCams::run2(){
 
 	};
 	simulation->enleveSous((int)(COST_CAM2_2*number));
+	}
 };
 
 
