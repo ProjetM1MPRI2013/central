@@ -6,13 +6,22 @@
 
 
 using namespace std;
+/*
+int main () {
+	Loader l;
+	ToLoad* t = new ToLoad("bla");
+	l.add(t);
+	l.~Loader();
+	cout << "yep" <<endl;
+};*/
+
 int main() {
 
 	Generator* g = new Generator;
 	string s = (string) "source.txt";
-	MainReader* m = new MainReader (g,'+',';',':',s ) ;
+	MainReader m = MainReader (g,'+',';',':',s ) ;
 	cout << "1" << endl;
-	m->read();
+	m.read();
 	cout << "1.1" << endl;
 
 	affiche(g->actions);
@@ -21,12 +30,12 @@ int main() {
 	g->AddIap(
 			"(isInThePack(this->simulation,this->stuff))"
 	);
-	g->AddConsequence("DropItem");
+	g->AddConsequence("DropItem(this->stuff,this->playerID,this->simulation);");
 	cout << "3" << endl;
-	g->AddActionField(new Field (FT_Clickable,"stuff","Stuff"));
-	g->AddActionField((Field*) new Variable (VT_BOTH,"playerID","int","this->simulation->getPlayer()->getID()"));
+	g->AddActionField((Field*) new Clickable("stuff","Stuff"));
 	cout << "4" << endl;
 	affiche (g->actions);
 	g->write();
-	delete g;
+	g->clear();
+	//delete g;
 };

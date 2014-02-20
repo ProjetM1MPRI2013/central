@@ -39,6 +39,7 @@ G:power:int
 C:weapon:Weapon
 C:victim:NPC
 I:(:P:weapon:)&&:(:G:weapon:range:<=:D:victim:)
+Q:KillNPC(victim,simulation);
 ;
 
 +a:Reload
@@ -51,7 +52,9 @@ I:(:P:gun:)&&(:P:ammunition:)
 C:bomb:Bomb
 C:zone:Tile
 I:(:P:bomb:)&&:(isPlantable:T:zone:)
-Q:Explosion
+Q:Explosion(3,this->zone,this->simulation);
+Q:DropItem(this->bomb,this->playerID,this->simulation);
+
 ;
 
 

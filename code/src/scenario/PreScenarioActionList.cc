@@ -194,6 +194,7 @@ void AddCams::run(){
 	};
 	if (number%4 == 1) {
 		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+
 	};
 	if (number%4 == 2) {
 		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
@@ -274,10 +275,27 @@ AbstractMessage* AddCams::copy(){
 
 
 
+RemoveNPC::RemoveNPC( boost::uuids::uuid npc,Simulation* sim): ScenarioAction("RemoveNPC",sim){
+	this->npc = npc;
+};
+
+RemoveNPC::RemoveNPC(const RemoveNPC& a) : ScenarioAction("RemoveNPC", a.simulation){
+	this->npc= a.npc;
+};
+
+AbstractMessage* RemoveNPC::copy() {
+	return (AbstractMessage*) new RemoveNPC(*this);
+};
+
+void RemoveNPC::run () {
+	simulation->supprimerNPC(this->simulation->getNPCByID(this->npc))
+	;};
+
+
 
 
 /*********************************************************
- ** Library for created scenario action**
+ ** Library for create scenario action**
  *********************************************************/
 
 
