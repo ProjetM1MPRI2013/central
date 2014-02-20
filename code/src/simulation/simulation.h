@@ -81,6 +81,9 @@ public:
   Simulation(Geography* map,int nbPlayers,int id);
   ~Simulation();
 
+  //pour rerouter les gens quand ils ont peur
+  void reroute(NPC& npc);
+
   /*methode qui agit sur la matrice pour lisser la peur*/
   virtual void lisserMatrice();
   template <class T>
