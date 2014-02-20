@@ -15,7 +15,7 @@
  *
  * Derive it like so :
  *
- *   class C : public EventListener<C>
+ *   class MyClass : public EventListener<MyClass>
  *
  * (see technical reasons below)
  *
@@ -24,7 +24,7 @@
  *   listen("myEvent", mySource, myCallback);
  *
  * where mySource derives EventSource
- * and myCallback is some method, for instance &C::myCallback
+ * and myCallback is some qualified member method, for instance &MyClass::myCallback
  */
 
 // Make parent (EventListener) class aware of any of its subclasses. 
@@ -32,22 +32,29 @@
 // listen(this, S source, [] { ... callback ... })
 // instead, they can just write:
 // listen(S source, [] { ... callback ... })
-// You must inherit from EventManager like so : class C : EventManager<C> { ... }
+// You must inherit from EventManager like so : class MyClass : EventManager<MyClass> { ... }
 // otherwise, some totally unsafe casts will happen.
 template <class Child>
 class EventListener : public GenericEventListener {
 
 public :
- 	 /**
+
+    EventListener();
+    EventListener(boost::uuids::uuid uuid);
+
+    /**
      * @brief listen to events of type eventT on source using callback
      * @param eventT: type of event being listened to (can be empty)
      * @param source: object the event is about
      * @param callback: a method of the instance inheriting from EventListener 
     */
+    // Give a callback which takes arguments by reference
     template <typename SourceT, typename ArgT>
     void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT&));
+    // Give a callback which takes arguments by value
     template <typename SourceT, typename ArgT>
     void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&, ArgT));
+    // Give a callback which takes no arguments
     template <typename SourceT>
     void listen(EventName event, SourceT& source, void (Child::*callback)(SourceT&));
 
@@ -57,7 +64,7 @@ public :
     template <typename SourceT>
     void unlisten(EventName eventT, SourceT& source);
 
-    virtual void trigger(EventName event, std::function<void()> closure);
+    virtual void callbackReady(EventName event, std::function<void()> callback);
 
     ~EventListener();
 
@@ -68,6 +75,15 @@ public :
 /*
  * Implementations for EventListener
  */
+template <class Child>
+EventListener<Child>::EventListener() {}
+template <class Child>
+// WARNING Since WithUuid is a *virtual* base class of GenericEventListener
+// the WithUuid constructor will *not* be called if you subclass EventListener
+// and call EventListener(uuid) in your initialization list.
+// You'll have to *also* call WithUuid(uuid).
+EventListener<Child>::EventListener(boost::uuids::uuid uuid) : WithUuid(uuid) {}
+
 // FIXME Remove code duplication. I don't know how.
 
 // Listener wants argument by reference
@@ -81,7 +97,7 @@ void EventListener<Child>::listen(EventName event, SourceT& source, void (Child:
     } else {
       try {
         auto closure = std::bind(callback, static_cast<Child*>(this) ,std::ref(source), boost::any_cast<reference<ArgT>>(arg));
-        (static_cast<Child*>(this))->trigger(event, closure);
+        (static_cast<Child*>(this))->callbackReady(event, closure);
       } catch (boost::bad_any_cast& e) {
         std::cerr << "Event trigger typing error: the event argument type and one of the callback types are incompatible" << std::endl;
       }
@@ -102,7 +118,7 @@ void EventListener<Child>::listen(EventName event, SourceT& source, void (Child:
     } else {
       try {
         auto closure = std::bind(callback, static_cast<Child*>(this), std::ref(source), boost::any_cast<ArgT>(arg));
-        (static_cast<Child*>(this))->trigger(event, closure);
+        (static_cast<Child*>(this))->callbackReady(event, closure);
       } catch (boost::bad_any_cast& e) {
         std::cerr << "Event trigger typing error: the event argument type and one of the callback types are incompatible" << std::endl;
       }
@@ -129,10 +145,11 @@ void EventListener<Child>::unlisten(EventName eventT, SourceT& source) {
   EventManager::unlisten(eventT, source, *this);
 };
 
-/* Trivially execute the callback. Overload it in derived classes to do 
+/* An event callback is ready to be called.
+ * By default, this trivially executes the callback. Overload it in derived classes to do 
  * conditional triggering, event queues, etc... */
 template <class Child>
-void EventListener<Child>::trigger(EventName event, std::function<void()> callback) {
+void EventListener<Child>::callbackReady(EventName event, std::function<void()> callback) {
   callback();
 }
 

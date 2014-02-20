@@ -23,7 +23,7 @@ return (AbstractMessage*) new CoA_Attack(*this);
 };
 
 void CoA_Attack::run () {
-	KillNPC(victim,simulation);
+KillNPC(victim,simulation);
 ;};
 
 
@@ -68,7 +68,7 @@ return (AbstractMessage*) new CoA_Plant(*this);
 };
 
 void CoA_Plant::run () {
-Explosion(3,this->zone,this->simulation);
+Explosion(10,this->zone,this->simulation);
 ;};
 
 
@@ -89,7 +89,6 @@ return (AbstractMessage*) new CoA_Drop(*this);
 };
 
 void CoA_Drop::run () {
-	DropItem(this->stuff,this->playerID,this->simulation);
-
-};
+DropItem(this->stuff,this->playerID,this->simulation);
+;};
 

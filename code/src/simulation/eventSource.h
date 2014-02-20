@@ -20,7 +20,7 @@ typedef std::string EventName;
  *   compatible if the argument to trigger() supports implicit conversion to X.
  */
  
-class EventSource : public WithUuid {
+class EventSource : public virtual WithUuid {
   public: 
   EventSource();
   EventSource(boost::uuids::uuid uuid);

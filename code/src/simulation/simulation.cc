@@ -2,6 +2,7 @@
  *@author Denys Kanunikov, others...
  */
 #include "simulation.h"
+#include "../graphism/graphic_context_iso.h"
 #include "../generation/geography.h"
 #include "../generation/tile.h"
 #include "npc.h"
@@ -82,6 +83,10 @@ Simulation::~Simulation() {
 	}
 	agents.clear();
 	sous.clear();
+}
+
+void Simulation::setContextIso(GraphicContextIso* gra){
+	this->graContIso=gra;
 }
 
 bool Simulation::simIsServer() {
@@ -185,18 +190,18 @@ void Simulation::peopleGeneration() {
 			chance = (rand() % 100);
 
 			if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-				int x = rand() % MAP_SIZE;
-				int y = rand() % MAP_SIZE;
+				int x = rand() % MAP_SIZE*TILE_SIZE_X;
+				int y = rand() % MAP_SIZE*TILE_SIZE_Y;
 
 				while (this->map->getTile(x, y)->getSpeed() == 0) {
-					x = rand() % MAP_SIZE;
-					y = rand() % MAP_SIZE;
+					x = rand() % MAP_SIZE*TILE_SIZE_X;
+					y = rand() % MAP_SIZE*TILE_SIZE_Y;
 				}
 
 				std::cout << "npc created, target =  (" << x << "," << y << ")"
 						<< std::endl;
 
-				//this->addNPC(start,target,1,graContIso.getTexturePack(i%2));
+				this->addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),1,this->graContIso->getTexturePack(i%2));
 
 				//addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),10);
 			}

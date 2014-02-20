@@ -119,13 +119,19 @@ void GlobalState::run(sf::Time dt) {
 	for (int i = 0; i < secondes; i++) {
 		this->lisserMatrice();
 	}
+
+	/*création des gens selon la densité*/
+		for (int i = 0; i < secondes; i++) {
+			//this->peopleGeneration();
+		}
+
 	/* We update the position of all the players */
 	for (Player& player : players) {
 		player.updatePosition(dt, *map);
 	}
 
 	/*on fait payer l'entretien des différents trucs*/
-	for (int i = 1; i < secondes; i++) {
+	for (int i = 0; i < secondes; i++) {
 		for (Agent* agent : agents) {
 			sous[0] = sous[0] - agent->getEntretien();
 		}

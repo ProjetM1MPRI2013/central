@@ -24,7 +24,7 @@
  * Dummy generic class to store instances of EventListener<T>
  * No one else may subclass GenericEventListener.
  */
-class GenericEventListener : public WithUuid {};
+class GenericEventListener : public virtual WithUuid {};
 
 /** We need a function from (source,type,listener) to callback,
  *  We create three maps : source -> (event -> (listener -> callback))
