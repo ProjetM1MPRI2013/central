@@ -13,6 +13,9 @@ enum WaitFor {
 class PreHud {
 public:
 	virtual void setwf(WaitFor w) = 0;
+  virtual void newMessage(std::string message) = 0;
+  virtual void deleteMessage() = 0;
+
 };
 
 #endif
