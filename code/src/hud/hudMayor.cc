@@ -64,6 +64,18 @@ void HudMayor::init(Simulation& simulation)
     // Create the new buttons 
     if (this->currentState == MAYOR_ACTIONS)
     {
+      // Create the "Add other Cameras" button
+      tgui::Button::Ptr b_ocam(this->hud);
+			b_ocam->load(THEME_CONFIG_FILE_HUD_MAYOR);
+			b_ocam->setSize(80, 40);
+			b_ocam->setPosition(250, this->h - 100);
+			b_ocam->setText("Add other Cameras");
+			b_ocam->bindCallback(std::bind(&HudMayor::callback, this, 3), 
+                          tgui::Button::LeftMouseClicked);
+			//b_cam->setCallbackId(3);
+			(this->buttonsList).push_back(b_ocam);
+
+
       // Create the "Add Cameras" button
 		  tgui::Button::Ptr b_cam(this->hud);
 			b_cam->load(THEME_CONFIG_FILE_HUD_MAYOR);
@@ -204,13 +216,20 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
           std::cout << "Ajout de " << currentNumber << " Cops en position (" 
             << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
-        if (this->currentAction == CA_CAM) {
+        if (this->currentAction == CA_CAM1) {
           AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
           addCams.run();
           std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
             << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
-       };
+        };
+        if (this->currentAction == CA_CAM2) {
+          AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
+                                  mapPosition.getY(), localState);
+          addCams.run2();
+          std::cout << "Ajout de " << currentNumber << " other Cameras en position (" 
+            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
+        };
         setwf(WF_NONE); 
       }
       else 
@@ -247,8 +266,13 @@ void HudMayor::callback(unsigned int callback_id)
       };
       if (callback_id == 2) 
       {
-        this->currentAction = CA_CAM; 
+        this->currentAction = CA_CAM1; 
         this->nextState = MAYOR_NUMBERS; 
+      };
+      if (callback_id == 3)
+      {
+        this->currentAction = CA_CAM2;
+        this->nextState = MAYOR_NUMBERS;
       };
     };
      

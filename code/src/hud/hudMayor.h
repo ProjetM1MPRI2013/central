@@ -17,7 +17,7 @@ class TileMap;
 
 enum MayorState {MAYOR_ACTIONS, MAYOR_NUMBERS}; 
 
-enum CurrentAction {CA_CAM, CA_COP}; 
+enum CurrentAction {CA_CAM1, CA_CAM2, CA_COP}; 
 
 class Simulation;
 
