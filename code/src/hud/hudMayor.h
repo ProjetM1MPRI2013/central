@@ -29,6 +29,8 @@ public:
 	void callback(unsigned int callback_id);
 	void draw();
 	void setwf(WaitFor w);
+  void newMessage(std::string message);
+  void deleteMessage();
 
 	/* In the main loop, the 3 methods must be called in this specific order :
 	 * init();
@@ -49,13 +51,13 @@ private:
 	tgui::Gui hud;
 	std::list<tgui::Button::Ptr> buttonsList;
   std::list<tgui::Label::Ptr> goldList;
+  std::list<tgui::Label::Ptr> messagesList;
   MayorState currentState; 
   MayorState nextState; 
   CurrentAction currentAction; 
   unsigned int currentNumber; 
 	WaitFor waitFor;
   int gold;
-  //tgui::Label::Ptr l_gold; 
 };
 
 #endif
