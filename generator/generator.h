@@ -6,13 +6,24 @@
 #include<fstream>
 using namespace std;
 
+/*J'ai laissé 4 pointeurs dans le generateur :
+
+Les classes qui héritent de Toload car il a vocation à être stocké sous forme de liste et repéré par un pointeur
+Le stack (mes fonctions marchent par effet de bord sur cet objet)
+le generateur (qui contient les loader et qui doit donc être passé )
+les ifstream et ofstream (j'ai des problèmes de droit si je les passe en référence)
+*/
 //loader
+
+//classe qui sert à être stoquée
 class ToLoad {
 public:
 	string name;
 	ToLoad(string);
 };
 
+
+//c'est une liste dans la quelle on stoque des toload et qui a un état courant
 class Loader {
 public :
 	Loader () ;
@@ -30,12 +41,31 @@ private :
 
 };
 
+//pour les tests
 void affiche (Loader);
 
 //field et preclass
 
-enum FieldType {FT_Clickable, FT_Variable, FT_IAP, FT_Consequence};
-enum VariableType {VT_Nothing,VT_Get,VT_Set,VT_BOTH};
+//une préclass sert à stoquer les information avant de créeer une classe
+//ces éléments sont des fields
+
+//il y a 4 types de fields
+enum FieldType {
+	FT_Clickable, //un clockable
+	FT_Variable, //bool, int ,float
+	FT_IAP, //pour implémenter isactionpossible()
+	FT_Consequence //pour implémenter la fonction run d'une scenarioactionlist
+};
+
+//le type de la variable dit ce qu'on peut faire dessus:
+enum VariableType {
+	VT_Nothing, //Rien
+	VT_Get, //Get
+	VT_Set, //Set
+	VT_BOTH //Les deux
+};
+
+//Les clickables peuvent être de trois type différents
 enum ClickableType {CT_NPC,CT_Tile,CT_Stuff};
 
 
@@ -55,6 +85,8 @@ public:
 	Variable (VariableType, string name, string type,string initialisation);
 	VariableType variabletype;
 	bool isVirtual;
+	//Une variable peut être "virtuelle" on peut la set ou get avec des méthodes virtuelles
+	//dans ce cas la classe qui la contient est abstraite
 };
 
 class Clickable : public Field {
@@ -70,7 +102,7 @@ public:
 	PreClass (string name);
 	PreClass (string name,PreClass* herite);
 	void add(Field*);
-	// pourra etre mis private: mais il faut pouvoir iterer
+	// ON doit pouvoir iterer là dessus donc on les laisse public
 	Loader fields;
 	PreClass* herite ;
 	Loader toInitialised;
@@ -80,7 +112,7 @@ class PreAction : public PreClass {
 public:
 	PreAction (string name);
 	string isActionPossible;
-	bool firstfield;
+	bool firstfield; //on a besoin de savoir si on a eu ou non un premier field pour ajouter l'action possible au premier
 	list<string> consequence;
 };
 
@@ -96,7 +128,7 @@ private:
 	list<PreAction*> actionPossible;
 };
 
-//writer
+//writer : il écrit dans les différents fichiers
 
 class Writer {
 public:
@@ -188,6 +220,7 @@ private:
 
 };
 
+//Generator : il génère les actions
 
 class Generator {
 public :
@@ -202,13 +235,12 @@ public :
 	void AddClickableField (Field*);
 	void AddIap (string);
 	void AddConsequence (string);
-	//private: need to be public
 	Loader clickables;
 	Loader actions;
 	Loader fields;
 };
 
-// reader
+// reader : parse un fichier
 
 #include <string>
 #include <iostream>
@@ -217,6 +249,19 @@ public :
 #include <vector>
 
 using namespace std;
+
+
+// tout ceci est  un ensemble de parseur général
+/* On décompose un fichier en
+ *bloc
+ *line
+ *field
+ */
+/*
+ chaqu'une des classes est utile pour lire ces différentes parties et appelle une classe plus petite pour lire sa sous partie
+ */
+
+
 
 class Reader {
 public:
@@ -255,6 +300,7 @@ protected:
 };
 
 //my reader
+/*ici je suis moins général et stoque chaque field dans une stakc*/
 
 class stackFieldReader : public readFielder {
 public:
@@ -289,22 +335,8 @@ private:
 	virtual void onALine (list<string>* ) = 0;
 };
 
-class ForStringGenerator {
-public:
-	int fieldNeeded;
-	char toSwitch;
 
-};
-
-class StringGenerator {
-public:
-	StringGenerator();
-	string generate(list<string>*);
-protected:
-	string result;
-	int fieldNeeded;
-};
-
+/*mes reader vont créer action et clickable à l'aide du générateur*/
 class ActionCreator : public stackBlockReader {
 public :
 	ActionCreator(Generator* g, char blockDelimiter, char fieldDelimiter, std::ifstream* fichier , string buffer);
