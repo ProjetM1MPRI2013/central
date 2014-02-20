@@ -28,10 +28,10 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
   tgui::Label::Ptr l_gold(this->hud);
   l_gold->load(THEME_CONFIG_FILE_HUD_MAYOR);
   l_gold->setText("Gold : "+std::to_string(gold));
-  l_gold->setPosition(this->w - 100, this->h -150);
+  l_gold->setPosition(this->w - 200, 50);
   l_gold->setTextColor(sf::Color(255, 255, 0));
-  l_gold->setTextSize(20);
-
+  l_gold->setTransparency(0);
+  (this->goldList).push_back(l_gold);
 }
 ;
 
@@ -39,9 +39,16 @@ void HudMayor::init(Simulation& simulation)
 {
   if (gold != simulation.getSous()) {
     gold = simulation.getSous();
-    std::cout << "Gold : " << gold << std::endl;
+    hud.remove((this->goldList).front());
+    (this->goldList).clear();
+    tgui::Label::Ptr l_gold(this->hud);
+    l_gold->load(THEME_CONFIG_FILE_HUD_MAYOR);
     l_gold->setText("Gold : "+std::to_string(gold));
-  };
+    l_gold->setPosition(this->w - 200, 50);
+    l_gold->setTextColor(sf::Color(255, 255, 0));
+    l_gold->setTransparency(0);
+    (this->goldList).push_back(l_gold);
+ };
   if (this->currentState != this->nextState) 
   {
     this->currentState = this->nextState;
@@ -263,7 +270,6 @@ void HudMayor::callback(unsigned int callback_id)
 
 void HudMayor::draw() {
 	(this->hud).draw();
-  //std::cout << "Il y a " << (this->buttonsList).size() << " bouttons." << std::endl;
 }
 ;
 

@@ -48,13 +48,14 @@ private:
   bool bright;
 	tgui::Gui hud;
 	std::list<tgui::Button::Ptr> buttonsList;
+  std::list<tgui::Label::Ptr> goldList;
   MayorState currentState; 
   MayorState nextState; 
   CurrentAction currentAction; 
   unsigned int currentNumber; 
 	WaitFor waitFor;
   int gold;
-  tgui::Label::Ptr l_gold; 
+  //tgui::Label::Ptr l_gold; 
 };
 
 #endif
