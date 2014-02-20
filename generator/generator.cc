@@ -8,15 +8,14 @@ void debug (string s) {
 	if (DEBUG) {cout << s << endl;}
 };
 
-// LOADEtofoR
+// LOADER
 
-// justification new toload :
-// un toload à vocation à être stocké sous forme de liste et repéré par un pointeur
-// chaque classe qui héritera de toload aura vocation à être créer par new
+
 ToLoad::ToLoad(string n) {
 	name = n;
 }
 ;
+
 
 Loader::Loader() {
 	current = NULL;
@@ -72,10 +71,9 @@ list<ToLoad*> Loader::getTable() {
 ;
 
 void Loader::add(ToLoad* p) {
-	//if (DEBUG) {cout << "add " + p->name << endl; affiche (*this);};
+
 
 	this->table.push_back(p);
-	//if (DEBUG) {affiche (*this);};
 	current = p;
 }
 ;
@@ -112,14 +110,14 @@ void affiche(Loader loader) {
 
 
 Field::Field(FieldType ft, string name, string type) :
-																																																																																														ToLoad(name) {
+																																																																																																								ToLoad(name) {
 	this->type = type;
 	this->initialisation = "";
 	this->fieldtype = ft;
 }
 ;
 Field::Field(FieldType ft,string name, string type, string init) :
-																																																																																														ToLoad(name) {
+																																																																																																								ToLoad(name) {
 	this->type = type;
 	this->initialisation = init;
 	this->fieldtype = ft;
@@ -127,14 +125,14 @@ Field::Field(FieldType ft,string name, string type, string init) :
 ;
 
 Variable::Variable(VariableType vt, string name, string type ) :
-																																																																																														Field (FT_Variable, name,type ) {
+																																																																																																								Field (FT_Variable, name,type ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 
 	;};
 
 Variable::Variable(VariableType vt, string name, string type, string init ) :
-																																																																																														Field (FT_Variable, name,type,init ) {
+																																																																																																								Field (FT_Variable, name,type,init ) {
 	this->variabletype = vt;
 	this->isVirtual =false;
 	;};
@@ -155,13 +153,13 @@ Clickable::Clickable (string name, string type): Field (FT_Clickable, name,type 
 	;};
 
 Clickable::Clickable (string name, string type, string init ) :
-																																																																																														Field (FT_Clickable, name,type,init ) {
+																																																																																																								Field (FT_Clickable, name,type,init ) {
 	this->clickableType = stringToClickableType(type);
 	;};
 
 
 PreClass::PreClass(string name) :
-																																																																																														ToLoad(name) {
+																																																																																																								ToLoad(name) {
 	Loader f ;
 	Loader toInitialised ;
 	this->fields = f;
@@ -172,7 +170,7 @@ PreClass::PreClass(string name) :
 ;
 
 PreClass::PreClass(string name, PreClass* heritage) :
-																																																																																														ToLoad(name) {
+																																																																																																								ToLoad(name) {
 	Loader f ;
 	toInitialised = heritage->toInitialised.copy();
 	this->fields = f;
@@ -476,9 +474,9 @@ void Writer::writeDoAction(PreClass* p) {
 void Writer::writeIsActionPossible(PreAction* a) {
 	writeWord("bool " + ActionName((PreClass*) a) + "::isActionPossible() {");
 	endLine();
-	writeWord("return true;");
+	writeWord("//return true;");
 	endLine();
-	writeWord("//return " + a->isActionPossible + ";");
+	writeWord("return " + a->isActionPossible + ";");
 	endLine();
 	writeWord("};");
 	endLine();
@@ -1568,8 +1566,8 @@ int stackLineReader::readField(int initialPosition, string s) {
 ;
 
 stackBlockReader::stackBlockReader(char blockDelimiter, char fieldDelimiter,std::ifstream* fichier, string buffer) :
-																																																																							ReadBlocker(blockDelimiter, fichier),
-																																																																							rl (fieldDelimiter)
+																																																																																	ReadBlocker(blockDelimiter, fichier),
+																																																																																	rl (fieldDelimiter)
 {
 	this->stack = new list<string>;
 	rl.setstack(this->stack);
@@ -1590,8 +1588,8 @@ void stackBlockReader::setstack(list<string>* s) {
 ;
 
 ActionCreator::ActionCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																																																																					stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																																																																					nameTreater (':') {
+																																																																															stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																																																																															nameTreater (':') {
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 
@@ -1603,7 +1601,7 @@ string ActionCreator::ById (Clickable* c) {
 	ClickableType ct = c->clickableType;
 	switch (ct) {
 	case CT_Stuff:
-			return ("(((C_"+c->type+"*)(&((Simulation*)this->simulation)->getItemByID<C_"+c->type+">(this->"+c->name+"))))");
+		return ("(((C_"+c->type+"*)(&((Simulation*)this->simulation)->getItemByID<C_"+c->type+">(this->"+c->name+"))))");
 	case CT_NPC:
 		return ("(this->simulation->getNPCByID(this->"+c->name+"))");
 	case CT_Tile:
@@ -1624,33 +1622,36 @@ string ActionCreator::get (string name, string toget) {
 };
 
 
+std::string myPop (list<string>* l){
+	if (l->empty()){std::cout<< "erreur de pop pour l'action creator" <<std::endl;}
+	else{
+		string s = l->front();
+		l->pop_front();
+		return s;
+	}
+	return "trolol";
+}
 
 string ActionCreator::generateIAP (list<string>* l) {
 	string s;
 	string t ;
 	while (l->size() > 0) {
-		t = l->front();
+		t = myPop(l);
 		// P : isInThePack; G : get, T :  this, D : distance
-		if (t== "P") {  //TODO assert l->size > 0
-			l->pop_front();
-			s = s + "isInThePack (this->simulation,this->" + l->front() + ")";
+		if (t== "P") {
+			s = s + "isInThePack (this->simulation,this->" + myPop(l) + ")";
 		}
-		else if (t== "G") {  //TODO assert l->size > 1
-			l->pop_front();
-			string name = l->front();
-			l->pop_front();
-			s = s + get(name,l->front());
+		else if (t== "G") {
+			string name = myPop(l);
+			s = s + get(name,myPop(l));
 		}
-		else if (t== "T") {  //TODO assert l->size > 0
-			l->pop_front();
-			s = s + ById(l->front()) ;
+		else if (t== "T") {
+			s = s + ById(myPop(l)) ;
 		}
-		else if (t== "D") {  //TODO assert l->size > 0
-			l->pop_front();
-			s = s + "distance (this->simulation," + ById(l->front()) + ")";
+		else if (t== "D") {
+			s = s + "distance (this->simulation," + ById(myPop(l)) + ")";
 		}
 		else {s = s+ t;};
-		l->pop_front();
 	}
 	return s;
 };
@@ -1662,7 +1663,6 @@ void ActionCreator::treatName(string s) {
 
 	this->nameTreater.readLine(s);
 	debug ("treat name.3");
-	//TODO tester la string quand on pop;
 	l->pop_front(); //enleve le "+a"
 	string name = l->front();
 	l->pop_front();
@@ -1721,8 +1721,8 @@ void ActionCreator::onALine(list<string>* l) {
 
 
 ClickableCreator::ClickableCreator(Generator* g, char blockDelimiter,char fieldDelimiter, std::ifstream* fichier, string buffer) :
-																																																																							stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
-																																																																							nameTreater (':'){
+																																																																																	stackBlockReader(blockDelimiter, fieldDelimiter, fichier, buffer),
+																																																																																	nameTreater (':'){
 	this->generator = g;
 	this->nameTreater.setstack(this->stack);
 };
@@ -1732,7 +1732,6 @@ void ClickableCreator::treatName(string s) {
 	list<string>* l = this->stack;
 	debug ("treat name.3");
 
-	//TODO tester la string quand on pop;
 	l->pop_front();
 	debug ("treat name.3.1");
 
@@ -1804,7 +1803,7 @@ void ClickableCreator::onALine(list<string>* l) {
 
 
 MainReader::MainReader(Generator* g, char addChar, char blockDelimiter, char fieldDelimiter, string& fichier) :
-																														ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer), cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
+																																								ac (g, blockDelimiter, fieldDelimiter,this->fichier, buffer), cc (g, blockDelimiter, fieldDelimiter,this->fichier, buffer)
 {
 	this->generator = g;
 	this->fichier= new ifstream (fichier.c_str());

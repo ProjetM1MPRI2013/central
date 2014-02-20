@@ -18,7 +18,7 @@
 #include <interface_globale.h>
 #include <interface_init.h>
 #include <def_button.h>
-#define DEBUG true
+#define DEBUG false
 #include <debug.h>
 using namespace std;
 int usl2 = chdir("./src/interfaceinit");
