@@ -356,6 +356,7 @@ int Simulation::getSous() {
 
 void Simulation::enleveSous(int n) {
 	this->mesSous = this->mesSous - n;
+	std::cout << "ok" << std::endl;
 	return;
 }
 

@@ -4,7 +4,7 @@
 #include "hudMayor.h"
 #include "../scenario/Stack.h"
 #include "../graphism/tilemap.h"
-#include "../scenario/ActionsPC.h"
+#include "../scenario/PreScenarioActionList.h"
 #include "../simulation/simulation.h"
 #include "localState.h"
 #define THEME_CONFIG_FILE_HUD_MAYOR "../widgets/Black.conf"
@@ -191,16 +191,16 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
         sf::Vector2i clicPosition = sf::Mouse::getPosition(*window);
         Position mapPosition = (*tilemap).CoordMouse(clicPosition);
         if (this->currentAction == CA_COP) {
-          AddCop addCop = AddCop(this->currentNumber, mapPosition.getX(), 
+          AddCops addCops = AddCops(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
-          addCop.doAction();
+          addCops.run();
           std::cout << "Ajout de " << currentNumber << " Cops en position (" 
             << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
         if (this->currentAction == CA_CAM) {
-          AddCam addCam = AddCam(this->currentNumber, mapPosition.getX(), 
+          AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
-          addCam.doAction();
+          addCams.run();
           std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
             << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
        };
