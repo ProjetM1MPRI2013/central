@@ -3,6 +3,7 @@
  */
 #ifndef NPC_H
 #define NPC_H
+#include "character.h"
 #include "trajectory.h"
 //#include "simulation.h"
 #include "positionable.h"
@@ -21,19 +22,12 @@
  * It represents a NPC
  */
 
-class NPC : public Positionable, public DrawableObject, public AbstractMessage {
+class NPC : public Character, public DrawableObject, public AbstractMessage {
  private:
-  Trajectory trajectory;
   /*needed for seriliazation*/
-  Position start;
-  Position target;
   float fear;
   bool shocked;
-  float speed;
   float hitboxSize;
-  float deltaT = 1;
-  float lambda = 1;
-  float Vzero = 10;
   bool dying;
   bool dead;
   sf::Time deathTimeout;
@@ -118,48 +112,6 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    */
   void setShocked(bool s);
 
-  /**
-   * @brief getSpeed
-   * @return the NPC's speed
-   */
-  float getSpeed() const;
-
-  /**
-   * @brief getTrajectory
-   * @return the NPC's Trajectory as a reference
-   */
-  Trajectory& getTrajectory();
-
-
-  /**
-   * @brief setTrajectory
-   * sets the NPC's trajectory
-   * (the server shouldn't use it)
-   * @param t : the new trajectory
-   */
-  void setTrajectory(Trajectory& t);
-
-  /**
-   * @brief setSpeed
-   * sets the NPC's speed
-   * @param s : the new speed
-   */
-  void setSpeed(float s);
-
-  /**
-   * @brief getPosition
-   * @return the NPC's position as a reference
-   */
-  Position& getPosition();
-
-  /**
-   * @brief setPosition
-   * sets the NPC's current position
-   * this method should NOT be used with updatePosition, since it already changes the current position
-   * the server should use updatePosition to move the NPCs
-   * @param the new position as a reference, so the NPC's new position will be the same object
-   */
-  void setPosition(Position& p);
 
   /**
    * @brief updatePosition
@@ -184,11 +136,6 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    */
   float getHitboxSize() const;
 
-  /**
-   * @brief hasArrived
-   * @return true iff the NPC has arrived at his target position
-   */
-  bool hasArrived();
   
   /**
    * @brief setAnim
@@ -197,19 +144,6 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    **/  
   void setAnim(const AnimType t);
 
-  /**
-   * @brief potential
-   * computes the potential created by the NPC
-   * @param p: the Position where the potential will be evaluated
-   */
-  float potential(Position p);
-
-  /**
-   * @brief gradPotential
-   * computes the gradient of the NPC's potential
-   * @param p: the Position where the gradient will be computed
-   */
-  std::pair<float,float> gradPot(Position p);
 
   /**
    * @brief nextFrame
@@ -218,11 +152,6 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    */
   void nextFrame();
 
-  /**
-   * @brief getTarget
-   * @return the NPC's target position
-   */
-  Position getTarget() const;
 
   /**
    * @brief setTarget
@@ -237,6 +166,12 @@ class NPC : public Positionable, public DrawableObject, public AbstractMessage {
    * kills the npc, ie tells him he is dying
    */
   void kill();
+
+  Position& getPosition();
+
+  void setPosition(Position& p);
+
+
 
 private :
   /**
