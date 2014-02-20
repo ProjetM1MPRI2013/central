@@ -32,13 +32,14 @@ class Camera {
   Position position;
   float entretien;//en unité/seconde
   std::list<Tile*> champDeVision;
+  int type;
 
  public :
   bool isInSight(NPC& npc);
-  Camera(float x, float y, float entretien, std::list<Tile*> champDeVision);
+  Camera(float x, float y, float entretien, std::list<Tile*> champDeVision, int type);
 
   //Quick fix, have to calculate the lineOfSight [Adrien K.]
-  Camera(float x, float y, float entretien);
+  Camera(float x, float y, float entretien, int type);
 
   float getEntretien();
 };

@@ -108,10 +108,11 @@ public:
 	int number;
 	float x;
 	float y;
-	AddCams(int number,float x,float y,Simulation* s);
+	AddCams(int number,float x,float y,Simulation* s, int type);
 	AddCams(const AddCams&);
 
 	virtual void run ();
+	virtual void run2 ();
 
 	virtual AbstractMessage* copy();
 

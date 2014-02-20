@@ -4,6 +4,8 @@
 #include "../simulation/simulation.h"
 #include "globalState.h"
 #include "localState.h"
+#define DEBUG true
+#include <debug.h>
 
 
 bool :: AddCop::IsActionPossible() {return (COST_COP2 <= (this->simulation)->getSous());}
@@ -21,16 +23,18 @@ AddCop::AddCop(const AddCop& a) : Action("AddCop",a.simulation){
   this->y = a.y;
 }
 
-AddCam :: AddCam(int n, float xx,float yy, LocalState* s) : Action("AddCam",s) {
+AddCam :: AddCam(int n, float xx,float yy, LocalState* s, int typee) : Action("AddCam",s) {
 	this->number = n;
 	this->x  = xx;
 	this->y = yy;
+	this->type = typee;
 }
 
 AddCam::AddCam(const AddCam& a) : Action("AddCam",a.simulation){
   this->number = a.number;
   this->x = a.x;
   this->y = a.y;
+
 }
 
 
