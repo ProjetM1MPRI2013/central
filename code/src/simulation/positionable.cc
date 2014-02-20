@@ -10,7 +10,7 @@ Positionable::Positionable() : FogDisabler() {
   return;
 }
 
-Positionable::Positionable(boost::uuids::uuid uuid) : FogDisabler(), EventSource(), EventListener<Positionable>(), WithUuid(uuid) {
+Positionable::Positionable(boost::uuids::uuid uuid) : FogDisabler(), WithUuid(uuid), EventSource(), EventListener<Positionable>() {
   position = Position();
   // listen("Position::changedTile",position,&Positionable::changedTile);
   return;
