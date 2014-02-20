@@ -9,6 +9,7 @@
 #include "eventListener.h"
 #include "animation.h"          // TexturePack
 #include "../generation/tile.h" // SpriteTilePack
+#include "game_textures.h"
 #include "../generation/geography.h"
 #include "../simulation/simulation.h"
 #include "../simulation/position.h"
@@ -60,8 +61,6 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
    **/
   Position screenToMap(int x, int y);
 
-  TexturePack* getTexturePack(int n);
-
   float zoom(float f);
 
   void addUnfog(Positionable* p, int radius);
@@ -72,7 +71,6 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
   
 
  private:
-  std::vector<TexturePack> texVector;
   std::vector<SpriteTilePack> tilepackVector;
   std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
   Geography* map;

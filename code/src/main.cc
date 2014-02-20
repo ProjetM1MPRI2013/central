@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "hud/hudMayor.h"
 #include "hud/hudTerro.h"
+#include "game_textures.h"
 #include "HScenario.h"
 #include <TGUI/TGUI.hpp>
 #include <string>
@@ -42,7 +43,7 @@ std::string SEED = "424242";
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::F4) && event.key.alt)
 #endif
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
-    sf::VideoMode video_mode, Client* clientPtr, std::string seed,
+    sf::VideoMode video_mode, Client* clientPtr, std::string seed, 
     sf::RenderWindow* window) {
 
   Geography geo = Generation1(seed);
@@ -60,15 +61,6 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
     /* MAYOR */
   }
 
-  std::default_random_engine npcGen(42);
-
-  if (TERRO) {
-    //[joseph] ceci est un NPC de test
-    //on en génère 500 à la création de la map, puis plus après
-    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-    dummy::createNPCs(500, loc, graContIso, geo, npcGen);
-  }
-  
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
   HudMayor hudMayor = HudMayor(window,loc); //One needs to be removed
@@ -140,6 +132,15 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
   glob.getPlayerByID(1).isServer = 1;
   glob.setServer(serverPtr);
 
+  std::default_random_engine npcGen(42);
+  
+  if (TERRO) {
+    //[joseph] ceci est un NPC de test
+    //on en génère 500 à la création de la map, puis plus après
+    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
+    dummy::createNPCs(500, glob, geo, npcGen);
+  }
+
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
   while (window->isOpen()) {
@@ -152,6 +153,7 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
 }
 
 int main(int argc, char ** argv) {
+  textures::initialize();
 
   if (argc > 2 && (std::string) argv[1] == "test") {
     test::run(argv[2]);
@@ -295,27 +297,27 @@ int main(int argc, char ** argv) {
 ;
 
 namespace dummy {
-void createNPCs(int number, LocalState& simu, GraphicContextIso& graContIso,
-    Geography& geo, std::default_random_engine npcGen) {
-  std::uniform_real_distribution<float>
-      npcDistX(0.01, geo.getMapWidth() - 0.01);
-  std::uniform_real_distribution<float> npcDistY(0.01, geo.getMapHeight()
-      - 0.01);
-  for (int i = 0; i < number; i++) {
-    Position start = Position(npcDistX(npcGen), npcDistY(npcGen));
-    Position target = Position(npcDistX(npcGen), npcDistY(npcGen));
-    while (start.isInTile(geo).getSpeed() == 0) {
-      start = Position(npcDistX(npcGen), npcDistY(npcGen));
-    }
-    while (target.isInTile(geo).getSpeed() == 0 || target.isInTile(geo).equals(
-        start.isInTile(geo))) {
-      target = Position(npcDistX(npcGen), npcDistY(npcGen));
-    }
-    simu.addNPC(start, target, 1, graContIso.getTexturePack(i % 2));
+  void createNPCs(int number, Simulation& simu,
+      Geography& geo, std::default_random_engine npcGen) {
+    std::uniform_real_distribution<float>
+        npcDistX(0.01, geo.getMapWidth() - 0.01);
+    std::uniform_real_distribution<float> npcDistY(0.01, geo.getMapHeight()
+        - 0.01);
+    for (int i = 0; i < number; i++) {
+      Position start = Position(npcDistX(npcGen), npcDistY(npcGen));
+      Position target = Position(npcDistX(npcGen), npcDistY(npcGen));
+      while (start.isInTile(geo).getSpeed() == 0) {
+        start = Position(npcDistX(npcGen), npcDistY(npcGen));
+      }
+      while (target.isInTile(geo).getSpeed() == 0 || target.isInTile(geo).equals(
+          start.isInTile(geo))) {
+        target = Position(npcDistX(npcGen), npcDistY(npcGen));
+      }
+      simu.addNPC(start, target, 1, textures::get(i % 2));
 
-    //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
+      //simu.addNPC(Position(8.5,0.5),Position(8.5,25.5),1,&tp1);
 
-    //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
+      //simu.addNPC(Position(8.5,25.5),Position(8.5,0.5),1,&tp1);
+    }
   }
-}
 }

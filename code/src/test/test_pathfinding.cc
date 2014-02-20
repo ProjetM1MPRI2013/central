@@ -21,7 +21,7 @@ namespace test {
     GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
     //TileMap tilemap = TileMap(&loc, &geo);
     std::default_random_engine npcGen (42);
-    dummy::createNPCs(1, loc, graContIso, geo, npcGen);
+    dummy::createNPCs(1, loc, geo, npcGen);
     LOG(info) << "Finished test NPCs creation and pathfinding";
     return 0;
   }

@@ -28,84 +28,6 @@
 
     // End fog and base
 
-    std::fstream file;
-    file.open("../graphism/animations",std::fstream::in);
-    assert(file);
-    std::string line, tmp;
-    while(getline(file,line)){
-      
-      TexturePack t;
-      sf::Texture a;
-      
-      tmp = line.substr(0,line.find(" "));
-      assert(a.loadFromFile(tmp));
-      t.texture = a;
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.nbFrames.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.nbFrames.push_back(atoi(tmp.c_str()));
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.widthSprite.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.widthSprite.push_back(atoi(tmp.c_str()));
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(0,line.find(" "));
-      t.heightSprite = atoi(tmp.c_str());
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.offsetX.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.offsetX.push_back(atoi(tmp.c_str()));
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.offsetY.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.offsetY.push_back(atoi(tmp.c_str()));
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.isLoop.push_back(tmp.substr(0,tmp.find(",")).compare("T")==0);
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.isLoop.push_back(tmp.compare("T")==0);
-
-      line = line.substr(line.find(" ")+1);
-      tmp = line.substr(1,line.find(" "));
-      while(tmp.find(",")!=std::string::npos){
-	t.fps.push_back(atoi(tmp.substr(0,tmp.find(",")).c_str()));
-	tmp = tmp.substr(tmp.find(",")+1);
-      }
-      tmp.pop_back();
-      t.fps.push_back(atoi(tmp.c_str()));
-
-      addTexturePack(t);
-
-    }
-    file.close();
-    
-    // End Parser animations
-
     int w = map->getMapWidth(), h = map->getMapHeight();
     
     for(int i = 0; i < w; i ++){
@@ -135,7 +57,7 @@
 	for(std::list<NPC*>::const_iterator ci = lnpc.begin(); 
 	    ci != lnpc.end(); ++ci){
 	  if(!(**ci).TextureIsInit()){
-	    (**ci).TextureAnim(&(texVector.at(0))); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur. A changer
+	    (**ci).TextureAnim(textures::get(0)); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur. A changer
 	  }
 	}
       }
@@ -340,13 +262,6 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   return;
 }
 
-void GraphicContextIso::addTexturePack(TexturePack t)
-{
-  t.ID = texVector.size();
-  texVector.push_back(t);
-  return;
-}
-
 void GraphicContextIso::addSpriteTilePack(SpriteTilePack stp)
 {
   tilepackVector.push_back(stp);
@@ -395,11 +310,6 @@ Position GraphicContextIso::screenToMap(int x, int y)
 	(xc+xo)/(RIGHT_TILE(0)+DOWN_TILE(0)) 
 	+ (yc+yo)/(DOWN_TILE(1)-RIGHT_TILE(1)));
   return p;
-}
-
-TexturePack* GraphicContextIso::getTexturePack(int n)
-{
-  return(&(texVector.at(n)));
 }
 
 float GraphicContextIso::zoom(float f)

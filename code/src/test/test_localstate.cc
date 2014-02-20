@@ -41,7 +41,7 @@ namespace test {
         LOG(info) << "Client : " << "Received <NPC>" << mes.size() << " messages "  ;
         for(NPC* p : mes){
             loc.addNPC(p->position, p->getTarget(), p->getSpeed(),
-                      graContIso.getTexturePack(1), p->getUuid());
+                      textures::get(1), p->getUuid());
             LOG(info) << "NPC :\n" << (*p)<< "; " ;
 
         }

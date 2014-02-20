@@ -205,7 +205,7 @@ void Simulation::peopleGeneration() {
 						Position(TILE_SIZE_X * i + TILE_SIZE_X / 2,
 								TILE_SIZE_Y * j + TILE_SIZE_Y / 2),
 						Position(x, y), 1,
-						this->graContIso->getTexturePack(i % 2));
+						textures::get(i % 2));
 
 				//addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),10);
 			}

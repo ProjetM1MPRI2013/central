@@ -30,7 +30,7 @@ NpcUpdate* NpcUpdate::copy(){
 
 NPC* NpcUpdate::createNpc(GraphicContextIso *gra){
   assert(isCreated) ;
-  NPC* npc = new NPC(speed, fear, hitboxSize, start, gra->getTexturePack(textPackID)) ;
+  NPC* npc = new NPC(speed, fear, hitboxSize, start, textures::get(textPackID));
   npc->position = currentPosition ;
   npc->shocked = shocked ;
   npc->speed = speed ;

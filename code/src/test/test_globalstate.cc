@@ -40,12 +40,12 @@ void createNPCs(int number, GlobalState& glob, GraphicContextIso& graContIso,
       target = Position(npcDistX(npcGen), npcDistY(npcGen));
     }
 
-    NPC *msg = new NPC(1, 10, 10, start, graContIso.getTexturePack(i% 2));
+    NPC *msg = new NPC(1, 10, 10, start, textures::get(i% 2));
 
     msg->setTarget(target,*(glob.getMap()));
     msg->getPosition().isInTile(*(glob.getMap())).addNPC(msg);
 
-    glob.addNPC(start, target, 1, graContIso.getTexturePack(i % 2), msg->getUuid());
+    glob.addNPC(start, target, 1, textures::get(i % 2), msg->getUuid());
     LOG(info) << "Server : " << "Broadcast 1 message of type NPC:\n" << (*msg);
     glob.getServer()->broadcastMessage<NPC>(*msg);
     sleep(1);
