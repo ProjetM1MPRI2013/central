@@ -119,8 +119,6 @@ Tile::Tile(const Tile& t) :
   filePictures = t.filePictures;
   alpha = t.alpha;
   fog = t.fog;
-  if (fog == 0)
-    sprite.setColor(sf::Color(128,128,128));
   buildfog = false;
 }
 
@@ -151,8 +149,6 @@ Tile& Tile::operator=(const Tile& t){
     filePictures = t.filePictures;
     alpha = t.alpha;
     fog = t.fog;
-    if (fog == 0)
-      sprite.setColor(sf::Color(128,128,128));
     buildfog = false;
   }
   return *this;
