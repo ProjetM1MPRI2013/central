@@ -30,14 +30,18 @@ float Agent::getEntretien(){
   return (this->entretien);
 }
 
-Camera::Camera(float x,float y,float entretien, std::list<Tile*> lineOfSight) :
+Camera::Camera(float x,float y,float entretien, std::list<Tile*> lineOfSight, int type) :
   position(x,y),
   entretien(entretien),
-  champDeVision(lineOfSight) {}
+  champDeVision(lineOfSight) ,
+  type(type)
+{}
 
-Camera::Camera(float x,float y,float entretien) :
+Camera::Camera(float x,float y,float entretien, int type) :
   position(x,y),
-  entretien(entretien) {}
+  entretien(entretien),
+  type (type)
+  {}
 
 bool Camera::isInSight(NPC& npc){
   bool boolean=false;

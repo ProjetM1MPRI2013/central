@@ -15,6 +15,9 @@ class LocalState;
 #define COST_CAM1 1 //cout d'entretien d'une caméra
 #define COST_COP2 1 //cout de placement d'un cop
 #define COST_CAM2 1 //cout de placement d'une caméra
+#define COST_CAM2_2 2 //cout de placement d'une caméra
+#define COST_CAM1_2 2 //cout de placement d'une caméra
+
 
 class AddCop : public Action {
  public:
@@ -44,7 +47,7 @@ class AddCam : public Action {
  public:
   bool IsActionPossible ();
   void doAction();
-  AddCam (int number,float x, float y, LocalState* s);
+  AddCam (int number,float x, float y, LocalState* s, int type);
   AddCam(const AddCam&);
   
   virtual AbstractMessage* copy();
@@ -54,8 +57,10 @@ class AddCam : public Action {
   int number;
   float x;
   float y;
+  int type;
 
-private :
+
+
   //Serialization
   AddCam(){}
 
