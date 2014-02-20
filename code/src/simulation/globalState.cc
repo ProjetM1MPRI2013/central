@@ -25,11 +25,11 @@ void GlobalState::setServer(Server *_server) {
 
 void GlobalState::run(sf::Time dt) {
 	//If their is not enough money, remove an agent and a camera
-	if (sous[0] < 0) {
-		if (!this->agents.empty()) {
+	if (mesSous < 0) {
+		if (!(this->agents.empty())) {
 			this->agents.pop_back();
 		}
-		if (!this->cameras.empty()) {
+		if (!(this->cameras.empty())) {
 			this->cameras.pop_back();
 		}
 	}
@@ -133,12 +133,13 @@ void GlobalState::run(sf::Time dt) {
 
 	/*on fait payer l'entretien des différents trucs*/
 	for (int i = 0; i < secondes; i++) {
+
 		for (Agent* agent : agents) {
-			sous[0] = sous[0] - agent->getEntretien();
+			mesSous = mesSous - agent->getEntretien();
 		}
 
-		for (auto camera : cameras) {
-			sous[0] = sous[0] - camera->getEntretien();
+		for (Camera* camera : cameras) {
+			mesSous = mesSous- camera->getEntretien();
 		}
 	}
 
