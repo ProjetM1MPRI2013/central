@@ -95,9 +95,9 @@ public:
 	//AbstractMessage functions
 	virtual AbstractMessage* copy();
 
-protected :
+public :
 	//Serialization
-	AddCops(){}
+	AddCops(){};
 
 	SIMPLE_MESSAGE(AddCops, ScenarioAction, number, x, y)
 };
@@ -108,7 +108,7 @@ public:
 	int number;
 	float x;
 	float y;
-	AddCams(int number,float x,float y,Simulation* s, int type);
+	AddCams(int number,float x,float y,Simulation* s);
 	AddCams(const AddCams&);
 
 	virtual void run ();
@@ -116,9 +116,9 @@ public:
 
 	virtual AbstractMessage* copy();
 
-private :
+public :
 	//Serialization
-	AddCams(){}
+	AddCams(){};
 
 	SIMPLE_MESSAGE(AddCams, ScenarioAction, number, x, y)
 };

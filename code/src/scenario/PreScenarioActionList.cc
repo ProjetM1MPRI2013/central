@@ -171,37 +171,37 @@ void AddCops::run(){
  * AddCams *
  ***********/
 
-AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){
-	x = xx;
-	y = yy;
-	number = n;
-	this->simulation = s;
-};
+//AddCams::AddCams(int n,float xx,float yy,Simulation* s) : ScenarioAction("AddCams",s){
+//	x = xx;
+//	y = yy;
+//	number = n;
+//	this->simulation = s;
+//};
 
-AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
-	this->number = a.number;
-	this->x = a.x;
-	this->y = a.y;
-}
+//AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
+//	this->number = a.number;
+//	this->x = a.x;
+//	this->y = a.y;
+//}
 
 void AddCams::run(){
 	for (int i=1;i<number/4;i++) {
-		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1),1);
+		simulation->addCam(new Camera(x+i,y+i,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x+i,y-i,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x-i,y+i,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x-i,y-i,(float)COST_CAM1,1));
 	};
 	if (number%4 == 1) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1),1);
+		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
 	};
 	if (number%4 == 2) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1),1);
+		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
 	};
 	if (number%4 == 3) {
-		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1),1);
-		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1),1);
+		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1,1));
+		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1,1));
 
 
 	};
@@ -220,7 +220,7 @@ AddCams::AddCams(const AddCams& a) : ScenarioAction("AddCams",a.simulation){
 	this->number = a.number;
 	this->x = a.x;
 	this->y = a.y;
-}
+};
 
 void AddCams::run2(){
 	for (int i=1;i<number/4;i++) {
@@ -239,8 +239,8 @@ void AddCams::run2(){
 	if (number%4 == 3) {
 		simulation->addCam(new Camera(x+number/4,y+number/4,(float)COST_CAM1_2,2));
 		simulation->addCam(new Camera(x-number/4,y+number/4,(float)COST_CAM1_2,2));
-		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1_2,2));
 
+		simulation->addCam(new Camera(x+number/4,y-number/4,(float)COST_CAM1_2,2));
 
 	};
 	simulation->enleveSous((int)(COST_CAM2_2*number));

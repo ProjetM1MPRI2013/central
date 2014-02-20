@@ -199,7 +199,7 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
         };
         if (this->currentAction == CA_CAM) {
           AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
-                                  mapPosition.getY(), localState,1);
+                                  mapPosition.getY(), localState);
           addCams.run();
           std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
             << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;

@@ -30,12 +30,11 @@ float Agent::getEntretien(){
   return (this->entretien);
 }
 
-Camera::Camera(float x,float y,float entretien, std::list<Tile*> lineOfSight, int type) :
-  position(x,y),
-  entretien(entretien),
-  champDeVision(lineOfSight) ,
-  type(type)
-{}
+//Camera::Camera(float x,float y,float entretien, int type) :
+//  position(x,y),
+//  entretien(entretien),
+//  type(type)
+//{}
 
 Camera::Camera(float x,float y,float entretien, int type) :
   position(x,y),
@@ -43,16 +42,16 @@ Camera::Camera(float x,float y,float entretien, int type) :
   type (type)
   {}
 
-bool Camera::isInSight(NPC& npc){
-  bool boolean=false;
-  std::list<NPC*>NPCinTile;
-  for (std::list<Tile*>::iterator it = this->champDeVision.begin(); it != this->champDeVision.end(); ++it)
-    {
-      NPCinTile=(*it)->getNPCs();
-      boolean=boolean||(isInList(npc,NPCinTile));
-    }
-  return boolean;
-}
+//bool Camera::isInSight(NPC& npc){
+//  bool boolean=false;
+//  std::list<NPC*>NPCinTile;
+//  for (std::list<Tile*>::iterator it = this->champDeVision.begin(); it != this->champDeVision.end(); ++it)
+//    {
+//      NPCinTile=(*it)->getNPCs();
+//      boolean=boolean||(isInList(npc,NPCinTile));
+//    }
+//  return boolean;
+//}
 
 float Camera::getEntretien(){
   return (this->entretien);

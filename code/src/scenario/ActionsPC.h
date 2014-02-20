@@ -47,7 +47,7 @@ class AddCam : public Action {
  public:
   bool IsActionPossible ();
   void doAction();
-  AddCam (int number,float x, float y, LocalState* s, int type);
+  AddCam (int number,float x, float y, LocalState* s,int type);
   AddCam(const AddCam&);
   
   virtual AbstractMessage* copy();

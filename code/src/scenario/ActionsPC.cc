@@ -34,6 +34,7 @@ AddCam::AddCam(const AddCam& a) : Action("AddCam",a.simulation){
   this->number = a.number;
   this->x = a.x;
   this->y = a.y;
+  this->type = a.type;
 
 }
 
