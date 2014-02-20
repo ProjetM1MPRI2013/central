@@ -3,7 +3,7 @@
 #include "localStateUpdater.h"
 #include "simulation/localState.h"
 
-#define DEBUG true
+#define DEBUG false
 #include "debug.h"
 
 /*
