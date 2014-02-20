@@ -132,6 +132,7 @@ void LocalState::run(sf::Time dt) {
 		for (Camera* camera : cameras) {
 			mesSous = mesSous - camera->getEntretien();
 		}
+		mesSous = mesSous + 10;
 	}
 	if (mesSous < 0) {
 			if (!(this->agents.empty())) {

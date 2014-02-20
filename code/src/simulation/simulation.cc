@@ -25,7 +25,7 @@ Simulation::Simulation(int nbPlayers, int id) :
 	this->NB_JOUEURS = nbPlayers;
 	this->Id = id;
 
-	this->mesSous = 21;
+	this->mesSous = 2;
 	this->sous = std::vector<int>(NB_JOUEURS, 0);
 	this->relativeTime = 0;
 	this->absoluteTime = 0;
