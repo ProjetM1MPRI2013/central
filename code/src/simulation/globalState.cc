@@ -108,7 +108,8 @@ void GlobalState::run(sf::Time dt) {
 
 	//Si ça fait plus d'une seconde, on fait changer de direction les gens qui ont peur
 	if (secondes > 0) {
-		for (NPC* npc : NPCs) {
+		for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
+			NPC* npc = pair.second;
 			if (npc->isShocked()) {
 				this->reroute(*npc);
 			}
@@ -121,9 +122,9 @@ void GlobalState::run(sf::Time dt) {
 	}
 
 	/*création des gens selon la densité*/
-		for (int i = 0; i < secondes; i++) {
-			//this->peopleGeneration();
-		}
+	for (int i = 0; i < secondes; i++) {
+		//this->peopleGeneration();
+	}
 
 	/* We update the position of all the players */
 	for (Player& player : players) {
@@ -143,7 +144,8 @@ void GlobalState::run(sf::Time dt) {
 
 	//Deplacement de tous les NPCs.
 	DBG << "on commence à bouger les npcs";
-	for (NPC* npc : NPCs) {
+	for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
+		NPC* npc = pair.second;
 		bool wasArrived = npc->hasArrived();
 		Tile& tileBefore = npc->getPosition().isInTile(*map);
 		npc->updatePosition(dt, *map);

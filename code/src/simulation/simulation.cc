@@ -66,8 +66,8 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id) :
 
 Simulation::~Simulation() {
 
-	for (auto& e : NPCs) {
-		delete e;
+	for (auto& pair : NPCs) {
+		delete pair.second;
 	}
 	NPCs.clear();
 	for (auto& e : pendingActions) {
@@ -85,8 +85,8 @@ Simulation::~Simulation() {
 	sous.clear();
 }
 
-void Simulation::setContextIso(GraphicContextIso* gra){
-	this->graContIso=gra;
+void Simulation::setContextIso(GraphicContextIso* gra) {
+	this->graContIso = gra;
 }
 
 bool Simulation::simIsServer() {
@@ -139,7 +139,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert({npc->getUuid(),npc});
+	NPCs.insert( { npc->getUuid(), npc });
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 
@@ -153,7 +153,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert({npc->getUuid(),npc});
+	NPCs.insert( { npc->getUuid(), npc });
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 	trigger("NPC::created", *npc);
@@ -190,18 +190,22 @@ void Simulation::peopleGeneration() {
 			chance = (rand() % 100);
 
 			if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-				int x = rand() % MAP_SIZE*TILE_SIZE_X;
-				int y = rand() % MAP_SIZE*TILE_SIZE_Y;
+				int x = rand() % MAP_SIZE * TILE_SIZE_X;
+				int y = rand() % MAP_SIZE * TILE_SIZE_Y;
 
 				while (this->map->getTile(x, y)->getSpeed() == 0) {
-					x = rand() % MAP_SIZE*TILE_SIZE_X;
-					y = rand() % MAP_SIZE*TILE_SIZE_Y;
+					x = rand() % MAP_SIZE * TILE_SIZE_X;
+					y = rand() % MAP_SIZE * TILE_SIZE_Y;
 				}
 
 				std::cout << "npc created, target =  (" << x << "," << y << ")"
 						<< std::endl;
 
-				this->addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),1,this->graContIso->getTexturePack(i%2));
+				this->addNPC(
+						Position(TILE_SIZE_X * i + TILE_SIZE_X / 2,
+								TILE_SIZE_Y * j + TILE_SIZE_Y / 2),
+						Position(x, y), 1,
+						this->graContIso->getTexturePack(i % 2));
 
 				//addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),10);
 			}
