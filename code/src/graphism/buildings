@@ -6,3 +6,7 @@ HOUSE 4 4 [[0.|0.|0.|0.||0.|0.|0.|0.||0.|0.|0.|0.||0.|0.|0.|0.]] ../../../sprite
 BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass.png (18,0)
 HOUSE 4 4 [[0.|0.|0.|0.||0.|0.|0.|0.||0.|0.|0.|0.||0.|0.|0.|0.]] ../../../sprite/maison2.png (78,10)
 BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass2.png (18,0)
+BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass3.png (18,0)
+BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass4.png (18,0)
+BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass5.png (18,0)
+BLANK 1 1 [[0.0]] ../../../sprite/patchofgrass6.png (18,0)
