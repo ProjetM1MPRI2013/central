@@ -1,9 +1,9 @@
 /*
 
-*@author Marc B* Mischellaneous.cpp
+*@author  Mischellaneous.cpp
  *
  *  Created on: 25 nov. 2013
- *      Author: gac
+ *      Author: Marc B
  */
 
 #include "miscellaneous.h"
