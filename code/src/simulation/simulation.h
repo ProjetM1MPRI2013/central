@@ -163,7 +163,7 @@ protected :
    float smallTime;
    Geography* map;
    std::list<Player> players;
-   std::set<NPC*, WithUuidPtrCmp> NPCs;
+   std::map<boost::uuids::uuid, NPC*> NPCs;
    std::list<ScenarioAction *> pendingActions;
    /**
     * @brief toDelete : liste des actions déjà traité

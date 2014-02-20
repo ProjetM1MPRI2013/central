@@ -139,7 +139,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert(npc);
+	NPCs.insert({npc->getUuid(),npc});
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 
@@ -153,7 +153,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert(npc);
+	NPCs.insert({npc->getUuid(),npc});
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 	trigger("NPC::created", *npc);
@@ -164,7 +164,7 @@ void Simulation::supprimerNPC(NPC * npc) {
 	//on le retire de sa tile
 	npc->getPosition().isInTile(*map).removeNPC(npc);
 	//on le retire de la liste
-	NPCs.erase(npc);
+	NPCs.erase(npc->getUuid());
 	//on le supprime
 	delete npc;
 	return;
@@ -176,7 +176,7 @@ void Simulation::supprimerNPCDansCase(int i, int j) {
 	//on le supprime de la tile
 	map->getTileRef(i, j).removeNPC(npc);
 	//on le supprime de la liste
-	NPCs.erase(npc);
+	NPCs.erase(npc->getUuid());
 	return;
 }
 
@@ -399,14 +399,6 @@ void Simulation::setScenario(HScenario* s) {
 }
 
 NPC* Simulation::getNPCByID(boost::uuids::uuid uuid) {
-	// FIXME This is a hack.
-	// Also having a set of pointers sounds terrible
-	// for locality. Use map<uuid,NPC*> instead.
-	auto cmp = WithUuid(uuid);
-	auto it = NPCs.find((NPC*) &cmp);
-	if (it == NPCs.end()) {
-		return nullptr;
-	} else {
-		return *it;
-	}
+	auto iterator = NPCs.find(uuid);
+	return (iterator == NPCs.end()) ? nullptr : (iterator->second);
 }
