@@ -7,6 +7,8 @@
 class Action;
 class Player;
 class HScenario;
+class GraphicContextIso;
+
 #include "../scenario/Action.h"
 #include "../scenario/Stuff.h"
 #include "ScenarioAction.h"
@@ -84,9 +86,12 @@ public:
   //pour rerouter les gens quand ils ont peur
   void reroute(NPC& npc);
 
+  void setContextIso(GraphicContextIso* gra);
+
   /*methode qui agit sur la matrice pour lisser la peur*/
   virtual void lisserMatrice();
   template <class T>
+
   T getItemByID(int id);
   /**
    * @brief setGeography
@@ -124,6 +129,9 @@ public:
    NPC* getNPCByID(boost::uuids::uuid uuid);
 protected :
 
+   //Pour pouvoir créer des npcs
+   GraphicContextIso* graContIso;
+
    void copyTmp();
    std::list<Camera*> cameras;
    std::list<Agent*> agents;
@@ -155,7 +163,7 @@ protected :
    float smallTime;
    Geography* map;
    std::list<Player> players;
-   std::map<boost::uuids::uuid, NPC*> NPCs;
+   std::set<NPC*, WithUuidPtrCmp> NPCs;
    std::list<ScenarioAction *> pendingActions;
    /**
     * @brief toDelete : liste des actions déjà traité

@@ -2,6 +2,7 @@
  *@author Denys Kanunikov, others...
  */
 #include "simulation.h"
+#include "../graphism/graphic_context_iso.h"
 #include "../generation/geography.h"
 #include "../generation/tile.h"
 #include "npc.h"
@@ -65,8 +66,8 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id) :
 
 Simulation::~Simulation() {
 
-	for (auto& pair : NPCs) {
-		delete pair.second;
+	for (auto& e : NPCs) {
+		delete e;
 	}
 	NPCs.clear();
 	for (auto& e : pendingActions) {
@@ -82,6 +83,10 @@ Simulation::~Simulation() {
 	}
 	agents.clear();
 	sous.clear();
+}
+
+void Simulation::setContextIso(GraphicContextIso* gra){
+	this->graContIso=gra;
 }
 
 bool Simulation::simIsServer() {
@@ -134,7 +139,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert({npc->getUuid(),npc});
+	NPCs.insert(npc);
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 
@@ -148,7 +153,7 @@ void Simulation::addNPC(Position start, Position target, float speed,
 	NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
 	npc->setTarget(target, *map);
 	//on l'ajoute à la liste
-	NPCs.insert({npc->getUuid(),npc});
+	NPCs.insert(npc);
 	//on le met dans sa tile de départ
 	npc->getPosition().isInTile(*map).addNPC(npc);
 	trigger("NPC::created", *npc);
@@ -159,7 +164,7 @@ void Simulation::supprimerNPC(NPC * npc) {
 	//on le retire de sa tile
 	npc->getPosition().isInTile(*map).removeNPC(npc);
 	//on le retire de la liste
-	NPCs.erase(npc->getUuid());
+	NPCs.erase(npc);
 	//on le supprime
 	delete npc;
 	return;
@@ -171,7 +176,7 @@ void Simulation::supprimerNPCDansCase(int i, int j) {
 	//on le supprime de la tile
 	map->getTileRef(i, j).removeNPC(npc);
 	//on le supprime de la liste
-	NPCs.erase(npc->getUuid());
+	NPCs.erase(npc);
 	return;
 }
 
@@ -185,18 +190,18 @@ void Simulation::peopleGeneration() {
 			chance = (rand() % 100);
 
 			if (chance > (map->getTile(i, j)->getPopulationDensity() / 10)) {
-				int x = rand() % MAP_SIZE;
-				int y = rand() % MAP_SIZE;
+				int x = rand() % MAP_SIZE*TILE_SIZE_X;
+				int y = rand() % MAP_SIZE*TILE_SIZE_Y;
 
 				while (this->map->getTile(x, y)->getSpeed() == 0) {
-					x = rand() % MAP_SIZE;
-					y = rand() % MAP_SIZE;
+					x = rand() % MAP_SIZE*TILE_SIZE_X;
+					y = rand() % MAP_SIZE*TILE_SIZE_Y;
 				}
 
 				std::cout << "npc created, target =  (" << x << "," << y << ")"
 						<< std::endl;
 
-				//this->addNPC(start,target,1,graContIso.getTexturePack(i%2));
+				this->addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),1,this->graContIso->getTexturePack(i%2));
 
 				//addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),10);
 			}
@@ -394,6 +399,14 @@ void Simulation::setScenario(HScenario* s) {
 }
 
 NPC* Simulation::getNPCByID(boost::uuids::uuid uuid) {
-	auto iterator = NPCs.find(uuid);
-	return (iterator == NPCs.end()) ? nullptr : (iterator->second);
+	// FIXME This is a hack.
+	// Also having a set of pointers sounds terrible
+	// for locality. Use map<uuid,NPC*> instead.
+	auto cmp = WithUuid(uuid);
+	auto it = NPCs.find((NPC*) &cmp);
+	if (it == NPCs.end()) {
+		return nullptr;
+	} else {
+		return *it;
+	}
 }
