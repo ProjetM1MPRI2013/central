@@ -51,6 +51,7 @@ void Stack::sendAction () {
 	std::cout << "send action" <<std::endl;
 	std::cout << (this->SoNList).size() <<std::endl;
 	if ((this->SoNList).empty()){
+		hud->deleteMessage();
 		Action* a (this->ActionOfStack(this->actionType));
 		log ("test action possible");
 		if (a->isActionPossible ())
@@ -58,19 +59,24 @@ void Stack::sendAction () {
 		a->doAction();
 		}
 		else
-		{ log ("pas possible");};
+		{
+		hud->deleteMessage();
+		hud->newMessage("action impossible");
+		};
 		this->cancel();
 		(this->hud)->setwf(WF_NONE);
 	}
 	else
 	{
 		if ((this->SoNList).front() == SON_NPC)
-		{
-			(this->hud)->setwf(WF_CLICK);
+		{ hud->deleteMessage();
+		hud->newMessage("clique sur quelqu'un");
+		(this->hud)->setwf(WF_CLICK);
 		}
 		else
-		{
-			(this->hud)->setwf(WF_STUFF);
+		{	hud->deleteMessage();
+		hud->newMessage("clique sur un objet");
+		(this->hud)->setwf(WF_STUFF);
 		};
 	};
 
