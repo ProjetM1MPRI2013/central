@@ -179,6 +179,8 @@ private :
    */
   NPC(){} ;
 
+  friend class NpcUpdate ;
+
 //  SIMPLE_SERIALIZATION(uuid, position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
   SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,
                  target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )

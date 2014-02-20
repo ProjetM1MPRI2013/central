@@ -86,13 +86,14 @@ std::pair<int, int> LocalState::getCurrentTile() {
 }
 
 void LocalState::run(sf::Time dt) {
-	//If their is no enough money, remove an agent and a camera
-	if (sous[0] < 0) {
+	//If teir is no enough money, remove an agent and a camera
+
+	/*if (this-> < 0) {
 		if (!agents.empty())
 			agents.pop_back();
 		if (!cameras.empty())
 			cameras.pop_back();
-	}
+	}*/
 	//The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
 	std::vector<ScenarioAction *> scenarioActionFromNetwork =
 			this->client->receiveMessages<ScenarioAction>();
@@ -124,14 +125,23 @@ void LocalState::run(sf::Time dt) {
 	for (int i = 0; i < secondes; i++)
 		this->lisserMatrice();
 	/*on fait payer l'entretien des différents trucs*/
-	for (int i = 1; i < secondes; i++) {
+	for (int i = 0; i < secondes; i++) {
 		for (Agent* agent : agents) {
 			mesSous = mesSous - agent->getEntretien();
 		}
 		for (Camera* camera : cameras) {
 			mesSous = mesSous - camera->getEntretien();
 		}
+		mesSous = mesSous + 10;
 	}
+	if (mesSous < 0) {
+			if (!(this->agents.empty())) {
+				this->agents.pop_back();
+			}
+			if (!(this->cameras.empty())) {
+				this->cameras.pop_back();
+			}
+		}
 
 	//Deplacement de tous les NPCs.
 	for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
