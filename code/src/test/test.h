@@ -11,6 +11,7 @@
 #include "test_net.h"
 #include "test_events.h"
 #include "test_misc.h"
+#include "test_music.h"
 namespace test {
   int run ();
   int run (std::string which);

@@ -36,6 +36,8 @@ int run(std::string which)
     return events();
   } else if (which == "misc") {
     return misc();
+  } else if (which == "music") {
+    return music();
   } else {
     LOG(error) << "Unknown test : " << which;
   }
