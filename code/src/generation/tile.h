@@ -19,8 +19,7 @@ class TileWrapper;
 class Geography;
 class Clickable;
 
-class SpriteTilePack
-{
+class SpriteTilePack {
  public:
   sf::Texture texture;
   // Ces coordonnées correspondent au point d'origine de l'image dans la boite de la texture
@@ -176,7 +175,8 @@ class Tile {
   int fog;
   bool buildfog;
 
-  public:
+
+ public:
   /**
    * @brief create a tile
    * @param abs : the abscissa of the coordinates of the tile in the map
@@ -204,173 +204,195 @@ class Tile {
   Tile();
 
   Tile(const Tile&);
+
   Tile& operator=(const Tile&);
 
+  /**
+   * @brief gives the type of the tile, it's a generalist type
+   * @return the type of the tile, which is in a enum
+   */
+  TileType getType();
+  void setType(TileType t);
+  bool isDestructible();
+  void nobodyTile ();
+  float getAnxiety();
+  void setAnxiety(float a);
+  float getPopulationDensity();
+  void setPopulationDensity(float d);
+  float getDestructionLevel();
+  void setDestructionLevel(float dl);
+  bool getGou();
+  void setGou(bool gou);
+  bool getGod();
+  void setGod(bool god);
+  bool getGor();
+  void setGor(bool gor);
+  bool getGol();
+  void setGol(bool gol);
+  float getSpeed();
+  void setSpeed(float speed);
+  Coordinates& getBatOrigin();
+  void setBatOrigin(Coordinates& p);
+  int getWidthBat();
+  void setWidthBat(int w);
+  int getHeightBat();
+  void setHeightBat(int h);
+  sf::Sprite& getSprite();
+  Coordinates& getCoord();
+  void setCoord(Coordinates& coord);
+  std::string getFilePictures();
+  int getPictureX();
+  int getPictureY();
 
-    /**
-     * @brief gives the type of the tile, it's a generalist type
-     * @return the type of the tile, which is in a enum
-     */
-    TileType getType();
-    /**
-     * 
-     */
-    void setType(TileType t);
-    bool isDestructible();
-    void nobodyTile ();
-    float getAnxiety();
-    void setAnxiety(float a);
-    float getPopulationDensity();
-    void setPopulationDensity(float d);
-    float getDestructionLevel();
-    void setDestructionLevel(float dl);
-    bool getGou();
-    void setGou(bool gou);
-    bool getGod();
-    void setGod(bool god);
-    bool getGor();
-    void setGor(bool gor);
-    bool getGol();
-    void setGol(bool gol);
-    float getSpeed();
-    void setSpeed(float speed);
-    Coordinates& getBatOrigin();
-    void setBatOrigin(Coordinates& p);
-    int getWidthBat();
-    void setWidthBat(int w);
-    int getHeightBat();
-    void setHeightBat(int h);
-    sf::Sprite& getSprite();
-    Coordinates& getCoord();
-    void setCoord(Coordinates& coord);
-    std::string getFilePictures();
-    int getPictureX();
-    int getPictureY();
+  /**
+   * @brief Return the list of the NPC in the tile, sorted by x-y
+   */
+  std::list<NPC*>& getNPCs();
 
-    /**
-     * @brief Return the list of the NPC in the tile, sorted by x-y
-     */
-    std::list<NPC*>& getNPCs();
+  /**
+   * @brief addNPC
+   * adds a NPC to the Tile's list
+   * @param a: a pointer to the NPC to add
+   */
+  void addNPC (NPC* a);
 
-    void addNPC (NPC* a);
-    void removeNPC (NPC* a);
+  /**
+   * @brief removeNPC
+   * removes a NPC from the Tile's list
+   * @param p: a pointer to the NPC to remove
+   */
+  void removeNPC (NPC* a);
 
-    /**
-     * @brief Return the list of the stuff in the tile
-     */
-    std::list<Clickable*>& getStuffs();
+  /**
+   * @brief Return the list of the stuff in the tile
+   */
+  std::list<Clickable*>& getStuffs();
 
-    void addStuff (Clickable* a);
-    void removeStuff (Clickable* a);
+  void addStuff (Clickable* a);
+  void removeStuff (Clickable* a);
     
-    /**
-     *@brief The tile belongs to a borough caracterized by a tile, given by this function
-     *@return the caracteristic tile of the borough
-     */
-    Coordinates& getCoordBorough();
-    /**
-     *@brief Change the borough of the tile
-     */
-    void setCoordBorough(Coordinates& CBorough);
+  /**
+   *@brief The tile belongs to a borough caracterized by a tile, given by this function
+   *@return the caracteristic tile of the borough
+   */
+  Coordinates& getCoordBorough();
+  /**
+   *@brief Change the borough of the tile
+   */
+  void setCoordBorough(Coordinates& CBorough);
 
-    /**
-     * @brief equals
-     * returns true iff the Tile is has the same coordinatees as the other tile
-     * @param t: the Tile to compare
-     */
-    bool equals(Tile& t);
+  /**
+   * @brief equals
+   * returns true iff the Tile is has the same coordinatees as the other tile
+   * @param t: the Tile to compare
+   */
+  bool equals(Tile& t);
 
-    TileWrapper* getWrapper();
-    void setWrapper(TileWrapper*);
-    void resetWrapper();
+  /**
+   * @brief getWrapper
+   * @return a pointer to the Tile's wrapper
+   */
+  TileWrapper* getWrapper();
+
+  /**
+   * @brief setWrapper
+   * changes the Tile's wrapper
+   * @param t: a pointer to the new wrapper
+   */
+  void setWrapper(TileWrapper* t);
+
+  /**
+   * @brief resetWrapper
+   * if the wrapper* is not null, deletes it and sets it to null
+   */
+  void resetWrapper();
     
-    /**
-     *@brief Sets the texture of the tile
-     */
-    void setTexture(SpriteTilePack* stp);
+  /**
+   *@brief Sets the texture of the tile
+   */
+  void setTexture(SpriteTilePack* stp);
     
-    /**
-     *@brief Get the origin X of the building in the texture
-     */
-    int getOriginSpriteX();
+  /**
+   *@brief Get the origin X of the building in the texture
+   */
+  int getOriginSpriteX();
     
-    /**
-     *@brief Get the origin Y of the building in the texture
-     */
-    int getOriginSpriteY();
+  /**
+   *@brief Get the origin Y of the building in the texture
+   */
+  int getOriginSpriteY();
 
-    /**
-     * @brief Returns true if the tile has a texture
-     **/
-    bool TextureIsInit();
+  /**
+   * @brief Returns true if the tile has a texture
+   **/
+  bool TextureIsInit();
     
-    /**
-     * @brief Returns true iff the tile is the origin of the building
-     **/
-    bool isBatOrigin();
+  /**
+   * @brief Returns true iff the tile is the origin of the building
+   **/
+  bool isBatOrigin();
 
-    void printTileType();
+  void printTileType();
 
-    /**
-     * @brief getNeighbourTiles
-     * @param map: the map where the Tile is located
-     * @return the list of Tiles which can be accessed in one step from this Tile
-     */
-    std::list<Tile*> getNeighbourTiles(Geography& map);
+  /**
+   * @brief getNeighbourTiles
+   * @param map: the map where the Tile is located
+   * @return the list of Tiles which can be accessed in one step from this Tile
+   */
+  std::list<Tile*> getNeighbourTiles(Geography& map);
     
-   /**
-     * @brief getTilesInRadius
-     * @param map: the map where the Tile is located
-     * @param r: the radius (in tiles)
-     * @return the list of all Tiles within a radius of r (for ||.||_\infty)
-     */
-    std::list<Tile*> getTilesInRadius(Geography& map,int r);
+  /**
+   * @brief getTilesInRadius
+   * @param map: the map where the Tile is located
+   * @param r: the radius (in tiles)
+   * @return the list of all Tiles within a radius of r (for ||.||_\infty)
+   */
+  std::list<Tile*> getTilesInRadius(Geography& map,int r);
 
-    /**
-     * @brief getNPCsInRadius
-     * @param map: the map where the Tile is located
-     * @param r: the radius (in tiles)
-     * @return the list of the NPCs within a radius of r (for ||.||_\infty)
-     */
-    std::list<NPC*> getNPCsInRadius(Geography& map,int r);
+  /**
+   * @brief getNPCsInRadius
+   * @param map: the map where the Tile is located
+   * @param r: the radius (in tiles)
+   * @return the list of the NPCs within a radius of r (for ||.||_\infty)
+   */
+  std::list<NPC*> getNPCsInRadius(Geography& map,int r);
 
-    /**
-     * @brief isAligned
-     * @param tile1: the first Tile
-     * @param tile2: the second Tile
-     * @return true iff the Tile is aligned with the 2 other Tiles in this order (tile1,tile2,tile) and they are neighbours
-     */
-    bool isAligned(Tile& tile1,Tile& tile2); 
+  /**
+   * @brief isAligned
+   * @param tile1: the first Tile
+   * @param tile2: the second Tile
+   * @return true iff the Tile is aligned with the 2 other Tiles in this order (tile1,tile2,tile) and they are neighbours
+   */
+  bool isAligned(Tile& tile1,Tile& tile2); 
 
-    /**
-     * @brief Tells if the tile is walkable or not.
-     * @return true iff the player can walk on the tile.
-     **/
-    bool isWalkable();
+  /**
+   * @brief Tells if the tile is walkable or not.
+   * @return true iff the player can walk on the tile.
+   **/
+  bool isWalkable();
 
-    /**
-     * @brief Tells if the tile is in the fog or not.
-     **/
-    bool isInFog();
+  /**
+   * @brief Tells if the tile is in the fog or not.
+   **/
+  bool isInFog();
 
-    /**
-     * @brief Changes the transparency of the building.
-     * Apply changes only to unwalkable buildings.
-     **/
-    void setAlpha(bool a);
+  /**
+   * @brief Changes the transparency of the building.
+   * Apply changes only to unwalkable buildings.
+   **/
+  void setAlpha(bool a);
     
-    /**
-     * @brief Changes the fog state of the building.
-     * @param nbFog: the number of hidden tiles of the building.
-     * This method is usefull only if the tile is not walkable.
-     **/
-    void setBuildFog(int nbFog);
+  /**
+   * @brief Changes the fog state of the building.
+   * @param nbFog: the number of hidden tiles of the building.
+   * This method is usefull only if the tile is not walkable.
+   **/
+  void setBuildFog(int nbFog);
 
-    /**
-     * @brief Changes the fog state of the tile.
-     **/
-    void setFog(int modfog);
-
+  /**
+   * @brief Changes the fog state of the tile.
+   **/
+  void setFog(int modfog);
 };
 
 

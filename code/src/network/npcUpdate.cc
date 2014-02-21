@@ -9,15 +9,14 @@
  */
 
 NpcUpdate::NpcUpdate() : isCreated(false), id(),
-  currentPosition(), start(), target(), fear(),
+  currentPosition(), target(), fear(),
   shocked(false), speed(), hitboxSize(), deltaT(), lambda(), Vzero(),
   dying(), dead(), deathTimeout(), textPackID()
 {
 }
 
 
-NpcUpdate::NpcUpdate(NPC &npc, bool is_created) : isCreated(is_created), id(npc.uuid), currentPosition(npc.position),
-  start(npc.start), target(npc.target),
+NpcUpdate::NpcUpdate(NPC &npc, bool is_created) : isCreated(is_created), id(npc.uuid), currentPosition(npc.position), target(npc.target),
   fear(npc.getFear()), shocked(npc.isShocked()), speed(npc.getSpeed()),
   hitboxSize(npc.hitboxSize), deltaT(npc.deltaT), lambda(npc.lambda), Vzero(npc.Vzero),
   dying(npc.dying), dead(npc.dead), deathTimeout(npc.deathTimeout.asSeconds()), textPackID(npc.anim.getTexID())
@@ -30,7 +29,7 @@ NpcUpdate* NpcUpdate::copy(){
 
 NPC* NpcUpdate::createNpc(GraphicContextIso *gra){
   assert(isCreated) ;
-  NPC* npc = new NPC(speed, fear, hitboxSize, start, textures::get(textPackID));
+  NPC* npc = new NPC(speed, fear, hitboxSize, currentPosition, textures::get(textPackID));
   npc->position = currentPosition ;
   npc->shocked = shocked ;
   npc->speed = speed ;

@@ -5,7 +5,6 @@
 #define POSITION_H
 
 #include <utility>
-
 #include "geography.h"
 #include "network/abstractMessage.h"
 #include "simulation/eventSource.h"
@@ -16,9 +15,10 @@ class Coordinates;
 class Geography;
 class NPC;
 
+
 /**
  * @brief The Position class
- * it is a couple of floats with some useful methods
+ * is a couple of floats with some useful methods
  */
 class Position : public EventSource {
  private:
@@ -117,7 +117,7 @@ class Position : public EventSource {
 
   SIMPLE_SERIALIZATION(x,y)
 
-};
+    };
 
 /**
  * @brief operator << : used to print debug info

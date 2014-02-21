@@ -13,10 +13,13 @@
 #include <utility>
 
 
+/**
+ * @brief The Character class
+ * contains the functions used to move the characters on the map
+ */
 class Character : public Positionable {
  protected:
   Trajectory trajectory;
-  Position start;
   Position target;
   float speed;
   float deltaT = 1;

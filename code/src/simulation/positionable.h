@@ -10,7 +10,7 @@
 
 /**
  * @brief The Positionable class
- * it only contains a Position and methods to get and set it
+ * only contains a Position and methods to get and set it
  */
 class Positionable : public FogDisabler, public EventSource, public EventListener<Positionable> {
  protected:
@@ -28,7 +28,6 @@ class Positionable : public FogDisabler, public EventSource, public EventListene
    * the default constructor with a given uuid passed to EventSource
    */
   Positionable(boost::uuids::uuid uuid);
-
 
   /**
    * @brief Positionable
@@ -58,6 +57,12 @@ class Positionable : public FogDisabler, public EventSource, public EventListene
    */
   virtual void setPosition(Position& p);
 
+  /**
+   * @brief changedTile
+   * triggers the an event using mod
+   */
   void changedTile(Position& p, std::pair<Coordinates,Coordinates> mod); 
+  /*[Joseph]Je ne sais pas du tout à quoi sert cette fonction ni qui l'a mise là, je la laisse car ce n'est sûrement pas pour rien qu'elle est là…*/
+
 };
 #endif

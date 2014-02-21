@@ -20,10 +20,9 @@
  * @brief The NPC class
  * It represents a NPC
  */
-
 class NPC : public Character, public DrawableObject, public AbstractMessage {
  private:
-  /*needed for seriliazation*/
+  /*needed for serialization*/
   float fear;
   bool shocked;
   float hitboxSize;
@@ -34,7 +33,7 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
 
  public:
   virtual AbstractMessage* copy() {
-      std::cout << "ERROR: NPC: we can't copy this class!\n" ;
+    std::cout << "ERROR: NPC: we can't copy this class!\n" ;
     return NULL ;
   }
 
@@ -70,6 +69,9 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
    */
   NPC(const NPC& n) = delete;
 
+  /**
+   * Default destructor
+   */
   virtual ~NPC() = default;
 
   /**
@@ -134,7 +136,6 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
    */
   float getHitboxSize() const;
 
-  
   /**
    * @brief setAnim
    * Sets the animation of the NPC
@@ -142,14 +143,12 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
    **/  
   void setAnim(const AnimType t);
 
-
   /**
    * @brief nextFrame
    * Changes the state of the animation to the next frame, according to the
    * different parametters of the NPC.
    */
   void nextFrame();
-
 
   /**
    * @brief setTarget
@@ -165,22 +164,30 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
    */
   void kill();
 
+  /**
+   * @brief getPosition
+   * @return the NPC's Position
+   */
   Position& getPosition();
 
+  /**
+   * @brief setPosition
+   * sets the NPC's Position
+   * @param p: the new position
+   */
   void setPosition(Position& p);
-
-
-
-private :
+  
+  
+ private :
   /**
    * @brief NPC : default constructor used only for serialization
    */
   NPC(){} ;
-
+  
   friend class NpcUpdate ;
+  
+  SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero );
 
-  SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,
-                 target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
 
 std::ostream& operator<<(std::ostream& os, const NPC& npc);

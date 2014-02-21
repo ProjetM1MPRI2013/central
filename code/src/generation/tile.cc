@@ -12,32 +12,39 @@
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
+
 Coordinates::Coordinates() {
   this->abs = 0;
   this->ord = 0;
 }
+
 
 Coordinates::Coordinates(const Coordinates& a){
   this->abs = a.abs;
   this->ord = a.ord;
 }
 
+
 int Coordinates::getAbs() {
   return abs;
 }
+
 
 int Coordinates::getOrd() {
   return ord;
 }
 
+
 bool Coordinates::equals(Coordinates& c) {
   return (abs==c.getAbs() && ord==c.getOrd());
 }
+
 
 void Coordinates::setAbs(int absO) {
   this->abs = absO;
   return;
 }
+
 
 void Coordinates::setOrd(int ordO) {
   this->ord = ordO;
@@ -81,7 +88,8 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   buildfog = false;
 
   if (DEBUG){std::cout << "Tile : end\n";}
-}
+  }
+
 
 Tile::Tile() :
   batOrigin(Coordinates()),
@@ -93,6 +101,7 @@ Tile::Tile() :
   fog = 0;
   buildfog = false;
 }
+
 
 Tile::Tile(const Tile& t) :
   batOrigin(t.batOrigin),
@@ -154,23 +163,26 @@ Tile& Tile::operator=(const Tile& t){
   return *this;
 }
 
+
 void Tile::nobodyTile(){
   DBG << "tile : " << this->getCoord().abs << "," << this->getCoord().ord;
-};
-float Tile::getAnxiety(){
-  return this->anxiety;
-
 }
 
+
+float Tile::getAnxiety(){
+  return this->anxiety;
+}
+
+
 void Tile::setAnxiety(float f){
-	DBG << "nobody : anxiety : " << f << "in " ;
-	nobodyTile();
+  DBG << "nobody : anxiety : " << f << "in " ;
+  nobodyTile();
   this->anxiety=f;
   return;
 }
 
 /*
-sf::Sprite& Tile::getTSprite(TileType type) {
+  sf::Sprite& Tile::getTSprite(TileType type) {
   switch (type) {
   case ROADH: break;
   case ROADV: break;
@@ -181,72 +193,87 @@ sf::Sprite& Tile::getTSprite(TileType type) {
   default: std::cerr << "Error : Tile : default case should not happen in getTSprite";
   };
   //TODO
-}*/
+  }*/
+
 
 TileType Tile::getType(){
-return (this -> type);}
+  return (this -> type);}
+
 
 void Tile::setType(TileType t){
   this->type = t;
   return;
 }
 
+
 std::list<NPC*>& Tile::getNPCs() {
   listNPC.sort([](NPC* a, NPC* b) { 
-    Position ap = a->getPosition();
-    Position bp = b->getPosition();
-    return ap.getY() - ap.getX() < bp.getY() - bp.getX();
+      Position ap = a->getPosition();
+      Position bp = b->getPosition();
+      return ap.getY() - ap.getX() < bp.getY() - bp.getX();
     });
   return listNPC;
-};
+}
+
 
 std::list<Clickable*>& Tile::getStuffs() {
   return listStuff;
-};
+}
+
 
 float Tile::getPopulationDensity(){
-	return this->populationDensity;
+  return this->populationDensity;
 }
 
+
 void Tile::setPopulationDensity(float density){
-	this->populationDensity=density;
+  this->populationDensity=density;
 }
+
 
 bool Tile::isDestructible() {
   return (destructible) ;
 }
 
+
 float Tile::getSpeed(){
-	return this->speed;
+  return this->speed;
 }
 
+
 void Tile::setSpeed(float speed){
-	this->speed=speed;
+  this->speed=speed;
 }
+
 
 void Tile::addNPC (NPC* a){
   listNPC.push_front(a);
   return;
-};
+}
+
 
 void Tile::removeNPC (NPC* a){
   listNPC.remove(a);
   return;
-};
+}
+
 
 void Tile::addStuff (Clickable* a){
   listStuff.push_front(a);
   return;
-};
+}
+
 
 void Tile::removeStuff (Clickable* a){
   listStuff.remove(a);
   return;
-};
+}
+
 
 Coordinates& Tile::getCoord() {
   return coord;
 }
+
 
 void Tile::setCoord(Coordinates& coordO) {
   this->coord = coordO;
@@ -259,6 +286,7 @@ sf::Sprite& Tile::getSprite(){
   return rs;
 }
 
+
 void Tile::setTexture(SpriteTilePack* stp){
   this->stp = stp;
   if(stp != NULL)
@@ -269,13 +297,16 @@ void Tile::setTexture(SpriteTilePack* stp){
   return;
 }
     
+
 int Tile::getOriginSpriteX(){
   return stp->originX;
 }
+
     
 int Tile::getOriginSpriteY(){
   return stp->originY;
 }
+
 
 bool Tile::equals(Tile& t) {
   return (coord.equals(t.getCoord()));
@@ -286,10 +317,12 @@ TileWrapper* Tile::getWrapper() {
   return wrapper;
 }
 
+
 void Tile::setWrapper(TileWrapper* t) {
   wrapper = t;
   return;
 }
+
 
 void Tile::resetWrapper() {
   if (wrapper) {
@@ -304,63 +337,83 @@ bool Tile::getGod() {
   return god;
 }
 
+
 bool Tile::getGou() {
   return gou;
 }
+
+
 bool Tile::getGor() {
   return gor;
 }
+
+
 bool Tile::getGol() {
   return gol;
 }
+
 
 void Tile::setGod(bool goD){
   this->god = goD;
   return;
 }
+
+
 void Tile::setGou(bool goU){
   this->gou = goU;
   return;
 }
+
+
 void Tile::setGor(bool goR){
   this->gor = goR;
   return;
 }
+
+
 void Tile::setGol(bool goL){
   this->gol = goL;
   return;
 }
 
+
 Coordinates& Tile::getBatOrigin() {
   return (this->batOrigin);
 }
+
 
 void Tile::setBatOrigin(Coordinates& p) {
   this->batOrigin = p;
   return;
 }
 
+
 Coordinates& Tile::getCoordBorough() {
   return (this->coordBorough);
 }
+
 
 void Tile::setCoordBorough(Coordinates& p) {
   this->coordBorough = p;
   return;
 }
 
+
 int Tile::getWidthBat() {
   return widthBat;
 }
+
 
 void Tile::setWidthBat(int w) {
   this->widthBat = w;
   return;
 }
 
+
 int Tile::getHeightBat() {
   return heightBat;
 }
+
 
 void Tile::setHeightBat(int h) {
   this->heightBat = h;
@@ -372,21 +425,26 @@ bool Tile::TextureIsInit() {
   return (this->stp != NULL);
 }
 
+
 std::string Tile::getFilePictures() {
   return(filePictures);
 }
+
 
 int Tile::getPictureX() {
   return(picture.getAbs());
 }
 
+
 int Tile::getPictureY() {
   return(picture.getOrd());
 }
 
+
 bool Tile::isBatOrigin() {
   return((coord.getAbs() == batOrigin.getAbs() + widthBat - 1) && (coord.getOrd() == batOrigin.getOrd()));
 }
+
 
 void Tile::printTileType(){
   //if (DEBUG) {std::cout << "Print Tile Type" << std::endl;}
@@ -416,7 +474,7 @@ void Tile::printTileType(){
     break;
   }
   return;
-};
+}
 
 
 std::list<Tile*> Tile::getNeighbourTiles(Geography& map) {
@@ -436,6 +494,7 @@ std::list<Tile*> Tile::getNeighbourTiles(Geography& map) {
   return neighbourTiles;
 }
 
+
 std::list<Tile*> Tile::getTilesInRadius(Geography& map,int r) {
   std::list<Tile*> tilesInRadius;
   for (int i=std::max(coord.getAbs()-r,0);i<std::min(coord.getAbs()+r+1,map.getMapWidth());i++) {
@@ -447,7 +506,6 @@ std::list<Tile*> Tile::getTilesInRadius(Geography& map,int r) {
 }
       
   
-
 std::list<NPC*> Tile::getNPCsInRadius(Geography& map,int r) {
   std::list<NPC*> notTooFarNPCs;
   std::list<Tile*> neighbourTiles = getTilesInRadius(map,r);
@@ -460,6 +518,7 @@ std::list<NPC*> Tile::getNPCsInRadius(Geography& map,int r) {
   }
   return notTooFarNPCs;
 }
+
 
 bool Tile::isAligned(Tile& tile1,Tile& tile2) {
   Coordinates coord1 = tile1.getCoord();
@@ -478,16 +537,19 @@ bool Tile::isAligned(Tile& tile1,Tile& tile2) {
   }
   return (dir || inv);
 }
+
     
 bool Tile::isWalkable()
 {
   return speed > 0.01;
 }
 
+
 bool Tile::isInFog()
 {
   return fog == 0;
 }
+
 
 void Tile::setAlpha(bool a)
 {
@@ -502,6 +564,7 @@ void Tile::setAlpha(bool a)
   return;
 }
 
+
 void Tile::setBuildFog(int nbFog)
 {
   bool w = (2*nbFog > widthBat*heightBat);
@@ -515,6 +578,7 @@ void Tile::setBuildFog(int nbFog)
   buildfog = w;
   return;
 }
+
 
 void Tile::setFog(int modfog){
   fog += modfog;

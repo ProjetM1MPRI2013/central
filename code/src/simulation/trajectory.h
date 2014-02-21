@@ -35,8 +35,8 @@ class Trajectory {
   bool ignoreTarget;
   void updateTimer(Position& oldPos,Position& newPos,float speedNorm,sf::Time dt,Geography& map);
 
- public:
 
+ public:
   /**
    * @brief Trajectory
    * the default constructor, creates a trajectory with default start and target Positions
@@ -110,8 +110,6 @@ class Trajectory {
   std::pair<float,float>& getAcceleration() {
     return acceleration;
   }
-
-
-} ;
+};
 
 #endif //TRAJECTORY_H

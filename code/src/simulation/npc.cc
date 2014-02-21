@@ -16,9 +16,8 @@ NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex) : Character(s
   return;
 }
 
-NPC::NPC(float s,float f,float h,Position& start,
-         TexturePack* tex,boost::uuids::uuid uuid) : 
-  Character(s,start,uuid), DrawableObject(tex) {
+
+NPC::NPC(float s,float f,float h,Position& start,TexturePack* tex,boost::uuids::uuid uuid) : Character(s,start,uuid), DrawableObject(tex) {
   shocked = false;
   fear = f;
   hitboxSize = h;
@@ -27,6 +26,7 @@ NPC::NPC(float s,float f,float h,Position& start,
   deathTimeout = sf::seconds(5);
   return;
 }
+
 
 float NPC::getFear() const {
   return fear;
@@ -43,13 +43,16 @@ bool NPC::isShocked() const {
   return shocked;
 }
 
+
 bool NPC::isDying() {
   return dying;
 }
 
+
 bool NPC::isDead() {
   return dead;
 }
+
 
 void NPC::setShocked(bool s) {
   shocked = s;
@@ -61,11 +64,13 @@ Position& NPC::getPosition() {
   return trajectory.getPosition();
 }
 
+
 void NPC::setPosition(Position& p) {
   trajectory.setPosition(p);
   Positionable::setPosition(p);
   return;
 }
+
 
 void NPC::updatePosition(sf::Time dt,Geography& map) {
   if (!dead && !dying) {
@@ -87,9 +92,11 @@ void NPC::updatePosition(sf::Time dt,Geography& map) {
   return;
 }
 
+
 float NPC::getHitboxSize() const {
   return hitboxSize;
 }
+
 
 bool NPC::isInHitbox(Position& p) {
   float d = p.distance(trajectory.getPosition());
@@ -103,8 +110,7 @@ void NPC::setAnim(const AnimType t){
 }
 
 
-void NPC::nextFrame()
-{
+void NPC::nextFrame() {
   std::pair<float,float> speedVect = trajectory.getSpeed();
   float sp = sqrt(pow(speedVect.first,2)+pow(speedVect.second,2));
   if(sp >= 0.01 && anim.getAnim() != RUN && anim.getAnim() != DEAD)
@@ -132,6 +138,7 @@ void NPC::kill() {
   dying = true;
   return;
 }
+
 
 std::ostream& operator<<(std::ostream& os, const NPC& npc) {
   os << "UUID: " << npc.getUuid() << "\n"

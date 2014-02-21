@@ -45,7 +45,6 @@ public:
   boost::uuids::uuid id ;
 
   Position currentPosition ;
-  Position start;
   Position target;
   float fear;
   bool shocked;
@@ -77,7 +76,7 @@ private :
     ar & isCreated ;
     __serialize_variables(ar, id, currentPosition, target, fear, shocked, dying, dead, deathTimeout) ;
     if(isCreated)
-      __serialize_variables(ar, start, speed, hitboxSize, deltaT, lambda, Vzero, textPackID) ;
+      __serialize_variables(ar, speed, hitboxSize, deltaT, lambda, Vzero, textPackID) ;
   }
 };
 

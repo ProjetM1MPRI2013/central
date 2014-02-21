@@ -13,6 +13,7 @@
 #include <random>
 
 #define DEBUG false
+
 Trajectory::Trajectory() {
   Position p1,p2;
   p1 = Position();
@@ -28,6 +29,7 @@ Trajectory::Trajectory() {
   return;
 }
 
+
 Trajectory::Trajectory(Position start) {
   posList = std::list<Position> ();
   posList.push_front(start);
@@ -38,6 +40,7 @@ Trajectory::Trajectory(Position start) {
   ignoreTarget = false;
   return;
 }
+
 
 void Trajectory::setTarget(Position target, Geography& map) {
   Position curPos = posList.front();
@@ -69,6 +72,7 @@ void Trajectory::explore(TileWrapper* y,TileWrapper* z,PriorityQueue& open) {
   return;
 }
 
+
 void Trajectory::pathfinding(Geography& map) {
   assert(posList.size()>1);//le vecteur doit contenir au moins le départ et l'arrivée
 
@@ -77,6 +81,7 @@ void Trajectory::pathfinding(Geography& map) {
 
   std::pair<float,float> offset (offsetDist(offsetGen),offsetDist(offsetGen));
   Position start,target;
+  //on ne garde que le départ et l'arrivée et on élimine tout le reste
   start = posList.front();
   target = posList.back();
   posList.clear();
@@ -98,7 +103,9 @@ void Trajectory::pathfinding(Geography& map) {
   TileWrapper* temp = NULL;
   bool found = false;
   
+  //boucle principale de A*
   while (!open.empty() && !found) {
+    //on récupère le premier élément ouvert
     TileWrapper* z = open.top();
     open.pop();
     if (z->equals(*t)) {
@@ -110,6 +117,7 @@ void Trajectory::pathfinding(Geography& map) {
 
       std::list<Tile*> neighbourTiles = z->getTile().getNeighbourTiles(map);
       
+      //on explore tous ses voisins
       while (!neighbourTiles.empty()) {
         Tile* tempTile = neighbourTiles.front();
         neighbourTiles.pop_front();
@@ -126,19 +134,22 @@ void Trajectory::pathfinding(Geography& map) {
   if (!found) {
     printf("départ : %f %f, arrivée : %f %f\n",start.getX(),start.getY(),target.getX(),target.getY());
   }
-  assert(found);//si la map est pas connexe voir avec Chatan
-  //on a temp = tilewrapper de target
+  //found signifie qu'on a pu atteindre l'objectif
+  //s'il est faux c'est que c'est impossible
+  assert(found);
+  //si la map n'est pas connexe voir avec Chatan
+  //sinon on a temp = tilewrapper de target
 
-  //pathfinding done, now add the positions in the list
+  //A* est fini, maintenant il faut reconstruire le chemin
   posList.push_front(target);
   
-  //on retient les 2 tiles précédentes
+  //on retient les 2 tiles précédentes pour tester l'alignement
   Tile previousPreviousTile = tileTarget;
   Tile previousTile = tileTarget;
 
   while (!temp->equals(*s)) {
     temp = temp->getParent();
-    assert(temp);        
+    assert(temp);//temp=null signifie pas de parent
     Position tempPos = Position(temp->getTile().getCoord().getAbs() + offset.first,
                                 temp->getTile().getCoord().getOrd() + offset.second);
     
@@ -159,6 +170,7 @@ void Trajectory::pathfinding(Geography& map) {
   posList.pop_front();
   posList.push_front(start);
 
+  //maintenant on nettoie soigneusement tous les tilewrapper générés
   tileTarget.resetWrapper();
 
   while(!open.empty()) {
@@ -181,24 +193,28 @@ void Trajectory::updateTimer(Position& oldPos,Position& newPos,float speedNorm,s
     timeoutIgnoreTarget -= dt;
     if (timeoutIgnoreTarget <= sf::Time::Zero) {
       ignoreTarget = false;
-      timeoutIgnoreTarget = sf::seconds(3./speedNorm);//le timer avant de faire n'importe quoi est de n fois le temps normalement nécessaire pour parcourir la tile
+      timeoutIgnoreTarget = sf::seconds(3./speedNorm);
+      //le timer avant de faire n'importe quoi est de n fois le temps normalement nécessaire pour parcourir la tile
+      //avec n=3
     }
   } else {
     if (oldPos.isInTile(map).equals(newPos.isInTile(map))) {
       timeoutIgnoreTarget -= dt;
       if (timeoutIgnoreTarget <= sf::Time::Zero) {
+        //on est resté coincé trop longtemps : on fait n'importe quoi quelque temps
         ignoreTarget = true;
         std::default_random_engine gen (rand());
         std::uniform_real_distribution<float> timeoutDist (0,0.5);
         timeoutIgnoreTarget = sf::seconds(timeoutDist(gen));
       }
     } else {
-    timeoutIgnoreTarget = sf::seconds(3./speedNorm);
+      timeoutIgnoreTarget = sf::seconds(3./speedNorm);
     }
   }
   return;
 }
-      
+
+   
 std::list<Position>& Trajectory::getPosList() {
   return posList;
 }
@@ -208,15 +224,18 @@ Position& Trajectory::getPosition() {
   return posList.front();
 }
 
+
 void Trajectory::setPosition(Position& p) {
   posList.pop_front();
   posList.push_front(p);
   return;
 }
 
+
 bool Trajectory::getHasArrived() {
   return hasArrived;
 }
+
 
 void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
   assert(!posList.empty());//il doit y avoir au moins la position courante  

@@ -22,11 +22,12 @@ class TileWrapperComparator {
 
 typedef typename boost::heap::fibonacci_heap<TileWrapper*,boost::heap::compare<TileWrapperComparator>> PriorityQueue;
 
+
 /**
  * @brief The TileWrapper class
- * it is a wrapper that contains a pointer to a tile and some variables needed to do the pathfinding,
+ * is a wrapper that contains a pointer to a tile and some variables needed to do the pathfinding,
  * and which would be weird in Tile.
- * A Tile should have at most one TileWrapper, and only during the ppathfinding computation
+ * A Tile should have at most one TileWrapper, and only during the pathfinding computation
  * The wrapper is then deleted.
  */
 class TileWrapper {
@@ -138,8 +139,6 @@ class TileWrapper {
    * @param h : the new handle
    */
   void setHandle(PriorityQueue::handle_type & h);;
-
-
 };
 
 
