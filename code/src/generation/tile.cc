@@ -518,7 +518,6 @@ void Tile::setBuildFog(int nbFog)
 
 void Tile::setFog(int modfog){
   fog += modfog;
-  fog = std::max(0,fog); //temp
-  // assert(fog >= 0);
+  fog = std::max(0,fog);
   return;
 }

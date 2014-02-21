@@ -30,7 +30,8 @@ namespace textures {
       sf::Texture a;
 
       tmp = line.substr(0,line.find(" "));
-      assert(a.loadFromFile(tmp));
+      if(!a.loadFromFile(tmp))
+	DBG << "Warnng: " << tmp << " not found";
       t.texture = a;
 
       line = line.substr(line.find(" ")+1);
