@@ -63,7 +63,7 @@ namespace test {
        * get used from the SoundFont) */
       /* "../../../Musique/FluidR3_GM2-2.SF2" */
       cout << "Chargement de SoundFont " 
-	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore v1.442.sf2", 1)) 
+	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore_v1.442.sf2", 1)) 
 	   << " "
 	   << FLUID_WARN <<"\n";
       setNextMesures(musique,MIDImusic,synth,false);

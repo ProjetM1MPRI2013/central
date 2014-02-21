@@ -192,18 +192,24 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
        * get used from the SoundFont) */
       /* "../../../Musique/FluidR3_GM2-2.SF2" */
       std::cout << "Chargement de SoundFont " 
-	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore v1.442.sf2", 1)) 
+	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore_v1.442.sf2", 1)) 
 	   << " "
 	   << FLUID_WARN ;
       setNextMesures(musique,MIDImusic,synth,false);
+
+      /*
       for (auto MIDIchannel : MIDImusic){
 	DBG << "New channel";
 	for (MIDIEvent event : MIDIchannel){
 	  DBG << event.MIDInumber << " " << event.duration << " " << event.begintime << "  |  ";
 	}
       }
+      */
 
-      bool oldvalue = not (*switchmusic);
+      bool oldvalue = *switchmusic;
+      fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
+      fluid_synth_program_change (synth, 1, 36);//Fretless Bass
+      fluid_synth_program_change (synth, 2, 65);//Soprano Sax
 
       while(true){
 	setNextMesures(musique,MIDImusic,synth,false);
@@ -233,12 +239,12 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
 	      if ((event->begintime + event->duration > time)&&(event->begintime < time)&&(event->isplayed == false)){
 		fluid_synth_noteon(synth, cpt, event->MIDInumber, 80);
 		event->isplayed = true;
-		DBG << "play a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
+		//DBG << "play a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
 	      }
 	      if((event->begintime + event->duration < time)&&(event->isplayed == true)){
 		fluid_synth_noteoff(synth, cpt, event->MIDInumber);
 		event->isplayed = false;
-		DBG << "stop playing a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
+		//DBG << "stop playing a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
 	      }
 	    }
 	    cpt++;
