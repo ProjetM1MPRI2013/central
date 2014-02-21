@@ -38,7 +38,7 @@ G:power:int
 +a:Shoot
 C:gun:Gun
 C:victim:NPC
-I:(:P:gun:)&&:(:G:gun:range:<=:D:victim:)
+I:(:P:gun:)&&:(:G:gun:range:>=:D:victim:)
 Q:KillNPC(victim,simulation);
 ;
 
