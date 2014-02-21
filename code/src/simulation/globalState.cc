@@ -176,7 +176,6 @@ void GlobalState::run(sf::Time dt) {
 			(*npc).trigger("NPC::arrived");
 			DBG << "suppression d'un NPC";
 			this->supprimerNPC(npc);
-			//this->addAction((ScenarioAction(new ())));
 			//ajouter ici les npc à envoyer aux clients quand la scenarioaction pour remove npc existera
 		}
 
