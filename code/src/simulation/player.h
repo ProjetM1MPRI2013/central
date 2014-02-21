@@ -60,15 +60,16 @@ public:
   void setDestination(Position pos);
 
 	std::vector<int> getInventory(); // returns list of stuff ids currently held by the player
-	template <class T>
   /*
    * Get a reference to the inventory item with ID ClickableID.
    * If you store this reference, it may become invalid later.
    * See note for future improvement above implementation
    */
+	template <class T>
 	T& getItemByID(int ClickableID); // raises exception if Stuff not found
 	bool hasItemByID(int ClickableID);
-	void addItem(Clickable&& s);
+  template <class T>
+	void addItem(T&& s);
 	void removeItem(int ClickableID);
 
 	/**
@@ -118,6 +119,14 @@ private:
 	std::list<std::unique_ptr<Clickable>> inventory;
 
 };
+
+template <typename T>
+void Player::addItem(T&& stuff) { // && has a different meaning now!
+	this->inventory.push_back(std::unique_ptr<Clickable>(new T(stuff)));
+	//DBG << "Add item to player " << this->playerID << " : " << stuff.name;
+	return;
+};
+
 
 /*
 * Note for future improvement: 

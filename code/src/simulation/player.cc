@@ -147,12 +147,6 @@ void Player::setDestination(Position pos) {
   this->movementType = DESTINATION;
 }
 
-void Player::addItem(Clickable&& stuff) {
-	this->inventory.push_back(std::unique_ptr<Clickable>(new Clickable(stuff)));
-	DBG << "Add item to player " << this->playerID << " : " << stuff.name;
-	return;
-};
-
 void Player::removeItem(int stuffID) {
   for (auto& stuffPtr : inventory) {
     if (stuffPtr->ClickableID == stuffID) {
