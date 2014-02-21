@@ -83,7 +83,10 @@ public:
   Simulation(Geography* map,int nbPlayers,int id);
   ~Simulation();
 
-  //pour rerouter les gens quand ils ont peur
+  /**
+   * @brief reroute : to recalculate the path
+   * @param npc : whose path will be recalculated
+   */
   void reroute(NPC& npc);
 
   void setContextIso(GraphicContextIso* gra);
@@ -141,7 +144,6 @@ protected :
     * fear (peur)
     */
    std::vector<std::vector<int> > tmp;
-//   int tmp [100][100];
 
    HScenario* scenario;
    bool isServer;

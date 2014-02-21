@@ -1,3 +1,7 @@
+/**
+ * @author Adrien K.
+ */
+
 #ifndef TO_MIDI_H
 #define TO_MIDI_H
 

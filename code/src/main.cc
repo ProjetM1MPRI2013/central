@@ -164,6 +164,7 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
 
 /**
  * The sound !
+ * @author: Adrien K.
  */
  int musicloop(bool* switchmusic) {    
     
@@ -208,10 +209,10 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
       }
       */
 
-      bool oldvalue = *switchmusic;
-      fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
-      fluid_synth_program_change (synth, 1, 36);//Fretless Bass
-      fluid_synth_program_change (synth, 2, 65);//Soprano Sax
+      bool oldvalue = not (*switchmusic);
+      //fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
+      //fluid_synth_program_change (synth, 1, 36);//Fretless Bass
+      //fluid_synth_program_change (synth, 2, 65);//Soprano Sax
 
       while(true){
 	setNextMesures(musique,MIDImusic,synth,false);
@@ -220,6 +221,7 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
 	sf::Clock clock;
 
 	if (*switchmusic != oldvalue){
+	  oldvalue = *switchmusic;
 	  if (*switchmusic){
 	    fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
 	    fluid_synth_program_change (synth, 1, 36);//Fretless Bass
@@ -319,7 +321,7 @@ int main(int argc, char ** argv) {
     //geo.printMatrix();
 
     //Change the value of the boolean to change the music
-    bool switchmusic = true;
+    bool switchmusic = false;
     std::thread musicThread { std::bind(musicloop, &switchmusic) };
 
 

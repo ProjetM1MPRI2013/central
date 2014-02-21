@@ -87,13 +87,6 @@ std::pair<int, int> LocalState::getCurrentTile() {
 
 void LocalState::run(sf::Time dt) {
 	//If teir is no enough money, remove an agent and a camera
-
-	/*if (this-> < 0) {
-		if (!agents.empty())
-			agents.pop_back();
-		if (!cameras.empty())
-			cameras.pop_back();
-	}*/
 	//The client retrieve all the new messages from the network (of type ScenarioAction), and add them to the list of pending ScenarioAction
 	std::vector<ScenarioAction *> scenarioActionFromNetwork =
 			this->client->receiveMessages<ScenarioAction>();

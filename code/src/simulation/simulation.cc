@@ -206,9 +206,7 @@ void Simulation::peopleGeneration() {
 								TILE_SIZE_Y * j + TILE_SIZE_Y / 2),
 						Position(x, y), 1,
 						textures::get(i % 2));
-
-				//addNPC(Position(TILE_SIZE_X * i+ TILE_SIZE_X/2,TILE_SIZE_Y * j+TILE_SIZE_Y /2),Position(x,y),10);
-			}
+            }
 			if (chance < (map->getTile(i, j)->getPopulationDensity() / 10)) {
 				supprimerNPCDansCase(i, j);
 			}
