@@ -37,6 +37,7 @@ HudMayor::HudMayor(sf::RenderWindow* window, Simulation& simulation) :
 
 void HudMayor::init(Simulation& simulation) 
 {
+  // Refresh the gold displayed
   if (gold != simulation.getSous()) {
     gold = simulation.getSous();
     hud.remove((this->goldList).front());
@@ -48,7 +49,8 @@ void HudMayor::init(Simulation& simulation)
     l_gold->setTextColor(sf::Color(255, 255, 0));
     l_gold->setTransparency(0);
     (this->goldList).push_back(l_gold);
- };
+  };
+  // If we must change the buttons
   if (this->currentState != this->nextState) 
   {
     this->currentState = this->nextState;
@@ -72,7 +74,6 @@ void HudMayor::init(Simulation& simulation)
 			b_ocam->setText("Add other Cameras");
 			b_ocam->bindCallback(std::bind(&HudMayor::callback, this, 3), 
                           tgui::Button::LeftMouseClicked);
-			//b_cam->setCallbackId(3);
 			(this->buttonsList).push_back(b_ocam);
 
 
@@ -84,7 +85,6 @@ void HudMayor::init(Simulation& simulation)
 			b_cam->setText("Add Cameras");
 			b_cam->bindCallback(std::bind(&HudMayor::callback, this, 2), 
                           tgui::Button::LeftMouseClicked);
-			//b_cam->setCallbackId(2);
 			(this->buttonsList).push_back(b_cam);
 
       // Create the "Add Cops" button
@@ -95,7 +95,6 @@ void HudMayor::init(Simulation& simulation)
 			b_cop->setText("Add Cops");
 			b_cop->bindCallback(std::bind(&HudMayor::callback, this, 1), 
                           tgui::Button::LeftMouseClicked);
-			//b_cop->setCallbackId(1);
 			(this->buttonsList).push_back(b_cop);
     }
     else 
@@ -110,7 +109,6 @@ void HudMayor::init(Simulation& simulation)
 			  button->setText(std::to_string(k));
 			  button->bindCallback(std::bind(&HudMayor::callback, this, k), 
                             tgui::Button::LeftMouseClicked);
-			  //button->setCallbackId(k);
 			  (this->buttonsList).push_back(button);
       };
 
@@ -122,7 +120,6 @@ void HudMayor::init(Simulation& simulation)
 	    b_back->setText("Back");
 	    b_back->bindCallback(std::bind(&HudMayor::callback, this, 0), 
                           tgui::Button::LeftMouseClicked);
-	    //b_back->setCallbackId(0);
 	    (this->buttonsList).push_back(b_back);
  
     };
@@ -140,8 +137,7 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 		(*window).close();
 
 	if (waitFor == WF_NONE) {
-		// Je crois qu'on veut rajouter une action Mayor newmovement
-		// je verrai plus tard comment on fait exactement
+    // Movement with keyboard
 		if (event.type == sf::Event::KeyPressed) {
 			switch (event.key.code) {
 			case sf::Keyboard::Z:
@@ -201,6 +197,7 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 		};
 	};
   
+  // Selecting where to add the Cameras/Cops
   if (waitFor == WF_CLICK) 
   {
     if (event.type == sf::Event::MouseButtonPressed) 
@@ -213,22 +210,16 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
           AddCops addCops = AddCops(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
           addCops.run();
-          std::cout << "Ajout de " << currentNumber << " Cops en position (" 
-            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
         if (this->currentAction == CA_CAM1) {
           AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
           addCams.run();
-          std::cout << "Ajout de " << currentNumber << " Cameras en position (" 
-            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
         if (this->currentAction == CA_CAM2) {
           AddCams addCams = AddCams(this->currentNumber, mapPosition.getX(),
                                   mapPosition.getY(), localState);
           addCams.run2();
-          std::cout << "Ajout de " << currentNumber << " other Cameras en position (" 
-            << mapPosition.getX() << ", " << mapPosition.getY() << ")" << std::endl;
         };
         setwf(WF_NONE); 
       }
@@ -254,41 +245,40 @@ void HudMayor::event(sf::RenderWindow* window, sf::Event event , TileMap* tilema
 
 void HudMayor::callback(unsigned int callback_id) 
 {
-  //while ((this->hud).pollCallback(callback)) 
-  //{
-    // an action is clicked. 
-    if ((this->currentState) == MAYOR_ACTIONS) 
+  // an action is clicked. 
+  if ((this->currentState) == MAYOR_ACTIONS) 
+  {
+    if (callback_id == 1) 
     {
-      if (callback_id == 1) 
-      {
-        this->currentAction = CA_COP; 
-        this->nextState = MAYOR_NUMBERS; 
-      };
-      if (callback_id == 2) 
-      {
-        this->currentAction = CA_CAM1; 
-        this->nextState = MAYOR_NUMBERS; 
-      };
-      if (callback_id == 3)
-      {
-        this->currentAction = CA_CAM2;
-        this->nextState = MAYOR_NUMBERS;
-      };
+      this->currentAction = CA_COP; 
+      this->nextState = MAYOR_NUMBERS; 
     };
-     
-    if ((this->currentState) == MAYOR_NUMBERS)
+    if (callback_id == 2) 
     {
-      // a number is clicked.
-      if (callback_id > 0 && callback_id < 11) 
-      {
-        this->currentNumber = callback_id; 
-        setwf(WF_CLICK); 
-      }
-      // The "Back" button is clicked. 
-      if (callback_id == 0)
-        this->nextState = MAYOR_ACTIONS; 
-    }
-  //}; 
+      this->currentAction = CA_CAM1; 
+      this->nextState = MAYOR_NUMBERS; 
+    };
+    if (callback_id == 3)
+    {
+      this->currentAction = CA_CAM2;
+      this->nextState = MAYOR_NUMBERS;
+    };
+  };
+   
+  if ((this->currentState) == MAYOR_NUMBERS)
+  {
+    // a number is clicked.
+    if (callback_id > 0 && callback_id < 11) 
+    {
+      this->currentNumber = callback_id; 
+      setwf(WF_CLICK); 
+    };
+    // The "Back" button is clicked. 
+    if (callback_id == 0)
+    {
+      this->nextState = MAYOR_ACTIONS; 
+    };
+  };
 }
 ;
 
