@@ -44,8 +44,10 @@ std::string SEED = "424242";
 
 #ifdef __APPLE__
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::Q) && event.key.system)
+#define AUDIO_DRIVER "coreaudio"
 #else
 #define CLOSE_KEYS ((event.key.code == sf::Keyboard::F4) && event.key.alt)
+#define AUDIO_DRIVER "alsa"
 #endif
 void clientLoop(int id, int nbPlayers, bool isFullScreen,
     sf::VideoMode video_mode, Client* clientPtr, std::string seed, 
@@ -176,7 +178,7 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
       
       /* Create the settings. */
       settings = new_fluid_settings();
-      fluid_settings_setstr(settings, "audio.driver", "alsa");
+      fluid_settings_setstr(settings, "audio.driver", AUDIO_DRIVER);
       fluid_settings_setnum(settings,"synth.gain",0.4);
 
       /* Change the settings if necessary*/
