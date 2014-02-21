@@ -31,6 +31,7 @@ int main() {
 			"(isInThePack(this->simulation,this->stuff))"
 	);
 	g->AddConsequence("DropItem(this->stuff,this->playerID,this->simulation);");
+	g->AddConsequence("//Could be activated when getitembyid will work");
 	g->AddConsequence("//simulation->getMap()->getTile(this->zone)->addStuff((Clickable*)(&this->simulation->getItemByID<C_Stuff>(this->stuff)));");
 	cout << "3" << endl;
 	g->AddActionField((Field*) new Clickable("stuff","Stuff"));
@@ -39,5 +40,4 @@ int main() {
 	affiche (g->actions);
 	g->write();
 	g->clear();
-	//delete g;
 };

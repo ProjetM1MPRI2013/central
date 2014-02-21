@@ -13,6 +13,8 @@ Le stack (mes fonctions marchent par effet de bord sur cet objet)
 le generateur (qui contient les loader et qui doit donc être passé )
 les ifstream et ofstream (j'ai des problèmes de droit si je les passe en référence)
 */
+
+//Les erreurs valgrind sont dut à la non-suppression de ces objets qui ne sont pas nombreux (pas de boucle qui en crée)
 //loader
 
 //classe qui sert à être stoquée

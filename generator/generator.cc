@@ -474,8 +474,6 @@ void Writer::writeDoAction(PreClass* p) {
 void Writer::writeIsActionPossible(PreAction* a) {
 	writeWord("bool " + ActionName((PreClass*) a) + "::isActionPossible() {");
 	endLine();
-	writeWord("//return true;");
-	endLine();
 	writeWord("return " + a->isActionPossible + ";");
 	endLine();
 	writeWord("};");

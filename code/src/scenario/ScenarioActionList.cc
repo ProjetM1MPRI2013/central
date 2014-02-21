@@ -46,6 +46,7 @@ return (AbstractMessage*) new CoA_Reload(*this);
 };
 
 void CoA_Reload::run () {
+//Can't be implemented cause of getitembyid
 ;};
 
 
@@ -68,6 +69,7 @@ return (AbstractMessage*) new CoA_Plant(*this);
 };
 
 void CoA_Plant::run () {
+//Could be activated when getitembyid will work
 //Explosion(((C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb)))->getpower(),this->zone,this->simulation);
 //DropItem(this->bomb,this->playerID,this->simulation);
 Explosion(10,this->zone,this->simulation);
@@ -94,6 +96,7 @@ return (AbstractMessage*) new CoA_Drop(*this);
 
 void CoA_Drop::run () {
 DropItem(this->stuff,this->playerID,this->simulation);
+//Could be activated when getitembyid will work
 //simulation->getMap()->getTile(this->zone)->addStuff((Clickable*)(&this->simulation->getItemByID<C_Stuff>(this->stuff)));
 ;};
 

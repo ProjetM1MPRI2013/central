@@ -46,12 +46,14 @@ Q:KillNPC(victim,simulation);
 C:gun:Gun
 C:ammunition:Ammunition
 I:(:P:gun:)&&(:P:ammunition:)
+Q://Can't be implemented cause of getitembyid
 ;
 
 +a:Plant
 C:bomb:Bomb
 C:zone:Tile
 I:(:P:bomb:)&&:(isPlantable:T:zone:)
+Q://Could be activated when getitembyid will work
 Q://Explosion(((C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb)))->getpower(),this->zone,this->simulation);
 Q://DropItem(this->bomb,this->playerID,this->simulation);
 Q:Explosion(10,this->zone,this->simulation);
