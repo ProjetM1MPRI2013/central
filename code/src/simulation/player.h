@@ -68,7 +68,7 @@ public:
 	template <class T>
 	T& getItemByID(int ClickableID); // raises exception if Stuff not found
 	bool hasItemByID(int ClickableID);
-  template <class T>
+	template <class T>
 	void addItem(T&& s);
 	void removeItem(int ClickableID);
 
@@ -119,13 +119,13 @@ private:
 	std::list<std::unique_ptr<Clickable>> inventory;
 
 };
-
 template <typename T>
-void Player::addItem(T&& stuff) { // && has a different meaning now!
-	this->inventory.push_back(std::unique_ptr<Clickable>(new T(stuff)));
-	//DBG << "Add item to player " << this->playerID << " : " << stuff.name;
-	return;
-};
+ void Player::addItem(T&& stuff) { // && has a different meaning now!
+ 	this->inventory.push_back(std::unique_ptr<Clickable>(new T(stuff)));
+ 	//DBG << "Add item to player " << this->playerID << " : " << stuff.name;
+ 	return;
+ };
+
 
 
 /*
