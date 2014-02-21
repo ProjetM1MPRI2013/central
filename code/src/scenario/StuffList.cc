@@ -108,3 +108,19 @@ int C_Bomb::getpower () {return this->power;};
 AbstractMessage* C_Bomb::copy() {
 return (AbstractMessage*) new C_Bomb(*this);
 };
+
+/*********************************************************
+** Flower**
+*********************************************************/
+C_Flower::C_Flower (): C_Weapon () {
+((Clickable*)this)->name =  "Flower";
+this->range = (float)(1.);
+this->damage = (int)(1);
+this->color = (int)(0);
+};
+float C_Flower::getrange () {return this->range;};
+int C_Flower::getdamage () {return this->damage;};
+int C_Flower::getcolor () {return this->color;};
+AbstractMessage* C_Flower::copy() {
+return (AbstractMessage*) new C_Flower(*this);
+};

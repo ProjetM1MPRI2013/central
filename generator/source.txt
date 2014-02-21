@@ -34,6 +34,14 @@ B:number:int
 G:power:int
 ;
 
++c:Flower:Weapon
+G:range:float:1.
+G:damage:int:1
+G:color:int:0
+;
+
+
+
 
 +a:Shoot
 C:gun:Gun
@@ -58,5 +66,4 @@ Q://Explosion(((C_Bomb*) (&this->simulation->getItemByID<C_Bomb>(this->bomb)))->
 Q://DropItem(this->bomb,this->playerID,this->simulation);
 Q:Explosion(10,this->zone,this->simulation);
 ;
-
 

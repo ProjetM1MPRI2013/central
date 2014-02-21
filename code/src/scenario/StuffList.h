@@ -165,4 +165,29 @@ C_Bomb(){};
 SIMPLE_MESSAGE(C_Bomb, C_Stuff, power);
 };
 
+/*********************************************************
+** Flower**
+*********************************************************/
+class C_Flower: public C_Weapon {
+ public:
+C_Flower  ();
+public:
+float getrange ();
+protected:
+float range; 
+public:
+int getdamage ();
+protected:
+int damage; 
+public:
+int getcolor ();
+protected:
+int color; 
+//Serialization
+protected :
+virtual AbstractMessage* copy();
+
+SIMPLE_MESSAGE(C_Flower, C_Weapon, range, damage, color);
+};
+
 #endif

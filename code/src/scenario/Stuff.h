@@ -11,8 +11,9 @@
 #include "Actions.h"
 #include "PreStuff.h"
 #include "network/abstractMessage.h"
+#include "drawableObject.h"
 
-class Clickable : public AbstractMessage{
+class Clickable : public AbstractMessage, public DrawableObject{
 public :
 	/**
    * @brief The Clickable name

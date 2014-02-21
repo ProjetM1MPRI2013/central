@@ -72,6 +72,8 @@ Player::Player(int pid, float xx, float yy) : DrawableObject(textures::get(0)) {
   this->addItem(C_Gun(5, 2., 4));
   this->addItem(C_Ammunition(10));
   this->addItem(C_UltraM());
+  this->addItem(C_Flower());
+
 }
 ;
 

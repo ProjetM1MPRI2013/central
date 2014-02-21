@@ -23,7 +23,7 @@ this->simulation->getClient()->sendMessage<Action>(*this,true);
 };
 
 bool A_Shoot::isActionPossible() {
-return (isInThePack (this->simulation,this->gun))&&(((((C_Gun*)(&((Simulation*)this->simulation)->getItemByID<C_Gun>(this->gun)))))->getrange()<=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
+return (isInThePack (this->simulation,this->gun))&&(((((C_Gun*)(&((Simulation*)this->simulation)->getItemByID<C_Gun>(this->gun)))))->getrange()>=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
 };
 
 void A_Shoot::addPendingActions(GlobalState* gs){
