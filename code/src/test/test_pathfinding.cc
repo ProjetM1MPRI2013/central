@@ -1,3 +1,4 @@
+//@auhor: Adrien H.
 #include <SFML/Graphics.hpp>
 #include "main.h"
 //#include "test.h"

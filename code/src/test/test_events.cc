@@ -1,3 +1,4 @@
+//@author: Adrien H.
 #include "main.h"
 #include "test_events.h"
 #define DEBUG true

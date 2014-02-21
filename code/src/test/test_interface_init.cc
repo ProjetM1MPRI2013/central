@@ -1,3 +1,4 @@
+//@author Adrien H.
 #include <SFML/Graphics.hpp>
 #include "test_interface_init.h"
 #include "interfaceinit/interface_init.h"
