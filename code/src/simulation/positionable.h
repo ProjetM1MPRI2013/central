@@ -45,6 +45,13 @@ class Positionable : public FogDisabler, public EventSource, public EventListene
   Positionable(Position& p);
 
   /**
+   * @brief Positionable
+   * creates a new Positionable with a given Position and a given uuid
+   * @param p : the Position
+   */
+  Positionable(Position& p, boost::uuids::uuid uuid);
+
+  /**
    * @brief getPosition
    * @return the Positionable's Position as a reference
    */

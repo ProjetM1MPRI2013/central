@@ -3,20 +3,16 @@
  */
 #include "character.h"
 
-
-Character::Character(float s,Position& start) {
+Character::Character(float s,Position& start) : Positionable(start) {
   trajectory = Trajectory(start);
-  position = start;
   target = Position();
   Positionable::setPosition(trajectory.getPosition());
   speed = s;
   return;
 }
 
-
-Character::Character(float s,Position& start,boost::uuids::uuid uuid) : Positionable(uuid) {  
+Character::Character(float s,Position& start,boost::uuids::uuid uuid) : Positionable(start, uuid) {
   trajectory = Trajectory(start);
-  position = start;
   target = Position();
   Positionable::setPosition(trajectory.getPosition());
   speed = s;
