@@ -5,7 +5,6 @@
 #define NPC_H
 #include "character.h"
 #include "trajectory.h"
-//#include "simulation.h"
 #include "positionable.h"
 #include "position.h"
 #include "withUuid.h"
@@ -34,7 +33,6 @@ class NPC : public Character, public DrawableObject, public AbstractMessage {
 
 
  public:
-//  static std::string getMsgType() { return "NPC_msg" ; }
   virtual AbstractMessage* copy() {
       std::cout << "ERROR: NPC: we can't copy this class!\n" ;
     return NULL ;
@@ -181,7 +179,6 @@ private :
 
   friend class NpcUpdate ;
 
-//  SIMPLE_SERIALIZATION(uuid, position, target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
   SIMPLE_MESSAGE(NPC, AbstractMessage, uuid, position,
                  target, fear, shocked, speed, hitboxSize, deltaT, lambda, Vzero )
 };
