@@ -48,6 +48,7 @@ namespace test {
       /* Create the settings. */
       settings = new_fluid_settings();
       fluid_settings_setstr(settings, "audio.driver", "alsa");
+      fluid_settings_setnum(settings,"synth.gain",0.4);
 
       /* Change the settings if necessary*/
 
@@ -60,35 +61,51 @@ namespace test {
 
       /* Load a SoundFont and reset presets (so that new instruments
        * get used from the SoundFont) */
+      /* "../../../Musique/FluidR3_GM2-2.SF2" */
       cout << "Chargement de SoundFont " 
-	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/FluidR3_GM2-2.SF2", 1)) 
+	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore v1.442.sf2", 1)) 
 	   << " "
 	   << FLUID_WARN <<"\n";
-      setNextMesures(musique,MIDImusic,synth,true);
+      setNextMesures(musique,MIDImusic,synth,false);
       for (auto MIDIchannel : MIDImusic){
 	cout << "\nNew channel\n";
 	for (MIDIEvent event : MIDIchannel){
 	  cout << event.MIDInumber << " " << event.duration << " " << event.begintime << "  |  ";
 	}
       }
-      getchar();
+      bool switchbool = true;
+      if (switchbool){
+      fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
+      fluid_synth_program_change (synth, 1, 36);//Fretless Bass
+      fluid_synth_program_change (synth, 2, 65);//Soprano Sax 65
+      }
+      else{      
+	fluid_synth_program_change (synth, 0, 17);//Drawbar Organ
+	fluid_synth_program_change (synth, 1, 113);//Tinkle Bell
+	fluid_synth_program_change (synth, 2, 80);//Ocarina
+      }
       cout << "loaded\n";
       while(true){
+	setNextMesures(musique,MIDImusic,synth,false);
+	cout << "play again\n";
 	float time = 0.;
-	sleep(0.05);
+	sleep(0.1);
 	sf::Clock clock;
 	while(time < MIDImusic[0].back().begintime + MIDImusic[0].back().duration){
 	  time += clock.restart().asSeconds();
 	  int cpt = 0;
-	  cout << "time " << time;
-	  for (auto MIDIchannel : MIDImusic){
-	    for (MIDIEvent event : MIDIchannel){
-	      if ((event.begintime > time)&&(event.isplayed == false)){
-		fluid_synth_noteon(synth, cpt, event.MIDInumber, 80);
-		event.isplayed = true;
+	  for (auto MIDIchannel = MIDImusic.begin(); MIDIchannel != MIDImusic.end(); MIDIchannel++){
+	    for (auto event = MIDIchannel->begin(); event != MIDIchannel->end(); event++){
+	      //cout << event->begintime + event->duration << " " << time << " " << event->begintime << " " << event->isplayed << "\n";
+	      if ((event->begintime + event->duration > time)&&(event->begintime < time)&&(event->isplayed == false)){
+		fluid_synth_noteon(synth, cpt, event->MIDInumber, 80);
+		event->isplayed = true;
+		cout << "play a note " << event->MIDInumber << " channel " << cpt << " time " << time << "\n";
 	      }
-	      if((event.begintime + event.duration > time)&&(event.isplayed == true)){
-		fluid_synth_noteoff(synth, cpt, event.MIDInumber);
+	      if((event->begintime + event->duration < time)&&(event->isplayed == true)){
+		fluid_synth_noteoff(synth, cpt, event->MIDInumber);
+		event->isplayed = false;
+		cout << "stop playing a note " << event->MIDInumber << " channel " << cpt << " time " << time << "\n";
 	      }
 	    }
 	    cpt++;
