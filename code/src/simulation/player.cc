@@ -3,6 +3,7 @@
 #include <cmath>
 #include "scenario/Stuff.h"
 #include "scenario/StuffList.h"
+#include "game_textures.h"
 
 #define SPEED_AMPLIFIER 8
 
@@ -58,7 +59,7 @@ std::string stringDirection(Direction d) {
   }
 }
 
-Player::Player(int pid, float xx, float yy) {
+Player::Player(int pid, float xx, float yy) : DrawableObject(textures::get(0)) {
   position = Position(xx, yy);
   this->movementType = DIRECTION;
   this->destination = Position();

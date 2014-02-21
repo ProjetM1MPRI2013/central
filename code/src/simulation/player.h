@@ -15,6 +15,7 @@
 #include <list>
 #include <stdexcept>
 #include "positionable.h"
+#include "drawableObject.h"
 #include "NewMov.h"
 enum MovementType { DESTINATION, DIRECTION };
 class StuffNotFound : public std::runtime_error
@@ -23,7 +24,7 @@ public:
 	explicit StuffNotFound();
 };
 
-class Player : public Positionable{
+class Player : public Positionable, public DrawableObject {
 public:
 
 	//Pour débugue
