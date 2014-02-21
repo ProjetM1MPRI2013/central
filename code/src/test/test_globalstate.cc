@@ -45,10 +45,12 @@ void createNPCs(int number, GlobalState& glob, GraphicContextIso& graContIso,
     msg->setTarget(target,*(glob.getMap()));
     msg->getPosition().isInTile(*(glob.getMap())).addNPC(msg);
 
-    glob.addNPC(start, target, 1, textures::get(i % 2), msg->getUuid());
+    glob.addNPC(start, target, 1, textures::get(i% 2), msg->getUuid());
+    msg->kill();
     LOG(info) << "Server : " << "Broadcast 1 message of type NPC:\n" << (*msg);
     glob.getServer()->broadcastMessage<NPC>(*msg);
     sleep(1);
+    delete msg;
    }
 }
 }
@@ -57,6 +59,8 @@ void createNPCs(int number, GlobalState& glob, GraphicContextIso& graContIso,
 namespace test {
   int globalstate() {
     std::string seed = "424242";
+    sf::Clock timer;
+
     auto nbPlayers = 1;
     Geography geo = Generation1(seed);
     LOG(debug) << "address of geo " << &geo;
@@ -74,7 +78,7 @@ namespace test {
     sleep(2);
     UUID_test::createNPCs(10, glob, graContIso, (*glob.getMap()), npcGen);
 
-    while (true){
+    while (timer.getElapsedTime().asSeconds() < 20.0){
         mes = glob.getServer()->receiveMessages<TestA>();
         LOG(info) << "TEST : " << "Received " << mes.size() << " messages "  ;
         for(TestA* p : mes)
@@ -82,6 +86,7 @@ namespace test {
         sleep(1);
     }
     LOG(info) << "Global State testing done.";
+
     delete ser ;
 
     return 0;

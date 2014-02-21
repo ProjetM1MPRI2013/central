@@ -17,6 +17,8 @@
 namespace test {
   int localstate() {
     std::string seed = "424242";
+    sf::Clock timer;
+
     auto nbPlayers = 1;
     Geography geo = Generation1(seed);
     LOG(debug) << "address of geo " << &geo;
@@ -31,7 +33,7 @@ namespace test {
 
     TestA msg(0);
     std::vector<NPC*> mes;
-    while (true){
+    while ((timer.getElapsedTime().asSeconds()) < 20.0){
         msg.data ++;
         LOG(info) << "Client : " << "Send a message <TestA> with data:"
                      << msg.data;
