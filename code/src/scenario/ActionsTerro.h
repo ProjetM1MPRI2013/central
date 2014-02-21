@@ -22,6 +22,48 @@
 #define ACTIONTERRO_H
 
 /*********************************************************
+** Pick**
+*********************************************************/
+class A_Pick: public Action {
+public:
+A_Pick  (int fake, std::pair<int,int> zone, LocalState* s);
+A_Pick(const A_Pick&);
+public:
+int fake; 
+public:
+std::pair<int,int> zone; 
+public: 
+ bool isActionPossible (); 
+  void doAction (); 
+  void addPendingActions(GlobalState* gs); 
+  virtual AbstractMessage* copy();
+protected :
+//Serialization
+A_Pick(){};
+SIMPLE_MESSAGE(A_Pick, Action, fake, zone);
+};
+/*********************************************************
+** Kick**
+*********************************************************/
+class A_Kick: public Action {
+public:
+A_Kick  (int weapon, boost::uuids::uuid victim, LocalState* s);
+A_Kick(const A_Kick&);
+public:
+int weapon; 
+public:
+boost::uuids::uuid victim; 
+public: 
+ bool isActionPossible (); 
+  void doAction (); 
+  void addPendingActions(GlobalState* gs); 
+  virtual AbstractMessage* copy();
+protected :
+//Serialization
+A_Kick(){};
+SIMPLE_MESSAGE(A_Kick, Action, weapon, victim);
+};
+/*********************************************************
 ** Shoot**
 *********************************************************/
 class A_Shoot: public Action {

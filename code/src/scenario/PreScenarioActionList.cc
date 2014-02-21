@@ -296,7 +296,7 @@ AbstractMessage* RemoveNPC::copy() {
 
 void RemoveNPC::run () {
 	simulation->supprimerNPC(this->simulation->getNPCByID(this->npc))
-			;};
+					;};
 
 
 
@@ -335,4 +335,15 @@ void Explosion (int power, std::pair<int,int> location,Simulation* simulation) {
 		}
 	};
 	std::cout << "nobody : fin d'explosion!!!!!"<< std::endl ;
+};
+
+void PickItems (std::pair<int,int> zone, int player, Simulation* sim ){
+	Tile* t = sim->getMap()->getTile(zone);
+	std::list<Clickable*> l =t->getStuffs();
+	while (not l.empty()) {
+		Clickable* c = l.back();
+		l.pop_back();
+		sim->getPlayerByID(player).addItem(Clickable(*c));
+		t->removeStuff(c);
+	};
 };

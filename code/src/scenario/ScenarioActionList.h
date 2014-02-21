@@ -5,6 +5,38 @@
 #include "PreScenarioActionList.h"
 #ifndef SCENARIOACTIONLIST_H
 #define SCENARIOACTIONLIST_H
+class CoA_Pick: public ScenarioAction {
+public:
+CoA_Pick(int fake, std::pair<int,int> zone, int playerID,Simulation* s);
+CoA_Pick(const CoA_Pick&);
+public:
+int fake; 
+public:
+std::pair<int,int> zone; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
+protected :
+//Serialization
+CoA_Pick(){};
+SIMPLE_MESSAGE(CoA_Pick, ScenarioAction, fake, zone);
+};
+class CoA_Kick: public ScenarioAction {
+public:
+CoA_Kick(int weapon, boost::uuids::uuid victim, int playerID,Simulation* s);
+CoA_Kick(const CoA_Kick&);
+public:
+int weapon; 
+public:
+boost::uuids::uuid victim; 
+public: 
+ virtual void run (); 
+  virtual AbstractMessage* copy();
+protected :
+//Serialization
+CoA_Kick(){};
+SIMPLE_MESSAGE(CoA_Kick, ScenarioAction, weapon, victim);
+};
 class CoA_Shoot: public ScenarioAction {
 public:
 CoA_Shoot(int gun, boost::uuids::uuid victim, int playerID,Simulation* s);

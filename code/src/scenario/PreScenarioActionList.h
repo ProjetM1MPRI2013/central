@@ -145,6 +145,7 @@ protected :
 void DropItem (int stuffID, int playerID, Simulation* simulation);
 void Explosion (int p,std::pair<int,int>,Simulation* s);
 void KillNPC(boost::uuids::uuid target, Simulation* s );
+void PickItems (std::pair<int,int> zone, int player, Simulation* sim );
 
 
 #endif

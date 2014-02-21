@@ -7,8 +7,10 @@
 #include "../simulation/tilewrapper.h"
 #include "debug.h"
 #include "../scenario/Stuff.h"
+#include "../scenario/StuffList.h"
 
 #define DEBUG false
+
 
 Coordinates::Coordinates(int abs, int ord) : abs(abs), ord(ord) {}
 
@@ -52,7 +54,6 @@ void Coordinates::setOrd(int ordO) {
 }
 
 
-
 Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO, float populationDensityO, bool gouO, bool godO, bool gorO, bool golO, float speedO, Coordinates batOriginO, Coordinates boroughOrigin, SpriteTilePack* stp0, std::string filePicturesO, Coordinates pictureO, int widthO, int heightO) :
   batOrigin(batOriginO),
   coord(abs,ord),
@@ -88,6 +89,11 @@ Tile::Tile(int abs, int ord, TileType typeO, bool destructibleO, float anxietyO,
   buildfog = false;
 
   if (DEBUG){std::cout << "Tile : end\n";}
+
+  //Nobody :  on met des fleurs pour le test
+  C_Flower* f = new C_Flower();
+  this->listStuff.push_front(f);
+
   }
 
 
@@ -129,6 +135,7 @@ Tile::Tile(const Tile& t) :
   alpha = t.alpha;
   fog = t.fog;
   buildfog = false;
+  this->listStuff = t.listStuff;
 }
 
 
@@ -159,6 +166,7 @@ Tile& Tile::operator=(const Tile& t){
     alpha = t.alpha;
     fog = t.fog;
     buildfog = false;
+    this->listStuff = t.listStuff;
   }
   return *this;
 }

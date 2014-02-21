@@ -166,6 +166,19 @@ SIMPLE_MESSAGE(C_Bomb, C_Stuff, power);
 };
 
 /*********************************************************
+** FakeStuff**
+*********************************************************/
+class C_FakeStuff: public Clickable {
+ public:
+C_FakeStuff  ();
+//Serialization
+protected :
+virtual AbstractMessage* copy();
+
+SIMPLE_MESSAGE(C_FakeStuff, Clickable);
+};
+
+/*********************************************************
 ** Flower**
 *********************************************************/
 class C_Flower: public C_Weapon {

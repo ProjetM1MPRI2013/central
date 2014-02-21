@@ -5,6 +5,68 @@
 #include "ActionsTerro.h"
 
 /*********************************************************
+** Pick**
+*********************************************************/
+
+A_Pick::A_Pick (int fake, std::pair<int,int> zone, LocalState* sim) : Action ( "ToA_Pick", sim) {
+this->fake = (int)fake;
+this->zone = (std::pair<int,int>)zone;
+};
+
+A_Pick::A_Pick(const A_Pick& a) : Action(" ToA_Pick", a.simulation){
+this->fake= a.fake;
+this->zone= a.zone;
+};
+
+void A_Pick::doAction() {
+this->simulation->getClient()->sendMessage<Action>(*this,true);
+};
+
+bool A_Pick::isActionPossible() {
+return true;
+};
+
+void A_Pick::addPendingActions(GlobalState* gs){
+gs->addAction(new CoA_Pick (this->fake, this->zone, ((Action*)this)->playerID,(Simulation*) gs));
+gs->deleteAction(this);
+};
+
+AbstractMessage* A_Pick::copy() {
+return (AbstractMessage*) new A_Pick(*this);
+};
+
+/*********************************************************
+** Kick**
+*********************************************************/
+
+A_Kick::A_Kick (int weapon, boost::uuids::uuid victim, LocalState* sim) : Action ( "ToA_Kick", sim) {
+this->weapon = (int)weapon;
+this->victim = (boost::uuids::uuid)victim;
+};
+
+A_Kick::A_Kick(const A_Kick& a) : Action(" ToA_Kick", a.simulation){
+this->weapon= a.weapon;
+this->victim= a.victim;
+};
+
+void A_Kick::doAction() {
+this->simulation->getClient()->sendMessage<Action>(*this,true);
+};
+
+bool A_Kick::isActionPossible() {
+return (isInThePack (this->simulation,this->weapon))&&(((((C_Weapon*)(&((Simulation*)this->simulation)->getItemByID<C_Weapon>(this->weapon)))))->getrange()>=distance (this->simulation,(this->simulation->getNPCByID(this->victim))));
+};
+
+void A_Kick::addPendingActions(GlobalState* gs){
+gs->addAction(new CoA_Kick (this->weapon, this->victim, ((Action*)this)->playerID,(Simulation*) gs));
+gs->deleteAction(this);
+};
+
+AbstractMessage* A_Kick::copy() {
+return (AbstractMessage*) new A_Kick(*this);
+};
+
+/*********************************************************
 ** Shoot**
 *********************************************************/
 

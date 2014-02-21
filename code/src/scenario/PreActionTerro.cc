@@ -55,4 +55,3 @@ void newMouseMovement(Position pos, LocalState* s) {
 	s->getOwner().setDestination(pos);
   s->getClient()->sendMessage(newMouseMovNet,true);
 };
-

@@ -5,6 +5,52 @@
 #include "ScenarioActionList.h"
 
 /*********************************************************
+** Consequences of Pick**
+*********************************************************/
+CoA_Pick::CoA_Pick(int fake, std::pair<int,int> zone, int playerID,Simulation* sim)
+: ScenarioAction("Pick",playerID,sim){ 
+this->fake = (int)fake;
+this->zone = (std::pair<int,int>)zone;
+};
+
+CoA_Pick::CoA_Pick(const CoA_Pick& a) : ScenarioAction("Pick",a.playerID, a.simulation){
+this->fake= a.fake;
+this->zone= a.zone;
+};
+
+AbstractMessage* CoA_Pick::copy() {
+return (AbstractMessage*) new CoA_Pick(*this);
+};
+
+void CoA_Pick::run () {
+PickItems(zone,((ScenarioAction*)this)->playerID, simulation);
+;};
+
+
+/*********************************************************
+** Consequences of Kick**
+*********************************************************/
+CoA_Kick::CoA_Kick(int weapon, boost::uuids::uuid victim, int playerID,Simulation* sim)
+: ScenarioAction("Kick",playerID,sim){ 
+this->weapon = (int)weapon;
+this->victim = (boost::uuids::uuid)victim;
+};
+
+CoA_Kick::CoA_Kick(const CoA_Kick& a) : ScenarioAction("Kick",a.playerID, a.simulation){
+this->weapon= a.weapon;
+this->victim= a.victim;
+};
+
+AbstractMessage* CoA_Kick::copy() {
+return (AbstractMessage*) new CoA_Kick(*this);
+};
+
+void CoA_Kick::run () {
+KillNPC(victim,simulation);
+;};
+
+
+/*********************************************************
 ** Consequences of Shoot**
 *********************************************************/
 CoA_Shoot::CoA_Shoot(int gun, boost::uuids::uuid victim, int playerID,Simulation* sim)

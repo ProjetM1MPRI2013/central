@@ -27,11 +27,14 @@ G:damage:int:1
 ;
 
 +c:Ammunition:Stuff
-B:number:int
+B:number:int:
 ;
 
 +c:Bomb:Stuff
 G:power:int
+;
+
++c:FakeStuff
 ;
 
 +c:Flower:Weapon
@@ -40,8 +43,18 @@ G:damage:int:1
 G:color:int:0
 ;
 
++a:Pick
+C:fake:FakeStuff
+C:zone:Tile
+Q:PickItems(zone,((ScenarioAction*)this)->playerID, simulation);
+;
 
-
++a:Kick
+C:weapon:Weapon
+C:victim:NPC
+I:(:P:weapon:)&&:(:G:weapon:range:>=:D:victim:)
+Q:KillNPC(victim,simulation);
+;
 
 +a:Shoot
 C:gun:Gun

@@ -20,6 +20,7 @@ return (AbstractMessage*) new C_Stuff(*this);
 *********************************************************/
 C_Weapon::C_Weapon (): C_Stuff () {
 ((Clickable*)this)->name =  "Weapon";
+this->ActionTypePossible.push_back(ActionType::ToA_Kick);
 };
 
 /*********************************************************
@@ -107,6 +108,17 @@ this->ActionTypePossible.push_back(ActionType::ToA_Plant);
 int C_Bomb::getpower () {return this->power;};
 AbstractMessage* C_Bomb::copy() {
 return (AbstractMessage*) new C_Bomb(*this);
+};
+
+/*********************************************************
+** FakeStuff**
+*********************************************************/
+C_FakeStuff::C_FakeStuff (): Clickable () {
+((Clickable*)this)->name =  "FakeStuff";
+this->ActionTypePossible.push_back(ActionType::ToA_Pick);
+};
+AbstractMessage* C_FakeStuff::copy() {
+return (AbstractMessage*) new C_FakeStuff(*this);
 };
 
 /*********************************************************

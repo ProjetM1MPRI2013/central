@@ -5,6 +5,10 @@
 #include "PreStack.h"
 std::string stringOfActions(ActionType a) {
 switch (a) {
+case ToA_Pick:{
+return "Pick";}
+case ToA_Kick:{
+return "Kick";}
 case ToA_Shoot:{
 return "Shoot";}
 case ToA_Reload:{
@@ -21,6 +25,11 @@ default:
 std::list<SoN> SoNOfActions(ActionType a){
 	std::list<SoN> l;
 switch (a) {
+case ToA_Pick:{
+}; break;
+case ToA_Kick:{l.push_front(SON_NPC);
+
+}; break;
 case ToA_Shoot:{l.push_front(SON_NPC);
 
 }; break;
@@ -39,6 +48,17 @@ default:
  };
 Action* createAction(ActionType a,int basicStuff, std::list<boost::uuids::uuid> npcList, std::list<int> stuffList,LocalState* sim) {
 switch (a) {
+case ToA_Pick:{
+int fake = basicStuff;
+std::pair<int,int> zone= sim->getCurrentTile();
+return (new A_Pick (fake, zone, sim));
+};
+case ToA_Kick:{
+int weapon = basicStuff;
+boost::uuids::uuid victim= npcList.back();
+npcList.pop_back();
+return (new A_Kick (weapon, victim, sim));
+};
 case ToA_Shoot:{
 int gun = basicStuff;
 boost::uuids::uuid victim= npcList.back();

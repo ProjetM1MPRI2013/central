@@ -47,7 +47,7 @@ public :
    */
   Clickable (std::string n, int id);
 
- protected:
+ //protected:
   /**
    * @brief The list of all ActionType possible on the object.
    */

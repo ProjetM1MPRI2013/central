@@ -244,7 +244,8 @@ void HudTerro::callback(unsigned int callback_id) {
     if (waitFor == WF_NONE) {
       // The 'pick' button is clicked
       if (callback_id == 0) {
-        setwf(WF_PICK);
+        //setwf(WF_PICK); nobody
+      	this->stack->newAction(ToA_Pick,0);
       };
 
       // An item of the inventory is clicked

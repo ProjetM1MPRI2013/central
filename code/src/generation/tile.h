@@ -29,7 +29,6 @@ class SpriteTilePack {
 
 
 
-
 /**
  * @brief Coordinates
  * Useful to caracterize a tile in the map
