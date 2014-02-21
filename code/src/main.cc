@@ -26,6 +26,11 @@
 #include <TGUI/TGUI.hpp>
 #include <string>
 #include <random>
+#include "Musique.h"
+#include <vector>
+#include "GrilleHarmonique.h"
+#include "ToMIDI.h"
+#include <fluidsynth.h>
 
 #include "localState.h"
 #include "globalState.h"
@@ -54,9 +59,18 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   loc.setClient(clientPtr);
   GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
   TileMap tilemap = TileMap(&loc, &geo);
+
+  std::default_random_engine npcGen(42);
+  
   //geo.printMatrix();
   if (TERRO) {
+
     // graContIso.load();
+    
+    //[joseph] ceci est un NPC de test
+    //on en génère 500 à la création de la map, puis plus après
+    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
+    dummy::createNPCs(500, loc, geo, npcGen);
   } else {
     /* MAYOR */
   }
@@ -132,14 +146,6 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
   glob.getPlayerByID(1).isServer = 1;
   glob.setServer(serverPtr);
 
-  std::default_random_engine npcGen(42);
-  
-  if (TERRO) {
-    //[joseph] ceci est un NPC de test
-    //on en génère 500 à la création de la map, puis plus après
-    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-    dummy::createNPCs(500, glob, geo, npcGen);
-  }
 
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
@@ -151,6 +157,107 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
 
   return;
 }
+
+
+
+/**
+ * The sound !
+ */
+ int musicloop(bool* switchmusic) {    
+    
+    srand( time(NULL)); // obligatoire pour initialisation de l'aleatoire
+    
+    Musique musique;
+    std::vector<std::list<MIDIEvent>> MIDImusic(16);  
+      fluid_settings_t* settings;
+      fluid_synth_t* synth;
+      fluid_audio_driver_t* adriver;
+      int sfont_id;
+      
+      /* Create the settings. */
+      settings = new_fluid_settings();
+      fluid_settings_setstr(settings, "audio.driver", "alsa");
+      fluid_settings_setnum(settings,"synth.gain",0.4);
+
+      /* Change the settings if necessary*/
+
+      /* Create the synthesizer. */
+      synth = new_fluid_synth(settings);
+
+      /* Create the audio driver. The synthesizer starts playing as soon
+	 as the driver is created. */
+      adriver = new_fluid_audio_driver(settings, synth);
+
+      /* Load a SoundFont and reset presets (so that new instruments
+       * get used from the SoundFont) */
+      /* "../../../Musique/FluidR3_GM2-2.SF2" */
+      std::cout << "Chargement de SoundFont " 
+	   << (sfont_id = fluid_synth_sfload(synth, "../../../Musique/GS_MuseScore_v1.442.sf2", 1)) 
+	   << " "
+	   << FLUID_WARN ;
+      setNextMesures(musique,MIDImusic,synth,false);
+
+      /*
+      for (auto MIDIchannel : MIDImusic){
+	DBG << "New channel";
+	for (MIDIEvent event : MIDIchannel){
+	  DBG << event.MIDInumber << " " << event.duration << " " << event.begintime << "  |  ";
+	}
+      }
+      */
+
+      bool oldvalue = *switchmusic;
+      fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
+      fluid_synth_program_change (synth, 1, 36);//Fretless Bass
+      fluid_synth_program_change (synth, 2, 65);//Soprano Sax
+
+      while(true){
+	setNextMesures(musique,MIDImusic,synth,false);
+	float time = 0.;
+	sleep(0.1);
+	sf::Clock clock;
+
+	if (*switchmusic != oldvalue){
+	  if (*switchmusic){
+	    fluid_synth_program_change (synth, 0, 33);//Acoustic Bass
+	    fluid_synth_program_change (synth, 1, 36);//Fretless Bass
+	    fluid_synth_program_change (synth, 2, 65);//Soprano Sax
+	  }
+	  else{      
+	    fluid_synth_program_change (synth, 0, 17);//Drawbar Organ
+	    fluid_synth_program_change (synth, 1, 113);//Tinkle Bell
+	    fluid_synth_program_change (synth, 2, 80);//Ocarina
+	  }
+	}
+	
+	while(time < MIDImusic[0].back().begintime + MIDImusic[0].back().duration){
+	  time += clock.restart().asSeconds();
+	  int cpt = 0;
+	  for (auto MIDIchannel = MIDImusic.begin(); MIDIchannel != MIDImusic.end(); MIDIchannel++){
+	    for (auto event = MIDIchannel->begin(); event != MIDIchannel->end(); event++){
+	      //cout << event->begintime + event->duration << " " << time << " " << event->begintime << " " << event->isplayed << "\n";
+	      if ((event->begintime + event->duration > time)&&(event->begintime < time)&&(event->isplayed == false)){
+		fluid_synth_noteon(synth, cpt, event->MIDInumber, 80);
+		event->isplayed = true;
+		//DBG << "play a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
+	      }
+	      if((event->begintime + event->duration < time)&&(event->isplayed == true)){
+		fluid_synth_noteoff(synth, cpt, event->MIDInumber);
+		event->isplayed = false;
+		//DBG << "stop playing a note " << event->MIDInumber << " channel " << cpt << " time " << time ;
+	      }
+	    }
+	    cpt++;
+	  }
+	}
+      }
+      /* Clean up */
+      delete_fluid_audio_driver(adriver);
+      delete_fluid_synth(synth);
+      delete_fluid_settings(settings);
+      return 0;
+ }
+
 
 int main(int argc, char ** argv) {
   textures::initialize();
@@ -208,6 +315,10 @@ int main(int argc, char ** argv) {
     DBG << "Seed: " << seed;
 
     //geo.printMatrix();
+
+    //Change the value of the boolean to change the music
+    bool switchmusic = true;
+    std::thread musicThread { std::bind(musicloop, &switchmusic) };
 
 
     std::thread serverThread { std::bind(serverLoop, 0, nbPlayers, serverPtr,
@@ -295,6 +406,8 @@ int main(int argc, char ** argv) {
    }*/
 }
 ;
+
+
 
 namespace dummy {
   void createNPCs(int number, Simulation& simu,

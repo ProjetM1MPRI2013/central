@@ -3,11 +3,6 @@
  */
 #include "npc.h"
 #include "boost/uuid/uuid_io.hpp"
-//#include "localState.h"
-//#include "simulation.h"
-
-/*it's included in npc.h*/
-//#include "trajectory.h"
 
 #define DEBUG false
 

@@ -16,7 +16,6 @@ class Positionable : public FogDisabler, public EventSource, public EventListene
  protected:
  public:
 
-//  using EventSource::EventSource;
   Position position;
   /**
    * @brief Positionable

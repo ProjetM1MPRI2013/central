@@ -13,9 +13,6 @@
  * any class which needs a uuid should be a subclass of WithUuid
  */
 class WithUuid {
-  private:
-//    boost::uuids::uuid uuid;
-
  protected:
     void setUuid(boost::uuids::uuid id);
     boost::uuids::uuid uuid;

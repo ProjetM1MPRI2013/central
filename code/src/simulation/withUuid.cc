@@ -4,9 +4,6 @@
 #include "withUuid.h"
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-// Event Manager templated functions use this,
-// so they must be declared in headers
-
 // Fix valgrind errors on non-intialized random numbers.
 // Otherwise, default initialization would work with
 // boost::uuids::random_generator()()

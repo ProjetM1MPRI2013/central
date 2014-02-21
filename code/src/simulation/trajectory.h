@@ -10,7 +10,6 @@
 #include "../generation/geography.h"
 #include <vector>
 #include <cmath>
-//#include <queue>
 #include<boost/heap/fibonacci_heap.hpp>
 #include "tilewrapper.h"
 
