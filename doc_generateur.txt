@@ -1,0 +1,42 @@
+Explications pour le générateur:
+Le générateur a été créé pour être utilisé de deux manières différentes: en lisant un fichier texte (source) et de façon interactive.
+
+En plus de générer les différents fichiers de code il génère un fichier sauvegarde qui peut être utilisé comme source.
+
+La façon interactive n'est pas du tout utilisée c'est pourquoi il y a beaucoup de code mort
+J'ai cependant implémenté interactivement l'action drop pour utiliser un peux cette partie.
+
+Voici une sémentique du fichier source
+":" est le séparateur
+"+" entre dans un bloc  : crée une préclasse il peut être suivit de 
+"c" pour un clickable
+"a" pour une action
+il est suivit du nom de la classe puis (si elle existe) de la classe héritée
+ensuite on saute une ligne
+chaque nouvelle ligne est un field ou ";" la fin d'un block
+
+IL y a différent type de field :
+
+-Clickable donné par "C:nom:type:initialisateur" (si il n'y a pas d'initialisateur il doit être initialisé par le constructeur et les constructeurs des classes héritées) 
+
+
+-Variable donné par "X:nom:type:initialisateur" (si il n'y a pas d'initialisateur il doit être initialisé par le constructeur et les constructeurs des classes héritées)
+X= la façon dont on peut accéder à la vaable :
+	S : Set
+	G : Get
+	B : Both (Set et Get)
+	N : Rien
+
+si l'initialisateur est "V" la variable est "virtuelle" ce qui représente une fausse variable d'une classe abstraite que des méthodes virtuelles get ou set ( par exemple getrange de weapon)
+
+-IAP donné par "I:liste"
+la liste permet de générer la condition Is action possible d'une action (voir actioncreator::generateiap)
+
+-Conséquences donné par "Q:x"
+Ajoute une conséquence c'est à dire une ligne de la fonction run de la senarioactionliste dérivée de l'action.
+
+
+
+	
+
+
