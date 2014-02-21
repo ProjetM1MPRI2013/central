@@ -54,9 +54,18 @@ void clientLoop(int id, int nbPlayers, bool isFullScreen,
   loc.setClient(clientPtr);
   GraphicContextIso graContIso = GraphicContextIso(&geo, &loc);
   TileMap tilemap = TileMap(&loc, &geo);
+
+  std::default_random_engine npcGen(42);
+  
   //geo.printMatrix();
   if (TERRO) {
+
     // graContIso.load();
+    
+    //[joseph] ceci est un NPC de test
+    //on en génère 500 à la création de la map, puis plus après
+    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
+    dummy::createNPCs(500, loc, geo, npcGen);
   } else {
     /* MAYOR */
   }
@@ -132,14 +141,6 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
   glob.getPlayerByID(1).isServer = 1;
   glob.setServer(serverPtr);
 
-  std::default_random_engine npcGen(42);
-  
-  if (TERRO) {
-    //[joseph] ceci est un NPC de test
-    //on en génère 500 à la création de la map, puis plus après
-    //(pour l'instant, après la classe simulation les fera apparaître et disparaître)
-    dummy::createNPCs(500, glob, geo, npcGen);
-  }
 
   sf::Clock clock;
   sf::Time dt = sf::Time::Zero;
