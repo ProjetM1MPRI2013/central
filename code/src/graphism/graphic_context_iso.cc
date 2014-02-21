@@ -21,10 +21,18 @@
 
     addUnfog(sim->getPlayer(),24);
 
-    assert(fogT.loadFromFile("../../../sprite/fogtile.png"));
-    assert(baseT.loadFromFile("../../../sprite/basetile.png"));
-    assert(dafont.loadFromFile("../fonts/DejaVuSans.ttf"));
-    assert(playerT.loadFromFile("../../../sprite/Anim_idle.png"));
+    bool bt = fogT.loadFromFile("../../../sprite/fogtile.png");
+    if(!bt)
+      DBG << "Warning : Fog not found";
+    bt = baseT.loadFromFile("../../../sprite/basetile.png");
+    if(!bt)
+      DBG << "Warning : Base tile not found";
+    bt = dafont.loadFromFile("../fonts/DejaVuSans.ttf");
+    if(!bt)
+      DBG << "Warning : Font not found";
+    bt = playerT.loadFromFile("../../../sprite/Anim_idle.png");
+    if(!bt)
+      DBG << "Warning : Anim_idle.png not found";
 
     // End fog and base
 
@@ -44,8 +52,9 @@
 	  }
 	  catch(...){
 	    sf::Texture t;
-	    DBG << "chargement de " << s;
-	    assert(t.loadFromFile(s));
+	    DBG << "Loading " << s;
+	    bt = t.loadFromFile(s);
+	    DBG << "Warning : " << s << " not found";
 	    SpriteTilePack stp = { .texture = t, .originX = tilec->getPictureX(),
 				   .originY = tilec->getPictureY()};
 	    tilemap[s] = stp;
@@ -57,7 +66,7 @@
 	for(std::list<NPC*>::const_iterator ci = lnpc.begin(); 
 	    ci != lnpc.end(); ++ci){
 	  if(!(**ci).TextureIsInit()){
-	    (**ci).TextureAnim(textures::get(0)); // prends la première animation par défaut. S'il n'y a aucune animation de chargée, renvoie une erreur. A changer
+	    (**ci).TextureAnim(textures::get(0)); // prends la première animation par défaut.
 	  }
 	}
       }
@@ -184,7 +193,7 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
     }
   }
 
-
+  // Fin mise à jour brouillard de guerre
   
   /* 
      Dans un premier temps, on peut afficher toutes les tiles walkable, qui
@@ -262,12 +271,6 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   return;
 }
 
-void GraphicContextIso::addSpriteTilePack(SpriteTilePack stp)
-{
-  tilepackVector.push_back(stp);
-  return;
-}
-
 void GraphicContextIso::run(sf::RenderWindow* window)
 {
   window->clear();
@@ -314,14 +317,13 @@ Position GraphicContextIso::screenToMap(int x, int y)
 
 float GraphicContextIso::zoom(float f)
 {
-  // float z = zoomfactor*f;
-  // z = std::min(z,zoommax);
-  // z = std::max(z,zoommin);
-  // float g = zoomfactor / z;
-  // view.zoom(g);
-  // zoomfactor = z;
-  view.zoom(0.5f);
-  // return zoomfactor;
+  float z = zoomfactor*f;
+  z = std::min(z,zoommax);
+  z = std::max(z,zoommin);
+  float g = zoomfactor / z;
+  view.zoom(g);
+  zoomfactor = z;
+  return zoomfactor;
   return f;
 }
 
@@ -331,7 +333,7 @@ void GraphicContextIso::addUnfog(Positionable* p, int radius)
   p->setRadius(radius);
   unfogVector.push_front(p);
   updateFog(Coordinates(floor(p->getPosition().getX()),floor(p->getPosition().getY())),radius,1);
-  // listen("Positionable::changedTile",(*p),&GraphicContextIso::changedTile)
+  listen("Positionable::changedTile",(*p),&GraphicContextIso::changedTile);
   return;
 }
 
@@ -357,7 +359,6 @@ void GraphicContextIso::updateFog(Coordinates c, int r, int modif)
   }
   
   /* Mise à jour des bâtiments */
-  /* On peut faire plus subtil, mais c'est pas important */
   for(int i = 0; i < w; i++){
     for(int j = 0; j < h; j++){
       Tile* tilec = map->getTile(i,j);

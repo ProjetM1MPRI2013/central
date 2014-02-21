@@ -45,9 +45,10 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
     **/
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   
+  /**
+   * @brief Add a texture Pack for a DrawableObject
+   **/  
   void addTexturePack(TexturePack t);
-
-  void addSpriteTilePack(SpriteTilePack stp);
 
   /**
    * @brief Runs one computation of the graphical output of the map.
@@ -61,18 +62,30 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
    **/
   Position screenToMap(int x, int y);
 
+  /**
+   * @brief Changes the zoom of the view.
+   **/
   float zoom(float f);
 
+  /**
+   * @brief Adds an object that reveals a part of the map
+   **/
   void addUnfog(Positionable* p, int radius);
 
+  /**
+   * @brief A method to update the fog
+   * It is not used outside of the class
+   **/
   void updateFog(Coordinates c, int r, int modif);
   
+  /**
+   * @brief Update the fog whenever a listened Positionable changes it's position
+   **/
   void changedTile(Positionable& p, std::pair<Coordinates,Coordinates> modifpos);
   
 
  private:
-  std::vector<SpriteTilePack> tilepackVector;
-  std::unordered_map<std::string, SpriteTilePack> tilemap; // Rends obsolete le vector.
+  std::unordered_map<std::string, SpriteTilePack> tilemap;
   Geography* map;
   Simulation* sim;
   sf::View view;
@@ -85,11 +98,6 @@ class GraphicContextIso : public sf::Drawable, public sf::Transformable, public 
   sf::Clock spf;
   sf::Font dafont;
   std::list<Positionable*> unfogVector;
-
-  // A ajouter : 
-  // Deux ensembles d'éléments pour enlever le brouillard ou activer la
-  // transparence, avec des pointeurs vers des positions, et de quoi checker
-  // s'il y a changement de tile.
 
   sf::Texture playerT;
  
