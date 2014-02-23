@@ -56,6 +56,9 @@ void EventManager::unlisten(GenericEventListener& listener) {
 }
 
 void EventManager::remove(EventSource& source) {
-  sources.erase(std::ref(source));
+  auto it = sources.find(source);
+  if (it != sources.end() && &(source) == &(it->first.get())) { // Making sure we're the right guy
+    sources.erase(std::ref(source));
+  }
 }
 
