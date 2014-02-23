@@ -47,9 +47,14 @@ public:
   virtual Player* getPlayer();
 
   /**
-   * @brief Add a player to the player list
+   * @brief Add player p to the player list
    */
   virtual void addPlayer(Player&& p);
+
+  /**
+   * @brief Add player with ID id and position (x,y) t othe player list
+   */
+  virtual void addPlayer(int id, float x, float y);
 
   /**
    * @brief addNPC

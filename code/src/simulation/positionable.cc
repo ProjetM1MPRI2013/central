@@ -50,9 +50,8 @@ void Positionable::setPosition(Position& p) {
   return;
 }
 
-
 void Positionable::changedTile(Position& p, std::pair<Coordinates,Coordinates> mod)
 {
-  trigger("Positionable::changedTile",mod);
+  trigger("Positionable::changedTile",std::pair<Coordinates,Coordinates>(mod));
   return;
 }

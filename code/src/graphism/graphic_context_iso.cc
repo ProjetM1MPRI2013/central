@@ -145,56 +145,6 @@ void GraphicContextIso::draw(sf::RenderTarget& target, sf::RenderStates states) 
   fog.setColor(sf::Color(0,0,0,128));
   base.setTexture(baseT);
 
-  /* Mise à jour pas subtile du brouillard de guerre */
-  /* Remise à zéro */
-  for(int j = 0; j < h; j++){
-    for(int i = 0; i < w; i++){
-      map->getTile(i,j)->setFog(-1000000);
-    }
-  }
-
-  /* Eclairage */
-  for(std::list<Positionable*>::const_iterator ci = unfogVector.begin();
-      ci != unfogVector.end(); ++ci){
-    Position p = (**ci).getPosition();
-    int r = (**ci).getRadius(), x = floor(p.getX()), y = floor(p.getY());
-    for(int k = 0; k <= r; k++){
-      for(int l = 0; l <= r; l++){
-  	int ii = x + k - l;
-  	int jj = y - r + k + l;
-  	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
-  	  map->getTile(ii,jj)->setFog(1);
-      }
-    }
-    for(int k = 0; k < r; k++){
-      for(int l = 0; l < r; l++){
-  	int ii = x + k - l;
-  	int jj = y - r + 1 + k + l;
-  	if(ii >= 0 && ii < w && jj >= 0 && jj < h)
-  	  map->getTile(ii,jj)->setFog(1);
-      }
-    }
-  }
-
-  /* Mise à jour des bâtiments */
-  for(int i = 0; i < w; i++){
-    for(int j = 0; j < h; j++){
-      Tile* tilec = map->getTile(i,j);
-      if(tilec->isBatOrigin()){
-  	int compt = 0;
-  	for(int ii = 0; ii < tilec->getWidthBat(); ii++){
-  	  for(int jj = 0; jj < tilec->getHeightBat(); jj++){
-  	    if(map->getTile(i-ii,j+jj)->isInFog())
-  	      compt++;
-  	  }
-  	}
-  	tilec->setBuildFog(compt);
-      }
-    }
-  }
-
-  // Fin mise à jour brouillard de guerre
-  
   /* 
      Dans un premier temps, on peut afficher toutes les tiles walkable, qui
      sont supposées plates. Cela permet d'éviter des problèmes éventuels 
