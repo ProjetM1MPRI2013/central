@@ -12,7 +12,7 @@
  * @brief The Positionable class
  * only contains a Position and methods to get and set it
  */
-class Positionable : public FogDisabler, public EventSource, public EventListener<Positionable> {
+class Positionable : public FogDisabler, public EventSource, public EventListener<Positionable>, public WithUuid {
  protected:
  public:
 

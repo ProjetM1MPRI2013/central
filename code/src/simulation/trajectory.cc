@@ -302,7 +302,7 @@ void Trajectory::update(sf::Time dt,float speedNorm,Geography& map,NPC& npc) {
     while (!neighbours.empty()) {
       NPC* tempNPC = neighbours.front();
       neighbours.pop_front();
-      if (npc.EventSource::getUuid()!=tempNPC->EventSource::getUuid()) {
+      if (npc.getUuid()!=tempNPC->getUuid()) {
         //only if it is not the NPC to ignore
         std::pair<float,float> force;
         force = tempNPC->gradPot(position);

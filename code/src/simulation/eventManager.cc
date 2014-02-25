@@ -1,64 +1,100 @@
 #include "eventManager.h" 
+#include <type_traits>
+#include <utility>
+#include <boost/uuid/uuid_io.hpp>
+
+using namespace std;
+
 sourceMap EventManager::sources;
 
 void EventManager::triggerEvent(EventName event, EventSource& source, boost::any arg) {
-  try {
-    auto listeners = sources.at(source).at(event);
-    for (auto& pair : listeners) { pair.second(arg); };
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-}
-
-void EventManager::listen(EventName event, EventSource& source, GenericEventListener& listener, std::function<void (boost::any)> run_callback) {
-  sources[source][event][listener] = run_callback;
-}
-
-void EventManager::unlisten(EventName eventT, EventSource& source, GenericEventListener& listener) {
-  try {
-    sources.at(std::ref(source)).at(eventT).erase(std::ref(listener));
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-}
-
-void EventManager::unlisten(EventSource& source, GenericEventListener& listener) {
-  try {
-    for (auto& event_listeners : sources.at(std::ref(source))) {
-      event_listeners.second.erase(std::ref(listener));
-    }
-  } catch (const std::out_of_range& e) {
-    return;
-  }
-}
-
-void EventManager::unlisten(EventName event, GenericEventListener& listener) {
-  for (auto& source_events : sources) {
-    try {
-      source_events.second.at(event).erase(std::ref(listener));
-    } catch (const std::out_of_range& e) {
-      return;
-    }
-  }
-}
-
-// FIXME very expensive
-void EventManager::unlisten(GenericEventListener& listener) {
-  for (auto& source_events : sources) {
-    for (auto& event_listeners : source_events.second) {
-      try {
-        event_listeners.second.erase(std::ref(listener));
-      } catch (const std::out_of_range& e) {
-        return;
+  auto it1 = sources.find(source.es_id);
+  if (it1 != sources.end()) {
+    auto it2 = it1->second.find(event);
+    if (it2 != it1->second.end()) {
+      auto& listeners = it2->second;
+      auto iterator = listeners.begin();
+      while (iterator != listeners.end()) {
+        auto& evt_info = iterator->second;
+        if (evt_info.el_info->location == nullptr) {
+          if (--(evt_info.el_info->bound_events) <= 0) {
+            delete evt_info.el_info;
+          }
+          listeners.erase(iterator++);
+        } else {
+          evt_info.callback(evt_info.el_info->location, &source, arg);
+          ++iterator;
+        }
       }
     }
   }
 }
 
-void EventManager::remove(EventSource& source) {
-  auto it = sources.find(source);
-  if (it != sources.end() && &(source) == &(it->first.get())) { // Making sure we're the right guy
-    sources.erase(std::ref(source));
+void EventManager::listen(EventName event, EventSource& source, GenericEventListener& listener, event_callback run_callback) {
+
+  if (listener.el_info->location == nullptr) {
+    listener.el_info = new ListenerInfo{1,&listener};
+  }
+
+  auto resp = sources[source.es_id][event].insert({listener.el_id, EventInfo{listener.el_info, run_callback}});
+  if (resp.second) { listener.el_info->bound_events++; } // resp.second==true iff event wasn't previously bound
+}
+
+void EventManager::markAsUnListened(listenerMap& listeners, GenericEventListener& listener) {
+  auto it = listeners.find(listener.el_id);
+  if (it != listeners.end()) {
+    listener.el_info->bound_events--;
+    listeners.erase(it);
+  }
+}
+
+void EventManager::unlisten(EventName eventT, EventSource& source, GenericEventListener& listener) {
+  auto it1 = sources.find(source.es_id);
+  if (it1 != sources.end()) {
+    auto it2 = it1->second.find(eventT);
+    if (it2 != it1->second.end()) {
+      markAsUnListened(it2->second, listener);
+    }
+  }
+}
+
+// FIXME slow
+void EventManager::unlisten(EventSource& source, GenericEventListener& listener) {
+  auto it = sources.find(source.es_id);
+  if (it != sources.end()) {
+    for (auto& event_listeners : it->second) {
+      markAsUnListened(event_listeners.second, listener);
+    }
+  }
+}
+
+// FIXME slow
+void EventManager::unlisten(EventName event, GenericEventListener& listener) {
+  for (auto& source_events : sources) {
+    auto it = source_events.second.find(event);
+    if (it != source_events.second.end()) {
+      markAsUnListened(it->second, listener);
+    }
+  }
+}
+
+void EventManager::unlisten(GenericEventListener& listener) {
+  listener.el_info->location = nullptr;
+}
+
+void EventManager::removeSource(EventSource& source) {
+  auto it = sources.find(source.es_id);
+  if (it != sources.end()) {
+    for (auto& event_listeners : it->second) {
+      for (auto& event_evt_info : event_listeners.second) {
+        auto el_info = event_evt_info.second.el_info;
+        el_info->bound_events--;
+        if (el_info->bound_events <= 0 && el_info->location == nullptr) {
+          delete el_info;
+        }
+      }
+    }
+    sources.erase(it);
   }
 }
 

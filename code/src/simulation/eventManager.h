@@ -7,10 +7,12 @@
 #include "withUuid.h"
 #include <boost/any.hpp>
 #include "eventSource.h"
+#include "genericEventListener.h"
 #include <string>
 #include <functional>
 #include <type_traits>
 #include <map>
+#include <boost/uuid/uuid_io.hpp>
 
 /**
  * How to use
@@ -20,19 +22,24 @@
  * To listen to events, derive EventListener<YourDerivedClass>.
  */
 
-/** 
- * Dummy generic class to store instances of EventListener<T>
- * No one else may subclass GenericEventListener.
- */
-class GenericEventListener : public virtual WithUuid {};
+
+template <typename T> using reference = std::reference_wrapper<T>;
+
+typedef std::function<void (GenericEventListener*, EventSource*, boost::any)> event_callback;
+
+struct EventInfo
+{
+  ListenerInfo* el_info; // use a shared_ptr instead of counting?
+  event_callback callback;
+};
+
 
 /** We need a function from (source,type,listener) to callback,
- *  We create three maps : source -> (event -> (listener -> callback))
+ *  We create three maps : source_id -> (event -> (listener_id -> (int, listener*, callback)))
  */
-template <typename T> using reference = std::reference_wrapper<T>;
-typedef std::map<reference<GenericEventListener>, std::function<void (boost::any)>, WithUuidCmp> listenerMap;
+typedef std::map<boost::uuids::uuid, EventInfo> listenerMap;
 typedef std::map<EventName, listenerMap> eventMap;
-typedef std::map<reference<EventSource>,eventMap, WithUuidCmp> sourceMap;
+typedef std::map<boost::uuids::uuid, eventMap> sourceMap;
 
 /* Conditional template instanciation. Used for clarity in EventManager::triggerEvent.
  *
@@ -49,8 +56,6 @@ template <typename T> using void_if_not_rvalue = typename std::enable_if<!std::i
 
 class EventManager {
   public:
-
-
   /**
    * @brief listen
    * @param eventT: event the listener listens to, for instance "isDestroyed"
@@ -65,7 +70,7 @@ class EventManager {
    * To listen to all events from an EventSource, pass the empty EventName.
    * To listen to all events of type EventName, pass the empty EventSource.
    */
-  static void listen(EventName event, EventSource& source, GenericEventListener& listener, std::function<void (boost::any)> callback);
+  static void listen(EventName event, EventSource& source, GenericEventListener& listener, event_callback callback);
 
   /**
    * @brief 'listener' stops listening from 'event' when triggered by 'source'.
@@ -83,11 +88,12 @@ class EventManager {
   static void unlisten(EventSource& source, GenericEventListener& listener);
   static void unlisten(EventName event, GenericEventListener& listener);
   static void unlisten(GenericEventListener& listener);
+  static void markAsUnListened(listenerMap& listeners, GenericEventListener& listener);
 
   /* Remove an event source from the event system. All listeners listening to source
    * immediately stop listening.
    */
-  static void remove(EventSource& source);
+  static void removeSource(EventSource& source);
 
   /* */
   template <typename ArgT>

@@ -1,14 +1,34 @@
 #include "eventSource.h"
 #include "eventManager.h"
+#include <boost/uuid/uuid_io.hpp>
 
-EventSource::EventSource() {}
-// WARNING Since WithUuid is a *virtual* base class of EventSource,
-// the WithUuid constructor will *not* be called if you subclass EventSource
-// and call EventSource(uuid) in your initialization list.
-// You'll have to *also* call WithUuid(uuid).
-EventSource::EventSource(boost::uuids::uuid uuid) : WithUuid(uuid) {}
+EventSource::EventSource() : es_id(WithUuid().getUuid()) {
+}
+
+EventSource::EventSource(boost::uuids::uuid uuid) : es_id(uuid) {
+}
+
+EventSource& EventSource::operator=(const EventSource& other) { 
+  return *this;
+}
+
+// Both sources keep their IDs
+EventSource& EventSource::operator=(EventSource&& other) { 
+  if (this != &other) {
+  }
+  return *this;
+}
+
+EventSource::EventSource(const EventSource& other) : es_id(WithUuid().getUuid()) {
+}
+
+// New source gets old source's ID
+EventSource::EventSource(EventSource&& other) {
+  this->es_id.swap(other.es_id); 
+}
+
 EventSource::~EventSource() {
-  EventManager::remove(*this);
+  EventManager::removeSource(*this);
 }
 
 void EventSource::trigger(EventName event) {

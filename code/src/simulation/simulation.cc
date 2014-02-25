@@ -33,9 +33,7 @@ Simulation::Simulation(int nbPlayers, int id) :
 
 	DBG << (this->getMap());
 	Tile* firstTile = (this->getMap())->getWalkableTile();
-	this->addPlayer(
-			Player(id, (firstTile->getCoord()).getAbs(),
-					(firstTile->getCoord()).getOrd()));
+	addPlayer(id, firstTile->getCoord().getAbs(), firstTile->getCoord().getOrd());
 
 	tmp = std::vector<std::vector<int> >(getMap()->getMapWidth() + 1);
 	for (int i = 0; i < getMap()->getMapWidth() + 1; ++i)
@@ -56,8 +54,7 @@ Simulation::Simulation(Geography* map, int nbPlayers, int id) :
 
 	DBG << (this->getMap());
 	Tile* firstTile = (this->getMap())->getWalkableTile();
-  auto coords = firstTile->getCoord();
-  addPlayer(id, coords.getAbs(), coords.getOrd());
+	addPlayer(id, firstTile->getCoord().getAbs(), firstTile->getCoord().getOrd());
 	tmp = std::vector<std::vector<int> >(getMap()->getMapWidth() + 1);
 	for (int i = 0; i < getMap()->getMapWidth() + 1; ++i)
 		tmp[i] = std::vector<int>(getMap()->getMapWidth() + 1, 0);

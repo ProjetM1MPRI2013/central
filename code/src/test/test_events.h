@@ -12,10 +12,20 @@ namespace test {
   };
 
   class Source : public EventSource {
+    public:
+    Source();
+    int val;
   };
 
   class Listener : public EventListener<Listener> {
     public:
+      Listener();
+      Listener(Listener& other) = default;
+      Listener(Listener&& other) = default;
+      Listener& operator=(Listener& other) = default;
+      Listener& operator=(Listener&& other) = default;
+      Source member;
+      int val;
       void eventHandler(Source& source, int arg);
       void eventHandlerMutable(Source& source, Mutable& arg);
   };

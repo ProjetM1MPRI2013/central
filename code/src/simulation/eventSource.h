@@ -20,17 +20,30 @@ typedef std::string EventName;
  *   compatible if the argument to trigger() supports implicit conversion to X.
  */
  
-class EventSource : public virtual WithUuid {
+class EventSource {
   public: 
+  friend class EventManager;
+  friend class EventSourceCmp;
   EventSource();
   EventSource(boost::uuids::uuid uuid);
+  EventSource& operator=(const EventSource& other);
+  EventSource& operator=(EventSource&& other);
+  EventSource(EventSource&& other);
+  EventSource(const EventSource& other);
   ~EventSource();
 
+
   void trigger(EventName event);
-  //template <typename ArgT>
-  //void trigger(EventName event, ArgT& arg);
   template <typename ArgT>
   void trigger(EventName event, ArgT&& arg);
+  private:
+  boost::uuids::uuid es_id;
+};
+
+struct EventSourceCmp{
+  bool operator()(const EventSource& lhs, const EventSource& rhs) const 
+  {
+    return lhs.es_id < rhs.es_id;
+  }
 };
 #endif
-

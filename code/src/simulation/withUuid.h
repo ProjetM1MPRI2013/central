@@ -16,9 +16,9 @@ class WithUuid {
  protected:
     void setUuid(boost::uuids::uuid id);
     boost::uuids::uuid uuid;
-    static boost::uuids::random_generator generator;
 
   public:
+    static boost::uuids::random_generator generator;
     // Event Manager templated functions use this,
     // so they must be declared in headers
     /**
