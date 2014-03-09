@@ -28,6 +28,8 @@ class GlobalState : public Simulation{
   void setServer(Server*);
   Server* getServer(void);
 
+  virtual void addNPC(Position start, Position target, float speed, TexturePack* tex, boost::uuids::uuid id = WithUuid::generator());
+
   void run(sf::Time dt);
 private:
     Server *server;

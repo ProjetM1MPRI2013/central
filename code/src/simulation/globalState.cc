@@ -150,6 +150,12 @@ void GlobalState::run(sf::Time dt) {
 		bool wasArrived = npc->hasArrived();
 		Tile& tileBefore = npc->getPosition().isInTile(*map);
 		npc->updatePosition(dt, *map);
+    // FIXME slow
+    // * Don't send updates at every tick?
+    // * Only send updates about visible NPCs to each player?
+    // * Create one update type per attribute?
+    auto update = NpcUpdate(*npc,false);
+    server->broadcastMessage(update,false);
 		Tile& tileAfter = npc->getPosition().isInTile(*map);
 		if (!tileBefore.equals(tileAfter)) {
 			/*
@@ -174,9 +180,9 @@ void GlobalState::run(sf::Time dt) {
 		// Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
 		if (npc->hasArrived() && !wasArrived) {
 			(*npc).trigger("NPC::arrived");
+      //FIXME send update when NPC is deleted
 			DBG << "suppression d'un NPC";
 			this->supprimerNPC(npc);
-			//ajouter ici les npc à envoyer aux clients quand la scenarioaction pour remove npc existera
 		}
 
 		if (DEBUG) {
@@ -208,3 +214,9 @@ Server* GlobalState::getServer(void) {
 	return server;
 }
 
+void GlobalState::addNPC(Position start, Position target, float speed, TexturePack* tex, boost::uuids::uuid uuid) {
+  NPC* npc = buildNPC(start, target, speed, tex, uuid);
+  Simulation::addNPC(npc);
+  auto update = NpcUpdate(*npc,true);
+  server->broadcastMessage(update, true);
+}

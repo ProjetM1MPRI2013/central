@@ -133,31 +133,25 @@ float floor2(float x) {
 	return ((float) (floor((double(x)))));
 }
 
-void Simulation::addNPC(Position start, Position target, float speed,
-		TexturePack* tex) {
-	//on crée le NPC
-	NPC *npc = new NPC(speed, 10, 1.5, start, tex);
-	npc->setTarget(target, *map);
-	//on l'ajoute à la liste
-	NPCs.insert( { npc->getUuid(), npc });
-	//on le met dans sa tile de départ
-	npc->getPosition().isInTile(*map).addNPC(npc);
-
-	trigger("NPC::created", *npc);
-	return;
+void Simulation::addNPC(NPC* npc) {
+  //on l'ajoute à la liste
+  NPCs.insert( { npc->getUuid(), npc });
+  //on le met dans sa tile de départ
+  npc->getPosition().isInTile(*map).addNPC(npc);
+  trigger("NPC::created", *npc);
 }
 
-void Simulation::addNPC(Position start, Position target, float speed,
-		TexturePack* tex, boost::uuids::uuid id) {
-	//on crée le NPC
-	NPC *npc = new NPC(speed, 10, 1.5, start, tex, id);
-	npc->setTarget(target, *map);
-	//on l'ajoute à la liste
-	NPCs.insert( { npc->getUuid(), npc });
-	//on le met dans sa tile de départ
-	npc->getPosition().isInTile(*map).addNPC(npc);
-	trigger("NPC::created", *npc);
-	return;
+void Simulation::addNPC(Position start, Position target, float speed, 
+                        TexturePack* tex, boost::uuids::uuid uuid /*optional*/) {
+  addNPC(buildNPC(start, target, speed, tex, uuid));
+}
+
+NPC* Simulation::buildNPC(Position start, Position target, float speed, 
+                          TexturePack* tex, boost::uuids::uuid uuid /*optional*/) {
+  NPC* npc = new NPC(speed, 10, 1.5, start, tex, uuid);
+  //on calcule son mouvement
+  npc->setTarget(target, *map);
+  return npc;
 }
 
 void Simulation::supprimerNPC(NPC * npc) {

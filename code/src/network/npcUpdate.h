@@ -28,10 +28,15 @@ public:
    * @brief createNpc : creates a new NPC according to this update.
    *
    * The field isCreated must be true. If it is not, it will fail.
-   * @param gra : the graphicContextIso to search the texturePack
    * @return A newly created NPC which should be a copy of the one it was created from.
    */
-  NPC * createNpc(GraphicContextIso* gra) ;
+  NPC * createNpc();
+
+  /**
+   * @brief update given NPC using this update's values.
+   * The field isCreated must be false. It it is, it will fail.
+   */
+  void updateNpc(NPC& npc);
 
 
   /**

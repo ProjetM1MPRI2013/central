@@ -56,15 +56,9 @@ public:
    */
   virtual void addPlayer(int id, float x, float y);
 
-  /**
-   * @brief addNPC
-   * creates a new NPC
-   * @param start: start position
-   * @param target: target position
-   * @param speed: the NPC's speed in tiles/s
-   * @param tex: the texturepack for the NPC
+  /** @brief add a previously-built NPC
    */
-  void addNPC(Position start, Position target, float speed, TexturePack* tex);
+  void addNPC(NPC* npc);
 
   /**
    * @brief addNPC
@@ -73,10 +67,17 @@ public:
    * @param target: target position
    * @param speed: the NPC's speed in tiles/s
    * @param tex: the texturepack for the NPC
-   * @param id: id of the npc to synch
+   * @param id: [optional] id of the npc to synch
    */
-  void addNPC(Position start, Position target, float speed, TexturePack* tex,
-              boost::uuids::uuid id);
+  virtual void addNPC(Position start, Position target, float speed, 
+                TexturePack* tex, boost::uuids::uuid uuid = WithUuid::generator());
+
+  /** @brief build NPC with some default values
+   *  creates a pointer to an NPC as addNPC would have done, but return it
+   *  instead of adding it to the simulation.
+   */
+  NPC* buildNPC(Position start, Position target, float speed,
+                TexturePack* tex, boost::uuids::uuid uuid = WithUuid::generator());
 
   /**
    * @brief peopleGeneration : parcourt la matrice et crée/supprime des NPCs

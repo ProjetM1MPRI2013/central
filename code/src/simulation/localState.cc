@@ -103,6 +103,38 @@ void LocalState::run(sf::Time dt) {
 		action->run();
 		std::cout << "nobody client fin run " << std::endl;
 	}
+
+  
+  auto npcUpdates = client->receiveMessages<NpcUpdate>();
+  for (NpcUpdate* update : npcUpdates) {
+    if (update->isCreated) {
+      NPC* npc = update->createNpc();
+      npc->setTarget(update->target,*map);
+      addNPC(npc);
+    } else {
+      NPC* npc = getNPCByID(update->id);
+      if (npc == nullptr) {
+        throw std::runtime_error("Received network information about nonexistent NPC (maybe we don't care)");
+      } else {
+
+        if (!(npc->getTarget().equal(update->target))) {
+          npc->setTarget(update->target, *map);
+        }
+
+        Tile& tileBefore = npc->getPosition().isInTile(*map);
+        update->updateNpc(*npc);
+        Tile& tileAfter = npc->getPosition().isInTile(*map);
+
+        if (!tileBefore.equals(tileAfter)) {
+          tileBefore.removeNPC(npc);
+          tileAfter.addNPC(npc);
+        }
+
+      }
+    }
+  }
+
+
 	this->pendingActions.clear();
 	//On supprime les actions déjà traitées
 	this->toDelete.clear();
@@ -135,38 +167,6 @@ void LocalState::run(sf::Time dt) {
 				this->cameras.pop_back();
 			}
 		}
-
-	//Deplacement de tous les NPCs.
-	for (std::pair<const boost::uuids::uuid, NPC*>& pair : NPCs) {
-		NPC* npc = pair.second;
-		bool wasArrived = npc->hasArrived();
-		Tile& tileBefore = npc->getPosition().isInTile(*map);
-		npc->updatePosition(dt, *map);
-		Tile& tileAfter = npc->getPosition().isInTile(*map);
-		if (!tileBefore.equals(tileAfter)) {
-			tileBefore.removeNPC(npc);
-			tileAfter.addNPC(npc);
-		}
-		// Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir_
-		if (npc->hasArrived() && !wasArrived) {
-			(*npc).trigger("NPC::arrived");
-		}
-		if (DEBUG) {
-			std::list<NPC*> neighbours =
-					npc->getPosition().isInTile(*map).getNPCsInRadius(*map, 2);
-			while (!neighbours.empty()) {
-				NPC* tempNPC = neighbours.front();
-				neighbours.pop_front();
-				if (tempNPC->getUuid() != npc->getUuid()) {
-					const std::string id1 = boost::lexical_cast<std::string>(
-							npc->getUuid());
-					const std::string id2 = boost::lexical_cast<std::string>(
-							tempNPC->getUuid());
-					printf("NPC %s: neighbour %s\n", id1.c_str(), id2.c_str());
-				}
-			}
-		}
-	}
 
 	DBG << "LocalState : Position of the Player" << getOwner().getPosition();
 	client->update(dt);
