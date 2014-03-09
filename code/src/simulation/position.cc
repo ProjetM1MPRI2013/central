@@ -86,6 +86,10 @@ float Position::distance(const Position &p) const {
   return d;
 }
 
+bool Position::equal(const Position &p) const {
+  return (p.x == x && p.y == y);
+}
+
 
 std::list<NPC*> Position::getNPCList(Geography& map) {
   std::list<NPC*> npcList;

@@ -110,6 +110,12 @@ class Position : public EventSource {
   float distance(const Position& p) const;
 
   /**
+   * @brief equality testing
+   * true iff distance is 0
+   */
+  bool equal(const Position& p) const;
+
+  /**
    * @brief getNPCList
    * computes the list of the alive NPCs whose hitbox contains the position
    */
