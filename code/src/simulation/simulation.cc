@@ -108,7 +108,7 @@ Player& Simulation::getPlayerByID(int pid) {
 			return player;
 		}
 	}
-	throw "getPlayerByID error : Unknown playerID ";
+	throw std::runtime_error("getPlayerByID error : Unknown playerID ");
 }
 
 Player* Simulation::getPlayer() {
