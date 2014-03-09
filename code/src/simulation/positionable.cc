@@ -55,3 +55,6 @@ void Positionable::changedTile(Position& p, std::pair<Coordinates,Coordinates> m
   trigger("Positionable::changedTile",std::pair<Coordinates,Coordinates>(mod));
   return;
 }
+
+Positionable::~Positionable() {
+}

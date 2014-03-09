@@ -86,6 +86,8 @@ public:
 
   Simulation(int nbPlayers,int id);
   Simulation(Geography* map,int nbPlayers,int id);
+  Simulation(Simulation&) = delete;
+  Simulation(Simulation&&) = default;
   ~Simulation();
 
   /**

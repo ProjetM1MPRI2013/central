@@ -52,6 +52,13 @@ class Positionable : public FogDisabler, public EventSource, public EventListene
   Positionable(Position& p, boost::uuids::uuid uuid);
 
   /**
+   * @brief destructor declared virtual since we have some virtual functions
+   */
+  virtual ~Positionable();
+  Positionable(Positionable&) = default;
+  Positionable(Positionable&&) = default;
+
+  /**
    * @brief getPosition
    * @return the Positionable's Position as a reference
    */
