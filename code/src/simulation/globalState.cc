@@ -172,7 +172,7 @@ void GlobalState::run(sf::Time dt) {
 			tileAfter.addNPC(npc);
 		}
 		// Juste un test pour le EventManager (activer debug dans HScenario.cc pour le voir)
-		if (npc->hasArrived() or !wasArrived) {
+		if (npc->hasArrived() && !wasArrived) {
 			(*npc).trigger("NPC::arrived");
 			DBG << "suppression d'un NPC";
 			this->supprimerNPC(npc);
