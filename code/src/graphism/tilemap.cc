@@ -265,7 +265,7 @@ Position TileMap::CoordMouse(sf::Vector2i Coord){
 	return pos;
 }
 
-void TileMap::newMovement(NewMov mov,Simulation s){
+void TileMap::newMovement(NewMov mov,Simulation& s){
 
 					int x=TileMap::getX();
 					int y=TileMap::getY();
