@@ -26,7 +26,7 @@ class GenericEventListener {
   boost::uuids::uuid el_id;
   ListenerInfo* el_info;
   friend class EventManager;
-  friend class GenericEventListenerCmp;
+  friend struct GenericEventListenerCmp;
   public:
   GenericEventListener();
   ~GenericEventListener();
@@ -46,4 +46,3 @@ struct GenericEventListenerCmp{
 
 
 #endif
-

@@ -23,7 +23,7 @@ typedef std::string EventName;
 class EventSource {
   public: 
   friend class EventManager;
-  friend class EventSourceCmp;
+  friend struct EventSourceCmp;
   EventSource();
   EventSource(boost::uuids::uuid uuid);
   EventSource& operator=(const EventSource& other);
