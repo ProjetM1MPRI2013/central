@@ -59,7 +59,7 @@ std::string stringDirection(Direction d) {
   }
 }
 
-Player::Player(int pid, float xx, float yy) : DrawableObject(textures::get(0)), Positionable(xx,yy) {
+Player::Player(int pid, float xx, float yy) : Positionable(xx,yy), DrawableObject(textures::get(0)) {
   this->movementType = DIRECTION;
   this->destination = Position();
   this->d = Direction::STOP;
