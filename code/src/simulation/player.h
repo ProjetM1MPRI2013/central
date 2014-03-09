@@ -90,10 +90,7 @@ public:
 	 *   Player& p = simulation->getPlayerByID(someID);
 	 *
 	 */
-	// FIXME I cannot delete the copy-constructor for now because gcc yells at me
-	// since Simulation has a destructor. I don't understand why yet.
-	//Player(const Player& other) = delete;
-	Player(const Player& other);
+	Player(Player& other) = delete;
 	Player(Player&& other) = default;
 	~Player() = default;
 

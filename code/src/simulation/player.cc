@@ -76,11 +76,6 @@ Player::Player(int pid, float xx, float yy) : Positionable(xx,yy), DrawableObjec
 }
 ;
 
-Player::Player(const Player& other) {
-  LOG(error) << "The copy constructor of Player should never be called.";
-}
-;
-
 int Player::getID() const {
   return this->playerID;
 }
