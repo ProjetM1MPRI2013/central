@@ -2,6 +2,7 @@
 #include <SFML/System.hpp>
 #include "main.h"
 #include "test/test.h"
+#include <unistd.h>
 #include <boost/asio.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -217,7 +218,7 @@ void serverLoop(int id, int nbPlayers, Server* serverPtr, std::string seed,
       while(true){
 	setNextMesures(musique,MIDImusic,synth,false);
 	float time = 0.;
-	sleep(0.1);
+  usleep(100000);
 	sf::Clock clock;
 
 	if (*switchmusic != oldvalue){

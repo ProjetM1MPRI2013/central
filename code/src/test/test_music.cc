@@ -4,6 +4,7 @@
 #include "debug.h"
 
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 #include "Note.h"
 #include "Accord.h"
@@ -89,7 +90,7 @@ namespace test {
 	setNextMesures(musique,MIDImusic,synth,false);
 	cout << "play again\n";
 	float time = 0.;
-	sleep(0.1);
+  usleep(100000);
 	sf::Clock clock;
 	while(time < MIDImusic[0].back().begintime + MIDImusic[0].back().duration){
 	  time += clock.restart().asSeconds();
