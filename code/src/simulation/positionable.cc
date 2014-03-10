@@ -26,15 +26,13 @@ Positionable::Positionable(float x,float y) : FogDisabler() {
 
 
 Positionable::Positionable(Position& p) : FogDisabler() {
-  position.setX(p.getX());
-  position.setY(p.getY());
+  position = Position(p);
   listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }
 
 Positionable::Positionable(Position& p, boost::uuids::uuid uuid) : WithUuid(uuid) {
-  position.setX(p.getX());
-  position.setY(p.getY());
+  position = Position(p);
   listen("Position::changedTile",position,&Positionable::changedTile);
   return;
 }

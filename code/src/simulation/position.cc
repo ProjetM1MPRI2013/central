@@ -7,7 +7,8 @@
 #include <cmath>
 
 Position::Position() {
-  Position(0,0);
+  x = 0;
+  y = 0;
   return;
 }
 
