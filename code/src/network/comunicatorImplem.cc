@@ -25,8 +25,8 @@ ComunicatorImplem::ComunicatorImplem() : ack_set(), received_messages(), receive
 
 ComunicatorImplem::~ComunicatorImplem(){
   shutdown() ;
-  delete service ;
   delete sock ;
+  delete service ;
   delete buff ;
   delete header_buff ;
   delete net_thread ;
