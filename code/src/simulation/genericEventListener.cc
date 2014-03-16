@@ -55,7 +55,7 @@ GenericEventListener& GenericEventListener::operator=(GenericEventListener&& oth
 }
 
 GenericEventListener::~GenericEventListener() {
-  if (el_info->bound_events <= 0) {
+  if (--(el_info->bound_events) <= 0) {
     delete el_info;
   } else {
     el_info->location = nullptr;

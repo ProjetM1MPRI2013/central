@@ -33,11 +33,30 @@ void EventManager::triggerEvent(EventName event, EventSource& source, boost::any
 void EventManager::listen(EventName event, EventSource& source, GenericEventListener& listener, event_callback run_callback) {
 
   if (listener.el_info->location == nullptr) {
-    listener.el_info = new ListenerInfo{1,&listener};
+    if (listener.el_info->bound_events > 1) {
+      listener.el_info->bound_events--;
+      listener.el_info = new ListenerInfo{1,&listener};
+    } else { // == 1
+      listener.el_info->location = &listener;
+    }
   }
 
   auto resp = sources[source.es_id][event].insert({listener.el_id, EventInfo{listener.el_info, run_callback}});
-  if (resp.second) { listener.el_info->bound_events++; } // resp.second==true iff event wasn't previously bound
+  auto& evt_info = resp.first->second;
+  auto& inserted = resp.second;
+
+  if (inserted) {
+    listener.el_info->bound_events++; 
+  } else {
+    if (evt_info.el_info->location == nullptr) {
+      if (--(evt_info.el_info->bound_events) <= 0) {
+        delete evt_info.el_info;
+      }
+      listener.el_info->bound_events++; 
+      evt_info.el_info = listener.el_info;
+    }
+    evt_info.callback = run_callback;
+  }
 }
 
 void EventManager::markAsUnListened(listenerMap& listeners, GenericEventListener& listener) {
@@ -79,7 +98,12 @@ void EventManager::unlisten(EventName event, GenericEventListener& listener) {
 }
 
 void EventManager::unlisten(GenericEventListener& listener) {
-  listener.el_info->location = nullptr;
+  // Equivalent to
+  // if (--(...) <= 0) { delete ... ; new ... } else { ... = nullptr }
+  if (listener.el_info->bound_events > 1) {
+    DBG << "setting to nullptr";
+    listener.el_info->location = nullptr;
+  }
 }
 
 void EventManager::removeSource(EventSource& source) {
