@@ -23,7 +23,7 @@ EventSource::EventSource(const EventSource& other) : es_id(WithUuid().getUuid())
 }
 
 // New source gets old source's ID
-EventSource::EventSource(EventSource&& other) {
+EventSource::EventSource(EventSource&& other) : es_id(WithUuid::generator()) {
   this->es_id.swap(other.es_id); 
 }
 
