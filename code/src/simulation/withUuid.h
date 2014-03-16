@@ -25,7 +25,7 @@ class WithUuid {
      * @brief WithUuid
      * Creates a new WithUuid object, the uuid is generated randomly by boost
      */
-    WithUuid(): uuid(generator()) {}
+    WithUuid();
 
     /**
      * @brief WithUuid
