@@ -2,12 +2,15 @@
 #include <type_traits>
 #include <utility>
 #include <boost/uuid/uuid_io.hpp>
+#define DEBUG false
+#include "debug.h"
 
 using namespace std;
 
 sourceMap EventManager::sources;
 
 void EventManager::triggerEvent(EventName event, EventSource& source, boost::any arg) {
+  DBG << "triggering on source";
   auto it1 = sources.find(source.es_id);
   if (it1 != sources.end()) {
     auto it2 = it1->second.find(event);
@@ -17,11 +20,13 @@ void EventManager::triggerEvent(EventName event, EventSource& source, boost::any
       while (iterator != listeners.end()) {
         auto& evt_info = iterator->second;
         if (evt_info.el_info->location == nullptr) {
+          DBG << "Found nullptr location, info_ptr: " << evt_info.el_info;
           if (--(evt_info.el_info->bound_events) <= 0) {
             delete evt_info.el_info;
           }
           listeners.erase(iterator++);
         } else {
+          DBG << "Found " << evt_info.el_info->location->el_id << "'s location: " << evt_info.el_info->location << ", info_ptr: " << evt_info.el_info;
           evt_info.callback(evt_info.el_info->location, &source, arg);
           ++iterator;
         }
@@ -33,6 +38,7 @@ void EventManager::triggerEvent(EventName event, EventSource& source, boost::any
 void EventManager::listen(EventName event, EventSource& source, GenericEventListener& listener, event_callback run_callback) {
 
   if (listener.el_info->location == nullptr) {
+    DBG << "recreate listener";
     if (listener.el_info->bound_events > 1) {
       listener.el_info->bound_events--;
       listener.el_info = new ListenerInfo{1,&listener};
@@ -40,6 +46,8 @@ void EventManager::listen(EventName event, EventSource& source, GenericEventList
       listener.el_info->location = &listener;
     }
   }
+
+  DBG << listener.el_id << " listens for source " << source.es_id << " giving ptr " << listener.el_info;
 
   auto resp = sources[source.es_id][event].insert({listener.el_id, EventInfo{listener.el_info, run_callback}});
   auto& evt_info = resp.first->second;
@@ -49,7 +57,9 @@ void EventManager::listen(EventName event, EventSource& source, GenericEventList
     listener.el_info->bound_events++; 
   } else {
     if (evt_info.el_info->location == nullptr) {
+      DBG << "was nullptr";
       if (--(evt_info.el_info->bound_events) <= 0) {
+        DBG << "...and last holder: delete";
         delete evt_info.el_info;
       }
       listener.el_info->bound_events++; 
