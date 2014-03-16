@@ -103,7 +103,7 @@ class EventManager {
 
   static void triggerEvent(EventName event, EventSource& source, boost::any arg=boost::any{});
 
-  static sourceMap sources;
+  thread_local static sourceMap sources;
 };
 
 

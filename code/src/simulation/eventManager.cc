@@ -7,7 +7,7 @@
 
 using namespace std;
 
-sourceMap EventManager::sources;
+thread_local sourceMap EventManager::sources;
 
 void EventManager::triggerEvent(EventName event, EventSource& source, boost::any arg) {
   DBG << "triggering on source";
