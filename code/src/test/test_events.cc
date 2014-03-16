@@ -136,6 +136,21 @@ namespace test {
     s5.trigger("a",test_number);
     EventManager::unlisten(l3);
 
+    declare("Unlisten then listen");
+    good(l3,s5);
+    l3.listen("a",s5,&Listener::eventHandler);
+    s5.trigger("a",test_number);
+
+    declare("Unlisten, remove source, listen");
+    Source s6;
+    good(l3,s6);
+    EventManager::unlisten(l3);
+    EventManager::removeSource(s5);
+    l3.listen("a",s6,&Listener::eventHandler);
+    s6.trigger("a",test_number);
+
+
+
     LOG(debug) << "[fin]";
 
     return 0;
