@@ -5,16 +5,9 @@
 #define GENERIC_EVENT_LISTENER_H
 
 #include <boost/uuid/uuid.hpp>
+#include <memory>
 
 class GenericEventListener;
-
-/* Counts references to the GenericEventListener pointer
- * used by sources to trigger the event on the right listeners
- */
-struct ListenerInfo {
-  int bound_events;
-  GenericEventListener* location;
-};
 
 /** 
  * Dummy generic class to store instances of EventListener<T>
@@ -24,7 +17,7 @@ struct ListenerInfo {
 class GenericEventListener {
   private:
   boost::uuids::uuid el_id;
-  ListenerInfo* el_info;
+  std::shared_ptr<GenericEventListener*> el_ptr;
   friend class EventManager;
   friend struct GenericEventListenerCmp;
   public:

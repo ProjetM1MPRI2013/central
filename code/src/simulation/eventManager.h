@@ -29,7 +29,7 @@ typedef std::function<void (GenericEventListener*, EventSource*, boost::any)> ev
 
 struct EventInfo
 {
-  ListenerInfo* el_info; // use a shared_ptr instead of counting?
+  std::shared_ptr<GenericEventListener*> el_ptr;
   event_callback callback;
 };
 
@@ -126,6 +126,7 @@ void_if_not_rvalue<ArgT> EventManager::triggerEvent(EventName event, EventSource
  */
 template <typename ArgT>
 void EventSource::trigger(EventName event, ArgT&& arg) {
+  // TODO send true iff ArgT is a value, false if a ref
   EventManager::triggerEvent(event, *this, std::forward<ArgT>(arg));
 }
 

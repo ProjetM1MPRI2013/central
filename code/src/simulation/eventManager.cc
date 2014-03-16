@@ -2,6 +2,7 @@
 #include <type_traits>
 #include <utility>
 #include <boost/uuid/uuid_io.hpp>
+#include <memory>
 #define DEBUG false
 #include "debug.h"
 
@@ -19,15 +20,12 @@ void EventManager::triggerEvent(EventName event, EventSource& source, boost::any
       auto iterator = listeners.begin();
       while (iterator != listeners.end()) {
         auto& evt_info = iterator->second;
-        if (evt_info.el_info->location == nullptr) {
-          DBG << "Found nullptr location, info_ptr: " << evt_info.el_info;
-          if (--(evt_info.el_info->bound_events) <= 0) {
-            delete evt_info.el_info;
-          }
+        if (*evt_info.el_ptr == nullptr) {
+          DBG << "Found nullptr location";
           listeners.erase(iterator++);
         } else {
-          DBG << "Found " << evt_info.el_info->location->el_id << "'s location: " << evt_info.el_info->location << ", info_ptr: " << evt_info.el_info;
-          evt_info.callback(evt_info.el_info->location, &source, arg);
+          DBG << "Found " << (*evt_info.el_ptr)->el_id << "'s location: " << *evt_info.el_ptr;
+          evt_info.callback(*evt_info.el_ptr, &source, arg);
           ++iterator;
         }
       }
@@ -37,42 +35,23 @@ void EventManager::triggerEvent(EventName event, EventSource& source, boost::any
 
 void EventManager::listen(EventName event, EventSource& source, GenericEventListener& listener, event_callback run_callback) {
 
-  if (listener.el_info->location == nullptr) {
+  if (*listener.el_ptr == nullptr) {
     DBG << "recreate listener";
-    if (listener.el_info->bound_events > 1) {
-      listener.el_info->bound_events--;
-      listener.el_info = new ListenerInfo{1,&listener};
-    } else { // == 1
-      listener.el_info->location = &listener;
+    if (listener.el_ptr.unique()) {
+      *listener.el_ptr = &listener;
+    } else {
+      listener.el_ptr = make_shared<GenericEventListener*>(&listener);
     }
   }
 
-  DBG << listener.el_id << " listens for source " << source.es_id << " giving ptr " << listener.el_info;
+  DBG << listener.el_id << " listens for source " << source.es_id << " giving ptr " << listener.el_ptr;
 
-  auto resp = sources[source.es_id][event].insert({listener.el_id, EventInfo{listener.el_info, run_callback}});
-  auto& evt_info = resp.first->second;
-  auto& inserted = resp.second;
-
-  if (inserted) {
-    listener.el_info->bound_events++; 
-  } else {
-    if (evt_info.el_info->location == nullptr) {
-      DBG << "was nullptr";
-      if (--(evt_info.el_info->bound_events) <= 0) {
-        DBG << "...and last holder: delete";
-        delete evt_info.el_info;
-      }
-      listener.el_info->bound_events++; 
-      evt_info.el_info = listener.el_info;
-    }
-    evt_info.callback = run_callback;
-  }
+  auto resp = sources[source.es_id][event][listener.el_id] = EventInfo{listener.el_ptr, run_callback};
 }
 
 void EventManager::markAsUnListened(listenerMap& listeners, GenericEventListener& listener) {
   auto it = listeners.find(listener.el_id);
   if (it != listeners.end()) {
-    listener.el_info->bound_events--;
     listeners.erase(it);
   }
 }
@@ -108,27 +87,15 @@ void EventManager::unlisten(EventName event, GenericEventListener& listener) {
 }
 
 void EventManager::unlisten(GenericEventListener& listener) {
-  // Equivalent to
-  // if (--(...) <= 0) { delete ... ; new ... } else { ... = nullptr }
-  if (listener.el_info->bound_events > 1) {
+  if (!(listener.el_ptr.unique())) {
     DBG << "setting to nullptr";
-    listener.el_info->location = nullptr;
+    *listener.el_ptr = nullptr;
   }
 }
 
 void EventManager::removeSource(EventSource& source) {
   auto it = sources.find(source.es_id);
   if (it != sources.end()) {
-    for (auto& event_listeners : it->second) {
-      for (auto& event_evt_info : event_listeners.second) {
-        auto el_info = event_evt_info.second.el_info;
-        el_info->bound_events--;
-        if (el_info->bound_events <= 0 && el_info->location == nullptr) {
-          delete el_info;
-        }
-      }
-    }
     sources.erase(it);
   }
 }
-
