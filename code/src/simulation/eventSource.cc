@@ -2,7 +2,7 @@
 #include "eventManager.h"
 #include <boost/uuid/uuid_io.hpp>
 
-EventSource::EventSource() : es_id(WithUuid().getUuid()) {
+EventSource::EventSource() : es_id(WithUuid::generator()) {
 }
 
 EventSource::EventSource(boost::uuids::uuid uuid) : es_id(uuid) {
@@ -19,7 +19,7 @@ EventSource& EventSource::operator=(EventSource&& other) {
   return *this;
 }
 
-EventSource::EventSource(const EventSource& other) : es_id(WithUuid().getUuid()) {
+EventSource::EventSource(const EventSource& other) : es_id(WithUuid::generator()) {
 }
 
 // New source gets old source's ID
